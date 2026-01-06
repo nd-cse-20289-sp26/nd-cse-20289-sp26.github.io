@@ -1,0 +1,240 @@
+- name:     Introduction
+  days:
+      - date:           Mon 01/12
+        topics:         Syllabus, Unix Programming Environment
+        assignments:
+          - Reading 00
+
+      - date:           Wed 01/14
+        topics:         Git
+
+      - date:           Fri 01/16
+        topics:         Files
+
+- name:     "Unit 01: Bourne Shell"
+
+- name:     "Using the Shell"
+  days:
+      - date:           Mon 01/19
+        topics:         '<i>Martin Luther King Day</i>'
+        assignments:
+          - Reading 01
+
+      - date:           Wed 01/21
+        topics:         Processes, I/O Redirection
+
+      - date:           Fri 01/23
+        topics:         Networking
+        assignments:
+          - Homework 01
+
+- name:     "Shell Scripting"
+  days:
+      - date:           Mon 01/26
+        topics:         Variables, Command Substitution, Matching
+        assignments:
+          - Reading 02
+
+      - date:           Wed 01/28
+        topics:         Control Flow, Command Line Arguments
+
+      - date:           Fri 01/30
+        topics:         Pipelines
+        assignments:
+          - Homework 02
+
+- name:     "Text Filtering"
+  days:
+      - date:           Mon 02/02
+        topics:         Regular Expressions
+        assignments:
+          - Reading 03
+
+      - date:           Wed 02/04
+        topics:         Filters
+
+      - date:           Fri 02/06
+        topics:         Filters
+        assignments:
+          - Homework 03
+
+- name:     Exam 01
+  days:
+      - date:           Mon 02/09
+        topics:         ''
+        items:
+          - name:       Checklist 01
+
+      - date:           Wed 02/11
+        topics:         ''
+        items:
+          - name:       Exam 01
+        assignments:
+          - Interview 01
+
+      - date:           Fri 02/13
+        topics:         Python Scripting
+
+- name:     "Unit 02: Python"
+
+- name:     Python Scripting
+  days:
+      - date:           Mon 02/16
+        topics:         Tests, Data Structures, Arguments, I/O
+        assignments:
+          - Reading 04
+
+      - date:           Wed 02/18
+        topics:         Regular Expressions, Processes, Requests
+
+      - date:           Fri 02/20
+        topics:         CSV, JSON
+        assignments:
+          - Homework 04
+
+- name:     Functional Programming
+  days:
+      - date:           Mon 02/23
+        topics:         Functional Programming
+        assignments:
+          - Reading 05
+
+      - date:           Wed 02/25
+        topics:         Iterators, Generators
+
+      - date:           Fri 02/27
+        topics:         Parallel Computing
+        assignments:
+          - Homework 05
+
+- name:     Exam 02
+  days:
+      - date:           Mon 03/02
+        topics:         ''
+        items:
+          - name:       Checklist 02
+
+      - date:           Wed 03/04
+        topics:         ''
+        items:
+          - name:       Exam 02
+        assignments:
+          - Interview 02
+
+      - date:           Fri 03/06
+        topics:         Compiling and Building
+
+- name:   "Spring Break"
+
+- name:   "Unit 03: C"
+
+- name:   "Pointers, Arrays, Strings"
+  days:
+      - date:           Mon 03/16
+        topics:         Libraries, Pointers
+        assignments:
+          - Reading 06
+
+      - date:           Wed 03/18
+        topics:         Arrays, Strings, Debugging (GDB)
+
+      - date:           Fri 03/20
+        topics:         Valgrind, Memory Allocation
+        assignments:
+          - Homework 06
+
+- name:   "Memory Management"
+  days:
+      - date:           Mon 03/23
+        topics:         Structs, Unions
+        assignments:
+          - Reading 07
+
+      - date:           Wed 03/25
+        topics:         Bitsets, Linked Lists
+
+      - date:           Fri 03/27
+        topics:         Data Representation
+        assignments:
+          - Homework 07
+
+- name:   "Exam 03"
+  days:
+      - date:           Mon 03/30
+        topics:         ''
+        items:
+          - name:       Checklist 03
+
+      - date:           Wed 04/01
+        items:
+          - name:       Exam 03
+        assignments:
+          - Interview 03
+
+      - date:           Fri 04/03
+        topics:         "<i>Easter</i>"
+
+- name:   "Unit 04: System Calls"
+
+- name:   "File System, I/O"
+  days:
+      - date:           Mon 04/06
+        topics:         "<i>Easter</i>"
+
+      - date:           Wed 04/08
+        topics:         File System
+        assignments:
+          - Reading 08
+
+      - date:           Fri 04/10
+        topics:         I/O
+        assignments:
+          - Homework 08
+
+- name:   "Processes"
+  days:
+      - date:           Mon 04/13
+        topics:         Processes
+        assignments:
+          - Reading 09
+
+      - date:           Wed 04/15
+        topics:         Pipes
+
+      - date:           Fri 04/17
+        topics:         Signals
+        assignments:
+          - Homework 09
+
+- name:   "Networking"
+  days:
+      - date:           Mon 04/20
+        topics:         Client/Server, URLs, Sockets
+        assignments:
+          - Reading 10
+
+      - date:           Wed 04/22
+        topics:         HTTP Client
+
+      - date:           Fri 04/24
+        topics:         HTTP Server
+        assignments:
+          - Homework 10
+
+- name:   "Exam 04"
+  days:
+      - date:           Mon 04/27
+        topics:         'VPS'
+
+      - date:           Wed 04/29
+        topics:         ''
+        items:
+          - name:       Checklist 04
+        assignments:
+          - Interview 04
+
+      - date:           Tue 05/05
+        topics:         ''
+        comments:       "10:30 AM - 12:30 PM"
+        items:
+          - name:       Exam 04
