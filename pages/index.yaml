@@ -79,7 +79,7 @@ body:       |
     : **155** DeBartolo Hall
 
     <i class="icon">{{ "video" | embed_icon }}</i> Zoom Meeting
-    : [TBD]()
+    : [998 5378 0923](https://notredame.zoom.us/j/99853780923)
 
     <i class="icon">{{ "email" | embed_icon }}</i> Mailing List
     : [sp26-cse-20289-01-group@nd.edu](mailto:sp26-cse-20289-01-group@nd.edu)
@@ -182,34 +182,46 @@ body:       |
     </tbody>
     </table>
 
+    <div class="alert success-bg" markdown="1">
+
+    ### <i class="icon icon-medium">{{ "scale-balance" | embed_icon }}</i> Assignments and Assessments
+
+    Students are expected to do all the **Reading** and **Homework**
+    assignments in this course, as they are **learning opportunities** that
+    will prepare them for the coding **Interviews** and written **Exams**.
+
+    For each of the **four units** in this course:
+
+    - Only the **Reading** assignment with the highest score from the **unit**
+      will be counted towards the final grade.
+
+    - Only the **Homework** assignment with the highest score from the **unit**
+      will be counted towards the final grade.
+
+    - A coding **Interview** will be conducted prior to the written **Exam** to
+      assess understanding of practical skills.
+
+    - A written **Exam** will be conducted to assess understanding and mastery
+      of core concepts and skills.
+
+    </div>
+
     <div class="alert info-bg" markdown="1">
 
     ### <i class="icon icon-medium">{{ "calendar-check" | embed_icon }}</i> Due Dates
 
-    For each of the **four units** in this course:
+    All **Reading** and **Homework** assignments are to be submitted to your
+    own private [GitHub] repository. Unless specified otherwise:
 
-    - Students must **complete** at least **one** **Reading** assignment.
+    - **Reading** assignments are due by **noon** on the **Monday** of the
+      assigned week.
 
-    - Students must **complete** at least **one** **Homework** assignment.
+    - **Homework** assignments are due by **noon** on the **Saturday** of the
+      assigned week.
 
-    - Students must **perform** **one** coding **Interview**.
-
-    For **Reading** and **Homework** assignments, these are due at **midnight**
-    on the dates assigned.
-
-    For coding **Interviews**, these take place during the week assigned and
-    must be completed before taking the associated **exam** that week.  Because
-    of this, students are required to schedule an appointment with a **teaching
-    assistant** or the **instructor** ahead of time (*each interview is no more
-    than `15` minutes long*).
-
-    Completing extra assignments is **highly encouraged**, but will not count
-    towards the course grade.
-
-    Students may complete assignments associated with a particular **unit**
-    after the specified assignment deadline as long as it is before the
-    **exam** for the **unit**.  Afterwards, no late work will be accepted for
-    that **unit**.
+    - Coding **Interviews** are due during the week of the written **Exam** and
+      must be scheduled with a **teaching assistant** or the **instructor**
+      ahead of time.
 
     </div>
 
@@ -360,12 +372,14 @@ body:       |
     university policies, coursework will be accepted late by the same number of
     days as the excused absence.
 
-    As noted above, no assignments associated with a particular **unit** will
-    be accepted after the **exam** associated with that **unit** has taken
-    place.
+    Otherwise, there is an automatic penalty of `25%` **late penalty** for
+    assignments turned in `12` hours pass the specified deadline.
 
-    Furthermore, no assignments will be accepted after the **last day of
-    class** without the permission of the instructor.
+    Note, there is an allowance for **self-service extensions** as described
+    below.
+
+    No assignments will be accepted after the **last day of class** without the
+    permission of the instructor.
 
     </div>
 
@@ -393,16 +407,20 @@ body:       |
     <div class="flex-col" markdown="1">
     ### Academic Dishonesty
 
-    Any academic misconduct in this course is considered a **serious offense**,
-    and the strongest possible **academic penalties** will be pursued for such
+    Any academic misconduct in this course is considered a serious offense, and
+    the strongest possible academic penalties will be pursued for such
     behavior.
 
-    For the specific rules of this course, please consult the [CSE Guide to the
-    Honor Code](#alert-embed_icon-cse-guide-to-the-honor-code) below.
+    Students may discuss high-level ideas with other students, but at
+    the time of implementation (i.e. programming), each person must do his/her
+    own work. Use of the Internet as a reference is allowed but directly
+    copying code or other information is cheating. It is cheating to copy, to
+    allow another person to copy, all or part of an exam or a assignment, or to
+    fake program output.
 
-    Note, it is also a violation of the [Undergraduate Academic Code of Honor]
-    to observe and then fail to report academic dishonesty. Each student is
-    **responsible** for **integrity** of their own work.
+    It is also a violation of the [Undergraduate Academic Code of Honor] to
+    observe and then fail to report academic dishonesty. You are responsible
+    for the security and integrity of your own work.
 
     </div>
 
@@ -417,20 +435,24 @@ body:       |
 
     ### <i class="icon icon-medium">{{ "alert" | embed_icon }}</i> CSE Guide to the Honor Code
 
-    For **assignments** in this class, the following rules apply:
+    For the assignments in this class, students are allowed to consult printed
+    and online resources and to discuss the class material with other students.
+    Students may also consult **AI Tools** such as **CoPilot** or **ChatGPT**
+    for help explaining concepts, debugging problems, or as a reference.
+    Viewing or consulting solutions, such as those from other students,
+    previous semesters, or generated by **AI Tools** is **never allowed**.
 
-    - Students may **consult resources** such as printed material, online
-      information, **AI tools** such as **CoPilot**, **ChatGPT**, or
-      **Gemini**, and even other students for help explaining concepts,
-      debugging problems, or discussing course material without the need for
-      citation.
+    Likewise, students may copy **small and trivial** snippets from books,
+    online sources, and **AI Tools** as long as you **cite them properly**.
+    However, students **may not copy** solutions or **significant** portions of
+    code from other students or online sources, nor may students generate
+    solutions via **AI Tools**.
 
-    - Students may also **copy solutions**, such as those from other students
-      or generated by **AI Tools** if **cited properly** in the [GitHub] **pull
-      request**.
-
-        <br><i>Failure to properly **cite** a copied solution is considered a
-        **violation** of the [Undergraduate Academic Code of Honor].</i>
+    Finally, when preparing for interviews or exams in this class, **students
+    may not access exams from previous semesters**, nor may students look at or
+    copy solutions from other current or former students.  Furthermore,
+    **students may not share the contents** of the interviews or exams with
+    classmates who have not not yet taken the assessments.
 
     <table class="bordered" style="border-color: var(--danger);">
       <thead>
@@ -442,35 +464,15 @@ body:       |
         <tr style="font-weight: bold;">
           <td class="centered">Consulting</td>
           <td class="centered success-bg">Allowed</td>
-          <td class="centered success-bg">Allowed</td>
+          <td class="centered danger-bg">Not Allowed</td>
         </tr>
         <tr style="font-weight: bold;">
           <td class="centered">Copying</td>
           <td class="centered caution-bg">Cite</td>
-          <td class="centered caution-bg">Cite</td>
+          <td class="centered danger-bg">Not Allowed</td>
         </tr>
       </tbody>
     </table>
-
-    For **interviews** and **exams** in this class, the following rules apply:
-
-    - Students may not **consult** or **share** the contents of the
-      **interviews** or **exams** from this semester or any semester prior, nor
-      may students look at or copy solutions from other current or former
-      students.
-
-    - Students may only **consult** their allowed cheatsheets during the
-      **interview** and the **written** portion of the exam (ie. *closed book,
-      closed notes, closed Internet, no AI*).
-
-    - Students may **consult resources** (ie. *book, notes, Internet AI*) or
-      **copy solutions ** if **cited properly** for the **coding** portion of
-      the exam.
-
-        <br><i>**Sharing** the contents of an **interview** or **exam**,
-        **communicating** with other students, or **accessing** forbidden
-        material during the **interview** or **exam** session is considered a
-        violation of the [Undergraduate Academic Code of Honor].</i>
 
     See the [CSE Guide to the Honor Code] for definitions of the above terms and
     specific examples of what is allowed and not allowed when consulting
@@ -484,6 +486,7 @@ body:       |
     If the instructor sees behavior that is, in their judgement, academically
     dishonest, they are required to file either an [Honor Code Violation Report] or
     a formal report to the [College of Engineering] Honesty Committee.
+
 
     </div>
 
@@ -577,7 +580,7 @@ body:       |
     - [Beej's Guide to Network Programming](https://beej.us/guide/bgnet/)
 
     </div>
-    
+
     <div class="flex-col" markdown="1">
 
     ### Manual Pages
