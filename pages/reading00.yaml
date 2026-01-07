@@ -1,0 +1,464 @@
+title:      "Reading 00: Slack, GitHub, Student Machines"
+body:       |
+
+    **Everyone**:
+
+    Welcome to [CSE 20289 Systems Programming](index.html), which (*as the
+    syllabus states*) is a course that "introduces students to the Unix
+    programming environment where they will explore various command line
+    utilities, files, processes, memory management, system calls, data
+    structures, networking, and concurrency".  What this means is that you will
+    first learn how to effectively utilize a modern [Unix] programming
+    environment and then you will study how to develop applications that take
+    advantage of system level [abstractions] such as [files], [processes], and
+    [sockets].
+
+    <div class="alert info-bg" markdown="1">
+
+    ### <i class="icon icon-medium">{{ "book" | embed_icon }}</i> TL;DR
+
+    For this week, you need to read about using the command line and [Git], and
+    then setup your [GitHub] repository.  There is **nothing to submit**.
+    </div>
+
+    ## Course Overview
+
+    <div class="flex-row" markdown="1">
+
+    <div class="flex-col" markdown="1">
+
+    Last semester, most of you took the **CSE 20311 Fundamentals of Computing**
+    course where you learned how to program in the [C] language.  After
+    *playing the Game of Life*, *generating anagrams*, and *building fractals*,
+    you should be capable of programming in a compiled language using
+    conditional statements, loops, and functions.  Moreover, you should be
+    somewhat familiar with [strings], [arrays], and [pointers].
+
+    In this course, we will build on this foundational knowledge by exploring
+    the [Unix] programming environment in order to get a better idea of how
+    modern computing systems work.  To do so, we will construct applications
+    that take advantage of the features and capabilities provided by the
+    underlying operating system that manages and abstracts the computer
+    hardware for us.
+
+    The semester can be broken down into the following units:
+
+    </div>
+
+    <div class="flex-col-50 centered">
+      <img src="static/img/house.png" class="responsive">
+    </div>
+
+    </div>
+
+    1. <div class="flex-col">
+
+        **Unit 01: Bourne Shell**
+
+        First, we will begin by learning how to utilize the [Unix shell] and
+        then how to compose multiple [Unix] utilities into [pipelines] and
+        [shell scripts] while taking advantage of [regular expressions].
+
+    2. <div class="flex-col">
+
+        **Unit 02: Python**
+
+        Next, we will explore processing and manipulating data using [Python].
+        Along the way, we will discuss how to exploit the [functional
+        programming] paradigm to efficiently perform [parallel computing].
+
+    3. <div class="flex-col">
+
+        **Unit 03: C**
+
+        Afterwards, we will descend down the software stack to [C] and discuss
+        [memory management] as well as revisiting [pointers], [arrays],
+        [strings], and studying some [data structures].
+
+    4. <div class="flex-col">
+
+        **Unit 04: System Calls**
+
+        Finally, we will build our own [Unix] applications that take advantage
+        of system level abstractions such as [files], [processes], and
+        [sockets] through the use of [system calls].
+
+    Moreover, throughout the course, we will frequently reflect on the wisdom
+    and power of the [Unix Philosophy]:
+
+    1. Write programs that do one thing and do it well.
+
+    2. Write programs to work together.
+
+    3. Write programs to handle text streams, because that is a universal interface.
+
+    Each week there will be a **Reading assignment** meant to give you a
+    context and reference into what we will be covering that upcoming week and
+    a **Homework assignment** that will provide you an opportunity apply the
+    material in (hopefully) interesting ways.
+
+    To assess your mastery of the concepts and skills in this class, there will
+    be `4` in-class **written Exams**.  Additionally, there will be an in-person
+    **coding Interview** (`15` minutes long) with a teaching assistant or with
+    the instructor before each **written Exam**.
+
+    Please refer to [Assignments and
+    Assessments](index.html#scale-balance-embed_icon-assignments-and-assessments)
+    for more details on the coursework required in this class.
+
+    [strings]:  https://en.wikipedia.org/wiki/String_(computer_science)
+    [arrays]:   https://en.wikipedia.org/wiki/Array_data_structure
+    [pointers]: https://en.wikipedia.org/wiki/Pointer_(computer_programming)
+    [pipelines]:    https://en.wikipedia.org/wiki/Pipeline_(Unix)
+    [shell scripts]:https://en.wikipedia.org/wiki/Shell_script
+    [regular expressions]: https://en.wikipedia.org/wiki/Regular_expression
+    [Python]:       https://www.python.org/
+    [functional programming]:   https://en.wikipedia.org/wiki/Functional_programming
+    [parallel computing]:       https://en.wikipedia.org/wiki/Parallel_computing
+    [distributed computing]:    https://en.wikipedia.org/wiki/Distributed_computing
+    [C]: https://en.wikipedia.org/wiki/C_(programming_language)
+    [memory management]: https://en.wikipedia.org/wiki/Memory_management
+    [data representation]: https://en.wikipedia.org/wiki/Data_(computing)
+    [data structures]: https://en.wikipedia.org/wiki/Data_structure
+    [Unix Philosophy]: https://en.wikipedia.org/wiki/Unix_philosophy
+    [system calls]:     https://en.wikipedia.org/wiki/System_call
+    [brute-force]:      https://en.wikipedia.org/wiki/Brute-force_attack
+    [HTTP]:             https://en.wikipedia.org/wiki/Hypertext_Transfer_Protocol
+    [processes]: https://en.wikipedia.org/wiki/Process_(computing)
+
+    [GitHub]:       https://github.com/
+    [Git]:          https://git-scm.com/
+    [Unix]:         https://en.wikipedia.org/wiki/Unix
+    [abstractions]: https://en.wikipedia.org/wiki/Abstraction_(software_engineering)
+    [files]:        https://en.wikipedia.org/wiki/Computer_file
+    [processes]:    https://en.wikipedia.org/wiki/Process_(computing)
+    [sockets]:      https://en.wikipedia.org/wiki/Network_socket
+    [C]:            https://isocpp.org/
+
+    ## Readings
+
+    <div class="flex-row" markdown="1">
+
+    <div class="flex-col" markdown="1">
+
+    The readings for **Monday, January 12** are:
+
+    1.  <div class="flex-col" markdown="1">
+
+        [The Linux Command Line](http://linuxcommand.org/tlcl.php)
+
+        - Chapter 1 - What is the Shell?
+        - Chapter 2 - Navigation
+        - Chapter 3 - Exploring the System
+        - Chapter 4 - Manipulating Files and Directories
+        - <p>Chapter 5 - Working With Commands<br></p>
+
+    2. [A beginner's guide to Git version control](https://developers.redhat.com/articles/2023/08/02/beginners-guide-git-version-control)
+
+    3. [GitHub Handbook](https://guides.github.com/introduction/git-handbook/)
+
+    </div>
+
+    <div class="flex-col-25 centered" markdown="1">
+      <img src="static/img/tlcl.jpg">
+    </div>
+
+    </div>
+
+    <div class="alert info-bg" markdown="1">
+
+    ### <i class="icon icon-medium">{{ "git" | embed_icon }}</i> Unix, Git, GitHub
+
+    The focus of the readings is to review the basics of using the [Unix
+    shell], which most of you used in **CSE 20311 Fundamentals of Computing**
+    last semester, and to introduce you to [Git] and [GitHub], which we will be using
+    throughout the semester.
+
+    </div>
+
+    ### Optional Resources
+
+    <div class="flex-row" markdown="1">
+
+    <div class="flex-col" markdown="1">
+
+    #### Unix
+
+    - [Command Line Crash Course]
+
+    - [A Linux Command Line Primer](https://www.digitalocean.com/community/tutorials/a-linux-command-line-primer)
+
+    - [Learning the Shell](http://linuxcommand.org/lc3_learning_the_shell.php)
+
+    - [Survival guide for Unix newbies](http://matt.might.net/articles/basic-unix/)
+
+    </div>
+
+    <div class="flex-col" markdown="1">
+
+    #### Git
+
+    - [Learn Git Branching]
+
+    - [gittutorial](https://git-scm.com/docs/gittutorial)
+
+    - [Git Tutorial](https://www.vogella.com/tutorials/Git/article.html)
+
+    - [Pro Git](https://git-scm.com/book/en/v2)
+
+    [Command Line Crash Course]: https://learnpythonthehardway.org/book/appendixa.html
+    [Unix shell]: https://en.wikipedia.org/wiki/Unix_shell
+    [Learn Git Branching]: https://learngitbranching.js.org/
+
+    </div>
+    </div>
+
+    <div class="alert success-bg" markdown="1">
+
+    ### <i class="icon icon-medium">{{ "console" | embed_icon }}</i> The Hands-on Imperative
+
+    To get the most out of your reading, you should be **typing** commands into
+    a terminal and **playing** around with the things you reading.
+
+    Passively reading will not be as fruitful as **actively** reading and
+    trying out things you are exploring.
+
+    </div>
+
+
+    ## Tasks
+
+    Normally, you would have **quiz** to complete after each reading. For this
+    initial reading, however, you only need do the following:
+
+    1. **Join** the class [Slack] channel.
+
+    2. **Create** your own **private assignments** [Git] repository on [GitHub].
+
+    3. **Clone** your **private assignments** [Git] repository to your local
+    computer or a **student machine**.
+
+    ### Task 1: Slack
+
+    For communication outside of our classroom, we will be using [Slack],
+    which is a real-time chat platform similar to **Discord**.  Your first task is
+    to create a **ND-CSE** [Slack] account (if you have not done so already)
+    and join the `#cse-20289-sp26` channel:
+
+    > [https://nd-cse.slack.com/messages/cse-20289-sp26/](https://nd-cse.slack.com/messages/cse-20289-sp26/)
+
+    <div class="alert info-bg" markdown="1">
+
+    ### <i class="icon icon-medium">{{ "slack" | embed_icon }}</i> Slack Channel
+
+    There is a [class mailing list], but most day-to-day communication
+    (including office hours and homework help) should take place on [Slack].
+
+    Therefore, you should **check this channel regularly** as it is the primary
+    means of communication for the course.
+
+    </div>
+
+    [Slack]: https://nd-cse.slack.com
+    [class mailing list]: mailto:sp26-cse-20289-01-group@nd.edu
+
+    ### Task 2: GitHub
+
+    All of your work in this class will be submitted to [GitHub] using [git].
+    Your second task is to setup your [GitHub] **assignments** repository by doing
+    the following:
+
+    1.  <div class="flex-col">
+
+        **Sign-in** or create a [GitHub] account if you do not already have one.
+
+        > [https://github.com/join](https://github.com/join)
+
+        You may associate this account with either your Notre Dame or personal
+        email address.  It is up to you.
+
+    2.  <div class="flex-col">
+
+        **Fork** the class assignments repository from the following template:
+
+        > [https://classroom.github.com/a/aTicsp6L](https://classroom.github.com/a/aTicsp6L)
+
+        This will create a **private** `assignments-$GITHUB_USERNAME`
+        repository under your own account and linked to the [nd-cse-20289-sp26]
+        organization.
+
+    <div class="alert danger-bg" markdown="1">
+
+    ### <i class="icon icon-medium">{{ "github" | embed_icon }}</i> GitHub Repository
+
+    The **assignments** repository will be used for your individual **reading**
+    and **homework** assignments. It must be kept **private** and only shared
+    with the **instructional staff**.
+
+    </div>
+
+    ### Task 3: Student Machines
+
+    While you are free to use any machine you wish to do your work, the
+    department provides a set of **student machines** that you can login to and
+    do remote work in an environment crafted for the course.  The following
+    steps allow you to **clone** the **assigments** you just created to any
+    machine of your choosing.
+
+    <div class="alert info-bg" markdown="1">
+
+    ### <i class="icon icon-medium">{{ "server" | embed_icon }}</i> Student Machines
+
+    As a reminder, students in this class have access to the following
+    **student** machines: `student05.cse.nd.edu`, `student10.cse.nd.edu`,
+    `student11.cse.nd.edu`, `student12.cse.nd.edu`, `student13.cse.nd.edu`.
+
+    </div>
+
+    1.  <div class="flex-col">
+
+        Before you can **clone** your [git] repository, you will need to
+        determine which form of **authentication**, you wish to use with
+        [GitHub].
+
+        To remotely access your repository from the command-line, you have two options:
+
+        1.  <div class="flex-col">
+
+            [Setup SSH Keys]: With this method, you generate a local public and
+            private key pair on your computer and then upload the **public
+            key** to [GitHub].  When accessing [GitHub] from the
+            command-line, you will use the **private key** to authenticate to
+            the server.
+
+            This is the **recommended** way to setup your repository as it will
+            allow for **passwordless** access.
+
+        2. [Setup a Personal Access Token]: With this method, [GitHub] will
+          generate an application specific passsword that you can use with
+          **HTTPS**.  As the **PAT** is a long string of characters, it is
+          recommended that you use it in conjunction with a **password
+          manager** or **keyring**.
+
+        <div class="alert success-bg" markdown="1">
+
+        ### <i class="icon icon-medium">{{ "key-chain" | embed_icon }}</i> Setup SSH Keys
+
+        <div class="alert warning-bg" markdown="1">
+
+        **Note**: If you have already [Setup SSH Keys] in another course (such
+        as **Data Structures**), you **do not** need to make new keys and
+        can skip this process.
+
+        </div>
+
+        Here is a quick tutorial on how to [Setup SSH Keys] on the **student
+        machines** (*if you have not done so already*):
+
+        1.  <div class="flex-col">
+
+            Generate SSH keys if you don't have them yet:
+
+                :::bash
+                # Accept the defaults, don't make a password if you want to go passwordless
+                $ ssh-keygen
+
+        2.  <div class="flex-col">
+
+            Copy the contents of `~/.ssh/id_rsa.pub` to the **SSH Keys** section of
+            your [GitHub] settings page:
+
+            > [https://github.com/settings/keys](https://github.com/settings/keys)
+
+                :::bash
+                # Copy and paste the contents of this file into GitHub
+                $ cat ~/.ssh/id_rsa.pub
+
+        3.  <div class="flex-col">
+
+            Edit/create `~/.ssh/config` to use this key with [GitHub]:
+
+                :::bash
+                # Add the following to your config (replace $NETID with your netid)
+                $ vim ~/.ssh/config
+                Host github.com
+                        User git
+                        Hostname github.com
+                        PreferredAuthentications publickey
+                        IdentityFile /escnfs/home/$NETID/.ssh/id_rsa
+
+        Once this is done, you should be able to do [git] operations without a password.
+        You will need to accept the host key the first time by typing in `"yes"`.
+        </div>
+
+        <div class="alert info-bg" markdown="1">
+
+        ### <i class="icon icon-medium">{{ "code-tags" | embed_icon }}</i> Text Editor
+
+        Any time you see references to `vim` in example commands, remember that
+        you can use any text editor such as `nano` or `emacs` instead.
+
+        </div>
+
+    2.  <div class="flex-col">
+
+        **Clone** your [git] repository on one of the **student machines**:
+
+            :::bash
+            # Example of cloning GitHub assignments repository to local or student machine
+            $ git clone git@github.com:nd-cse-20289-sp26/assignments-$GITHUB_USERNAME.git
+            remote: Enumerating objects: 70, done.
+            remote: Counting objects: 100% (70/70), done.
+            remote: Compressing objects: 100% (13/13), done.
+            Receiving objects: 100% (70/70), 6.25 KiB | 1.56 MiB/s, done.
+            Resolving deltas: 100% (4/4), done.
+            remote: Total 70 (delta 4), reused 70 (delta 4), pack-reused 0
+
+    3.  <div class="flex-col">
+
+        **Edit** the `README.md` file in your **assignments** repository such
+        that the **Name** and **NetID** fields are completed (i.e. replace
+        "Domer McDomerson" and "dmcdomer"). You should **commit** your change
+        and then **push** them to [GitHub].
+
+            :::bash
+            # Example on editing README in assignments repository and pushing changes to GitHub
+
+            $ cd assignments-$GITHUB_USERNAME           # Go into the assignments directory
+
+            $ nano README.md                            # Edit the README.md file
+
+            $ git add README.md                         # Mark the file for recording
+
+            $ git commit -m "Update README"             # Record the change
+            [master c550fa1] Update README
+            1 file changed, 2 insertions(+), 2 deletions(-)
+
+            $ git push                                  # Send your local changes to GitHub
+
+    The following is a video demonstration of the process of cloning your
+    [GitHub] repository and committing your first change.
+
+    <div class="centered">
+      <script src="https://asciinema.org/a/QKVHM7yas1OkJjaF0U1EHLgor.js" id="asciicast-QKVHM7yas1OkJjaF0U1EHLgor" async="true"></script>
+    </div>
+
+    <div class="alert success-bg" markdown="1">
+
+    ### <i class="icon icon-medium">{{ "check-all" | embed_icon }}</i> Tasks
+
+    Once you have setup [Slack], [GitHub], and have a working development
+    environment on the **student machines**, then you have completed all the
+    necessary tasks for this **reading assignment**.
+
+    </div>
+
+    [GitHub]:       https://github.com
+    [Markdown]:     https://daringfireball.net/projects/markdown/
+    [reference]:    https://guides.github.com/features/mastering-markdown/
+    [nd-cse-20289-sp26]: https://github.com/nd-cse-20289-sp26
+
+    [password authentication]: https://github.blog/changelog/2021-08-12-git-password-authentication-is-shutting-down/
+    [Setup a Personal Access Token]: https://docs.github.com/en/github/authenticating-to-github/keeping-your-account-and-data-secure/creating-a-personal-access-token
+    [Setup SSH Keys]: https://docs.github.com/en/github/authenticating-to-github/connecting-to-github-with-ssh/about-ssh
+
