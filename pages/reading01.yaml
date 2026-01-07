@@ -1,0 +1,484 @@
+title:      "Reading 01: Using the Shell"
+body:       |
+
+  **Everyone**:
+
+  Next week, we will explore how to use some of the more advanced features of
+  the [Unix shell], including how to manipulate [files] and control
+  [processes], which are two fundamental abstractions the [Unix] operating
+  system provides to the end user.  You are also encouraged to learn more about
+  a particular text editor of your choice such as [vim], [emacs], or [nano].
+
+  <div class="alert info-bg" markdown="1">
+
+  ### <i class="icon icon-medium">{{ "book" | embed_icon }}</i> TL;DR
+
+  The focus of this reading is to review the basics of manipulating files and
+  processes in the [Unix Shell].
+
+  </div>
+
+  ## Branching
+
+  As discussed in class, each **reading** and **homework** assignment must be
+  completed in its own git [branch]; this will allow you to separate the work
+  of each assignment and for you to use the [Pull Request] workflow describe
+  at the end of this document.
+
+  To create a branch in your local repository, follow the instructions below:
+
+      :::bash
+      $ cd path/to/cse-20289-sp26-assignments   # Go to assignments repository
+
+      $ git switch master                       # Make sure we are in master branch
+
+      $ git pull --rebase                       # Make sure we are up-to-date with GitHub
+
+      $ git checkout -b reading01               # Create reading01 branch and check it out
+
+      $ cd reading01                            # Go into reading01 folder
+
+  Once these commands have been successfully performed, you are now ready to
+  [add], [commit], and [push] any work required for this assignment.
+
+  <div class="alert warning-bg" markdown="1">
+
+  ### <i class="icon icon-medium">{{ "source-fork" | embed_icon }}</i> Git Branching
+
+  For the assignments in this class, you should always [branch] off the master
+  [branch].  To determine which branch you are on, you can do the following:
+
+      :::bash
+      $ git branch
+
+  To create and switch to a new branch, you can use the `git checkout -b
+  BRANCH` as described above.  Once you have performed this command, you can
+  check which branch you are on:
+
+      :::bash
+      $ git branch
+        master
+      * reading01
+
+  To change to another existing branch, you can use the `git switch BRANCH`
+  command.  Suppose you are on the `reading01` branch and want to switch back
+  to the `master` branch.  To do so, you can do the following:
+
+      :::bash
+      $ git switch master
+
+  Before switching branches, however, you may wish to [commit] your work or at
+  the very least [stash] it.
+
+  </div>
+
+  ## Python 3
+
+  Throughout the semester, we will be using [Python 3] for a variety of
+  purposes.  Because the student machines an older version of [Python 3] by
+  default, you will need to add the following line *to the bottom* your
+  `~/.bashrc` file:
+
+      :::bash
+      export PATH=/escnfs/home/pbui/pub/pkgsrc/bin:$PATH
+
+  You can then source this file to load that environment variable:
+
+      :::bash
+      $ source ~/.bashrc
+
+  To check that [Python 3] works, you can run the following:
+
+      :::bash
+      $ python3 -V
+      Python 3.12.4
+
+  This will be necessary for the `.scripts/check.py` script in your
+  **assignments** repository.
+
+  ## Readings
+
+  <div class="flex-row" markdown="1">
+
+  <div class="flex-col" markdown="1">
+
+  The readings for this week are:
+
+  1.  <div class="flex-col" markdown="1">
+
+      [The Linux Command Line]
+
+      - Chapter 6 - Redirection
+      - Chapter 7 - Seeing the World as the Shell Sees it
+      - Chapter 8 - Advanced Keyboard Tricks
+      - Chapter 9 - Permissions
+      - Chapter 10 - Processes
+
+  </div>
+
+  <div class="flex-col-25 centered" markdown="1">
+    <img src="static/img/tlcl.jpg">
+  </div>
+
+  </div>
+
+  In addition to reading the above chapters, it is recommended that you learn a
+  command-line [text editor] such as one of the following:
+
+  <div class="flex-row" markdown="1">
+
+  <div class="flex-col" markdown="1">
+
+  ### [nano]
+
+  This text editor is the easiest to get started with, but also has the least
+  amount of features. This is recommended for newcomers to Linux.
+
+  - [Using Nano](https://www.linode.com/docs/tools-reference/tools/using-nano)
+  - [Nano Text Editor in Linux](https://www.geeksforgeeks.org/nano-text-editor-in-linux/)
+
+  </div>
+
+  <div class="flex-col" markdown="1">
+
+  ### [vim]
+
+  This text editor has many features such as syntax highlighting, plugins, and
+  even spell checking. That said, it has a steep learning curve due to its
+  unconventional keyboard interface.
+
+  - Chapter 12 - A Gentle Introduction to Vi of [The Linux Command Line]
+  - [Vim Editor in Linux](https://www.geeksforgeeks.org/getting-started-with-vim-editor-in-linux/)
+
+  </div>
+
+  <div class="flex-col" markdown="1">
+
+  ### [emacs]
+
+  This text editor also has many features (perhaps too many). In
+  fact, [Emacs] is so powerful, there is saying "Emacs is an excellent
+  operating system. All it's missing is a decent text editor".
+
+  - [How To Use the Emacs Editor in Linux](https://www.digitalocean.com/community/tutorials/how-to-use-the-emacs-editor-in-linux)
+
+  - [An Emacs Tutorial: Beginner’s Guide to Emacs](https://www.masteringemacs.org/article/beginners-guide-to-emacs)
+
+  </div>
+
+  </div>
+
+  <div class="alert success-bg" markdown="1">
+
+  ### <i class="icon icon-medium">{{ "pencil-outline" | embed_icon }}</i> This is my editor
+
+  All joking aside, your exact choice in a [text editor] is not important.
+  What is important, however, is that you become comfortable with at least one
+  of them and are capable of editting text efficiently in terminal.  As the
+  [creed] goes:
+
+  > This is my editor. There are many like it, but this one is mine.
+  >
+  > My editor is my best friend. It is my life. I must master it as I must master my life.
+  >
+  > Without me, my editor is useless. Without my editor, I am useless.
+
+  </div>
+
+  <div class="alert warning-bg" markdown="1">
+
+  ### <i class="icon icon-medium">{{ "vscode" | embed_icon }}</i> VS Code
+
+  If you are more comfortable using a graphical [text editor] such as [Visual
+  Studio Code](https://code.visualstudio.com/), then you should consider
+  setting up [Remote development over
+  SSH](https://code.visualstudio.com/docs/remote/ssh-tutorial) and becoming
+  familiar with its features including its builtin terminal emulator and
+  debugger.
+
+  That said, we do not recommend that you use the [git] integration or become
+  too dependent on **AI** features such as **CoPilot**.
+
+  </div>
+
+  ### Optional References
+
+  The following are additional resources that you may find useful:
+
+  1.  <div class="flex-col">
+
+      [Introduction to Linux](http://tldp.org/LDP/intro-linux/html/index.html)
+
+      - [Chapter 3. About files and the file system](http://tldp.org/LDP/intro-linux/html/chap_03.html)
+
+      - [Chapter 4. Processes](http://tldp.org/LDP/intro-linux/html/chap_04.html)
+
+  ## Quiz
+
+  Once you have completed the readings, answer the following [Reading 01 Quiz]
+  questions:
+
+  <div id="quiz-questions"></div>
+
+  <div id="quiz-responses"></div>
+
+  <script src="static/js/dredd-quiz.js"></script>
+  <script>
+  loadQuiz('static/json/reading01.json');
+  </script>
+
+  <pre style="display: none;" id="dr-container" class="codehilite"><code id="dredd-response"></code></pre>
+
+  ## Submission
+
+  To submit your answers, you will need to create an `answers.json` file in the
+  `reading01` folder of your **assignments** repository:
+
+  1.  <div class="flex-col">
+
+      If you have not already, follow the instructions at the top of this
+      document to create a `reading01` branch in your **assignments** [Git]
+      repository.
+
+  2.  <div class="flex-col">
+
+      You can either hand-write the `answers.json` file using your favorite text
+      editor or you can use the online form to generate the [JSON] data, which should
+      look like the following:
+
+          :::json
+          {
+              "q01": [
+                  "stdin",
+                  "stdout",
+                  "stderr"
+              ],
+              "q02": "yes",
+              "q03": [
+                  "a",
+                  "b"
+              ],
+              "q04": [
+                  "a",
+                  "b"
+              ],
+              "q05": [
+                  "ls"
+              ],
+              "q06": [
+                  "beastie"
+              ],
+              "q07": [
+                  "beastie"
+              ],
+              "q08": [
+                  "800"
+              ],
+              "q09": [
+                  "b"
+              ],
+              "q10": [
+                  "homeworks"
+              ]
+          }
+
+      To determine which symbols correspond to which response, take a look at
+      the [Reading 01 Quiz] file.
+
+      To check your answers, you can use the provided `.scripts/check.py` script:
+
+          :::bash
+          $ cd reading01                        # Go into reading01 folder
+
+          $ $EDITOR answers.json                # Edit your answers.json file
+
+          $ ../.scripts/check.py                # Check reading01 quiz
+          Checking reading01 quiz ...
+              Q01  9.00 /  9.00
+              Q02  1.00 /  1.00
+              Q03  2.00 /  2.00
+              Q04  3.00 /  3.00
+              Q05  4.00 /  4.00
+              Q06  2.00 /  2.00
+              Q07  2.00 /  2.00
+              Q08  3.00 /  3.00
+              Q09  6.00 /  6.00
+              Q10  7.00 /  7.00
+           --------------------
+            Score 39.00 / 39.00
+            Grade  1.00 /  1.00
+           Status Success
+
+      This script will check your responses by sending your
+      `reading01/answers.json` file to [dredd], which is the automated grading
+      system. [dredd] will take your answers and return to you a score and
+      overall status as shown above.
+
+      <div class="alert success-bg" markdown="1">
+
+      **Note**: `Score` is how many points you received out of the maximum
+      number of attempted points, while `Grade` is the amount of normalized
+      points that will be recorded on **Canvas**.
+
+      Moreover, `Status` is `Success` if you have achieved full credit
+      (otherwise, it will show `Failure`).
+
+      </div>
+
+      <div class="alert warning-bg" markdown="1">
+
+      ### <i class="icon icon-medium">{{ "repeat" | embed_icon }}</i> Try, Try, Try again
+
+      You may check your quiz answers as many times as you want; [dredd] does
+      not keep track of who submits what or how many times. It simply returns a
+      score.
+      </div>
+
+  3.  <div class="flex-col">
+
+      Once you have your `answers` file, you need to [add], [commit] the file,
+      and [push] your commits to [GitHub]:
+
+          :::bash
+          $ git add answers.json                # Add answers.json to staging area
+
+          $ git commit -m "Reading 01: Quiz"    # Commit work
+
+          $ git push -u origin reading01        # Push branch to GitHub
+
+      <div class="alert success-bg" markdown="1">
+
+      ### <i class="icon icon-medium">{{ "git" | embed_icon }}</i> Iterative Approach
+
+      You may edit and commit changes to your branch as many times as you wish.
+      Just make sure all of your work goes in the appropriate branch and then
+      perform a `git push` when you are done.
+      </div>
+
+  4.  <div class="flex-col">
+
+      When you are ready for your final submission, you need to create a [Pull
+      Request] via the [GitHub] interface:
+
+      -   <div class="flex-col">
+
+          If you have a **Compare & pull request** button corresponding to your
+          `reading01` branch on your repository page, then you can click on
+          that button.
+
+          <div class="centered">
+            <img src="static/img/reading01-github-compare-pr.png" class="responsive">
+          </div>
+
+          <div class="alert info-bg" markdown="1">
+
+          ### <i class="icon icon-medium">{{ "git" | embed_icon }}</i> Pull Request URL
+
+          As an alternative, when you first do a `git push` on the
+          command-line, [git] will also give you a **URL** that you can click
+          to create a **Pull Request**.
+
+          </div>
+
+      -   <div class="flex-col">
+
+          If you do not have the **Compare & pull request** button, then go to
+          your repository's **Branches** page and then press the
+          **New pull request** button for the appropriate branch:
+
+          <div class="centered">
+            <img src="static/img/reading01-github-branches.png" class="responsive">
+          </div>
+
+      -   <div class="flex-col">
+
+          Next, edit the **Pull Request** title to "Reading 01", write a
+          comment if necessary, assign the appropriate **TA** from the [Reading
+          01 TA List], and then press the "Create pull request" button.
+
+          <div class="centered">
+            <img src="static/img/reading01-github-pull-request.png" class="responsive">
+          </div>
+
+          <div class="alert danger-bg" markdown="1">
+
+          ### <i class="icon icon-medium">{{ "close-octogon" | embed_icon }}</i> Don't Merge!
+
+          **DO NOT MERGE your own Pull Requests**.  The TAs use open **Pull Requests**
+          to keep track of which assignments to grade.  Closing them yourself will
+          confuse the TAs and cause a delay in grading.
+
+          </div>
+
+      -   <div class="flex-col">
+
+          Every commit on [GitHub] will automatically submit your quiz or code to
+          [dredd] and the results of each run is displayed in the **Checks** tab of
+          each commit as shown below:
+
+          <div class="centered">
+            <img src="static/img/reading01-github-checks.png" class="responsive">
+          </div>
+
+    Once you have made the **Pull Request**, the TA can verify your work and
+    provide feedback via the discussion form inside the **Pull Request**. If
+    necessary, you can update your submission by simply commit and pushing to
+    the appropriate branch; the **Pull Request** will automatically be updated
+    to match your latest work.
+
+  <div class="alert warning-bg" markdown="1">
+
+  ### <i class="icon icon-medium">{{ "lifebuoy" | embed_icon }}</i> Acknowledgments
+
+  If you collaborated with any other students, or received help from TAs or AI
+  tools on this assignment, please record this support in the `README.md` in
+  the `reading01` folder and include it with your **Pull Request**.
+
+  </div>
+
+  <div class="alert success-bg" markdown="1">
+
+  ### <i class="icon icon-medium">{{ "account-question" | embed_icon }}</i> Graders
+
+  Once you have committed your work and pushed it to [GitHub], remember to
+  create a **pull request** and assign it to the appropriate **teaching
+  assistant** from the [Reading 01 TA List].
+
+  **Note**: this list changes each week, so be sure to consult the appropriate
+  list for each assignment.
+
+  </div>
+
+  [The Linux Command Line]: https://linuxcommand.org/tlcl.php
+  [Unix]: https://en.wikipedia.org/wiki/Unix
+  [Unix Shell]: https://en.wikipedia.org/wiki/Unix_shell
+  [Git]: https://git-scm.com/
+  [GitHub]: https://github.com/
+  [nano]: http://www.nano-editor.org/
+  [vim]: http://www.vim.org/
+  [emacs]: https://www.gnu.org/software/emacs/
+  [text editor]: https://en.wikipedia.org/wiki/Text_editor
+  [creed]: https://en.wikipedia.org/wiki/Rifleman's_Creed
+  [TCSH]: http://www.tcsh.org/
+  [Bash]: https://www.gnu.org/software/bash/
+  [sort]: http://man7.org/linux/man-pages/man1/sort.1.html
+  [macOS]: http://www.apple.com/macos/
+  [Linux]: http://kernel.org
+  [GNU]: https://www.gnu.org
+  [FreeBSD]: http://www.freebsd.org
+  [files]: https://en.wikipedia.org/wiki/Computer_file
+  [processes]: https://en.wikipedia.org/wiki/Process_(computing)
+  [branch]: https://git-scm.com/docs/git-branch
+  [add]: https://git-scm.com/docs/git-add
+  [commit]: https://git-scm.com/docs/git-commit
+  [push]: https://git-scm.com/docs/git-push
+  [Reading 01 Quiz]: static/json/reading01.json
+  [dredd]: https://dredd.h4x0r.space
+  [JSON]: https://json.org/
+  [Python 3]: https://python.org
+  [Reading 01 TA List]: reading01_tas.html
+  [Requests]: http://docs.python-requests.org/en/master/
+  [PyYAML]: https://github.com/yaml/pyyaml
+  [commit]: https://git-scm.com/docs/git-commit
+  [stash]: https://www.git-scm.com/docs/git-stash
+  [Pull Request]: https://docs.github.com/en/github/collaborating-with-issues-and-pull-requests/creating-a-pull-request
