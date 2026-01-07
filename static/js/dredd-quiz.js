@@ -95,12 +95,14 @@ function submitQuiz(quiz_url) {
 	    // data now contains JSON from dredd
 	    dr.innerHTML += `Checking ${assignment_name} quiz ...\n`;
 	    for (const question in data) {
-		if (question === 'score' || question === 'value' || question === 'status') {
+		if (question === 'score' || question === 'value' || question === 'status' || question === 'points') {
 		    continue;
 		}
-		dr.innerHTML += (`${titleCase(question).padStart(8, " ")} ${data[question].toFixed(2)}\n`);
+		dr.innerHTML += (`${titleCase(question).padStart(8, " ")} ${String(data[question].toFixed(2)).padStart(5, " ")} / ${String(data['points'][question].toFixed(2)).padStart(5, " ")}\n`);
 	    }
-	    dr.innerHTML += `   Score ${data['score'].toFixed(2)} / ${data['value'].toFixed(2)}\n`;
+	    dr.innerHTML += "  --------------------\n";
+	    dr.innerHTML += `   Score ${String(data['score'].toFixed(2)).padStart(5, " ")} / ${String(data['value'].toFixed(2)).padStart(5, " ")}\n`;
+	    dr.innerHTML += `   Grade ${String((data['score'].toFixed(2) / data['value']).toFixed(2)).padStart(5, " ")} /  1.00\n`;
 	    dr.innerHTML += `  Status ${!data['status'] ? "Success" : "Failure"}`;
 	    // show the results
 	    document.getElementById('dr-container').style.display = 'block';
