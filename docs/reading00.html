@@ -1,0 +1,411 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<!-- Favicon -->
+<link rel="icon" type="image/png" sizes="32x32" href="static/ico/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="static/ico/favicon-16x16.png">
+<link rel="manifest" href="static/ico/site.webmanifest">
+<!-- Stylesheets -->
+<link rel="stylesheet" href="static/css/pnutzh4x0r.css">
+<title>Reading 00: Slack, GitHub, Student Machines</title>
+</head>
+<body>
+<header>
+<a class="logo" href="reading00.html">
+    <h1>Reading 00: Slack, GitHub, Student Machines</h1>
+</a>
+<nav>
+    <ul>
+        <li><a href="index.html"><h4>Home</h4></a></li>
+        </ul>
+</nav></header>
+<main>
+<p><strong>Everyone</strong>:</p>
+<p>Welcome to <a href="index.html">CSE 20289 Systems Programming</a>, which (<em>as the
+syllabus states</em>) is a course that "introduces students to the Unix
+programming environment where they will explore various command line
+utilities, files, processes, memory management, system calls, data
+structures, networking, and concurrency".  What this means is that you will
+first learn how to effectively utilize a modern <a href="https://en.wikipedia.org/wiki/Unix">Unix</a> programming
+environment and then you will study how to develop applications that take
+advantage of system level <a href="https://en.wikipedia.org/wiki/Abstraction_(software_engineering)">abstractions</a> such as <a href="https://en.wikipedia.org/wiki/Computer_file">files</a>, <a href="https://en.wikipedia.org/wiki/Process_(computing)">processes</a>, and
+<a href="https://en.wikipedia.org/wiki/Network_socket">sockets</a>.</p>
+<div class="alert info-bg">
+<h3 id="book-embed_icon-tldr"><i class="icon icon-medium"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><title>book</title><path d="M18,22A2,2 0 0,0 20,20V4C20,2.89 19.1,2 18,2H12V9L9.5,7.5L7,9V2H6A2,2 0 0,0 4,4V20A2,2 0 0,0 6,22H18Z" /></svg>
+</i> TL;DR<a class="headerlink" href="#book-embed_icon-tldr" title="Permanent link">&para;</a></h3>
+<p>For this week, you need to read about using the command line and <a href="https://git-scm.com/">Git</a>, and
+then setup your <a href="https://github.com">GitHub</a> repository.  There is <strong>nothing to submit</strong>.</p>
+</div>
+<h2 id="course-overview">Course Overview<a class="headerlink" href="#course-overview" title="Permanent link">&para;</a></h2>
+<div class="flex-row">
+<div class="flex-col">
+<p>Last semester, most of you took the <strong>CSE 20311 Fundamentals of Computing</strong>
+course where you learned how to program in the <a href="https://isocpp.org/">C</a> language.  After
+<em>playing the Game of Life</em>, <em>generating anagrams</em>, and <em>building fractals</em>,
+you should be capable of programming in a compiled language using
+conditional statements, loops, and functions.  Moreover, you should be
+somewhat familiar with <a href="https://en.wikipedia.org/wiki/String_(computer_science)">strings</a>, <a href="https://en.wikipedia.org/wiki/Array_data_structure">arrays</a>, and <a href="https://en.wikipedia.org/wiki/Pointer_(computer_programming)">pointers</a>.</p>
+<p>In this course, we will build on this foundational knowledge by exploring
+the <a href="https://en.wikipedia.org/wiki/Unix">Unix</a> programming environment in order to get a better idea of how
+modern computing systems work.  To do so, we will construct applications
+that take advantage of the features and capabilities provided by the
+underlying operating system that manages and abstracts the computer
+hardware for us.</p>
+<p>The semester can be broken down into the following units:</p>
+</div>
+<div class="flex-col-50 centered">
+  <img src="static/img/house.png" class="responsive">
+</div>
+</div>
+<ol>
+<li>
+<div class="flex-col">
+<p><strong>Unit 01: Bourne Shell</strong></p>
+<p>First, we will begin by learning how to utilize the <a href="https://en.wikipedia.org/wiki/Unix_shell">Unix shell</a> and
+then how to compose multiple <a href="https://en.wikipedia.org/wiki/Unix">Unix</a> utilities into <a href="https://en.wikipedia.org/wiki/Pipeline_(Unix)">pipelines</a> and
+<a href="https://en.wikipedia.org/wiki/Shell_script">shell scripts</a> while taking advantage of <a href="https://en.wikipedia.org/wiki/Regular_expression">regular expressions</a>.</p>
+</li>
+<li>
+<div class="flex-col">
+<p><strong>Unit 02: Python</strong></p>
+<p>Next, we will explore processing and manipulating data using <a href="https://www.python.org/">Python</a>.
+Along the way, we will discuss how to exploit the <a href="https://en.wikipedia.org/wiki/Functional_programming">functional
+programming</a> paradigm to efficiently perform <a href="https://en.wikipedia.org/wiki/Parallel_computing">parallel computing</a>.</p>
+</li>
+<li>
+<div class="flex-col">
+<p><strong>Unit 03: C</strong></p>
+<p>Afterwards, we will descend down the software stack to <a href="https://isocpp.org/">C</a> and discuss
+<a href="https://en.wikipedia.org/wiki/Memory_management">memory management</a> as well as revisiting <a href="https://en.wikipedia.org/wiki/Pointer_(computer_programming)">pointers</a>, <a href="https://en.wikipedia.org/wiki/Array_data_structure">arrays</a>,
+<a href="https://en.wikipedia.org/wiki/String_(computer_science)">strings</a>, and studying some <a href="https://en.wikipedia.org/wiki/Data_structure">data structures</a>.</p>
+</li>
+<li>
+<div class="flex-col">
+<p><strong>Unit 04: System Calls</strong></p>
+<p>Finally, we will build our own <a href="https://en.wikipedia.org/wiki/Unix">Unix</a> applications that take advantage
+of system level abstractions such as <a href="https://en.wikipedia.org/wiki/Computer_file">files</a>, <a href="https://en.wikipedia.org/wiki/Process_(computing)">processes</a>, and
+<a href="https://en.wikipedia.org/wiki/Network_socket">sockets</a> through the use of <a href="https://en.wikipedia.org/wiki/System_call">system calls</a>.</p>
+</li>
+</ol>
+<p>Moreover, throughout the course, we will frequently reflect on the wisdom
+and power of the <a href="https://en.wikipedia.org/wiki/Unix_philosophy">Unix Philosophy</a>:</p>
+<ol>
+<li>
+<p>Write programs that do one thing and do it well.</p>
+</li>
+<li>
+<p>Write programs to work together.</p>
+</li>
+<li>
+<p>Write programs to handle text streams, because that is a universal interface.</p>
+</li>
+</ol>
+<p>Each week there will be a <strong>Reading assignment</strong> meant to give you a
+context and reference into what we will be covering that upcoming week and
+a <strong>Homework assignment</strong> that will provide you an opportunity apply the
+material in (hopefully) interesting ways.</p>
+<p>To assess your mastery of the concepts and skills in this class, there will
+be <code>4</code> in-class <strong>written Exams</strong>.  Additionally, there will be an in-person
+<strong>coding Interview</strong> (<code>15</code> minutes long) with a teaching assistant or with
+the instructor before each <strong>written Exam</strong>.</p>
+<p>Please refer to <a href="index.html#scale-balance-embed_icon-assignments-and-assessments">Assignments and
+Assessments</a>
+for more details on the coursework required in this class.</p>
+<h2 id="readings">Readings<a class="headerlink" href="#readings" title="Permanent link">&para;</a></h2>
+<div class="flex-row">
+<div class="flex-col">
+<p>The readings for <strong>Monday, January 12</strong> are:</p>
+<ol>
+<li>
+<div class="flex-col" markdown="1">
+<p><a href="http://linuxcommand.org/tlcl.php">The Linux Command Line</a></p>
+<ul>
+<li>Chapter 1 - What is the Shell?</li>
+<li>Chapter 2 - Navigation</li>
+<li>Chapter 3 - Exploring the System</li>
+<li>Chapter 4 - Manipulating Files and Directories</li>
+<li><p>Chapter 5 - Working With Commands<br></p></li>
+</ul>
+</li>
+<li>
+<p><a href="https://developers.redhat.com/articles/2023/08/02/beginners-guide-git-version-control">A beginner's guide to Git version control</a></p>
+</li>
+<li>
+<p><a href="https://guides.github.com/introduction/git-handbook/">GitHub Handbook</a></p>
+</li>
+</ol>
+</div>
+<div class="flex-col-25 centered">
+<p><img src="static/img/tlcl.jpg"></p>
+</div>
+</div>
+<div class="alert info-bg">
+<h3 id="git-embed_icon-unix-git-github"><i class="icon icon-medium"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><title>git</title><path d="M2.6,10.59L8.38,4.8L10.07,6.5C9.83,7.35 10.22,8.28 11,8.73V14.27C10.4,14.61 10,15.26 10,16A2,2 0 0,0 12,18A2,2 0 0,0 14,16C14,15.26 13.6,14.61 13,14.27V9.41L15.07,11.5C15,11.65 15,11.82 15,12A2,2 0 0,0 17,14A2,2 0 0,0 19,12A2,2 0 0,0 17,10C16.82,10 16.65,10 16.5,10.07L13.93,7.5C14.19,6.57 13.71,5.55 12.78,5.16C12.35,5 11.9,4.96 11.5,5.07L9.8,3.38L10.59,2.6C11.37,1.81 12.63,1.81 13.41,2.6L21.4,10.59C22.19,11.37 22.19,12.63 21.4,13.41L13.41,21.4C12.63,22.19 11.37,22.19 10.59,21.4L2.6,13.41C1.81,12.63 1.81,11.37 2.6,10.59Z" /></svg>
+</i> Unix, Git, GitHub<a class="headerlink" href="#git-embed_icon-unix-git-github" title="Permanent link">&para;</a></h3>
+<p>The focus of the readings is to review the basics of using the <a href="https://en.wikipedia.org/wiki/Unix_shell">Unix
+shell</a>, which most of you used in <strong>CSE 20311 Fundamentals of Computing</strong>
+last semester, and to introduce you to <a href="https://git-scm.com/">Git</a> and <a href="https://github.com">GitHub</a>, which we will be using
+throughout the semester.</p>
+</div>
+<h3 id="optional-resources">Optional Resources<a class="headerlink" href="#optional-resources" title="Permanent link">&para;</a></h3>
+<div class="flex-row">
+<div class="flex-col">
+<h4 id="unix">Unix<a class="headerlink" href="#unix" title="Permanent link">&para;</a></h4>
+<ul>
+<li>
+<p><a href="https://learnpythonthehardway.org/book/appendixa.html">Command Line Crash Course</a></p>
+</li>
+<li>
+<p><a href="https://www.digitalocean.com/community/tutorials/a-linux-command-line-primer">A Linux Command Line Primer</a></p>
+</li>
+<li>
+<p><a href="http://linuxcommand.org/lc3_learning_the_shell.php">Learning the Shell</a></p>
+</li>
+<li>
+<p><a href="http://matt.might.net/articles/basic-unix/">Survival guide for Unix newbies</a></p>
+</li>
+</ul>
+</div>
+<div class="flex-col">
+<h4 id="git">Git<a class="headerlink" href="#git" title="Permanent link">&para;</a></h4>
+<ul>
+<li>
+<p><a href="https://learngitbranching.js.org/">Learn Git Branching</a></p>
+</li>
+<li>
+<p><a href="https://git-scm.com/docs/gittutorial">gittutorial</a></p>
+</li>
+<li>
+<p><a href="https://www.vogella.com/tutorials/Git/article.html">Git Tutorial</a></p>
+</li>
+<li>
+<p><a href="https://git-scm.com/book/en/v2">Pro Git</a></p>
+</li>
+</ul>
+</div>
+</div>
+<div class="alert success-bg">
+<h3 id="console-embed_icon-the-hands-on-imperative"><i class="icon icon-medium"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><title>console</title><path d="M20,19V7H4V19H20M20,3A2,2 0 0,1 22,5V19A2,2 0 0,1 20,21H4A2,2 0 0,1 2,19V5C2,3.89 2.9,3 4,3H20M13,17V15H18V17H13M9.58,13L5.57,9H8.4L11.7,12.3C12.09,12.69 12.09,13.33 11.7,13.72L8.42,17H5.59L9.58,13Z" /></svg>
+</i> The Hands-on Imperative<a class="headerlink" href="#console-embed_icon-the-hands-on-imperative" title="Permanent link">&para;</a></h3>
+<p>To get the most out of your reading, you should be <strong>typing</strong> commands into
+a terminal and <strong>playing</strong> around with the things you reading.</p>
+<p>Passively reading will not be as fruitful as <strong>actively</strong> reading and
+trying out things you are exploring.</p>
+</div>
+<h2 id="tasks">Tasks<a class="headerlink" href="#tasks" title="Permanent link">&para;</a></h2>
+<p>Normally, you would have <strong>quiz</strong> to complete after each reading. For this
+initial reading, however, you only need do the following:</p>
+<ol>
+<li>
+<p><strong>Join</strong> the class <a href="https://nd-cse.slack.com">Slack</a> channel.</p>
+</li>
+<li>
+<p><strong>Create</strong> your own <strong>private assignments</strong> <a href="https://git-scm.com/">Git</a> repository on <a href="https://github.com">GitHub</a>.</p>
+</li>
+<li>
+<p><strong>Clone</strong> your <strong>private assignments</strong> <a href="https://git-scm.com/">Git</a> repository to your local
+computer or a <strong>student machine</strong>.</p>
+</li>
+</ol>
+<h3 id="task-1-slack">Task 1: Slack<a class="headerlink" href="#task-1-slack" title="Permanent link">&para;</a></h3>
+<p>For communication outside of our classroom, we will be using <a href="https://nd-cse.slack.com">Slack</a>,
+which is a real-time chat platform similar to <strong>Discord</strong>.  Your first task is
+to create a <strong>ND-CSE</strong> <a href="https://nd-cse.slack.com">Slack</a> account (if you have not done so already)
+and join the <code>#cse-20289-sp26</code> channel:</p>
+<blockquote>
+<p><a href="https://nd-cse.slack.com/messages/cse-20289-sp26/">https://nd-cse.slack.com/messages/cse-20289-sp26/</a></p>
+</blockquote>
+<div class="alert info-bg">
+<h3 id="slack-embed_icon-slack-channel"><i class="icon icon-medium"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><title>slack</title><path d="M6,15A2,2 0 0,1 4,17A2,2 0 0,1 2,15A2,2 0 0,1 4,13H6V15M7,15A2,2 0 0,1 9,13A2,2 0 0,1 11,15V20A2,2 0 0,1 9,22A2,2 0 0,1 7,20V15M9,7A2,2 0 0,1 7,5A2,2 0 0,1 9,3A2,2 0 0,1 11,5V7H9M9,8A2,2 0 0,1 11,10A2,2 0 0,1 9,12H4A2,2 0 0,1 2,10A2,2 0 0,1 4,8H9M17,10A2,2 0 0,1 19,8A2,2 0 0,1 21,10A2,2 0 0,1 19,12H17V10M16,10A2,2 0 0,1 14,12A2,2 0 0,1 12,10V5A2,2 0 0,1 14,3A2,2 0 0,1 16,5V10M14,18A2,2 0 0,1 16,20A2,2 0 0,1 14,22A2,2 0 0,1 12,20V18H14M14,17A2,2 0 0,1 12,15A2,2 0 0,1 14,13H19A2,2 0 0,1 21,15A2,2 0 0,1 19,17H14Z" /></svg>
+</i> Slack Channel<a class="headerlink" href="#slack-embed_icon-slack-channel" title="Permanent link">&para;</a></h3>
+<p>There is a <a href="mailto:sp26-cse-20289-01-group@nd.edu">class mailing list</a>, but most day-to-day communication
+(including office hours and homework help) should take place on <a href="https://nd-cse.slack.com">Slack</a>.</p>
+<p>Therefore, you should <strong>check this channel regularly</strong> as it is the primary
+means of communication for the course.</p>
+</div>
+<h3 id="task-2-github">Task 2: GitHub<a class="headerlink" href="#task-2-github" title="Permanent link">&para;</a></h3>
+<p>All of your work in this class will be submitted to <a href="https://github.com">GitHub</a> using <a href="https://git-scm.com/">git</a>.
+Your second task is to setup your <a href="https://github.com">GitHub</a> <strong>assignments</strong> repository by doing
+the following:</p>
+<ol>
+<li>
+<div class="flex-col">
+<p><strong>Sign-in</strong> or create a <a href="https://github.com">GitHub</a> account if you do not already have one.</p>
+<blockquote>
+<p><a href="https://github.com/join">https://github.com/join</a></p>
+</blockquote>
+<p>You may associate this account with either your Notre Dame or personal
+email address.  It is up to you.</p>
+</li>
+<li>
+<div class="flex-col">
+<p><strong>Fork</strong> the class assignments repository from the following template:</p>
+<blockquote>
+<p><a href="https://classroom.github.com/a/aTicsp6L">https://classroom.github.com/a/aTicsp6L</a></p>
+</blockquote>
+<p>This will create a <strong>private</strong> <code>assignments-$GITHUB_USERNAME</code>
+repository under your own account and linked to the <a href="https://github.com/nd-cse-20289-sp26">nd-cse-20289-sp26</a>
+organization.</p>
+</li>
+</ol>
+<div class="alert danger-bg">
+<h3 id="github-embed_icon-github-repository"><i class="icon icon-medium"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><title>github</title><path d="M12,2A10,10 0 0,0 2,12C2,16.42 4.87,20.17 8.84,21.5C9.34,21.58 9.5,21.27 9.5,21C9.5,20.77 9.5,20.14 9.5,19.31C6.73,19.91 6.14,17.97 6.14,17.97C5.68,16.81 5.03,16.5 5.03,16.5C4.12,15.88 5.1,15.9 5.1,15.9C6.1,15.97 6.63,16.93 6.63,16.93C7.5,18.45 8.97,18 9.54,17.76C9.63,17.11 9.89,16.67 10.17,16.42C7.95,16.17 5.62,15.31 5.62,11.5C5.62,10.39 6,9.5 6.65,8.79C6.55,8.54 6.2,7.5 6.75,6.15C6.75,6.15 7.59,5.88 9.5,7.17C10.29,6.95 11.15,6.84 12,6.84C12.85,6.84 13.71,6.95 14.5,7.17C16.41,5.88 17.25,6.15 17.25,6.15C17.8,7.5 17.45,8.54 17.35,8.79C18,9.5 18.38,10.39 18.38,11.5C18.38,15.32 16.04,16.16 13.81,16.41C14.17,16.72 14.5,17.33 14.5,18.26C14.5,19.6 14.5,20.68 14.5,21C14.5,21.27 14.66,21.59 15.17,21.5C19.14,20.16 22,16.42 22,12A10,10 0 0,0 12,2Z" /></svg>
+</i> GitHub Repository<a class="headerlink" href="#github-embed_icon-github-repository" title="Permanent link">&para;</a></h3>
+<p>The <strong>assignments</strong> repository will be used for your individual <strong>reading</strong>
+and <strong>homework</strong> assignments. It must be kept <strong>private</strong> and only shared
+with the <strong>instructional staff</strong>.</p>
+</div>
+<h3 id="task-3-student-machines">Task 3: Student Machines<a class="headerlink" href="#task-3-student-machines" title="Permanent link">&para;</a></h3>
+<p>While you are free to use any machine you wish to do your work, the
+department provides a set of <strong>student machines</strong> that you can login to and
+do remote work in an environment crafted for the course.  The following
+steps allow you to <strong>clone</strong> the <strong>assigments</strong> you just created to any
+machine of your choosing.</p>
+<div class="alert info-bg">
+<h3 id="server-embed_icon-student-machines"><i class="icon icon-medium"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><title>server</title><path d="M4,1H20A1,1 0 0,1 21,2V6A1,1 0 0,1 20,7H4A1,1 0 0,1 3,6V2A1,1 0 0,1 4,1M4,9H20A1,1 0 0,1 21,10V14A1,1 0 0,1 20,15H4A1,1 0 0,1 3,14V10A1,1 0 0,1 4,9M4,17H20A1,1 0 0,1 21,18V22A1,1 0 0,1 20,23H4A1,1 0 0,1 3,22V18A1,1 0 0,1 4,17M9,5H10V3H9V5M9,13H10V11H9V13M9,21H10V19H9V21M5,3V5H7V3H5M5,11V13H7V11H5M5,19V21H7V19H5Z" /></svg>
+</i> Student Machines<a class="headerlink" href="#server-embed_icon-student-machines" title="Permanent link">&para;</a></h3>
+<p>As a reminder, students in this class have access to the following
+<strong>student</strong> machines: <code>student05.cse.nd.edu</code>, <code>student10.cse.nd.edu</code>,
+<code>student11.cse.nd.edu</code>, <code>student12.cse.nd.edu</code>, <code>student13.cse.nd.edu</code>.</p>
+</div>
+<ol>
+<li>
+<div class="flex-col">
+<p>Before you can <strong>clone</strong> your <a href="https://git-scm.com/">git</a> repository, you will need to
+determine which form of <strong>authentication</strong>, you wish to use with
+<a href="https://github.com">GitHub</a>.</p>
+<p>To remotely access your repository from the command-line, you have two options:</p>
+<ol>
+<li>
+<div class="flex-col">
+<p><a href="https://docs.github.com/en/github/authenticating-to-github/connecting-to-github-with-ssh/about-ssh">Setup SSH Keys</a>: With this method, you generate a local public and
+private key pair on your computer and then upload the <strong>public
+key</strong> to <a href="https://github.com">GitHub</a>.  When accessing <a href="https://github.com">GitHub</a> from the
+command-line, you will use the <strong>private key</strong> to authenticate to
+the server.</p>
+<p>This is the <strong>recommended</strong> way to setup your repository as it will
+allow for <strong>passwordless</strong> access.</p>
+</li>
+<li>
+<p><a href="https://docs.github.com/en/github/authenticating-to-github/keeping-your-account-and-data-secure/creating-a-personal-access-token">Setup a Personal Access Token</a>: With this method, <a href="https://github.com">GitHub</a> will
+  generate an application specific passsword that you can use with
+  <strong>HTTPS</strong>.  As the <strong>PAT</strong> is a long string of characters, it is
+  recommended that you use it in conjunction with a <strong>password
+  manager</strong> or <strong>keyring</strong>.</p>
+</li>
+</ol>
+<div class="alert success-bg" markdown="1">
+<h3 id="key-chain-embed_icon-setup-ssh-keys"><i class="icon icon-medium"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><title>key-chain</title><path d="M12.67 13.67C12.2 14.13 11.63 14.5 11 14.73V23H8V21H5V18H8V14.72C6.26 14.1 5 12.46 5 10.5C5 8 7 6 9.5 6C9.54 6 9.57 6 9.6 6C9.13 6.95 8.92 8 9.03 9.08C8.44 9.28 8 9.84 8 10.5C8 11.33 8.67 12 9.5 12C9.73 12 9.95 11.94 10.15 11.85C10.79 12.69 11.67 13.32 12.67 13.67M20.73 19.44L17.97 20.6L17.19 18.76L14.43 19.93L13.26 17.16L16.03 16L14.76 13C12.91 13.08 11.11 12.05 10.35 10.25C9.39 7.96 10.47 5.32 12.76 4.35C13 4.25 13.26 4.18 13.5 4.12C12.84 2.87 11.5 2 10 2C7.79 2 6 3.79 6 6C6 6.08 6 6.16 6 6.24C5.7 6.5 5.4 6.82 5.15 7.15C5.06 6.78 5 6.4 5 6C5 3.24 7.24 1 10 1S15 3.24 15 6C15 7.42 14.4 8.67 13.45 9.57C13.87 10 14.5 10.13 15.08 9.88C15.85 9.56 16.2 8.68 15.88 7.92C15.85 7.83 15.8 7.74 15.74 7.66C15.9 7.13 16 6.58 16 6C16 5.37 15.9 4.76 15.72 4.19C17 4.55 18.1 5.44 18.65 6.76C19.41 8.56 18.89 10.57 17.5 11.81L20.73 19.44M13 8.6C13.37 8.19 13.65 7.71 13.82 7.18C13.28 7.45 12.97 8 13 8.6Z" /></svg>
+</i> Setup SSH Keys<a class="headerlink" href="#key-chain-embed_icon-setup-ssh-keys" title="Permanent link">&para;</a></h3>
+<div class="alert warning-bg" markdown="1">
+<p><strong>Note</strong>: If you have already <a href="https://docs.github.com/en/github/authenticating-to-github/connecting-to-github-with-ssh/about-ssh">Setup SSH Keys</a> in another course (such
+as <strong>Data Structures</strong>), you <strong>do not</strong> need to make new keys and
+can skip this process.</p>
+</div>
+<p>Here is a quick tutorial on how to <a href="https://docs.github.com/en/github/authenticating-to-github/connecting-to-github-with-ssh/about-ssh">Setup SSH Keys</a> on the <strong>student
+machines</strong> (<em>if you have not done so already</em>):</p>
+<ol>
+<li>
+<div class="flex-col">
+<p>Generate SSH keys if you don't have them yet:</p>
+<div class="codehilite"><pre><span></span><code><span class="c1"># Accept the defaults, don&#39;t make a password if you want to go passwordless</span>
+$<span class="w"> </span>ssh-keygen
+</code></pre></div>
+
+</li>
+<li>
+<div class="flex-col">
+<p>Copy the contents of <code>~/.ssh/id_rsa.pub</code> to the <strong>SSH Keys</strong> section of
+your <a href="https://github.com">GitHub</a> settings page:</p>
+<blockquote>
+<p><a href="https://github.com/settings/keys">https://github.com/settings/keys</a></p>
+</blockquote>
+<div class="codehilite"><pre><span></span><code><span class="c1"># Copy and paste the contents of this file into GitHub</span>
+$<span class="w"> </span>cat<span class="w"> </span>~/.ssh/id_rsa.pub
+</code></pre></div>
+
+</li>
+<li>
+<div class="flex-col">
+<p>Edit/create <code>~/.ssh/config</code> to use this key with <a href="https://github.com">GitHub</a>:</p>
+<div class="codehilite"><pre><span></span><code><span class="c1"># Add the following to your config (replace $NETID with your netid)</span>
+$<span class="w"> </span>vim<span class="w"> </span>~/.ssh/config
+Host<span class="w"> </span>github.com
+<span class="w">        </span>User<span class="w"> </span>git
+<span class="w">        </span>Hostname<span class="w"> </span>github.com
+<span class="w">        </span>PreferredAuthentications<span class="w"> </span>publickey
+<span class="w">        </span>IdentityFile<span class="w"> </span>/escnfs/home/<span class="nv">$NETID</span>/.ssh/id_rsa
+</code></pre></div>
+
+</li>
+</ol>
+<p>Once this is done, you should be able to do <a href="https://git-scm.com/">git</a> operations without a password.
+You will need to accept the host key the first time by typing in <code>"yes"</code>.
+</div></p>
+<div class="alert info-bg" markdown="1">
+<h3 id="code-tags-embed_icon-text-editor"><i class="icon icon-medium"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><title>code-tags</title><path d="M14.6,16.6L19.2,12L14.6,7.4L16,6L22,12L16,18L14.6,16.6M9.4,16.6L4.8,12L9.4,7.4L8,6L2,12L8,18L9.4,16.6Z" /></svg>
+</i> Text Editor<a class="headerlink" href="#code-tags-embed_icon-text-editor" title="Permanent link">&para;</a></h3>
+<p>Any time you see references to <code>vim</code> in example commands, remember that
+you can use any text editor such as <code>nano</code> or <code>emacs</code> instead.</p>
+</div>
+</li>
+<li>
+<div class="flex-col">
+<p><strong>Clone</strong> your <a href="https://git-scm.com/">git</a> repository on one of the <strong>student machines</strong>:</p>
+<div class="codehilite"><pre><span></span><code><span class="c1"># Example of cloning GitHub assignments repository to local or student machine</span>
+$<span class="w"> </span>git<span class="w"> </span>clone<span class="w"> </span>git@github.com:nd-cse-20289-sp26/assignments-<span class="nv">$GITHUB_USERNAME</span>.git
+remote:<span class="w"> </span>Enumerating<span class="w"> </span>objects:<span class="w"> </span><span class="m">70</span>,<span class="w"> </span><span class="k">done</span>.
+remote:<span class="w"> </span>Counting<span class="w"> </span>objects:<span class="w"> </span><span class="m">100</span>%<span class="w"> </span><span class="o">(</span><span class="m">70</span>/70<span class="o">)</span>,<span class="w"> </span><span class="k">done</span>.
+remote:<span class="w"> </span>Compressing<span class="w"> </span>objects:<span class="w"> </span><span class="m">100</span>%<span class="w"> </span><span class="o">(</span><span class="m">13</span>/13<span class="o">)</span>,<span class="w"> </span><span class="k">done</span>.
+Receiving<span class="w"> </span>objects:<span class="w"> </span><span class="m">100</span>%<span class="w"> </span><span class="o">(</span><span class="m">70</span>/70<span class="o">)</span>,<span class="w"> </span><span class="m">6</span>.25<span class="w"> </span>KiB<span class="w"> </span><span class="p">|</span><span class="w"> </span><span class="m">1</span>.56<span class="w"> </span>MiB/s,<span class="w"> </span><span class="k">done</span>.
+Resolving<span class="w"> </span>deltas:<span class="w"> </span><span class="m">100</span>%<span class="w"> </span><span class="o">(</span><span class="m">4</span>/4<span class="o">)</span>,<span class="w"> </span><span class="k">done</span>.
+remote:<span class="w"> </span>Total<span class="w"> </span><span class="m">70</span><span class="w"> </span><span class="o">(</span>delta<span class="w"> </span><span class="m">4</span><span class="o">)</span>,<span class="w"> </span>reused<span class="w"> </span><span class="m">70</span><span class="w"> </span><span class="o">(</span>delta<span class="w"> </span><span class="m">4</span><span class="o">)</span>,<span class="w"> </span>pack-reused<span class="w"> </span><span class="m">0</span>
+</code></pre></div>
+
+</li>
+<li>
+<div class="flex-col">
+<p><strong>Edit</strong> the <code>README.md</code> file in your <strong>assignments</strong> repository such
+that the <strong>Name</strong> and <strong>NetID</strong> fields are completed (i.e. replace
+"Domer McDomerson" and "dmcdomer"). You should <strong>commit</strong> your change
+and then <strong>push</strong> them to <a href="https://github.com">GitHub</a>.</p>
+<div class="codehilite"><pre><span></span><code><span class="c1"># Example on editing README in assignments repository and pushing changes to GitHub</span>
+
+$<span class="w"> </span><span class="nb">cd</span><span class="w"> </span>assignments-<span class="nv">$GITHUB_USERNAME</span><span class="w">           </span><span class="c1"># Go into the assignments directory</span>
+
+$<span class="w"> </span>nano<span class="w"> </span>README.md<span class="w">                            </span><span class="c1"># Edit the README.md file</span>
+
+$<span class="w"> </span>git<span class="w"> </span>add<span class="w"> </span>README.md<span class="w">                         </span><span class="c1"># Mark the file for recording</span>
+
+$<span class="w"> </span>git<span class="w"> </span>commit<span class="w"> </span>-m<span class="w"> </span><span class="s2">&quot;Update README&quot;</span><span class="w">             </span><span class="c1"># Record the change</span>
+<span class="o">[</span>master<span class="w"> </span>c550fa1<span class="o">]</span><span class="w"> </span>Update<span class="w"> </span>README
+<span class="m">1</span><span class="w"> </span>file<span class="w"> </span>changed,<span class="w"> </span><span class="m">2</span><span class="w"> </span>insertions<span class="o">(</span>+<span class="o">)</span>,<span class="w"> </span><span class="m">2</span><span class="w"> </span>deletions<span class="o">(</span>-<span class="o">)</span>
+
+$<span class="w"> </span>git<span class="w"> </span>push<span class="w">                                  </span><span class="c1"># Send your local changes to GitHub</span>
+</code></pre></div>
+
+</li>
+</ol>
+<p>The following is a video demonstration of the process of cloning your
+<a href="https://github.com">GitHub</a> repository and committing your first change.</p>
+<div class="centered">
+  <script src="https://asciinema.org/a/QKVHM7yas1OkJjaF0U1EHLgor.js" id="asciicast-QKVHM7yas1OkJjaF0U1EHLgor" async="true"></script>
+</div>
+
+<div class="alert success-bg">
+<h3 id="check-all-embed_icon-tasks"><i class="icon icon-medium"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><title>check-all</title><path d="M0.41,13.41L6,19L7.41,17.58L1.83,12M22.24,5.58L11.66,16.17L7.5,12L6.07,13.41L11.66,19L23.66,7M18,7L16.59,5.58L10.24,11.93L11.66,13.34L18,7Z" /></svg>
+</i> Tasks<a class="headerlink" href="#check-all-embed_icon-tasks" title="Permanent link">&para;</a></h3>
+<p>Once you have setup <a href="https://nd-cse.slack.com">Slack</a>, <a href="https://github.com">GitHub</a>, and have a working development
+environment on the <strong>student machines</strong>, then you have completed all the
+necessary tasks for this <strong>reading assignment</strong>.</p>
+</div>
+</main>
+<footer>
+Built using <a href="https://python.org">Python</a>
+and <a href="https://jinja.palletsprojects.com">Jinja</a>
+with colors from <a href="https://nordtheme.com">Nord Theme</a>
+and icons from <a href="https://pictogrammers.com/library/mdi/">Material Design Icons</a>.</footer>
+</body>
+</html>
