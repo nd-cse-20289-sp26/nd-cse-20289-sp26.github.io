@@ -151,7 +151,7 @@ body:       |
       {% else %}
       {% set item_color = 'default' %}
       {% endif %}
-      <a class="badge {{ item_color }}-btn" href="{{ item.get('link') }}">{{ item['name'] }}</a>
+      <a class="badge {{ item_color }}-btn" href="{{ item.get('link', '') }}">{{ item['name'] }}</a>
       {% endfor %}
       </td>
       <td class="assignments">
