@@ -294,20 +294,20 @@ body:       |
 
           $ ../.scripts/check.py                # Check reading01 quiz
           Checking reading01 quiz ...
-              Q01  9.00 /  9.00
-              Q02  1.00 /  1.00
-              Q03  2.00 /  2.00
-              Q04  3.00 /  3.00
-              Q05  4.00 /  4.00
-              Q06  2.00 /  2.00
-              Q07  2.00 /  2.00
-              Q08  3.00 /  3.00
-              Q09  6.00 /  6.00
-              Q10  7.00 /  7.00
-           --------------------
-            Score 39.00 / 39.00
-            Grade  1.00 /  1.00
-           Status Success
+               Q01  9.00 /  9.00
+               Q02  1.00 /  1.00
+               Q03  2.00 /  2.00
+               Q04  3.00 /  3.00
+               Q05  4.00 /  4.00
+               Q06  2.00 /  2.00
+               Q07  2.00 /  2.00
+               Q08  3.00 /  3.00
+               Q09  6.00 /  6.00
+               Q10  7.00 /  7.00
+            --------------------
+             Score 39.00 / 39.00
+             Grade  1.00 /  1.00
+            Status Success
 
       This script will check your responses by sending your
       `reading01/answers.json` file to [dredd], which is the automated grading
