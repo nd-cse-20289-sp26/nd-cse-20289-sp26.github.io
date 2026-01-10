@@ -34,7 +34,7 @@ body:       |
 
       $ git pull --rebase                       # Make sure we are up-to-date with GitHub
 
-      $ git checkout -b reading01               # Create reading01 branch and check it out
+      $ git switch -c reading01                 # Create reading01 branch and switch to it
 
       $ cd reading01                            # Go into reading01 folder
 
@@ -51,7 +51,7 @@ body:       |
       :::bash
       $ git branch
 
-  To create and switch to a new branch, you can use the `git checkout -b
+  To create and switch to a new branch, you can use the `git switch -c
   BRANCH` as described above.  Once you have performed this command, you can
   check which branch you are on:
 
