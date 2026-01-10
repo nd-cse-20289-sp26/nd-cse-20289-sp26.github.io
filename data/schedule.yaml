@@ -33,9 +33,17 @@
         topics:         Processes, I/O Redirection
         assignments:
           - Reading 01
+        items:
+          - name:       Slides 04
+            link:       https://docs.google.com/presentation/d/1hAS4Nhrc5r8qQoqPsm2wcUEMdyZFd6yTX2LdalE_sKk/edit?usp=sharing
+          - name:       Slides 05
+            link:       https://docs.google.com/presentation/d/17wmheTljxoiok4I_nT8-mjp3wkgicYwfKoSLZy92XKg/edit?usp=sharing
 
       - date:           Fri 01/23
         topics:         Networking
+        items:
+          - name:       Slides 06
+            link:       https://docs.google.com/presentation/d/19HSEMKj_vJ7wJbDyOZwTN5tVZpc4-thDI5DLofEzCc0/edit?usp=sharing
 
       - date:           Sat 01/24
         topics:         '<i class="muted">Command Line Adventure</i>'
