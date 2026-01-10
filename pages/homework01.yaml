@@ -1,0 +1,423 @@
+title:      "Homework 01: Command Line Adventure"
+body:       |
+
+  The goal of this homework assignment is to allow you to practice manipulating
+  files, redirecting I/O, constructing [pipelines], and signaling [processes]
+  in a [Unix] environment.
+
+  For this assignment, you are to do your work in the `homework01` folder of
+  your **assignments** [GitHub] repository and push your work by **noon
+  Saturday, January 24**.
+
+  [Unix]: https://en.wikipedia.org/wiki/Unix
+  [GitHub]: https://github.com
+  [processes]: https://en.wikipedia.org/wiki/Process_(computing)
+  [pipelines]: https://en.wikipedia.org/wiki/Pipeline_(Unix)
+
+  ## Activity 0: Branching
+
+  As discussed in class, each **reading** and **homework** assignment must be
+  completed in its own git [branch]; this will allow you to separate the work
+  of each assignment and for you to use the [Pull Request] workflow describe
+  in [Reading 01].
+
+  To create a `homework01` branch in your local repository, follow the
+  instructions below:
+
+      :::bash
+      $ cd path/to/cse-20289-sp26-assignments   # Go to assignments repository
+
+      $ git switch master                       # Make sure we are in master branch
+
+      $ git pull --rebase                       # Make sure we are up-to-date with GitHub
+
+      $ git switch -c homework01                # Create homework01 branch and switch to it
+
+      $ cd homework01                           # Go into homework01 folder
+
+  Once these commands have been successfully performed, you are now ready to
+  [add], [commit], and [push] any work required for this assignment.
+
+  ## Activity 1: Adventure Guide (*9 Points*)
+
+  The main activity for this assignment is to follow the prompts of your
+  **Adventure Guide**, which takes the form of a program located at:
+
+      https://pnutz.h4x0r.space/courses/cse.20289.sp26/static/txt/homework01/GUIDE
+
+  <div class="alert caution-bg" markdown="1">
+
+  ### <i class="icon icon-medium">{{ "server" | embed_icon }}</i> Student Machines
+
+  For this assignment, you will need to use the CSE **student machines** or any
+  other machine with access to the [ESC] **NFS** filesystem.  This is because
+  there are some resources that are only accessible via the [ESC] **NFS**.
+
+  </div>
+
+  You can use either [curl] or [wget] to download this program to your
+  `homework01` folder in your **assignments** repository and execute it as follows:
+
+      :::bash
+      # Go to homework01 directory in assignments repository
+      $ cd path/to/assignments/homework01
+
+      # Download Adventure GUIDE
+      $ curl -LO https://pnutz.h4x0r.space/courses/cse.20289.sp26/static/txt/homework01/GUIDE
+
+      # Run Adventure GUIDE
+      $ python3 GUIDE
+      ...
+
+  As you can see in the demonstration video below, the `GUIDE` script will
+  prompt you to complete a series of tasks (**19** in total).  After you
+  complete each task, you must run the `GUIDE` script so it can verify your
+  work.  If it detects that you have completed the task, it will update the
+  `tasks.yaml` file with a specially encoded checkpoint payload associated with
+  your **netid** and the corresponding task.  It will then prompt you with the
+  next task.
+
+  <div class="thumbnail text-center">
+    <script src="https://asciinema.org/a/R7Q35JcS718V5UNUliA34uGPF.js" id="asciicast-R7Q35JcS718V5UNUliA34uGPF" async="true"></script>
+  </div>
+
+  You are to follow the prompts specified by the `GUIDE` until you have
+  completed each of the tasks in the adventure.  Because some tasks depend on
+  others, there is no skipping ahead or going backwards.   That said, you can
+  always remove the checkpoints in the `tasks.yaml` file to go back to a
+  particular task.
+
+  At the end of this activity, you should see the following output from the `GUIDE`:
+
+      :::text
+      $ ./GUIDE
+      Checking homework01 tasks ...
+        Task 00 Checkout on homework01 branch            ... Completed
+        Task 01 Make GUIDE executable                    ... Completed
+        Task 02 Copy file                                ... Completed
+        Task 03 Extract archive                          ... Completed
+        Task 04 Rename directory                         ... Completed
+        Task 05 Remove archive                           ... Completed
+        Task 06 Create empty file                        ... Completed
+        Task 07 Redirection                              ... Completed
+        Task 08 Append to file                           ... Completed
+        Task 09 Edit file                                ... Completed
+        Task 10 File size                                ... Completed
+        Task 11 Disk usage                               ... Completed
+        Task 12 Search file contents                     ... Completed
+        Task 13 Search file names                        ... Completed
+        Task 14 Sorting                                  ... Completed
+        Task 15 Symlink                                  ... Completed
+        Task 16 PID                                      ... Completed
+        Task 17 Kill                                     ... Completed
+        Task 18 Quiz                                     ... Completed
+        --------------------------------------------------------------
+         Score 10.00 / 10.00
+         Grade  1.00 /  1.00
+        Status Success
+
+  <div class="alert danger-bg" markdown="1">
+
+  ### <i class="icon icon-medium">{{ "checkbox-marked-outline" | embed_icon }}</i> Task Checkpoints
+
+  Note, that each task checkpoint in the `tasks.yaml` is specially encoded for
+  your **netid**.  This means that copying the checkpoint from another student
+  or from a previous task will not work and will lead to a **corruption**
+  warning that will anger the `GUIDE`.  The only way to proceed through the
+  activity is to actually do the tasks!
+
+  </div>
+
+  ### Adventure Companions
+
+  The following information will help you on your journey:
+
+  <table class="bordered" markdown="1">
+  <thead>
+    <th>Command</th>
+    <th>Description</th>
+    <th>Example</th>
+  </thead>
+  <tbody markdown="1">
+  <tr markdown="1">
+    <td markdown="1"><tt>[cat]</tt></td>
+    <td>Display the contents of a text file.</td>
+    <td markdown="1"><tt>cat README.md</tt></td>
+  </tr>
+  <tr markdown="1">
+    <td markdown="1"><tt>[chmod]</tt></td>
+    <td>Change the permissions of a file.</td>
+    <td markdown="1"><tt>chmod 644 data.txt</tt></td>
+  </tr>
+  <tr markdown="1">
+    <td markdown="1"><tt>[cp]</tt></td>
+    <td>Copy files or directories.</td>
+    <td markdown="1"><tt>cp source destination</tt></td>
+  </tr>
+  <tr markdown="1">
+    <td markdown="1"><tt>[du]</tt></td>
+    <td>Display disk usage of files or directories.</td>
+    <td markdown="1"><tt>du /etc</tt></td>
+  </tr>
+  <tr markdown="1">
+    <td markdown="1"><tt>[find]</tt></td>
+    <td>Recursively search file paths.</td>
+    <td markdown="1"><tt>find /etc -name '\*ssl\*'</tt></td>
+  </tr>
+  <tr markdown="1">
+    <td markdown="1"><tt>[grep]</tt></td>
+    <td>Search contents of files.</td>
+    <td markdown="1"><tt>grep precious gollum.txt</tt></td>
+  </tr>
+  <tr markdown="1">
+    <td markdown="1"><tt>[kill]</tt></td>
+    <td>Send signal to process by ID.</td>
+    <td markdown="1"><tt>kill -HUP 1</tt></td>
+  </tr>
+  <tr markdown="1">
+    <td markdown="1"><tt>[ln]</tt></td>
+    <td>Create links to other files or directories.</td>
+    <td markdown="1"><tt>ln -s target symlink</tt></td>
+  </tr>
+  <tr markdown="1">
+    <td markdown="1"><tt>[ls]</tt></td>
+    <td>List contents of directory or specified files.</td>
+    <td markdown="1"><tt>ls -l /etc</tt></td>
+  </tr>
+  <tr markdown="1">
+    <td markdown="1"><tt>[mv]</tt></td>
+    <td>Move or rename a file or directory.</td>
+    <td markdown="1"><tt>mv old new</tt></td>
+  </tr>
+  <tr markdown="1">
+    <td markdown="1"><tt>[ps]</tt></td>
+    <td>List processes on current system.</td>
+    <td markdown="1"><tt>ps ux</tt></td>
+  </tr>
+  <tr markdown="1">
+    <td markdown="1"><tt>[rm]</tt></td>
+    <td>Remove file or directory.</td>
+    <td markdown="1"><tt>rm junk</tt></td>
+  </tr>
+  <tr markdown="1">
+    <td markdown="1"><tt>[sort]</tt></td>
+    <td markdown="1">Order data.</td>
+    <td markdown="1"><tt>sort data</tt></td>
+  </tr>
+  <tr markdown="1">
+    <td markdown="1"><tt>[stat]</tt></td>
+    <td>View the meta-data associated with file or directory.</td>
+    <td markdown="1"><tt>stat data</tt></td>
+  </tr>
+  <tr markdown="1">
+    <td markdown="1"><tt>[tar]</tt></td>
+    <td>Manage archived data.</td>
+    <td markdown="1"><tt>tar xvf archive</tt></td>
+  </tr>
+  </tbody>
+  </table>
+
+  <table class="bordered" markdown="1">
+  <thead>
+    <th>Operation</th>
+    <th>Example</th>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Redirect standard output</td>
+      <td><tt>command > output</tt></td>
+    </tr>
+
+    <tr>
+      <td>Redirect standard output and standard error</td>
+      <td><tt>command > output 2>&1 || command &> output</tt></td>
+    </tr>
+
+    <tr>
+      <td>Redirect standard output; overwrite file if it exists</td>
+      <td><tt>command >| output</tt></td>
+    </tr>
+
+    <tr>
+      <td>Append standard output</td>
+      <td><tt>command >> output</tt></td>
+    </tr>
+
+    <tr>
+      <td>Redirect standard output to another command</td>
+      <td><tt>command1 | command2</tt></td>
+    </tr>
+
+    <tr>
+      <td>Redirect standard input</td>
+      <td><tt>command < input</tt></td>
+    </tr>
+  </tbody>
+  </table>
+
+  ### References
+
+  If you need additional reference information, please refer to the readings
+  from [Reading 01]:
+
+  1.  <div class="flex-col">
+
+      [The Linux Command Line]
+
+      - Chapter 6 - Redirection
+      - Chapter 7 - Seeing the World as the Shell Sees it
+      - Chapter 8 - Advanced Keyboard Tricks
+      - Chapter 9 - Permissions
+      - Chapter 10 - Processes
+
+      You may also wish to read the following chapters:
+
+      - Chapter 17 - Searching For Files
+      - Chapter 18 - Archiving And Backup
+
+  [cat]: http://man7.org/linux/man-pages/man1/cat.1.html
+  [chmod]: http://man7.org/linux/man-pages/man1/chmod.1.html
+  [cp]: http://man7.org/linux/man-pages/man1/cp.1.html
+  [du]: http://man7.org/linux/man-pages/man1/du.1.html
+  [find]: http://man7.org/linux/man-pages/man1/find.1.html
+  [grep]: http://man7.org/linux/man-pages/man1/grep.1.html
+  [kill]: http://man7.org/linux/man-pages/man1/kill.1.html
+  [ln]: http://man7.org/linux/man-pages/man1/ln.1.html
+  [ls]: http://man7.org/linux/man-pages/man1/ls.1.html
+  [mv]: http://man7.org/linux/man-pages/man1/mv.1.html
+  [ps]: http://man7.org/linux/man-pages/man1/ps.1.html
+  [rm]: http://man7.org/linux/man-pages/man1/rm.1.html
+  [stat]: http://man7.org/linux/man-pages/man1/stat.1.html
+  [sort]: http://man7.org/linux/man-pages/man1/sort.1.html
+  [tar]: http://man7.org/linux/man-pages/man1/tar.1.html
+
+  <div class="alert warning-bg" markdown="1">
+
+  ### <i class="icon icon-medium">{{ "bomb" | embed_icon }}</i> Kill The TROLLs
+
+  The `TROLL` program is located at `/escnfs/home/pbui/pub/bin/TROLL`.  Before
+  you log off the **student** machine you are working on, you should make sure
+  you have **killed** all of your `TROLL` processes.
+
+  </div>
+
+  ## Activity 2: Adventure Quiz (*1 Point*)
+
+  Once you have completed all the tasks specified by the `GUIDE` in **Activity
+  1**, you are to complete the following *reflection quiz*:
+
+  <div id="quiz-questions"></div>
+
+  <div id="quiz-responses"></div>
+
+  <script src="static/js/dredd-quiz.js"></script>
+  <script>
+  loadQuiz('static/json/homework01.json');
+  </script>
+
+  <pre style="display: none;" id="dr-container" class="codehilite"><code id="dredd-response"></code></pre>
+
+  As with [Reading 01], you will need to store your answers in a
+  `homework01/answers.json` file.  You can use the form above to generate the
+  contents of this file, or you can write the [JSON] by hand.
+
+  To check your quiz directly, you can use the `check.py` script:
+
+      :::bash
+      $ ../.scripts/check.py
+      Checking homework01 quiz ...
+           Q01  1.00 /  1.00
+           Q02  1.00 /  1.00
+           Q03  1.00 /  1.00
+           Q04  1.00 /  1.00
+           Q05  1.00 /  1.00
+        --------------------
+         Score  5.00 /  5.00
+         Grade  1.00 /  1.00
+        Status Success
+
+  ## Just For Fun (*Optional*)
+
+  For your own personal enrichment, you can read the following chapters from
+  [The Linux Command Line]:
+
+  1. Chapter 11 - The Environment
+  2. Chapter 13 - Customizing the Prompt
+
+  Once you have read these chapters, you can **customize** your [bash] shell
+  prompt by adding useful information and colors and setting `$EDITOR` to your
+  preferred text editor.
+
+  Here are some additional resources to help you customize your [bash] shell:
+
+  1. [How to Customize your Bash Prompt on a Linux VPS](https://www.digitalocean.com/community/tutorials/how-to-customize-your-bash-prompt-on-a-linux-vps)
+
+  2. [Bash/Prompt customization](https://wiki.archlinux.org/index.php/Bash/Prompt_customization)
+
+  3. [How to Customize (and Colorize) Your Bash Prompt](https://www.howtogeek.com/307701/how-to-customize-and-colorize-your-bash-prompt/)
+
+  4. [EZPrompt: Easy Bash PS1 Generator](http://ezprompt.net/)
+
+  [bash]: http://man7.org/linux/man-pages/man1/bash.1.html
+  [The Linux Command Line]: http://linuxcommand.org/tlcl.php
+
+  ## Submission (*10 Points*)
+
+  To submit your assignment, please commit your work to the `homework01` folder
+  of your `homework01` branch in your **assignments** [GitHub] repository:
+
+      :::bash
+      #-----------------------------------------------------------------------
+      # Make sure you have already completed Activity 0: Branching
+      #-----------------------------------------------------------------------
+      ...
+
+      $ git add Makefile                                    # Mark changes for commit
+      $ git add GUIDE                                       # Mark changes for commit
+      $ git add tasks.yaml                                  # Mark changes for commit
+      $ git commit -m "Homework 01: Tasks"                  # Record changes
+      ...
+
+      $ git add answers.json                                # Mark changes for commit
+      $ git commit -m "Homework 01: Quiz"                   # Record changes
+      ...
+
+      $ git push -u origin homework01                       # Push branch to GitHub
+
+  <div class="alert warning-bg" markdown="1">
+
+  ### <i class="icon icon-medium">{{ "lifebuoy" | embed_icon }}</i> Acknowledgments
+
+  If you collaborated with any other students, or received help from TAs or AI
+  tools on this assignment, please record this support in the `README.md` in
+  the `homework01` folder and include it with your **Pull Request**.
+
+  </div>
+
+  <div class="alert success-bg" markdown="1">
+
+  ### <i class="icon icon-medium">{{ "account-question" | embed_icon }}</i> Graders
+
+  Once you have committed your work and pushed it to [GitHub], remember to
+  create a **pull request** and assign it to the appropriate **teaching
+  assistant** from the [Reading 01 TA List].
+
+  </div>
+
+  [git]: https://git-scm.com/
+  [clone]: https://git-scm.com/docs/git-clone
+  [commit]: https://git-scm.com/docs/git-commit
+  [push]: https://git-scm.com/docs/git-push
+  [branching]: https://git-scm.com/docs/git-branch
+  [code review]: https://en.wikipedia.org/wiki/Code_review
+  [GitHub]: https://github.com
+  [Linux]: https://kernel.org
+  [branch]: https://git-scm.com/docs/git-branch
+  [add]: https://git-scm.com/docs/git-add
+  [Pull Request]: https://docs.github.com/en/github/collaborating-with-issues-and-pull-requests/creating-a-pull-request
+  [Reading 01]: reading01.html
+  [Reading 01 TA List]: reading01_tas.html
+  [curl]: http://man7.org/linux/man-pages/man1/curl.1.html
+  [wget]: http://man7.org/linux/man-pages/man1/wget.1.html
+  [JSON]: https://json.org/
+  [ESC]: https://esc.nd.edu/
