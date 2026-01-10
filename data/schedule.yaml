@@ -4,12 +4,23 @@
         topics:         Syllabus, Unix Programming Environment
         assignments:
           - Reading 00
+        items:
+          - name:       Slides 00
+            link:       https://docs.google.com/presentation/d/1K6fi8WjLG_Tx257omzGx6V4lHbQMZLRNbxmS2HJUoUo/edit?usp=sharing
+          - name:       Slides 01
+            link:       https://docs.google.com/presentation/d/1pCEn7bitIM2DZQzbJCPZFmOp6nKhTGjRMfG895dVn1Y/edit?usp=sharing
 
       - date:           Wed 01/14
         topics:         Git
+        items:
+          - name:       Slides 02
+            link:       https://docs.google.com/presentation/d/1iXhU1q7WRCnI78dvPugrGTI7iwXGAQORA-21J2_l7s4/edit?usp=sharing
 
       - date:           Fri 01/16
         topics:         Files
+        items:
+          - name:       Slides 03
+            link:       https://docs.google.com/presentation/d/1SyUdmeWCIiglnU-BZzNDpkkhH7bhfqhsjS8mfU4Bh3I/edit?usp=sharing
 
 - name:     "Unit 01: Bourne Shell"
 
