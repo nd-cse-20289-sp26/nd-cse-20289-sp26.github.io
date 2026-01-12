@@ -1,0 +1,374 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<!-- Favicon -->
+<link rel="icon" type="image/png" sizes="32x32" href="static/ico/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="static/ico/favicon-16x16.png">
+<link rel="manifest" href="static/ico/site.webmanifest">
+<!-- Stylesheets -->
+<link rel="stylesheet" href="static/css/pnutzh4x0r.css">
+<title>Homework 01: Command Line Adventure</title>
+</head>
+<body>
+<header>
+<a class="logo" href="homework01.html">
+    <h1>Homework 01: Command Line Adventure</h1>
+</a>
+<nav>
+    <ul>
+        <li><a href="index.html"><h4>Home</h4></a></li>
+        </ul>
+</nav></header>
+<main>
+<p>The goal of this homework assignment is to allow you to practice manipulating
+files, redirecting I/O, constructing <a href="https://en.wikipedia.org/wiki/Pipeline_(Unix)">pipelines</a>, and signaling <a href="https://en.wikipedia.org/wiki/Process_(computing)">processes</a>
+in a <a href="https://en.wikipedia.org/wiki/Unix">Unix</a> environment.</p>
+<p>For this assignment, you are to do your work in the <code>homework01</code> folder of
+your <strong>assignments</strong> <a href="https://github.com">GitHub</a> repository and push your work by <strong>noon
+Saturday, January 24</strong>.</p>
+<h2 id="activity-0-branching">Activity 0: Branching<a class="headerlink" href="#activity-0-branching" title="Permanent link">&para;</a></h2>
+<p>As discussed in class, each <strong>reading</strong> and <strong>homework</strong> assignment must be
+completed in its own git <a href="https://git-scm.com/docs/git-branch">branch</a>; this will allow you to separate the work
+of each assignment and for you to use the <a href="https://docs.github.com/en/github/collaborating-with-issues-and-pull-requests/creating-a-pull-request">Pull Request</a> workflow describe
+in <a href="reading01.html">Reading 01</a>.</p>
+<p>To create a <code>homework01</code> branch in your local repository, follow the
+instructions below:</p>
+<div class="codehilite"><pre><span></span><code>$<span class="w"> </span><span class="nb">cd</span><span class="w"> </span>path/to/cse-20289-sp26-assignments<span class="w">   </span><span class="c1"># Go to assignments repository</span>
+
+$<span class="w"> </span>git<span class="w"> </span>switch<span class="w"> </span>master<span class="w">                       </span><span class="c1"># Make sure we are in master branch</span>
+
+$<span class="w"> </span>git<span class="w"> </span>pull<span class="w"> </span>--rebase<span class="w">                       </span><span class="c1"># Make sure we are up-to-date with GitHub</span>
+
+$<span class="w"> </span>git<span class="w"> </span>switch<span class="w"> </span>-c<span class="w"> </span>homework01<span class="w">                </span><span class="c1"># Create homework01 branch and switch to it</span>
+
+$<span class="w"> </span><span class="nb">cd</span><span class="w"> </span>homework01<span class="w">                           </span><span class="c1"># Go into homework01 folder</span>
+</code></pre></div>
+
+<p>Once these commands have been successfully performed, you are now ready to
+<a href="https://git-scm.com/docs/git-add">add</a>, <a href="https://git-scm.com/docs/git-commit">commit</a>, and <a href="https://git-scm.com/docs/git-push">push</a> any work required for this assignment.</p>
+<h2 id="activity-1-adventure-guide-9-points">Activity 1: Adventure Guide (<em>9 Points</em>)<a class="headerlink" href="#activity-1-adventure-guide-9-points" title="Permanent link">&para;</a></h2>
+<p>The main activity for this assignment is to follow the prompts of your
+<strong>Adventure Guide</strong>, which takes the form of a program located at:</p>
+<div class="codehilite"><pre><span></span><code>https://pnutz.h4x0r.space/courses/cse.20289.sp26/static/txt/homework01/GUIDE
+</code></pre></div>
+
+<div class="alert caution-bg">
+<h3 id="server-embed_icon-student-machines"><i class="icon icon-medium"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><title>server</title><path d="M4,1H20A1,1 0 0,1 21,2V6A1,1 0 0,1 20,7H4A1,1 0 0,1 3,6V2A1,1 0 0,1 4,1M4,9H20A1,1 0 0,1 21,10V14A1,1 0 0,1 20,15H4A1,1 0 0,1 3,14V10A1,1 0 0,1 4,9M4,17H20A1,1 0 0,1 21,18V22A1,1 0 0,1 20,23H4A1,1 0 0,1 3,22V18A1,1 0 0,1 4,17M9,5H10V3H9V5M9,13H10V11H9V13M9,21H10V19H9V21M5,3V5H7V3H5M5,11V13H7V11H5M5,19V21H7V19H5Z" /></svg>
+</i> Student Machines<a class="headerlink" href="#server-embed_icon-student-machines" title="Permanent link">&para;</a></h3>
+<p>For this assignment, you will need to use the CSE <strong>student machines</strong> or any
+other machine with access to the <a href="https://esc.nd.edu/">ESC</a> <strong>NFS</strong> filesystem.  This is because
+there are some resources that are only accessible via the <a href="https://esc.nd.edu/">ESC</a> <strong>NFS</strong>.</p>
+</div>
+<p>You can use either <a href="http://man7.org/linux/man-pages/man1/curl.1.html">curl</a> or <a href="http://man7.org/linux/man-pages/man1/wget.1.html">wget</a> to download this program to your
+<code>homework01</code> folder in your <strong>assignments</strong> repository and execute it as follows:</p>
+<div class="codehilite"><pre><span></span><code><span class="c1"># Go to homework01 directory in assignments repository</span>
+$<span class="w"> </span><span class="nb">cd</span><span class="w"> </span>path/to/assignments/homework01
+
+<span class="c1"># Download Adventure GUIDE</span>
+$<span class="w"> </span>curl<span class="w"> </span>-LO<span class="w"> </span>https://pnutz.h4x0r.space/courses/cse.20289.sp26/static/txt/homework01/GUIDE
+
+<span class="c1"># Run Adventure GUIDE</span>
+$<span class="w"> </span>python3<span class="w"> </span>GUIDE
+...
+</code></pre></div>
+
+<p>As you can see in the demonstration video below, the <code>GUIDE</code> script will
+prompt you to complete a series of tasks (<strong>19</strong> in total).  After you
+complete each task, you must run the <code>GUIDE</code> script so it can verify your
+work.  If it detects that you have completed the task, it will update the
+<code>tasks.yaml</code> file with a specially encoded checkpoint payload associated with
+your <strong>netid</strong> and the corresponding task.  It will then prompt you with the
+next task.</p>
+<div class="thumbnail text-center">
+  <script src="https://asciinema.org/a/R7Q35JcS718V5UNUliA34uGPF.js" id="asciicast-R7Q35JcS718V5UNUliA34uGPF" async="true"></script>
+</div>
+
+<p>You are to follow the prompts specified by the <code>GUIDE</code> until you have
+completed each of the tasks in the adventure.  Because some tasks depend on
+others, there is no skipping ahead or going backwards.   That said, you can
+always remove the checkpoints in the <code>tasks.yaml</code> file to go back to a
+particular task.</p>
+<p>At the end of this activity, you should see the following output from the <code>GUIDE</code>:</p>
+<div class="codehilite"><pre><span></span><code>$ ./GUIDE
+Checking homework01 tasks ...
+  Task 00 Checkout on homework01 branch            ... Completed
+  Task 01 Make GUIDE executable                    ... Completed
+  Task 02 Copy file                                ... Completed
+  Task 03 Extract archive                          ... Completed
+  Task 04 Rename directory                         ... Completed
+  Task 05 Remove archive                           ... Completed
+  Task 06 Create empty file                        ... Completed
+  Task 07 Redirection                              ... Completed
+  Task 08 Append to file                           ... Completed
+  Task 09 Edit file                                ... Completed
+  Task 10 File size                                ... Completed
+  Task 11 Disk usage                               ... Completed
+  Task 12 Search file contents                     ... Completed
+  Task 13 Search file names                        ... Completed
+  Task 14 Sorting                                  ... Completed
+  Task 15 Symlink                                  ... Completed
+  Task 16 PID                                      ... Completed
+  Task 17 Kill                                     ... Completed
+  Task 18 Quiz                                     ... Completed
+  --------------------------------------------------------------
+   Score 10.00 / 10.00
+   Grade  1.00 /  1.00
+  Status Success
+</code></pre></div>
+
+<div class="alert danger-bg">
+<h3 id="checkbox-marked-outline-embed_icon-task-checkpoints"><i class="icon icon-medium"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><title>checkbox-marked-outline</title><path d="M19,19H5V5H15V3H5C3.89,3 3,3.89 3,5V19A2,2 0 0,0 5,21H19A2,2 0 0,0 21,19V11H19M7.91,10.08L6.5,11.5L11,16L21,6L19.59,4.58L11,13.17L7.91,10.08Z" /></svg>
+</i> Task Checkpoints<a class="headerlink" href="#checkbox-marked-outline-embed_icon-task-checkpoints" title="Permanent link">&para;</a></h3>
+<p>Note, that each task checkpoint in the <code>tasks.yaml</code> is specially encoded for
+your <strong>netid</strong>.  This means that copying the checkpoint from another student
+or from a previous task will not work and will lead to a <strong>corruption</strong>
+warning that will anger the <code>GUIDE</code>.  The only way to proceed through the
+activity is to actually do the tasks!</p>
+</div>
+<h3 id="adventure-companions">Adventure Companions<a class="headerlink" href="#adventure-companions" title="Permanent link">&para;</a></h3>
+<p>The following information will help you on your journey:</p>
+<table class="bordered">
+<thead>
+<th>Command</th>
+<th>Description</th>
+<th>Example</th>
+</thead>
+<tbody>
+<tr>
+<td><tt><a href="http://man7.org/linux/man-pages/man1/cat.1.html">cat</a></tt></td>
+<td>Display the contents of a text file.</td>
+<td><tt>cat README.md</tt></td>
+</tr>
+<tr>
+<td><tt><a href="http://man7.org/linux/man-pages/man1/chmod.1.html">chmod</a></tt></td>
+<td>Change the permissions of a file.</td>
+<td><tt>chmod 644 data.txt</tt></td>
+</tr>
+<tr>
+<td><tt><a href="http://man7.org/linux/man-pages/man1/cp.1.html">cp</a></tt></td>
+<td>Copy files or directories.</td>
+<td><tt>cp source destination</tt></td>
+</tr>
+<tr>
+<td><tt><a href="http://man7.org/linux/man-pages/man1/du.1.html">du</a></tt></td>
+<td>Display disk usage of files or directories.</td>
+<td><tt>du /etc</tt></td>
+</tr>
+<tr>
+<td><tt><a href="http://man7.org/linux/man-pages/man1/find.1.html">find</a></tt></td>
+<td>Recursively search file paths.</td>
+<td><tt>find /etc -name '*ssl*'</tt></td>
+</tr>
+<tr>
+<td><tt><a href="http://man7.org/linux/man-pages/man1/grep.1.html">grep</a></tt></td>
+<td>Search contents of files.</td>
+<td><tt>grep precious gollum.txt</tt></td>
+</tr>
+<tr>
+<td><tt><a href="http://man7.org/linux/man-pages/man1/kill.1.html">kill</a></tt></td>
+<td>Send signal to process by ID.</td>
+<td><tt>kill -HUP 1</tt></td>
+</tr>
+<tr>
+<td><tt><a href="http://man7.org/linux/man-pages/man1/ln.1.html">ln</a></tt></td>
+<td>Create links to other files or directories.</td>
+<td><tt>ln -s target symlink</tt></td>
+</tr>
+<tr>
+<td><tt><a href="http://man7.org/linux/man-pages/man1/ls.1.html">ls</a></tt></td>
+<td>List contents of directory or specified files.</td>
+<td><tt>ls -l /etc</tt></td>
+</tr>
+<tr>
+<td><tt><a href="http://man7.org/linux/man-pages/man1/mv.1.html">mv</a></tt></td>
+<td>Move or rename a file or directory.</td>
+<td><tt>mv old new</tt></td>
+</tr>
+<tr>
+<td><tt><a href="http://man7.org/linux/man-pages/man1/ps.1.html">ps</a></tt></td>
+<td>List processes on current system.</td>
+<td><tt>ps ux</tt></td>
+</tr>
+<tr>
+<td><tt><a href="http://man7.org/linux/man-pages/man1/rm.1.html">rm</a></tt></td>
+<td>Remove file or directory.</td>
+<td><tt>rm junk</tt></td>
+</tr>
+<tr>
+<td><tt><a href="http://man7.org/linux/man-pages/man1/sort.1.html">sort</a></tt></td>
+<td>Order data.</td>
+<td><tt>sort data</tt></td>
+</tr>
+<tr>
+<td><tt><a href="http://man7.org/linux/man-pages/man1/stat.1.html">stat</a></tt></td>
+<td>View the meta-data associated with file or directory.</td>
+<td><tt>stat data</tt></td>
+</tr>
+<tr>
+<td><tt><a href="http://man7.org/linux/man-pages/man1/tar.1.html">tar</a></tt></td>
+<td>Manage archived data.</td>
+<td><tt>tar xvf archive</tt></td>
+</tr>
+</tbody>
+</table>
+<table class="bordered">
+<thead>
+<th>Operation</th>
+<th>Example</th>
+</thead>
+<tbody>
+<tr>
+    <td>Redirect standard output</td>
+    <td><tt>command &gt; output</tt></td>
+  </tr>
+<tr>
+    <td>Redirect standard output and standard error</td>
+    <td><tt>command &gt; output 2&gt;&amp;1 || command &amp;&gt; output</tt></td>
+  </tr>
+<tr>
+    <td>Redirect standard output; overwrite file if it exists</td>
+    <td><tt>command &gt;| output</tt></td>
+  </tr>
+<tr>
+    <td>Append standard output</td>
+    <td><tt>command &gt;&gt; output</tt></td>
+  </tr>
+<tr>
+    <td>Redirect standard output to another command</td>
+    <td><tt>command1 | command2</tt></td>
+  </tr>
+<tr>
+    <td>Redirect standard input</td>
+    <td><tt>command &lt; input</tt></td>
+  </tr>
+</tbody>
+</table>
+<h3 id="references">References<a class="headerlink" href="#references" title="Permanent link">&para;</a></h3>
+<p>If you need additional reference information, please refer to the readings
+from <a href="reading01.html">Reading 01</a>:</p>
+<ol>
+<li>
+<div class="flex-col">
+<p><a href="http://linuxcommand.org/tlcl.php">The Linux Command Line</a></p>
+<ul>
+<li>Chapter 6 - Redirection</li>
+<li>Chapter 7 - Seeing the World as the Shell Sees it</li>
+<li>Chapter 8 - Advanced Keyboard Tricks</li>
+<li>Chapter 9 - Permissions</li>
+<li>Chapter 10 - Processes</li>
+</ul>
+<p>You may also wish to read the following chapters:</p>
+<ul>
+<li>Chapter 17 - Searching For Files</li>
+<li>Chapter 18 - Archiving And Backup</li>
+</ul>
+</li>
+</ol>
+<div class="alert warning-bg">
+<h3 id="bomb-embed_icon-kill-the-trolls"><i class="icon icon-medium"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><title>bomb</title><path d="M11.25,6A3.25,3.25 0 0,1 14.5,2.75A3.25,3.25 0 0,1 17.75,6C17.75,6.42 18.08,6.75 18.5,6.75C18.92,6.75 19.25,6.42 19.25,6V5.25H20.75V6A2.25,2.25 0 0,1 18.5,8.25A2.25,2.25 0 0,1 16.25,6A1.75,1.75 0 0,0 14.5,4.25A1.75,1.75 0 0,0 12.75,6H14V7.29C16.89,8.15 19,10.83 19,14A7,7 0 0,1 12,21A7,7 0 0,1 5,14C5,10.83 7.11,8.15 10,7.29V6H11.25M22,6H24V7H22V6M19,4V2H20V4H19M20.91,4.38L22.33,2.96L23.04,3.67L21.62,5.09L20.91,4.38Z" /></svg>
+</i> Kill The TROLLs<a class="headerlink" href="#bomb-embed_icon-kill-the-trolls" title="Permanent link">&para;</a></h3>
+<p>The <code>TROLL</code> program is located at <code>/escnfs/home/pbui/pub/bin/TROLL</code>.  Before
+you log off the <strong>student</strong> machine you are working on, you should make sure
+you have <strong>killed</strong> all of your <code>TROLL</code> processes.</p>
+</div>
+<h2 id="activity-2-adventure-quiz-1-point">Activity 2: Adventure Quiz (<em>1 Point</em>)<a class="headerlink" href="#activity-2-adventure-quiz-1-point" title="Permanent link">&para;</a></h2>
+<p>Once you have completed all the tasks specified by the <code>GUIDE</code> in <strong>Activity
+1</strong>, you are to complete the following <em>reflection quiz</em>:</p>
+<div id="quiz-questions"></div>
+
+<div id="quiz-responses"></div>
+
+<script src="static/js/dredd-quiz.js"></script>
+<script>
+loadQuiz('static/json/homework01.json');
+</script>
+
+<pre style="display: none;" id="dr-container" class="codehilite"><code id="dredd-response"></code></pre>
+
+<p>As with <a href="reading01.html">Reading 01</a>, you will need to store your answers in a
+<code>homework01/answers.json</code> file.  You can use the form above to generate the
+contents of this file, or you can write the <a href="https://json.org/">JSON</a> by hand.</p>
+<p>To check your quiz directly, you can use the <code>check.py</code> script:</p>
+<div class="codehilite"><pre><span></span><code>$<span class="w"> </span>../.scripts/check.py
+Checking<span class="w"> </span>homework01<span class="w"> </span>quiz<span class="w"> </span>...
+<span class="w">     </span>Q01<span class="w">  </span><span class="m">1</span>.00<span class="w"> </span>/<span class="w">  </span><span class="m">1</span>.00
+<span class="w">     </span>Q02<span class="w">  </span><span class="m">1</span>.00<span class="w"> </span>/<span class="w">  </span><span class="m">1</span>.00
+<span class="w">     </span>Q03<span class="w">  </span><span class="m">1</span>.00<span class="w"> </span>/<span class="w">  </span><span class="m">1</span>.00
+<span class="w">     </span>Q04<span class="w">  </span><span class="m">1</span>.00<span class="w"> </span>/<span class="w">  </span><span class="m">1</span>.00
+<span class="w">     </span>Q05<span class="w">  </span><span class="m">1</span>.00<span class="w"> </span>/<span class="w">  </span><span class="m">1</span>.00
+<span class="w">  </span>--------------------
+<span class="w">   </span>Score<span class="w">  </span><span class="m">5</span>.00<span class="w"> </span>/<span class="w">  </span><span class="m">5</span>.00
+<span class="w">   </span>Grade<span class="w">  </span><span class="m">1</span>.00<span class="w"> </span>/<span class="w">  </span><span class="m">1</span>.00
+<span class="w">  </span>Status<span class="w"> </span>Success
+</code></pre></div>
+
+<h2 id="just-for-fun-optional">Just For Fun (<em>Optional</em>)<a class="headerlink" href="#just-for-fun-optional" title="Permanent link">&para;</a></h2>
+<p>For your own personal enrichment, you can read the following chapters from
+<a href="http://linuxcommand.org/tlcl.php">The Linux Command Line</a>:</p>
+<ol>
+<li>Chapter 11 - The Environment</li>
+<li>Chapter 13 - Customizing the Prompt</li>
+</ol>
+<p>Once you have read these chapters, you can <strong>customize</strong> your <a href="http://man7.org/linux/man-pages/man1/bash.1.html">bash</a> shell
+prompt by adding useful information and colors and setting <code>$EDITOR</code> to your
+preferred text editor.</p>
+<p>Here are some additional resources to help you customize your <a href="http://man7.org/linux/man-pages/man1/bash.1.html">bash</a> shell:</p>
+<ol>
+<li>
+<p><a href="https://www.digitalocean.com/community/tutorials/how-to-customize-your-bash-prompt-on-a-linux-vps">How to Customize your Bash Prompt on a Linux VPS</a></p>
+</li>
+<li>
+<p><a href="https://wiki.archlinux.org/index.php/Bash/Prompt_customization">Bash/Prompt customization</a></p>
+</li>
+<li>
+<p><a href="https://www.howtogeek.com/307701/how-to-customize-and-colorize-your-bash-prompt/">How to Customize (and Colorize) Your Bash Prompt</a></p>
+</li>
+<li>
+<p><a href="http://ezprompt.net/">EZPrompt: Easy Bash PS1 Generator</a></p>
+</li>
+</ol>
+<h2 id="submission-10-points">Submission (<em>10 Points</em>)<a class="headerlink" href="#submission-10-points" title="Permanent link">&para;</a></h2>
+<p>To submit your assignment, please commit your work to the <code>homework01</code> folder
+of your <code>homework01</code> branch in your <strong>assignments</strong> <a href="https://github.com">GitHub</a> repository:</p>
+<div class="codehilite"><pre><span></span><code><span class="c1">#-----------------------------------------------------------------------</span>
+<span class="c1"># Make sure you have already completed Activity 0: Branching</span>
+<span class="c1">#-----------------------------------------------------------------------</span>
+...
+
+$<span class="w"> </span>git<span class="w"> </span>add<span class="w"> </span>Makefile<span class="w">                                    </span><span class="c1"># Mark changes for commit</span>
+$<span class="w"> </span>git<span class="w"> </span>add<span class="w"> </span>GUIDE<span class="w">                                       </span><span class="c1"># Mark changes for commit</span>
+$<span class="w"> </span>git<span class="w"> </span>add<span class="w"> </span>tasks.yaml<span class="w">                                  </span><span class="c1"># Mark changes for commit</span>
+$<span class="w"> </span>git<span class="w"> </span>commit<span class="w"> </span>-m<span class="w"> </span><span class="s2">&quot;Homework 01: Tasks&quot;</span><span class="w">                  </span><span class="c1"># Record changes</span>
+...
+
+$<span class="w"> </span>git<span class="w"> </span>add<span class="w"> </span>answers.json<span class="w">                                </span><span class="c1"># Mark changes for commit</span>
+$<span class="w"> </span>git<span class="w"> </span>commit<span class="w"> </span>-m<span class="w"> </span><span class="s2">&quot;Homework 01: Quiz&quot;</span><span class="w">                   </span><span class="c1"># Record changes</span>
+...
+
+$<span class="w"> </span>git<span class="w"> </span>push<span class="w"> </span>-u<span class="w"> </span>origin<span class="w"> </span>homework01<span class="w">                       </span><span class="c1"># Push branch to GitHub</span>
+</code></pre></div>
+
+<div class="alert warning-bg">
+<h3 id="lifebuoy-embed_icon-acknowledgments"><i class="icon icon-medium"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><title>lifebuoy</title><path d="M19.79,15.41C20.74,13.24 20.74,10.75 19.79,8.59L17.05,9.83C17.65,11.21 17.65,12.78 17.06,14.17L19.79,15.41M15.42,4.21C13.25,3.26 10.76,3.26 8.59,4.21L9.83,6.94C11.22,6.35 12.79,6.35 14.18,6.95L15.42,4.21M4.21,8.58C3.26,10.76 3.26,13.24 4.21,15.42L6.95,14.17C6.35,12.79 6.35,11.21 6.95,9.82L4.21,8.58M8.59,19.79C10.76,20.74 13.25,20.74 15.42,19.78L14.18,17.05C12.8,17.65 11.22,17.65 9.84,17.06L8.59,19.79M12,2A10,10 0 0,1 22,12A10,10 0 0,1 12,22A10,10 0 0,1 2,12A10,10 0 0,1 12,2M12,8A4,4 0 0,0 8,12A4,4 0 0,0 12,16A4,4 0 0,0 16,12A4,4 0 0,0 12,8Z" /></svg>
+</i> Acknowledgments<a class="headerlink" href="#lifebuoy-embed_icon-acknowledgments" title="Permanent link">&para;</a></h3>
+<p>If you collaborated with any other students, or received help from TAs or AI
+tools on this assignment, please record this support in the <code>README.md</code> in
+the <code>homework01</code> folder and include it with your <strong>Pull Request</strong>.</p>
+</div>
+<div class="alert success-bg">
+<h3 id="account-question-embed_icon-graders"><i class="icon icon-medium"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><title>account-question</title><path d="M13,8A4,4 0 0,1 9,12A4,4 0 0,1 5,8A4,4 0 0,1 9,4A4,4 0 0,1 13,8M17,18V20H1V18C1,15.79 4.58,14 9,14C13.42,14 17,15.79 17,18M20.5,14.5V16H19V14.5H20.5M18.5,9.5H17V9A3,3 0 0,1 20,6A3,3 0 0,1 23,9C23,9.97 22.5,10.88 21.71,11.41L21.41,11.6C20.84,12 20.5,12.61 20.5,13.3V13.5H19V13.3C19,12.11 19.6,11 20.59,10.35L20.88,10.16C21.27,9.9 21.5,9.47 21.5,9A1.5,1.5 0 0,0 20,7.5A1.5,1.5 0 0,0 18.5,9V9.5Z" /></svg>
+</i> Graders<a class="headerlink" href="#account-question-embed_icon-graders" title="Permanent link">&para;</a></h3>
+<p>Once you have committed your work and pushed it to <a href="https://github.com">GitHub</a>, remember to
+create a <strong>pull request</strong> and assign it to the appropriate <strong>teaching
+assistant</strong> from the <a href="reading01_tas.html">Reading 01 TA List</a>.</p>
+</div>
+</main>
+<footer>
+Built using <a href="https://python.org">Python</a>
+and <a href="https://jinja.palletsprojects.com">Jinja</a>
+with colors from <a href="https://nordtheme.com">Nord Theme</a>
+and icons from <a href="https://pictogrammers.com/library/mdi/">Material Design Icons</a>.</footer>
+</body>
+</html>

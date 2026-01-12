@@ -1,0 +1,414 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<!-- Favicon -->
+<link rel="icon" type="image/png" sizes="32x32" href="static/ico/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="static/ico/favicon-16x16.png">
+<link rel="manifest" href="static/ico/site.webmanifest">
+<!-- Stylesheets -->
+<link rel="stylesheet" href="static/css/pnutzh4x0r.css">
+<title>Reading 01: Using the Shell</title>
+</head>
+<body>
+<header>
+<a class="logo" href="reading01.html">
+    <h1>Reading 01: Using the Shell</h1>
+</a>
+<nav>
+    <ul>
+        <li><a href="index.html"><h4>Home</h4></a></li>
+        </ul>
+</nav></header>
+<main>
+<p><strong>Everyone</strong>:</p>
+<p>Next week, we will explore how to use some of the more advanced features of
+the <a href="https://en.wikipedia.org/wiki/Unix_shell">Unix shell</a>, including how to manipulate <a href="https://en.wikipedia.org/wiki/Computer_file">files</a> and control
+<a href="https://en.wikipedia.org/wiki/Process_(computing)">processes</a>, which are two fundamental abstractions the <a href="https://en.wikipedia.org/wiki/Unix">Unix</a> operating
+system provides to the end user.  You are also encouraged to learn more about
+a particular text editor of your choice such as <a href="http://www.vim.org/">vim</a>, <a href="https://www.gnu.org/software/emacs/">emacs</a>, or <a href="http://www.nano-editor.org/">nano</a>.</p>
+<div class="alert info-bg">
+<h3 id="book-embed_icon-tldr"><i class="icon icon-medium"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><title>book</title><path d="M18,22A2,2 0 0,0 20,20V4C20,2.89 19.1,2 18,2H12V9L9.5,7.5L7,9V2H6A2,2 0 0,0 4,4V20A2,2 0 0,0 6,22H18Z" /></svg>
+</i> TL;DR<a class="headerlink" href="#book-embed_icon-tldr" title="Permanent link">&para;</a></h3>
+<p>The focus of this reading is to review the basics of manipulating files and
+processes in the <a href="https://en.wikipedia.org/wiki/Unix_shell">Unix Shell</a>.</p>
+</div>
+<h2 id="branching">Branching<a class="headerlink" href="#branching" title="Permanent link">&para;</a></h2>
+<p>As discussed in class, each <strong>reading</strong> and <strong>homework</strong> assignment must be
+completed in its own git <a href="https://git-scm.com/docs/git-branch">branch</a>; this will allow you to separate the work
+of each assignment and for you to use the <a href="https://docs.github.com/en/github/collaborating-with-issues-and-pull-requests/creating-a-pull-request">Pull Request</a> workflow describe
+at the end of this document.</p>
+<p>To create a branch in your local repository, follow the instructions below:</p>
+<div class="codehilite"><pre><span></span><code>$<span class="w"> </span><span class="nb">cd</span><span class="w"> </span>path/to/cse-20289-sp26-assignments<span class="w">   </span><span class="c1"># Go to assignments repository</span>
+
+$<span class="w"> </span>git<span class="w"> </span>switch<span class="w"> </span>master<span class="w">                       </span><span class="c1"># Make sure we are in master branch</span>
+
+$<span class="w"> </span>git<span class="w"> </span>pull<span class="w"> </span>--rebase<span class="w">                       </span><span class="c1"># Make sure we are up-to-date with GitHub</span>
+
+$<span class="w"> </span>git<span class="w"> </span>switch<span class="w"> </span>-c<span class="w"> </span>reading01<span class="w">                 </span><span class="c1"># Create reading01 branch and switch to it</span>
+
+$<span class="w"> </span><span class="nb">cd</span><span class="w"> </span>reading01<span class="w">                            </span><span class="c1"># Go into reading01 folder</span>
+</code></pre></div>
+
+<p>Once these commands have been successfully performed, you are now ready to
+<a href="https://git-scm.com/docs/git-add">add</a>, <a href="https://git-scm.com/docs/git-commit">commit</a>, and <a href="https://git-scm.com/docs/git-push">push</a> any work required for this assignment.</p>
+<div class="alert warning-bg">
+<h3 id="source-fork-embed_icon-git-branching"><i class="icon icon-medium"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><title>source-fork</title><path d="M6,2A3,3 0 0,1 9,5C9,6.28 8.19,7.38 7.06,7.81C7.15,8.27 7.39,8.83 8,9.63C9,10.92 11,12.83 12,14.17C13,12.83 15,10.92 16,9.63C16.61,8.83 16.85,8.27 16.94,7.81C15.81,7.38 15,6.28 15,5A3,3 0 0,1 18,2A3,3 0 0,1 21,5C21,6.32 20.14,7.45 18.95,7.85C18.87,8.37 18.64,9 18,9.83C17,11.17 15,13.08 14,14.38C13.39,15.17 13.15,15.73 13.06,16.19C14.19,16.62 15,17.72 15,19A3,3 0 0,1 12,22A3,3 0 0,1 9,19C9,17.72 9.81,16.62 10.94,16.19C10.85,15.73 10.61,15.17 10,14.38C9,13.08 7,11.17 6,9.83C5.36,9 5.13,8.37 5.05,7.85C3.86,7.45 3,6.32 3,5A3,3 0 0,1 6,2M6,4A1,1 0 0,0 5,5A1,1 0 0,0 6,6A1,1 0 0,0 7,5A1,1 0 0,0 6,4M18,4A1,1 0 0,0 17,5A1,1 0 0,0 18,6A1,1 0 0,0 19,5A1,1 0 0,0 18,4M12,18A1,1 0 0,0 11,19A1,1 0 0,0 12,20A1,1 0 0,0 13,19A1,1 0 0,0 12,18Z" /></svg>
+</i> Git Branching<a class="headerlink" href="#source-fork-embed_icon-git-branching" title="Permanent link">&para;</a></h3>
+<p>For the assignments in this class, you should always <a href="https://git-scm.com/docs/git-branch">branch</a> off the master
+<a href="https://git-scm.com/docs/git-branch">branch</a>.  To determine which branch you are on, you can do the following:</p>
+<div class="codehilite"><pre><span></span><code>$<span class="w"> </span>git<span class="w"> </span>branch
+</code></pre></div>
+
+<p>To create and switch to a new branch, you can use the <code>git switch -c
+BRANCH</code> as described above.  Once you have performed this command, you can
+check which branch you are on:</p>
+<div class="codehilite"><pre><span></span><code>$<span class="w"> </span>git<span class="w"> </span>branch
+<span class="w">  </span>master
+*<span class="w"> </span>reading01
+</code></pre></div>
+
+<p>To change to another existing branch, you can use the <code>git switch BRANCH</code>
+command.  Suppose you are on the <code>reading01</code> branch and want to switch back
+to the <code>master</code> branch.  To do so, you can do the following:</p>
+<div class="codehilite"><pre><span></span><code>$<span class="w"> </span>git<span class="w"> </span>switch<span class="w"> </span>master
+</code></pre></div>
+
+<p>Before switching branches, however, you may wish to <a href="https://git-scm.com/docs/git-commit">commit</a> your work or at
+the very least <a href="https://www.git-scm.com/docs/git-stash">stash</a> it.</p>
+</div>
+<h2 id="python-3">Python 3<a class="headerlink" href="#python-3" title="Permanent link">&para;</a></h2>
+<p>Throughout the semester, we will be using <a href="https://python.org">Python 3</a> for a variety of
+purposes.  Because the student machines an older version of <a href="https://python.org">Python 3</a> by
+default, you will need to add the following line <em>to the bottom</em> your
+<code>~/.bashrc</code> file:</p>
+<div class="codehilite"><pre><span></span><code><span class="nb">export</span><span class="w"> </span><span class="nv">PATH</span><span class="o">=</span>/escnfs/home/pbui/pub/pkgsrc/bin:<span class="nv">$PATH</span>
+</code></pre></div>
+
+<p>You can then source this file to load that environment variable:</p>
+<div class="codehilite"><pre><span></span><code>$<span class="w"> </span><span class="nb">source</span><span class="w"> </span>~/.bashrc
+</code></pre></div>
+
+<p>To check that <a href="https://python.org">Python 3</a> works, you can run the following:</p>
+<div class="codehilite"><pre><span></span><code>$<span class="w"> </span>python3<span class="w"> </span>-V
+Python<span class="w"> </span><span class="m">3</span>.12.4
+</code></pre></div>
+
+<p>This will be necessary for the <code>.scripts/check.py</code> script in your
+<strong>assignments</strong> repository.</p>
+<h2 id="readings">Readings<a class="headerlink" href="#readings" title="Permanent link">&para;</a></h2>
+<div class="flex-row">
+<div class="flex-col">
+<p>The readings for <strong>Wednesday, January 21</strong> are:</p>
+<ol>
+<li>
+<div class="flex-col" markdown="1">
+<p><a href="https://linuxcommand.org/tlcl.php">The Linux Command Line</a></p>
+<ul>
+<li>Chapter 6 - Redirection</li>
+<li>Chapter 7 - Seeing the World as the Shell Sees it</li>
+<li>Chapter 8 - Advanced Keyboard Tricks</li>
+<li>Chapter 9 - Permissions</li>
+<li>Chapter 10 - Processes</li>
+</ul>
+</li>
+</ol>
+</div>
+<div class="flex-col-25 centered">
+<p><img src="static/img/tlcl.jpg"></p>
+</div>
+</div>
+<p>In addition to reading the above chapters, it is recommended that you learn a
+command-line <a href="https://en.wikipedia.org/wiki/Text_editor">text editor</a> such as one of the following:</p>
+<div class="flex-row">
+<div class="flex-col">
+<h3 id="nano"><a href="http://www.nano-editor.org/">nano</a><a class="headerlink" href="#nano" title="Permanent link">&para;</a></h3>
+<p>This text editor is the easiest to get started with, but also has the least
+amount of features. This is recommended for newcomers to Linux.</p>
+<ul>
+<li><a href="https://www.linode.com/docs/tools-reference/tools/using-nano">Using Nano</a></li>
+<li><a href="https://www.geeksforgeeks.org/nano-text-editor-in-linux/">Nano Text Editor in Linux</a></li>
+</ul>
+</div>
+<div class="flex-col">
+<h3 id="vim"><a href="http://www.vim.org/">vim</a><a class="headerlink" href="#vim" title="Permanent link">&para;</a></h3>
+<p>This text editor has many features such as syntax highlighting, plugins, and
+even spell checking. That said, it has a steep learning curve due to its
+unconventional keyboard interface.</p>
+<ul>
+<li>Chapter 12 - A Gentle Introduction to Vi of <a href="https://linuxcommand.org/tlcl.php">The Linux Command Line</a></li>
+<li><a href="https://www.geeksforgeeks.org/getting-started-with-vim-editor-in-linux/">Vim Editor in Linux</a></li>
+</ul>
+</div>
+<div class="flex-col">
+<h3 id="emacs"><a href="https://www.gnu.org/software/emacs/">emacs</a><a class="headerlink" href="#emacs" title="Permanent link">&para;</a></h3>
+<p>This text editor also has many features (perhaps too many). In
+fact, <a href="https://www.gnu.org/software/emacs/">Emacs</a> is so powerful, there is saying "Emacs is an excellent
+operating system. All it's missing is a decent text editor".</p>
+<ul>
+<li>
+<p><a href="https://www.digitalocean.com/community/tutorials/how-to-use-the-emacs-editor-in-linux">How To Use the Emacs Editor in Linux</a></p>
+</li>
+<li>
+<p><a href="https://www.masteringemacs.org/article/beginners-guide-to-emacs">An Emacs Tutorial: Beginner’s Guide to Emacs</a></p>
+</li>
+</ul>
+</div>
+</div>
+<div class="alert success-bg">
+<h3 id="pencil-outline-embed_icon-this-is-my-editor"><i class="icon icon-medium"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><title>pencil-outline</title><path d="M14.06,9L15,9.94L5.92,19H5V18.08L14.06,9M17.66,3C17.41,3 17.15,3.1 16.96,3.29L15.13,5.12L18.88,8.87L20.71,7.04C21.1,6.65 21.1,6 20.71,5.63L18.37,3.29C18.17,3.09 17.92,3 17.66,3M14.06,6.19L3,17.25V21H6.75L17.81,9.94L14.06,6.19Z" /></svg>
+</i> This is my editor<a class="headerlink" href="#pencil-outline-embed_icon-this-is-my-editor" title="Permanent link">&para;</a></h3>
+<p>All joking aside, your exact choice in a <a href="https://en.wikipedia.org/wiki/Text_editor">text editor</a> is not important.
+What is important, however, is that you become comfortable with at least one
+of them and are capable of editting text efficiently in terminal.  As the
+<a href="https://en.wikipedia.org/wiki/Rifleman's_Creed">creed</a> goes:</p>
+<blockquote>
+<p>This is my editor. There are many like it, but this one is mine.</p>
+<p>My editor is my best friend. It is my life. I must master it as I must master my life.</p>
+<p>Without me, my editor is useless. Without my editor, I am useless.</p>
+</blockquote>
+</div>
+<div class="alert warning-bg">
+<h3 id="vscode-embed_icon-vs-code"><i class="icon icon-medium"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><title>microsoft-visual-studio-code</title><path d="M17,16.47V7.39L11,11.93M2.22,9.19C1.92,8.87 1.91,8.37 2.2,8.04L3.4,6.93C3.6,6.75 4.09,6.67 4.45,6.93L7.87,9.54L15.8,2.29C16.12,1.97 16.67,1.84 17.3,2.17L21.3,4.08C21.66,4.29 22,4.62 22,5.23V18.73C22,19.13 21.71,19.56 21.4,19.73L17,21.83C16.68,21.96 16.08,21.84 15.87,21.63L7.85,14.33L4.45,16.93C4.07,17.19 3.6,17.12 3.4,16.93L2.2,15.83C1.88,15.5 1.92,14.96 2.25,14.63L5.25,11.93" /></svg>
+</i> VS Code<a class="headerlink" href="#vscode-embed_icon-vs-code" title="Permanent link">&para;</a></h3>
+<p>If you are more comfortable using a graphical <a href="https://en.wikipedia.org/wiki/Text_editor">text editor</a> such as <a href="https://code.visualstudio.com/">Visual
+Studio Code</a>, then you should consider
+setting up <a href="https://code.visualstudio.com/docs/remote/ssh-tutorial">Remote development over
+SSH</a> and becoming
+familiar with its features including its builtin terminal emulator and
+debugger.</p>
+<p>That said, we do not recommend that you use the <a href="https://git-scm.com/">git</a> integration or become
+too dependent on <strong>AI</strong> features such as <strong>CoPilot</strong>.</p>
+</div>
+<h3 id="optional-references">Optional References<a class="headerlink" href="#optional-references" title="Permanent link">&para;</a></h3>
+<p>The following are additional resources that you may find useful:</p>
+<ol>
+<li>
+<div class="flex-col">
+<p><a href="http://tldp.org/LDP/intro-linux/html/index.html">Introduction to Linux</a></p>
+<ul>
+<li>
+<p><a href="http://tldp.org/LDP/intro-linux/html/chap_03.html">Chapter 3. About files and the file system</a></p>
+</li>
+<li>
+<p><a href="http://tldp.org/LDP/intro-linux/html/chap_04.html">Chapter 4. Processes</a></p>
+</li>
+</ul>
+</li>
+</ol>
+<h2 id="quiz">Quiz<a class="headerlink" href="#quiz" title="Permanent link">&para;</a></h2>
+<p>Once you have completed the readings, answer the following <a href="static/json/reading01.json">Reading 01 Quiz</a>
+questions:</p>
+<div id="quiz-questions"></div>
+
+<div id="quiz-responses"></div>
+
+<script src="static/js/dredd-quiz.js"></script>
+<script>
+loadQuiz('static/json/reading01.json');
+</script>
+
+<pre style="display: none;" id="dr-container" class="codehilite"><code id="dredd-response"></code></pre>
+
+<h2 id="submission">Submission<a class="headerlink" href="#submission" title="Permanent link">&para;</a></h2>
+<p>To submit your answers, you will need to create an <code>answers.json</code> file in the
+<code>reading01</code> folder of your <strong>assignments</strong> repository:</p>
+<ol>
+<li>
+<div class="flex-col">
+<p>If you have not already, follow the instructions at the top of this
+document to create a <code>reading01</code> branch in your <strong>assignments</strong> <a href="https://git-scm.com/">Git</a>
+repository.</p>
+</li>
+<li>
+<div class="flex-col">
+<p>You can either hand-write the <code>answers.json</code> file using your favorite text
+editor or you can use the online form to generate the <a href="https://json.org/">JSON</a> data, which should
+look like the following:</p>
+<div class="codehilite"><pre><span></span><code><span class="p">{</span>
+<span class="w">    </span><span class="nt">&quot;q01&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">        </span><span class="s2">&quot;stdin&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="s2">&quot;stdout&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="s2">&quot;stderr&quot;</span>
+<span class="w">    </span><span class="p">],</span>
+<span class="w">    </span><span class="nt">&quot;q02&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;yes&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;q03&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">        </span><span class="s2">&quot;a&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="s2">&quot;b&quot;</span>
+<span class="w">    </span><span class="p">],</span>
+<span class="w">    </span><span class="nt">&quot;q04&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">        </span><span class="s2">&quot;a&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="s2">&quot;b&quot;</span>
+<span class="w">    </span><span class="p">],</span>
+<span class="w">    </span><span class="nt">&quot;q05&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">        </span><span class="s2">&quot;ls&quot;</span>
+<span class="w">    </span><span class="p">],</span>
+<span class="w">    </span><span class="nt">&quot;q06&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">        </span><span class="s2">&quot;beastie&quot;</span>
+<span class="w">    </span><span class="p">],</span>
+<span class="w">    </span><span class="nt">&quot;q07&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">        </span><span class="s2">&quot;beastie&quot;</span>
+<span class="w">    </span><span class="p">],</span>
+<span class="w">    </span><span class="nt">&quot;q08&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">        </span><span class="s2">&quot;800&quot;</span>
+<span class="w">    </span><span class="p">],</span>
+<span class="w">    </span><span class="nt">&quot;q09&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">        </span><span class="s2">&quot;b&quot;</span>
+<span class="w">    </span><span class="p">],</span>
+<span class="w">    </span><span class="nt">&quot;q10&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">        </span><span class="s2">&quot;homeworks&quot;</span>
+<span class="w">    </span><span class="p">]</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<p>To determine which symbols correspond to which response, take a look at
+the <a href="static/json/reading01.json">Reading 01 Quiz</a> file.</p>
+<p>To check your answers, you can use the provided <code>.scripts/check.py</code> script:</p>
+<div class="codehilite"><pre><span></span><code>$<span class="w"> </span><span class="nb">cd</span><span class="w"> </span>reading01<span class="w">                        </span><span class="c1"># Go into reading01 folder</span>
+
+$<span class="w"> </span><span class="nv">$EDITOR</span><span class="w"> </span>answers.json<span class="w">                </span><span class="c1"># Edit your answers.json file</span>
+
+$<span class="w"> </span>../.scripts/check.py<span class="w">                </span><span class="c1"># Check reading01 quiz</span>
+Checking<span class="w"> </span>reading01<span class="w"> </span>quiz<span class="w"> </span>...
+<span class="w">     </span>Q01<span class="w">  </span><span class="m">9</span>.00<span class="w"> </span>/<span class="w">  </span><span class="m">9</span>.00
+<span class="w">     </span>Q02<span class="w">  </span><span class="m">1</span>.00<span class="w"> </span>/<span class="w">  </span><span class="m">1</span>.00
+<span class="w">     </span>Q03<span class="w">  </span><span class="m">2</span>.00<span class="w"> </span>/<span class="w">  </span><span class="m">2</span>.00
+<span class="w">     </span>Q04<span class="w">  </span><span class="m">3</span>.00<span class="w"> </span>/<span class="w">  </span><span class="m">3</span>.00
+<span class="w">     </span>Q05<span class="w">  </span><span class="m">4</span>.00<span class="w"> </span>/<span class="w">  </span><span class="m">4</span>.00
+<span class="w">     </span>Q06<span class="w">  </span><span class="m">2</span>.00<span class="w"> </span>/<span class="w">  </span><span class="m">2</span>.00
+<span class="w">     </span>Q07<span class="w">  </span><span class="m">2</span>.00<span class="w"> </span>/<span class="w">  </span><span class="m">2</span>.00
+<span class="w">     </span>Q08<span class="w">  </span><span class="m">3</span>.00<span class="w"> </span>/<span class="w">  </span><span class="m">3</span>.00
+<span class="w">     </span>Q09<span class="w">  </span><span class="m">6</span>.00<span class="w"> </span>/<span class="w">  </span><span class="m">6</span>.00
+<span class="w">     </span>Q10<span class="w">  </span><span class="m">7</span>.00<span class="w"> </span>/<span class="w">  </span><span class="m">7</span>.00
+<span class="w">  </span>--------------------
+<span class="w">   </span>Score<span class="w"> </span><span class="m">39</span>.00<span class="w"> </span>/<span class="w"> </span><span class="m">39</span>.00
+<span class="w">   </span>Grade<span class="w">  </span><span class="m">1</span>.00<span class="w"> </span>/<span class="w">  </span><span class="m">1</span>.00
+<span class="w">  </span>Status<span class="w"> </span>Success
+</code></pre></div>
+
+<p>This script will check your responses by sending your
+<code>reading01/answers.json</code> file to <a href="https://dredd.h4x0r.space">dredd</a>, which is the automated grading
+system. <a href="https://dredd.h4x0r.space">dredd</a> will take your answers and return to you a score and
+overall status as shown above.</p>
+<div class="alert success-bg" markdown="1">
+<p><strong>Note</strong>: <code>Score</code> is how many points you received out of the maximum
+number of attempted points, while <code>Grade</code> is the amount of normalized
+points that will be recorded on <strong>Canvas</strong>.</p>
+<p>Moreover, <code>Status</code> is <code>Success</code> if you have achieved full credit
+(otherwise, it will show <code>Failure</code>).</p>
+</div>
+<div class="alert warning-bg" markdown="1">
+<h3 id="repeat-embed_icon-try-try-try-again"><i class="icon icon-medium"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><title>repeat</title><path d="M17,17H7V14L3,18L7,22V19H19V13H17M7,7H17V10L21,6L17,2V5H5V11H7V7Z" /></svg>
+</i> Try, Try, Try again<a class="headerlink" href="#repeat-embed_icon-try-try-try-again" title="Permanent link">&para;</a></h3>
+<p>You may check your quiz answers as many times as you want; <a href="https://dredd.h4x0r.space">dredd</a> does
+not keep track of who submits what or how many times. It simply returns a
+score.
+</div></p>
+</li>
+<li>
+<div class="flex-col">
+<p>Once you have your <code>answers</code> file, you need to <a href="https://git-scm.com/docs/git-add">add</a>, <a href="https://git-scm.com/docs/git-commit">commit</a> the file,
+and <a href="https://git-scm.com/docs/git-push">push</a> your commits to <a href="https://github.com/">GitHub</a>:</p>
+<div class="codehilite"><pre><span></span><code>$<span class="w"> </span>git<span class="w"> </span>add<span class="w"> </span>answers.json<span class="w">                </span><span class="c1"># Add answers.json to staging area</span>
+
+$<span class="w"> </span>git<span class="w"> </span>commit<span class="w"> </span>-m<span class="w"> </span><span class="s2">&quot;Reading 01: Quiz&quot;</span><span class="w">    </span><span class="c1"># Commit work</span>
+
+$<span class="w"> </span>git<span class="w"> </span>push<span class="w"> </span>-u<span class="w"> </span>origin<span class="w"> </span>reading01<span class="w">        </span><span class="c1"># Push branch to GitHub</span>
+</code></pre></div>
+
+<div class="alert success-bg" markdown="1">
+<h3 id="git-embed_icon-iterative-approach"><i class="icon icon-medium"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><title>git</title><path d="M2.6,10.59L8.38,4.8L10.07,6.5C9.83,7.35 10.22,8.28 11,8.73V14.27C10.4,14.61 10,15.26 10,16A2,2 0 0,0 12,18A2,2 0 0,0 14,16C14,15.26 13.6,14.61 13,14.27V9.41L15.07,11.5C15,11.65 15,11.82 15,12A2,2 0 0,0 17,14A2,2 0 0,0 19,12A2,2 0 0,0 17,10C16.82,10 16.65,10 16.5,10.07L13.93,7.5C14.19,6.57 13.71,5.55 12.78,5.16C12.35,5 11.9,4.96 11.5,5.07L9.8,3.38L10.59,2.6C11.37,1.81 12.63,1.81 13.41,2.6L21.4,10.59C22.19,11.37 22.19,12.63 21.4,13.41L13.41,21.4C12.63,22.19 11.37,22.19 10.59,21.4L2.6,13.41C1.81,12.63 1.81,11.37 2.6,10.59Z" /></svg>
+</i> Iterative Approach<a class="headerlink" href="#git-embed_icon-iterative-approach" title="Permanent link">&para;</a></h3>
+<p>You may edit and commit changes to your branch as many times as you wish.
+Just make sure all of your work goes in the appropriate branch and then
+perform a <code>git push</code> when you are done.
+</div></p>
+</li>
+<li>
+<div class="flex-col">
+<p>When you are ready for your final submission, you need to create a <a href="https://docs.github.com/en/github/collaborating-with-issues-and-pull-requests/creating-a-pull-request">Pull
+Request</a> via the <a href="https://github.com/">GitHub</a> interface:</p>
+<ul>
+<li>
+<div class="flex-col">
+<p>If you have a <strong>Compare &amp; pull request</strong> button corresponding to your
+<code>reading01</code> branch on your repository page, then you can click on
+that button.</p>
+<p><div class="centered">
+  <img src="static/img/reading01-github-compare-pr.png" class="responsive">
+</div></p>
+<div class="alert info-bg" markdown="1">
+<h3 id="git-embed_icon-pull-request-url"><i class="icon icon-medium"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><title>git</title><path d="M2.6,10.59L8.38,4.8L10.07,6.5C9.83,7.35 10.22,8.28 11,8.73V14.27C10.4,14.61 10,15.26 10,16A2,2 0 0,0 12,18A2,2 0 0,0 14,16C14,15.26 13.6,14.61 13,14.27V9.41L15.07,11.5C15,11.65 15,11.82 15,12A2,2 0 0,0 17,14A2,2 0 0,0 19,12A2,2 0 0,0 17,10C16.82,10 16.65,10 16.5,10.07L13.93,7.5C14.19,6.57 13.71,5.55 12.78,5.16C12.35,5 11.9,4.96 11.5,5.07L9.8,3.38L10.59,2.6C11.37,1.81 12.63,1.81 13.41,2.6L21.4,10.59C22.19,11.37 22.19,12.63 21.4,13.41L13.41,21.4C12.63,22.19 11.37,22.19 10.59,21.4L2.6,13.41C1.81,12.63 1.81,11.37 2.6,10.59Z" /></svg>
+</i> Pull Request URL<a class="headerlink" href="#git-embed_icon-pull-request-url" title="Permanent link">&para;</a></h3>
+<p>As an alternative, when you first do a <code>git push</code> on the
+command-line, <a href="https://git-scm.com/">git</a> will also give you a <strong>URL</strong> that you can click
+to create a <strong>Pull Request</strong>.</p>
+</div>
+</li>
+<li>
+<div class="flex-col">
+<p>If you do not have the <strong>Compare &amp; pull request</strong> button, then go to
+your repository's <strong>Branches</strong> page and then press the
+<strong>New pull request</strong> button for the appropriate branch:</p>
+<p><div class="centered">
+  <img src="static/img/reading01-github-branches.png" class="responsive">
+</div></p>
+</li>
+<li>
+<div class="flex-col">
+<p>Next, edit the <strong>Pull Request</strong> title to "Reading 01", write a
+comment if necessary, assign the appropriate <strong>TA</strong> from the <a href="reading01_tas.html">Reading
+01 TA List</a>, and then press the "Create pull request" button.</p>
+<p><div class="centered">
+  <img src="static/img/reading01-github-pull-request.png" class="responsive">
+</div></p>
+<div class="alert danger-bg" markdown="1">
+<h3 id="close-octogon-embed_icon-dont-merge"><i class="icon icon-medium"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><title>close-octagon</title><path d="M8.27,3L3,8.27V15.73L8.27,21H15.73L21,15.73V8.27L15.73,3M8.41,7L12,10.59L15.59,7L17,8.41L13.41,12L17,15.59L15.59,17L12,13.41L8.41,17L7,15.59L10.59,12L7,8.41" /></svg>
+</i> Don't Merge!<a class="headerlink" href="#close-octogon-embed_icon-dont-merge" title="Permanent link">&para;</a></h3>
+<p><strong>DO NOT MERGE your own Pull Requests</strong>.  The TAs use open <strong>Pull Requests</strong>
+to keep track of which assignments to grade.  Closing them yourself will
+confuse the TAs and cause a delay in grading.</p>
+</div>
+</li>
+<li>
+<div class="flex-col">
+<p>Every commit on <a href="https://github.com/">GitHub</a> will automatically submit your quiz or code to
+<a href="https://dredd.h4x0r.space">dredd</a> and the results of each run is displayed in the <strong>Checks</strong> tab of
+each commit as shown below:</p>
+<p><div class="centered">
+  <img src="static/img/reading01-github-checks.png" class="responsive">
+</div></p>
+</li>
+</ul>
+</li>
+</ol>
+<p>Once you have made the <strong>Pull Request</strong>, the TA can verify your work and
+  provide feedback via the discussion form inside the <strong>Pull Request</strong>. If
+  necessary, you can update your submission by simply commit and pushing to
+  the appropriate branch; the <strong>Pull Request</strong> will automatically be updated
+  to match your latest work.</p>
+<div class="alert warning-bg">
+<h3 id="lifebuoy-embed_icon-acknowledgments"><i class="icon icon-medium"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><title>lifebuoy</title><path d="M19.79,15.41C20.74,13.24 20.74,10.75 19.79,8.59L17.05,9.83C17.65,11.21 17.65,12.78 17.06,14.17L19.79,15.41M15.42,4.21C13.25,3.26 10.76,3.26 8.59,4.21L9.83,6.94C11.22,6.35 12.79,6.35 14.18,6.95L15.42,4.21M4.21,8.58C3.26,10.76 3.26,13.24 4.21,15.42L6.95,14.17C6.35,12.79 6.35,11.21 6.95,9.82L4.21,8.58M8.59,19.79C10.76,20.74 13.25,20.74 15.42,19.78L14.18,17.05C12.8,17.65 11.22,17.65 9.84,17.06L8.59,19.79M12,2A10,10 0 0,1 22,12A10,10 0 0,1 12,22A10,10 0 0,1 2,12A10,10 0 0,1 12,2M12,8A4,4 0 0,0 8,12A4,4 0 0,0 12,16A4,4 0 0,0 16,12A4,4 0 0,0 12,8Z" /></svg>
+</i> Acknowledgments<a class="headerlink" href="#lifebuoy-embed_icon-acknowledgments" title="Permanent link">&para;</a></h3>
+<p>If you collaborated with any other students, or received help from TAs or AI
+tools on this assignment, please record this support in the <code>README.md</code> in
+the <code>reading01</code> folder and include it with your <strong>Pull Request</strong>.</p>
+</div>
+<div class="alert success-bg">
+<h3 id="account-question-embed_icon-graders"><i class="icon icon-medium"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><title>account-question</title><path d="M13,8A4,4 0 0,1 9,12A4,4 0 0,1 5,8A4,4 0 0,1 9,4A4,4 0 0,1 13,8M17,18V20H1V18C1,15.79 4.58,14 9,14C13.42,14 17,15.79 17,18M20.5,14.5V16H19V14.5H20.5M18.5,9.5H17V9A3,3 0 0,1 20,6A3,3 0 0,1 23,9C23,9.97 22.5,10.88 21.71,11.41L21.41,11.6C20.84,12 20.5,12.61 20.5,13.3V13.5H19V13.3C19,12.11 19.6,11 20.59,10.35L20.88,10.16C21.27,9.9 21.5,9.47 21.5,9A1.5,1.5 0 0,0 20,7.5A1.5,1.5 0 0,0 18.5,9V9.5Z" /></svg>
+</i> Graders<a class="headerlink" href="#account-question-embed_icon-graders" title="Permanent link">&para;</a></h3>
+<p>Once you have committed your work and pushed it to <a href="https://github.com/">GitHub</a>, remember to
+create a <strong>pull request</strong> and assign it to the appropriate <strong>teaching
+assistant</strong> from the <a href="reading01_tas.html">Reading 01 TA List</a>.</p>
+<p><strong>Note</strong>: this list changes each week, so be sure to consult the appropriate
+list for each assignment.</p>
+</div>
+</main>
+<footer>
+Built using <a href="https://python.org">Python</a>
+and <a href="https://jinja.palletsprojects.com">Jinja</a>
+with colors from <a href="https://nordtheme.com">Nord Theme</a>
+and icons from <a href="https://pictogrammers.com/library/mdi/">Material Design Icons</a>.</footer>
+</body>
+</html>
