@@ -1,0 +1,198 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<!-- Favicon -->
+<link rel="icon" type="image/png" sizes="32x32" href="static/ico/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="static/ico/favicon-16x16.png">
+<link rel="manifest" href="static/ico/site.webmanifest">
+<!-- Stylesheets -->
+<link rel="stylesheet" href="static/css/pnutzh4x0r.css">
+<title>Reading 02: Shell Scripting</title>
+</head>
+<body>
+<header>
+<a class="logo" href="reading02.html">
+    <h1>Reading 02: Shell Scripting</h1>
+</a>
+<nav>
+    <ul>
+        <li><a href="index.html"><h4>Home</h4></a></li>
+        </ul>
+</nav></header>
+<main>
+<p><strong>Everyone</strong>:</p>
+<p>Next week, we will explore some basic <a href="https://en.wikipedia.org/wiki/Computer_network">networking</a> utilities and then begin
+learning about <a href="https://en.wikipedia.org/wiki/Shell_script">shell scripting</a>.  That is, we will go from interactively
+controlling the <a href="https://en.wikipedia.org/wiki/Unix_shell">Unix shell</a> to utilizing the shell as a full-fledged
+programming language with variables, conditional statements, loops and even
+functions.</p>
+<div class="alert info-bg">
+<h3 id="book-embed_icon-tldr"><i class="icon icon-medium"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><title>book</title><path d="M18,22A2,2 0 0,0 20,20V4C20,2.89 19.1,2 18,2H12V9L9.5,7.5L7,9V2H6A2,2 0 0,0 4,4V20A2,2 0 0,0 6,22H18Z" /></svg>
+</i> TL;DR<a class="headerlink" href="#book-embed_icon-tldr" title="Permanent link">&para;</a></h3>
+<p>The focus of this reading is some basic <a href="https://en.wikipedia.org/wiki/Computer_network">networking</a> tools and an
+introduction to <a href="https://en.wikipedia.org/wiki/Shell_script">shell scripting</a> in <a href="https://www.gnu.org/software/bash/">bash</a>.</p>
+</div>
+<h2 id="readings">Readings<a class="headerlink" href="#readings" title="Permanent link">&para;</a></h2>
+<div class="flex-row">
+<div class="flex-col">
+<p>The readings for next week are:</p>
+<ol>
+<li>
+<div class="flex-col" markdown="1">
+<p><a href="https://linuxcommand.org/tlcl.php">The Linux Command Line</a> (<em>Tools</em>):</p>
+<ul>
+<li>Chapter 16 - Networking</li>
+<li>Chapter 17 - Searching For Files</li>
+</ul>
+</li>
+<li>
+<div class="flex-col" markdown="1">
+<p><a href="https://linuxcommand.org/tlcl.php">The Linux Command Line</a> (<em>Scripting</em>):</p>
+<ul>
+<li>Chapter 24 - Writing Your First Script</li>
+<li>Chapter 25 - Starting A Project</li>
+<li>Chapter 26 - Top-Down Design</li>
+<li>Chapter 27 - Flow Control: Branching With If</li>
+<li>Chapter 29 - Flow Control: Loopning With While and Until</li>
+<li>Chapter 30 - Troubleshooting</li>
+<li>Chapter 31 - Flow Control: Branching With Case</li>
+<li>Chapter 32 - Positional Parameters</li>
+<li>Chapter 33 - Flow Control: Looping With For</li>
+</ul>
+<p>For a <strong>shorter</strong> version of the scripting chapters, you can read
+<a href="https://linuxcommand.org/lc3_writing_shell_scripts.php">Writing Shell Scripts</a> instead.  However, the chapters above are listed
+to serve as a reference should you need them (they do a more thorough job
+of explaining the material).</p>
+</li>
+</ol>
+</div>
+<div class="flex-col-25 centered">
+<p><img src="static/img/tlcl.jpg"></p>
+</div>
+</div>
+<h3 id="optional-resources">Optional Resources<a class="headerlink" href="#optional-resources" title="Permanent link">&para;</a></h3>
+<p>The following are additional resources that you may find useful:</p>
+<div class="flex-row">
+<div class="flex-col">
+<h4 id="shell-scripting">Shell Scripting<a class="headerlink" href="#shell-scripting" title="Permanent link">&para;</a></h4>
+<ul>
+<li><a href="https://www.grymoire.com/Unix/Bourne.html">Sh - the Bourne Shell</a></li>
+<li><a href="http://matt.might.net/articles/bash-by-example/">Shell programming with bash: by example, by counter-example</a></li>
+<li><a href="http://mywiki.wooledge.org/BashGuide">Bash Guide</a></li>
+</ul>
+</div>
+<div class="flex-col">
+<h4 id="networking">Networking<a class="headerlink" href="#networking" title="Permanent link">&para;</a></h4>
+<ul>
+<li><a href="http://www.tldp.org/LDP/intro-linux/html/chap_10.html">Introduction to Linux - Chapter 10. Networking</a></li>
+<li><a href="http://www.slackbook.org/html/basic-network-commands.html">Slackware Linux Essentials - Chapter 13 Basic Network Commands</a></li>
+<li><a href="https://itsfoss.com/basic-linux-networking-commands/">21 Basic Linux Networking Commands You Should Know</a></li>
+</ul>
+</div>
+</div>
+<div class="alert success-bg">
+<h3 id="console-embed_icon-terminal-multiplexer"><i class="icon icon-medium"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><title>console</title><path d="M20,19V7H4V19H20M20,3A2,2 0 0,1 22,5V19A2,2 0 0,1 20,21H4A2,2 0 0,1 2,19V5C2,3.89 2.9,3 4,3H20M13,17V15H18V17H13M9.58,13L5.57,9H8.4L11.7,12.3C12.09,12.69 12.09,13.33 11.7,13.72L8.42,17H5.59L9.58,13Z" /></svg>
+</i> Terminal Multiplexer<a class="headerlink" href="#console-embed_icon-terminal-multiplexer" title="Permanent link">&para;</a></h3>
+<p>A tool that will be demonstrated in class, but not assessed in the reading
+quiz or homework is <a href="https://github.com/tmux/tmux/wiki">tmux</a>, which is one of the <strong>most game-changing</strong>
+programs you could ever learn:</p>
+<ul>
+<li><a href="https://danielmiessler.com/study/tmux/">A tmux Primer</a></li>
+<li><a href="http://www.hamvocke.com/blog/a-quick-and-easy-guide-to-tmux/">A Quick and Easy Guide to tmux</a></li>
+<li><a href="https://medium.com/hackernoon/a-gentle-introduction-to-tmux-8d784c404340">A Gentle Introduction to tmux</a></li>
+</ul>
+<p>Although not required, it is <strong>highly recommended</strong> that you learn how to use
+<a href="https://github.com/tmux/tmux/wiki">tmux</a>.</p>
+</div>
+<h2 id="quiz">Quiz<a class="headerlink" href="#quiz" title="Permanent link">&para;</a></h2>
+<p>Once you have completed the readings, answer the following <a href="static/json/reading02.json">Reading 02 Quiz</a>
+questions:</p>
+<div id="quiz-questions"></div>
+
+<div id="quiz-responses"></div>
+
+<script src="static/js/dredd-quiz.js"></script>
+
+<script>
+loadQuiz('static/json/reading02.json');
+</script>
+
+<pre style="display: none;" id="dr-container" class="codehilite"><code id="dredd-response"></code></pre>
+
+<h3 id="testing">Testing<a class="headerlink" href="#testing" title="Permanent link">&para;</a></h3>
+<p>To verify the correctness of your <code>exists.sh</code> script, you should be able to
+reproduce the following:</p>
+<div class="codehilite"><pre><span></span><code>$<span class="w"> </span>ls<span class="w"> </span>-l<span class="w">                               </span><span class="c1"># List files in reading02 directory</span>
+total<span class="w"> </span><span class="m">8</span>.0K
+-rw-r--r--<span class="w"> </span><span class="m">1</span><span class="w"> </span>pbui<span class="w"> </span>pbui<span class="w">  </span><span class="m">23</span><span class="w"> </span>Jan<span class="w"> </span><span class="m">18</span><span class="w"> </span><span class="m">15</span>:39<span class="w"> </span>README.md
+-rw-r--r--<span class="w"> </span><span class="m">1</span><span class="w"> </span>pbui<span class="w"> </span>pbui<span class="w"> </span><span class="m">144</span><span class="w"> </span>Jan<span class="w"> </span><span class="m">28</span><span class="w"> </span><span class="m">13</span>:37<span class="w"> </span>answers.json
+-rwxr-xr-x<span class="w"> </span><span class="m">1</span><span class="w"> </span>pbui<span class="w"> </span>pbui<span class="w"> </span><span class="m">254</span><span class="w"> </span>Jan<span class="w"> </span><span class="m">28</span><span class="w"> </span><span class="m">18</span>:02<span class="w"> </span>exists.sh
+
+$<span class="w"> </span>./exists.sh<span class="w"> </span>*<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="nb">echo</span><span class="w"> </span>Success<span class="w">       </span><span class="c1"># Run script and check error code</span>
+answers.json<span class="w"> </span>exists!
+exists.sh<span class="w"> </span>exists!
+README.md<span class="w"> </span>exists!
+Success
+
+$<span class="w"> </span>./exists.sh<span class="w"> </span>*<span class="w"> </span>ASDF<span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="nb">echo</span><span class="w"> </span>Success<span class="w">  </span><span class="c1"># Run script and check error code</span>
+answers.json<span class="w"> </span>exists!
+exists.sh<span class="w"> </span>exists!
+README.md<span class="w"> </span>exists!
+ASDF<span class="w"> </span>does<span class="w"> </span>not<span class="w"> </span>exist!
+Success
+</code></pre></div>
+
+<h2 id="submission">Submission<a class="headerlink" href="#submission" title="Permanent link">&para;</a></h2>
+<p>To submit your work, follow the same process outlined in <a href="reading01.html">Reading 01</a>:</p>
+<div class="codehilite"><pre><span></span><code>$<span class="w"> </span>git<span class="w"> </span>switch<span class="w"> </span>master<span class="w">                   </span><span class="c1"># Make sure we are in master branch</span>
+$<span class="w"> </span>git<span class="w"> </span>pull<span class="w"> </span>--rebase<span class="w">                   </span><span class="c1"># Make sure we are up-to-date with GitHub</span>
+
+$<span class="w"> </span>git<span class="w"> </span>switch<span class="w"> </span>-c<span class="w"> </span>reading02<span class="w">             </span><span class="c1"># Create reading02 branch and check it out</span>
+
+$<span class="w"> </span><span class="nb">cd</span><span class="w"> </span>reading02<span class="w">                        </span><span class="c1"># Go into reading02 folder</span>
+$<span class="w"> </span><span class="nv">$EDITOR</span><span class="w"> </span>answers.json<span class="w">                </span><span class="c1"># Edit your answers.json file</span>
+
+$<span class="w"> </span>../.scripts/check.py<span class="w">                </span><span class="c1"># Check reading02 quiz</span>
+Checking<span class="w"> </span>reading02<span class="w"> </span>quiz<span class="w"> </span>...
+<span class="w">      </span>Q1<span class="w"> </span><span class="m">10</span>.00<span class="w"> </span>/<span class="w"> </span><span class="m">10</span>.00
+<span class="w">      </span>Q2<span class="w">  </span><span class="m">5</span>.00<span class="w"> </span>/<span class="w">  </span><span class="m">5</span>.00
+<span class="w">      </span>Q3<span class="w">  </span><span class="m">4</span>.00<span class="w"> </span>/<span class="w">  </span><span class="m">4</span>.00
+<span class="w">      </span>Q4<span class="w">  </span><span class="m">3</span>.00<span class="w"> </span>/<span class="w">  </span><span class="m">3</span>.00
+<span class="w">      </span>Q5<span class="w"> </span><span class="m">11</span>.00<span class="w"> </span>/<span class="w"> </span><span class="m">11</span>.00
+<span class="w">  </span>--------------------
+<span class="w">   </span>Score<span class="w"> </span><span class="m">33</span>.00<span class="w"> </span>/<span class="w"> </span><span class="m">33</span>.00
+<span class="w">   </span>Grade<span class="w">  </span><span class="m">1</span>.00<span class="w"> </span>/<span class="w">  </span><span class="m">1</span>.00
+<span class="w">  </span>Status<span class="w"> </span>Success
+
+$<span class="w"> </span>git<span class="w"> </span>add<span class="w"> </span>answers.json<span class="w">                </span><span class="c1"># Add answers.json to staging area</span>
+$<span class="w"> </span>git<span class="w"> </span>commit<span class="w"> </span>-m<span class="w"> </span><span class="s2">&quot;Reading 02: Quiz&quot;</span><span class="w">    </span><span class="c1"># Commit work</span>
+
+$<span class="w"> </span>git<span class="w"> </span>push<span class="w"> </span>-u<span class="w"> </span>origin<span class="w"> </span>reading02<span class="w">        </span><span class="c1"># Push branch to GitHub</span>
+</code></pre></div>
+
+<div class="alert warning-bg">
+<h3 id="lifebuoy-embed_icon-acknowledgments"><i class="icon icon-medium"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><title>lifebuoy</title><path d="M19.79,15.41C20.74,13.24 20.74,10.75 19.79,8.59L17.05,9.83C17.65,11.21 17.65,12.78 17.06,14.17L19.79,15.41M15.42,4.21C13.25,3.26 10.76,3.26 8.59,4.21L9.83,6.94C11.22,6.35 12.79,6.35 14.18,6.95L15.42,4.21M4.21,8.58C3.26,10.76 3.26,13.24 4.21,15.42L6.95,14.17C6.35,12.79 6.35,11.21 6.95,9.82L4.21,8.58M8.59,19.79C10.76,20.74 13.25,20.74 15.42,19.78L14.18,17.05C12.8,17.65 11.22,17.65 9.84,17.06L8.59,19.79M12,2A10,10 0 0,1 22,12A10,10 0 0,1 12,22A10,10 0 0,1 2,12A10,10 0 0,1 12,2M12,8A4,4 0 0,0 8,12A4,4 0 0,0 12,16A4,4 0 0,0 16,12A4,4 0 0,0 12,8Z" /></svg>
+</i> Acknowledgments<a class="headerlink" href="#lifebuoy-embed_icon-acknowledgments" title="Permanent link">&para;</a></h3>
+<p>If you collaborated with any other students, or received help from TAs or AI
+tools on this assignment, please record this support in the <code>README.md</code> in
+the <code>reading02</code> folder and include it with your <strong>Pull Request</strong>.</p>
+</div>
+<div class="alert success-bg">
+<h3 id="account-question-embed_icon-graders"><i class="icon icon-medium"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><title>account-question</title><path d="M13,8A4,4 0 0,1 9,12A4,4 0 0,1 5,8A4,4 0 0,1 9,4A4,4 0 0,1 13,8M17,18V20H1V18C1,15.79 4.58,14 9,14C13.42,14 17,15.79 17,18M20.5,14.5V16H19V14.5H20.5M18.5,9.5H17V9A3,3 0 0,1 20,6A3,3 0 0,1 23,9C23,9.97 22.5,10.88 21.71,11.41L21.41,11.6C20.84,12 20.5,12.61 20.5,13.3V13.5H19V13.3C19,12.11 19.6,11 20.59,10.35L20.88,10.16C21.27,9.9 21.5,9.47 21.5,9A1.5,1.5 0 0,0 20,7.5A1.5,1.5 0 0,0 18.5,9V9.5Z" /></svg>
+</i> Graders<a class="headerlink" href="#account-question-embed_icon-graders" title="Permanent link">&para;</a></h3>
+<p>Once you have committed your work and pushed it to <a href="https://github.com">GitHub</a>, remember to
+create a <strong>pull request</strong> and assign it to the appropriate <strong>teaching
+assistant</strong> from the <a href="reading02_tas.html">Reading 02 TA List</a>.</p>
+<p><strong>Note</strong>: this list changes each week, so be sure to consult the appropriate
+list for each assignment.</p>
+</div>
+</main>
+<footer>
+Built using <a href="https://python.org">Python</a>
+and <a href="https://jinja.palletsprojects.com">Jinja</a>
+with colors from <a href="https://nordtheme.com">Nord Theme</a>
+and icons from <a href="https://pictogrammers.com/library/mdi/">Material Design Icons</a>.</footer>
+</body>
+</html>
