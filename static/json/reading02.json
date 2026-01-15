@@ -1,0 +1,42 @@
+{
+    "q1": {
+        "type": "order",
+        "question": "\n<p>\nOrder the following <b>networking</b> utilities to match the descriptions\nbelow.\n</p>\n\n<p>\n<ol>\n\n  <li>Find the ip address of all the networking devices on the current\n  machine.</li>\n\n  <li>Find the ip address of a remote machine along with other DNS\n  records.</li>\n\n  <li>Measure the <i>latency</i> to a remote machine or check if another\n  machine is responsive.</li>\n\n  <li>Securely transfer a file from one machine to another.</li>\n\n  <li>Synchronize files between machines.</li>\n\n  <li>Download a file from a website.</li>\n\n  <li>List what ports or services are available on the current machine.</li>\n\n  <li>Scan a remote machine to see what ports are open.</li>\n\n  <li>Make arbitrary network connections to a remote machine.</li>\n\n  <li>List the machines traversed in a network connection.</li>\n\n</ol>\n</p>\n\n<p>\n<b>Note</b>: You may need to lookup additional resources for some of these commands.\n</p>\n",
+        "responses": {
+            "host": "host",
+            "scp": "scp",
+            "curl": "curl",
+            "rsync": "rsync",
+            "nmap": "nmap",
+            "nc": "nc",
+            "ping": "ping",
+            "ip": "ip",
+            "ss": "ss",
+            "traceroute": "traceroute"
+        }
+    },
+    "q2": {
+        "type": "blank",
+        "question": "\n<p>\nUse the <code>find</code> command on the <code>/etc</code> folder on\n<code>student10.cse.nd.edu</code> to answer the following questions:\n</p>\n\n<p>\n<ol>\n\n  <li>How many files are there? <b>(1)</b> ____</li>\n\n  <li>How many directories are there? <b>(2)</b> ____</li>\n\n  <li>How many executable files are there? <b>(3)</b> ____</li>\n\n  <li>How many empty files are there? <b>(4)</b> ____</li>\n\n  <li>How many files and directories have the string 'host' in the name? <b>(5)</b> ____</li>\n\n</ol>\n</p>\n"
+    },
+    "q3": {
+        "type": "blank",
+        "question": "\n<p>Given the following output of <code>ls -l</code>:</p>\n\n<pre>\n-rw-r--r-- 1 pbui pbui  23 Jan 18 15:39 README.md\n-rw-r--r-- 1 pbui pbui 155 Jan 25 01:15 exists.sh\n</pre>\n\n<p>And the following script, <code>exists.sh</code>:</p>\n\n<pre>\n#!/bin/sh\n\nif test -e \"$1\"; then\n    echo \"$1 exists!\"\nelse\n    echo \"$1 does not exist!\"\nfi\n</pre>\n\n<p>\n<ol>\n<li>How would you run the script even though it is not executable? <b>(1)</b> ____</li>\n<li>How would you make this script executable? <b>(2)</b> ____</li>\n<li>Once this script is executable, how would you run it directly? <b>(3)</b> ____</li>\n<li>What environment variable would you modify to allow you to run this script from any directory using just its name (ie. <code>exists.sh</code>)? <b>(4)</b> ____</li>\n</ol>\n</p>\n"
+    },
+    "q4": {
+        "type": "multiple",
+        "question": "\n<p>\nGiven the <code>exists.sh</code> script in <b>Q3</b>, which of the\nfollowing statements are true (choose all that apply)?\n</p>\n",
+        "responses": {
+            "extension": "The <code>#!/bin/sh</code> line specifies the file extension.",
+            "shebang": "The <code>#!/bin/sh</code> line specifies the interpreter to use when the script is executed.",
+            "number": "The <code>$1</code> represents the number <code>1</code>.",
+            "argument": "The <code>$1</code> represents the first argument to the script</code>.",
+            "variable": "The <code>test -e</code> line checks if the number referenced by the variable exists.",
+            "file": "The <code>test -e</code> line checks if the file referenced by the variable exists."
+        }
+    },
+    "q5": {
+        "type": "blank",
+        "question": "\n<p>We wish to create a new version of the <code>exists.sh</code> script in\n<b>Q3</b> with the following modifications:</p>\n\n<p>\n<ol>\n\n  <li>Use <code>[</code> instead of <code>test</code> for the conditional.</li>\n\n  <li>Check every command line argument (one at a time).</li>\n\n  <li>Return an error code (<code>1</code>) if one of the checks fails.</li>\n\n  <li>Display an error message and exit with an error if no arguments are given.</li>\n\n</ol>\n<p>\n\n<p>Fill in the missing code in the script below to complete this new\nversion of <code>exists.sh</code>:</p>\n\n<pre>\n#!/bin/sh\n\n# Check if there are no arguments\nif [ \"____\" ____ 1 ]; then              # 1, 2\n    \u00a0\u00a0\u00a0echo \"Usage: exists.sh file0...\"\n    \u00a0\u00a0\u00a0exit ____                        # 3\nfi\n\n# Check each command line argument\nEXITCODE=____                           # 4\nfor arg in \"____\"; do                   # 5\n    # Check if argument exists\n    if [ ____ \"____\" ]; then            # 6, 7\n        echo \"____ exists!\"             # 8\n    else\n        echo \"____ does not exist!\"     # 9\n        EXITCODE=____                   # 10\n    fi\ndone\n\nexit ____                               # 11\n</pre>\n"
+    }
+}
