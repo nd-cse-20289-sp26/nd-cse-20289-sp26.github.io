@@ -1,0 +1,372 @@
+title:      "Homework 02: Meeting the Oracle"
+body:       |
+
+  The goal of this homework assignment is to allow you to practice [shell
+  scripting] and explore [networking] in a [Unix] environment.
+
+  For this assignment, you are to do your work in the `homework02` folder of of
+  your **assignments** [GitHub] repository and push your work by **noon
+  Saturday, January 31**.
+
+  [Unix]:               https://en.wikipedia.org/wiki/Unix
+  [GitHub]:             https://github.com
+  [shell scripting]:    https://en.wikipedia.org/wiki/Shell_script
+  [networking]:         https://en.wikipedia.org/wiki/Computer_network
+  [Slack]:              https://nd-cse.slack.com/
+
+  ## Activity 0: Pulling Changes
+
+  Before starting this homework assignment, you should first perform a `git
+  pull` to retrieve any changes in your remote [GitHub] repository:
+
+      :::bash
+      $ cd path/to/repository                   # Go to assignments repository
+
+      $ git switch master                       # Make sure we are in master branch
+
+      $ git pull --rebase                       # Get any remote changes not present locally
+
+  You will need to do this from time to time since the TAs will be grading your
+  assignments and merging in your previous work.  To integrate these changes
+  into your local repository, you will need to do a `git pull` to retrieve it
+  from the remote [GitHub] repository.
+
+  **Note**: If you get the following messages when you do a `git push`:
+
+      ! [rejected]        master -> master (fetch first)
+      error: failed to push some refs to 'git@github.com/nd-cse-20289-sp26/assignments-pbui'
+      hint: Updates were rejected because the remote contains work that you do
+      hint: not have locally. This is usually caused by another repository pushing
+      hint: to the same ref. You may want to first merge the remote changes (e.g.,
+      hint: 'git pull') before pushing again.
+      hint: See the 'Note about fast-forwards' in 'git push --help' for details.
+
+  Or:
+
+      ! [rejected]        master -> master (fetch first)
+      error: failed to push some refs to '...'
+      To prevent you from losing history, non-fast-forward updates were rejected
+      Merge the remote changes before pushing again.  See the 'Note about fast-forwards'
+      section of 'git push --help' for details
+
+  This means you need to perform a `git pull` and merge in the remote changes
+  before performing a `git push` as described above.
+
+  Don't forget to create a new branch for this assignment:
+
+      :::bash
+      $ git switch -c homework02                # Create homework02 branch and check it out
+
+      $ cd homework02                           # Go into homework02 folder
+
+  ## Activity 1: Meet the Oracle (*6 Points*)
+
+  The main activity for this assignment is to follow the prompts of `MORPHEUS`,
+  who takes the form of a program located at:
+
+      https://pnutz.h4x0r.space/courses/cse.20289.sp26/static/txt/homework02/MORPHEUS
+
+  You can use either [curl] or [wget] to download this program to your
+  `homework02` folder in your **assignments** repository and execute it as
+  follows:
+
+      :::bash
+      # Go to homework02 directory in assignments repository
+      $ cd path/to/assignments/homework02
+
+      # Download Adventure MORPHEUS
+      $ curl -LO https://pnutz.h4x0r.space/courses/cse.20289.sp26/static/txt/homework02/MORPHEUS
+
+      # Make MORPHEUS executable
+      $ chmod +x MORPHEUS
+
+      # Run MORPHEUS
+      $ ./MORPHEUS
+      ...
+
+  <div class="alert success-bg" markdown="1">
+
+  ### <i class="icon icon-medium">{{ "server" | embed_icon }}</i> Student Machines
+
+  For this assignment, you will need to use the CSE **student machines**. This
+  is because `MORPHEUS` relies on some timing and networking features specific
+  to the **student machines**.
+
+  </div>
+
+  `MORPHEUS` will lead you down the **rabbit hole** and guide you on your
+  journey to meet with the [Oracle]:
+
+  <div class="centered">
+  <iframe width="640" height="360" src="https://www.youtube.com/embed/TbYirSi08m4" frameborder="0" allowfullscreen></iframe>
+  </div>
+
+  Of course, access to the [Oracle] is heavily restricted, so you will need to
+  use your [hacking] skills to locate her.  Once you connect with her, she will
+  hopefully give you a message about how to use your **awesome Unix skills**.
+
+  You are to follow the prompts specified by `MORPHEUS` until you have
+  completed each of the tasks in the journey.  Because some tasks depend on
+  others, there is no skipping ahead or going backwards.   That said, you can
+  always remove the checkpoints in the `tasks.yaml` file to go back to a
+  particular task.
+
+  At the end of this activity, you should see the following output from the `MORPHEUS`:
+
+      :::text
+      $ ./MORPHEUS
+      Checking homework02 tasks ...
+       Task 00 Checkout on homework02 branch            ... Completed
+       Task 01 IP of current machine                    ... Completed
+       Task 02 IP of remote machine                     ... Completed
+       Task 03 SSH hopping                              ... Completed
+       Task 04 Measuring latency                        ... Completed
+       Task 05 Scanning remote ports                    ... Completed
+       Task 06 Find the DOORMAN                         ... Completed
+       Task 07 Find your LOCKBOX                        ... Completed
+       Task 08 Copy remote file                         ... Completed
+       Task 09 Crack your LOCKBOX                       ... Completed
+       Task 10 Contact the DOORMAN                      ... Completed
+       Task 11 Retrieve MESSAGE                         ... Completed
+       Task 12 Meet the ORACLE                          ... Completed
+       Task 13 Quiz                                     ... Completed
+        --------------------------------------------------------------
+         Score 10.00 / 10.00
+         Grade  1.00 /  1.00
+        Status Success
+
+  <div class="alert danger-bg" markdown="1">
+
+  ### <i class="icon icon-medium">{{ "checkbox-marked-outline" | embed_icon }}</i> Task Checkpoints
+
+  Note, that each task checkpoint in the `tasks.yaml` is specially encoded for
+  your **netid**.  This means that copying the checkpoint from another student
+  or from a previous task will not work and will lead to a **corruption**
+  warning that will confuse `MORPHEUS`.  The only way to proceed through the
+  activity is to actually do the tasks!
+
+  </div>
+
+  ### Matrix Utilities
+
+  The following information will help you on your journey:
+
+  <table class="bordered" markdown="1">
+  <thead>
+    <th>Command</th>
+    <th>Description</th>
+    <th>Example</th>
+  </thead>
+  <tbody markdown="1">
+  <tr markdown="1">
+    <td markdown="1"><tt>[curl]</tt></td>
+    <td>Request remote file using <b>HTTP</b>.</td>
+    <td markdown="1">`curl` https://google.com</td>
+  </tr>
+  <tr markdown="1">
+    <td markdown="1"><tt>[find]</tt></td>
+    <td>Recursively search file paths.</td>
+    <td markdown="1">`find` /etc -name '*ssl*'</td>
+  </tr>
+  <tr markdown="1">
+    <td markdown="1"><tt>[host]</tt></td>
+    <td>Lookup DNS records for domain or IP address.</td>
+    <td markdown="1">`host` nd.edu</td>
+  </tr>
+  <tr markdown="1">
+    <td markdown="1"><tt>[ip]</tt></td>
+    <td>Display IP address of current machine.</td>
+    <td markdown="1">`ip` addr</td>
+  </tr>
+  <tr markdown="1">
+    <td markdown="1"><tt>[md5sum]</tt></td>
+    <td>Compute checksum of file.</td>
+    <td markdown="1">`md5sum` README.md</td>
+  </tr>
+  <tr markdown="1">
+    <td markdown="1"><tt>[nc]</tt></td>
+    <td>Connect to remote machine for arbitrary communication.</td>
+    <td markdown="1">`nc` google.com 80</td>
+  </tr>
+  <tr markdown="1">
+    <td markdown="1"><tt>[nmap]</tt></td>
+    <td>Scan remote machine for open ports.</td>
+    <td markdown="1">`nmap` -v -Pn student00.cse.nd.edu</td>
+  </tr>
+  <tr markdown="1">
+    <td markdown="1"><tt>[ping]</tt></td>
+    <td>Measure latency to remote machine.</td>
+    <td markdown="1">`ping` duckduckgo.com</td>
+  </tr>
+  <tr markdown="1">
+    <td markdown="1"><tt>[scp]</tt></td>
+    <td>Securely copy files with remote host.</td>
+    <td markdown="1">`scp` README.md student01.cse.nd.edu:</td>
+  </tr>
+  <tr markdown="1">
+    <td markdown="1"><tt>[sftp]</tt></td>
+    <td>Securely transfer files with remote host.</td>
+    <td markdown="1">`sftp` student01.cse.nd.edu</td>
+  </tr>
+  <tr markdown="1">
+    <td markdown="1"><tt>[ss]</tt></td>
+    <td>Display ports and services on current machine.</td>
+    <td markdown="1">`ss` -tlp</td>
+  </tr>
+  <tr markdown="1">
+    <td markdown="1"><tt>[ssh]</tt></td>
+    <td>Securely login to remote host.</td>
+    <td markdown="1">`ssh` student01.cse.nd.edu</td>
+  </tr>
+  <tr markdown="1">
+    <td markdown="1"><tt>[strings]</tt></td>
+    <td>List all strings in a file.</td>
+    <td markdown="1">`strings` /bin/ls</td>
+  </tr>
+  <tr markdown="1">
+    <td markdown="1"><tt>[traceroute]</tt></td>
+    <td>Display hops to remote machine.</td>
+    <td markdown="1">`traceroute` nd.edu</td>
+  </tr>
+  <tr markdown="1">
+    <td markdown="1"><tt>[wget]</tt></td>
+    <td>Download a file via <b>HTTP</b>.</td>
+    <td markdown="1">`wget` https://matrix.org</td>
+  </tr>
+  </tbody>
+  </table>
+
+  [find]:   http://man7.org/linux/man-pages/man1/find.1.html
+  [host]:   https://linux.die.net/man/1/host
+  [ip]:     http://man7.org/linux/man-pages/man8/ip.8.html
+  [md5sum]: http://man7.org/linux/man-pages/man1/md5sum.1.html
+  [nc]:     http://man7.org/linux/man-pages/man1/ncat.1.html
+  [nmap]:   http://man7.org/linux/man-pages/man1/nmap.1.html
+  [ping]:   http://man7.org/linux/man-pages/man8/ping.8.html
+  [scp]:    http://man7.org/linux/man-pages/man1/scp.1.html
+  [sftp]:   http://man7.org/linux/man-pages/man1/sftp.1.html
+  [ss]:     http://man7.org/linux/man-pages/man8/ss.8.html
+  [ssh]:    http://man7.org/linux/man-pages/man1/ssh.1.html
+  [strings]: http://man7.org/linux/man-pages/man1/strings.1.html
+  [traceroute]: http://man7.org/linux/man-pages/man8/traceroute.8.html
+  [wget]:   http://man7.org/linux/man-pages/man1/wget.1.html
+
+  ## Activity 2: Oracle Quiz (*4 Points*)
+
+  Once you have completed all the tasks specified by the `MORPHEUS` in **Activity
+  1**, you are to complete the following *reflection quiz*:
+
+  <div id="quiz-questions"></div>
+
+  <div id="quiz-responses"></div>
+
+  <script src="static/js/dredd-quiz.js"></script>
+  <script>
+  loadQuiz('static/json/homework02.json');
+  </script>
+
+  <pre style="display: none;" id="dr-container" class="codehilite"><code id="dredd-response"></code></pre>
+
+  As with [Reading 01], you will need to store your answers in a
+  `homework02/answers.json` file.  You can use the form above to generate the
+  contents of this file, or you can write the [JSON] by hand.
+
+  ## Just for Fun (*Optional*)
+
+  For your own personal enrichment, can may customize your favorite `$EDITOR`
+  by adding useful programming or development extensions and plugins that will
+  make your [Unix] programming environment more productive. Here are some
+  sources of inspiration:
+
+  ### Nano
+
+  - [Configure nano for Command Line Development](https://www.agnosticdev.com/content/configure-nano-command-line-development)
+  - [Customising Nano – Productivity Friday](https://timnash.co.uk/customising-nano-productivity-friday/)
+
+  ### Vim
+
+  - [Vimrc Configuration Guide](https://www.freecodecamp.org/news/vimrc-configuration-guide-customize-your-vim-editor/)
+  - [Vim as an IDE](https://blog.jez.io/vim-as-an-ide/)
+  - [How to Turn Vim Into a Lightweight IDE](https://dane-bulat.medium.com/how-to-turn-vim-into-a-lightweight-ide-6185e0f47b79)
+
+  ### Emacs
+
+  - [Mastering Emacs](https://www.masteringemacs.org/all-articles)
+  - [Org mode](http://orgmode.org/)
+
+  If you come across any other tutorials or resources, please share them on [Slack].
+
+  ## Submission (*10 Points*)
+
+  To submit your assignment, please commit your work to the `homework02` folder
+  of your `homework02` branch in your **assignments** [GitHub] repository:
+
+      :::bash
+      #----------------------------------------------------------------------
+      # Make sure you have already completed Activity 0: Pulling Changes
+      #----------------------------------------------------------------------
+      ...
+
+      $ git add Makefile                                    # Mark changes for commit
+      $ git add MORPHEUS                                    # Mark changes for commit
+      $ git add tasks.yaml                                  # Mark changes for commit
+      $ git commit -m "Homework 02: Tasks"                  # Record changes
+      ...
+
+      $ git add answers.json                                # Mark changes for commit
+      $ git commit -m "Homework 02: Quiz"                   # Record changes
+      ...
+
+      $ git push -u origin homework02                       # Push branch to GitHub
+
+
+  <div class="alert warning-bg" markdown="1">
+
+  ### <i class="icon icon-medium">{{ "lifebuoy" | embed_icon }}</i> Acknowledgments
+
+  If you collaborated with any other students, or received help from TAs or AI
+  tools on this assignment, please record this support in the `README.md` in
+  the `homework02` folder and include it with your **Pull Request**.
+
+  </div>
+
+  <div class="alert success-bg" markdown="1">
+
+  ### <i class="icon icon-medium">{{ "account-question" | embed_icon }}</i> Graders
+
+  Once you have committed your work and pushed it to [GitHub], remember to
+  create a **pull request** and assign it to the appropriate **teaching
+  assistant** from the [Reading 02 TA List].
+
+  </div>
+
+  [git]: https://git-scm.com/
+  [clone]: https://git-scm.com/docs/git-clone
+  [commit]: https://git-scm.com/docs/git-commit
+  [push]: https://git-scm.com/docs/git-push
+  [branching]: https://git-scm.com/docs/git-branch
+  [code review]: https://en.wikipedia.org/wiki/Code_review
+  [GitHub]: https://github.com
+  [Linux]: https://kernel.org
+  [branch]: https://git-scm.com/docs/git-branch
+  [add]: https://git-scm.com/docs/git-add
+  [Pull Request]: https://docs.github.com/en/github/collaborating-with-issues-and-pull-requests/creating-a-pull-request
+  [Reading 01]: reading01.html
+  [Reading 02]: reading02.html
+  [Reading 02 TA List]: reading02_tas.html
+  [curl]: http://man7.org/linux/man-pages/man1/curl.1.html
+  [wget]: http://man7.org/linux/man-pages/man1/wget.1.html
+  [JSON]: https://json.org/
+  [ESC]: https://esc.nd.edu/
+
+  [bash]: http://man7.org/linux/man-pages/man1/bash.1.html
+  [The Linux Command Line]: http://linuxcommand.org/tlcl.php
+  [text editor]: https://en.wikipedia.org/wiki/Text_editor
+  [Linux]: https://www.kernel.org/
+  [Open Source]: https://opensource.org/
+  [vim]: http://www.vim.org/
+  [emacs]: https://www.gnu.org/software/emacs/
+  [Oracle]: http://matrix.wikia.com/wiki/The_Oracle
+  [hacking]: https://en.wikipedia.org/wiki/Hacker_culture
+  [Matrix]: http://www.imdb.com/title/tt0133093/
+  [HTTP]: https://en.wikipedia.org/wiki/Hypertext_Transfer_Protocol
