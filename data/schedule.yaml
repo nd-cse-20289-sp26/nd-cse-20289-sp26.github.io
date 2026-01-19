@@ -62,12 +62,21 @@
         topics:         Variables, Command Substitution, Matching
         assignments:
           - Reading 02
+        items:
+          - name:       Slides 07
+            link:       https://docs.google.com/presentation/d/1iP0HgKRyItx3mVXZkrdijrJdRpufAAnM0JkXsorFj8s/edit?usp=sharing
 
       - date:           Wed 01/28
         topics:         Control Flow, Command Line Arguments
+        items:
+          - name:       Slides 07
+            link:       https://docs.google.com/presentation/d/1iP0HgKRyItx3mVXZkrdijrJdRpufAAnM0JkXsorFj8s/edit?usp=sharing
 
       - date:           Fri 01/30
         topics:         Pipelines
+        items:
+          - name:       Slides 08
+            link:       https://docs.google.com/presentation/d/1tTGu3KGFixkGXDGZlhYP-UiIeZ5xTsXv_ZFEtBBDuas/edit?usp=sharing
 
       - date:           Sat 01/31
         topics:         '<i class="muted">Meeting the Oracle</i>'
@@ -80,12 +89,21 @@
         topics:         Regular Expressions
         assignments:
           - Reading 03
+        items:
+          - name:       Slides 08
+            link:       https://docs.google.com/presentation/d/1tTGu3KGFixkGXDGZlhYP-UiIeZ5xTsXv_ZFEtBBDuas/edit?usp=sharing
 
       - date:           Wed 02/04
         topics:         Filters
+        items:
+          - name:       Slides 08
+            link:       https://docs.google.com/presentation/d/1tTGu3KGFixkGXDGZlhYP-UiIeZ5xTsXv_ZFEtBBDuas/edit?usp=sharing
 
       - date:           Fri 02/06
         topics:         Filters
+        items:
+          - name:       Slides 08
+            link:       https://docs.google.com/presentation/d/1tTGu3KGFixkGXDGZlhYP-UiIeZ5xTsXv_ZFEtBBDuas/edit?usp=sharing
 
       - date:           Sat 02/07
         topics:         '<i class="muted">Weathering with Zipcodes</i>'
