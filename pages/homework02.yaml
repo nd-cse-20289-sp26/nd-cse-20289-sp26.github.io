@@ -251,6 +251,52 @@ body:       |
   [traceroute]: http://man7.org/linux/man-pages/man8/traceroute.8.html
   [wget]:   http://man7.org/linux/man-pages/man1/wget.1.html
 
+  <div class="alert info-bg" markdown="1">
+
+  ### <i class="icon icon-medium">{{ "chat" | embed_icon }}</i> NDLUG's IRC Network
+
+  For one of the tasks, you will need to contact [bobbit], the instructor's
+  chatbot.  Unfortunately, due to an unforeseen mishap, [bobbit] has been
+  evicted from **Slack** and is now exiled on [NDLUG]'s [IRC] Network.
+
+  If you are familiar with [IRC], you can use the following information to
+  login using your client of choice:
+
+  <table class="bordered" markdown="1">
+  <tbody>
+    <tr>
+      <td><b>Host</b></td>
+      <td>chat.ndlug.org</td>
+    </tr>
+    <tr>
+      <td><b>Port</b></td>
+      <td>6697</td>
+    </tr>
+    <tr>
+      <td><b>SSL</b></td>
+      <td>True</td>
+    </tr>
+  </body>
+  </table>
+
+  Otherwise, if you have never used [IRC] before, you can use [NDLUG]'s [Gamja]
+  web client here:
+
+  > [gamja.ndlug.org](https://gamja.ndlug.org)
+
+  By default, this will drop you into the `#bots` channel where you can
+  *verify* your *token* for this assignment.
+
+  If you are curious, feel free to checkout `#lug` where the instructor broods
+  along with various [NDLUG] alumni and other scroundrels.
+
+  </div>
+
+  [bobbit]: https://github.com/pbui/bobbit
+  [NDLUG]: https://ndlug.org
+  [IRC]: https://en.wikipedia.org/wiki/IRC
+  [Gamja]: https://sr.ht/~emersion/gamja/
+
   ## Activity 2: Oracle Quiz (*4 Points*)
 
   Once you have completed all the tasks specified by the `MORPHEUS` in **Activity
