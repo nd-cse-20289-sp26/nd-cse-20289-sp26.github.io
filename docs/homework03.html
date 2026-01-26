@@ -1,0 +1,616 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<!-- Favicon -->
+<link rel="icon" type="image/png" sizes="32x32" href="static/ico/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="static/ico/favicon-16x16.png">
+<link rel="manifest" href="static/ico/site.webmanifest">
+<!-- Stylesheets -->
+<link rel="stylesheet" href="static/css/pnutzh4x0r.css">
+<title>Homework 03: Weathering with Zipcodes</title>
+</head>
+<body>
+<header>
+<a class="logo" href="homework03.html">
+    <h1>Homework 03: Weathering with Zipcodes</h1>
+</a>
+<nav>
+    <ul>
+        <li><a href="index.html"><h4>Home</h4></a></li>
+        </ul>
+</nav></header>
+<main>
+<p>The goal of this homework assignment is to allow you to practice using
+<a href="https://en.wikipedia.org/wiki/Regular_expression">regular expressions</a> and <a href="https://en.wikipedia.org/wiki/Filter_(software)#Unix">filters</a> in <a href="https://en.wikipedia.org/wiki/Shell_script">shell scripts</a>.  In this assignment,
+you will build on your knowledge of the <a href="https://en.wikipedia.org/wiki/Bourne_shell">bourne shell</a> language to write
+scripts that slice and dice data.</p>
+<p>For this assignment, record your scripts and any responses to the following
+activities in the in the <code>homework03</code> folder of your <strong>assignments</strong> <a href="https://github.com">GitHub</a>
+repository and push your work by <strong>noon Saturday, February 7</strong>.</p>
+<h2 id="activity-0-preparation">Activity 0: Preparation<a class="headerlink" href="#activity-0-preparation" title="Permanent link">&para;</a></h2>
+<p>Before starting this homework assignment, you should first perform a <code>git
+pull</code> to retrieve any changes in your remote <a href="https://github.com">GitHub</a> repository:</p>
+<div class="codehilite"><pre><span></span><code>$<span class="w"> </span><span class="nb">cd</span><span class="w"> </span>path/to/repository<span class="w">                   </span><span class="c1"># Go to assignments repository</span>
+
+$<span class="w"> </span>git<span class="w"> </span>switch<span class="w"> </span>master<span class="w">                       </span><span class="c1"># Make sure we are in master branch</span>
+
+$<span class="w"> </span>git<span class="w"> </span>pull<span class="w"> </span>--rebase<span class="w">                       </span><span class="c1"># Get any remote changes not present locally</span>
+</code></pre></div>
+
+<p>Next, create a new branch for this assignment:</p>
+<div class="codehilite"><pre><span></span><code>$<span class="w"> </span>git<span class="w"> </span>switch<span class="w"> </span>-c<span class="w"> </span>homework03<span class="w">                </span><span class="c1"># Create homework03 branch and check it out</span>
+</code></pre></div>
+
+<p>Once this is done, download the <code>Makefile</code> and test scripts:</p>
+<div class="codehilite"><pre><span></span><code><span class="c1"># Go to homework03 folder</span>
+$<span class="w"> </span><span class="nb">cd</span><span class="w"> </span>homework03
+
+<span class="c1"># Download the Makefile</span>
+$<span class="w"> </span>curl<span class="w"> </span>-LO<span class="w"> </span>https://pnutz.h4x0r.space/courses/cse.20289.sp26/static/txt/homework03/Makefile
+
+<span class="c1"># Add and commit Makefile</span>
+$<span class="w"> </span>git<span class="w"> </span>add<span class="w"> </span>Makefile
+$<span class="w"> </span>git<span class="w"> </span>commit<span class="w"> </span>-m<span class="w"> </span><span class="s2">&quot;Homework 03: Makefile&quot;</span>
+
+<span class="c1"># Download the test scripts</span>
+$<span class="w"> </span>make<span class="w"> </span>test-scripts
+</code></pre></div>
+
+<div class="alert info-bg">
+<p><strong>Note</strong>, you do not need to add and commit the test scripts since the
+<code>Makefile</code> will automatically download them again whenever you run <code>make</code>.</p>
+</div>
+<p>You are now ready to work on the activities below.</p>
+<div class="alert warning-bg">
+<h3 id="code-tags-embed_icon-cause-we-never-go-out-of-style"><i class="icon icon-medium"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><title>code-tags</title><path d="M14.6,16.6L19.2,12L14.6,7.4L16,6L22,12L16,18L14.6,16.6M9.4,16.6L4.8,12L9.4,7.4L8,6L2,12L8,18L9.4,16.6Z" /></svg>
+</i> Cause we never go out of style<a class="headerlink" href="#code-tags-embed_icon-cause-we-never-go-out-of-style" title="Permanent link">&para;</a></h3>
+<p>Note, the provided test scripts are used to verify the correctness of your
+code (ie. does it do the right thing).  Good code, however, requires more
+than just correct behavior; it demands <strong>consistent formatting</strong> and
+<strong>concise</strong> implementation.  Because of this, your scripts will also be
+graded on <strong>coding style</strong>.  In general, we expect you to strive for <strong><a href="https://dzone.com/articles/clean-code-explanation-benefits-amp-examples">clean code</a></strong> and
+will look for the following:</p>
+<ul>
+<li>
+<div class="flex-col" markdown="1">
+<p><strong>Consistency</strong></p>
+<ul>
+<li>Naming, whitespace, and indentation</li>
+<li>No dead code</li>
+</ul>
+</li>
+<li>
+<div class="flex-col" markdown="1">
+<p><strong>Readability</strong></p>
+<ul>
+<li>Idiomatic usage of language syntax and features</li>
+<li>Code is mostly self-documenting (with comments when necessary)</li>
+<li>Not too dense, not too sparse</li>
+</ul>
+</li>
+<li>
+<div class="flex-col" markdown="1">
+<p><strong>Organization</strong></p>
+<ul>
+<li>Reasonably sized functions</li>
+<li>Reasonably structured and ordered</li>
+</ul>
+</li>
+</ul>
+</div>
+<h2 id="activity-1-weather-04-points">Activity 1: Weather (<em>0.4 Points</em>)<a class="headerlink" href="#activity-1-weather-04-points" title="Permanent link">&para;</a></h2>
+<p>Michael is not amused by all the cold snow on campus and longs for the warmth
+and comfort of spring.  Obsessed with the weather, he compulsively checks
+<a href="https://www.weather.gov/">weather.gov</a>, which is a website by the <a href="https://www.weather.gov/">National Weather Service</a>.  While
+checking the weather for the fifth time on his phone during class, he
+realized that he could actually apply some of the things he is learning in
+class to his current obsession.</p>
+<p>For example, he realized that he can fetch the weather information for any
+<a href="https://en.wikipedia.org/wiki/ZIP_Code">zip code</a>, using the following <a href="https://en.wikipedia.org/wiki/URL">URL</a>:</p>
+<div class="codehilite"><pre><span></span><code>$<span class="w"> </span>curl<span class="w"> </span>-sL<span class="w"> </span>https://forecast.weather.gov/zipcity.php?inputstring<span class="o">=</span><span class="nv">$ZIPCODE</span>
+</code></pre></div>
+
+<p>For instance, the weather information for Notre Dame, Indiana can be
+retrieved using:</p>
+<div class="codehilite"><pre><span></span><code>$<span class="w"> </span>curl<span class="w"> </span>-sL<span class="w"> </span>https://forecast.weather.gov/zipcity.php?inputstring<span class="o">=</span><span class="m">46556</span>
+</code></pre></div>
+
+<p>Looking at the data retrieved from the website, he notices that the forecast
+and temperature information is wrapped in <a href="https://en.wikipedia.org/wiki/HTML">HTML</a> fields that contain the text
+"myforecast":</p>
+<div class="codehilite"><pre><span></span><code>...
+<span class="p">&lt;</span><span class="nt">p</span> <span class="na">class</span><span class="o">=</span><span class="s">&quot;myforecast-current&quot;</span><span class="p">&gt;</span>Overcast<span class="p">&lt;/</span><span class="nt">p</span><span class="p">&gt;</span>
+<span class="p">&lt;</span><span class="nt">p</span> <span class="na">class</span><span class="o">=</span><span class="s">&quot;myforecast-current-lrg&quot;</span><span class="p">&gt;</span>37<span class="ni">&amp;deg;</span>F<span class="p">&lt;/</span><span class="nt">p</span><span class="p">&gt;</span>
+<span class="p">&lt;</span><span class="nt">p</span> <span class="na">class</span><span class="o">=</span><span class="s">&quot;myforecast-current-sm&quot;</span><span class="p">&gt;</span>3<span class="ni">&amp;deg;</span>C<span class="p">&lt;/</span><span class="nt">p</span><span class="p">&gt;</span>
+...
+</code></pre></div>
+
+<p>Michael wants to make a script <code>weather.sh</code> that will fetch the weather
+information for any specified <a href="https://en.wikipedia.org/wiki/ZIP_Code">zip code</a> and extract the temperature and
+forecast.  Unfortunately, despite taking AP Computer Science in high school,
+he is still a bit confused about <a href="https://en.wikipedia.org/wiki/Pipeline_(Unix)">pipelines</a> and <a href="https://en.wikipedia.org/wiki/Shell_script">shell scripting</a>.</p>
+<p>You decide that you could use some practice wth <a href="https://en.wikipedia.org/wiki/Shell_script">shell scripting</a> and
+<a href="https://en.wikipedia.org/wiki/Regular_expression">regular expressions</a>, so you help him complete the script.</p>
+<h3 id="task-1-weathersh">Task 1: <code>weather.sh</code><a class="headerlink" href="#task-1-weathersh" title="Permanent link">&para;</a></h3>
+<p>The <code>weather.sh</code> script takes three possible flags:</p>
+<div class="codehilite"><pre><span></span><code>$ ./weather.sh -h
+Usage: weather.sh [zipcode]
+
+-c    Use Celsius degrees instead of Fahrenheit for temperature
+-f    Display forecast text after temperature
+
+If zipcode is not provided, then it defaults to 46556.
+</code></pre></div>
+
+<p>The <code>-c</code> flag will have the script output the temperature as Celsius rather
+than Fahrenheit (the default).</p>
+<p>The <code>-f</code> flag will have the script output the forecast text after the
+current temperature.</p>
+<p>The <code>-h</code> flag will display the usage message and exit with success.</p>
+<p>Here are some examples of <code>weather.sh</code> in action:</p>
+<div class="codehilite"><pre><span></span><code><span class="c1"># Show current temperature for Notre Dame, Indiana (46556)</span>
+$<span class="w"> </span>./weather.sh
+Temperature:<span class="w"> </span><span class="m">0</span><span class="w"> </span>degrees
+
+<span class="c1"># Show current temperature and forecast for Orange, California (92869)</span>
+$<span class="w"> </span>./weather.sh<span class="w"> </span>-f<span class="w"> </span><span class="m">92869</span>
+Temperature:<span class="w"> </span><span class="m">61</span><span class="w"> </span>degrees
+Forecast:<span class="w">    </span>NA
+
+<span class="c1"># Show current temperature and forecast (celsius) for Eau Claire, Wisconsin (54701)</span>
+$<span class="w"> </span>./weather.sh<span class="w"> </span>-c<span class="w"> </span>-f<span class="w"> </span><span class="m">54701</span>
+Temperature:<span class="w"> </span>-19<span class="w"> </span>degrees
+Forecast:<span class="w">    </span>A<span class="w"> </span>Few<span class="w"> </span>Clouds
+</code></pre></div>
+
+<h4 id="skeleton-code">Skeleton Code<a class="headerlink" href="#skeleton-code" title="Permanent link">&para;</a></h4>
+<p>Here is a skeleton you can use to start your <code>weather.sh</code> script:</p>
+<div class="codehilite"><pre><span></span><code><span class="c1"># Download weather.sh skeleton</span>
+$<span class="w"> </span>curl<span class="w"> </span>-LO<span class="w"> </span>https://pnutz.h4x0r.space/courses/cse.20289.sp26/static/txt/homework03/weather.sh
+</code></pre></div>
+
+<p>It should look something like this:</p>
+<div class="codehilite"><pre><span></span><code><span class="ch">#!/bin/sh</span>
+
+<span class="c1"># Globals</span>
+
+<span class="nv">URL</span><span class="o">=</span><span class="s2">&quot;https://forecast.weather.gov/zipcity.php&quot;</span>
+<span class="nv">ZIPCODE</span><span class="o">=</span><span class="m">46556</span>
+<span class="nv">FORECAST</span><span class="o">=</span><span class="m">0</span>
+<span class="nv">CELSIUS</span><span class="o">=</span><span class="m">0</span>
+
+<span class="c1"># Functions</span>
+
+usage<span class="o">()</span><span class="w"> </span><span class="o">{</span>
+<span class="w">    </span>cat<span class="w"> </span><span class="m">1</span>&gt;<span class="p">&amp;</span><span class="m">2</span><span class="w"> </span><span class="s">&lt;&lt;EOF</span>
+<span class="s">Usage: $(basename $0) [zipcode]</span>
+
+<span class="s">-c    Use Celsius degrees instead of Fahrenheit for temperature</span>
+<span class="s">-f    Display forecast text after the temperature</span>
+
+<span class="s">If zipcode is not provided, then it defaults to $ZIPCODE.</span>
+<span class="s">EOF</span>
+<span class="w">    </span><span class="nb">exit</span><span class="w"> </span><span class="nv">$1</span>
+<span class="o">}</span>
+
+weather_information<span class="o">()</span><span class="w"> </span><span class="o">{</span>
+<span class="w">    </span><span class="c1"># Fetch weather information from URL based on ZIPCODE</span>
+<span class="o">}</span>
+
+temperature<span class="o">()</span><span class="w"> </span><span class="o">{</span>
+<span class="w">    </span><span class="c1"># Extract temperature information from weather source</span>
+<span class="w">    </span>weather_information<span class="w"> </span><span class="p">|</span><span class="w"> </span>...
+<span class="o">}</span>
+
+forecast<span class="o">()</span><span class="w"> </span><span class="o">{</span>
+<span class="w">    </span><span class="c1"># Extract forecast information from weather source</span>
+<span class="w">    </span>weather_information<span class="w"> </span><span class="p">|</span><span class="w"> </span>...
+<span class="o">}</span>
+
+<span class="c1"># Parse Command Line Options</span>
+
+<span class="k">while</span><span class="w"> </span><span class="o">[</span><span class="w"> </span><span class="nv">$#</span><span class="w"> </span>-gt<span class="w"> </span><span class="m">0</span><span class="w"> </span><span class="o">]</span><span class="p">;</span><span class="w"> </span><span class="k">do</span>
+<span class="w">    </span><span class="k">case</span><span class="w"> </span><span class="nv">$1</span><span class="w"> </span><span class="k">in</span>
+<span class="w">        </span>-h<span class="o">)</span><span class="w"> </span>usage<span class="w"> </span><span class="m">0</span><span class="p">;;</span>
+<span class="w">    </span><span class="k">esac</span>
+<span class="w">    </span><span class="nb">shift</span>
+<span class="k">done</span>
+
+<span class="c1"># Display Information</span>
+
+<span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;Temperature: </span><span class="k">$(</span>temperature<span class="k">)</span><span class="s2"> degrees&quot;</span>
+</code></pre></div>
+
+<div class="alert success-bg" markdown="1">
+<h3 id="lightbulb-outline-embed_icon-hints"><i class="icon icon-medium"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><title>lightbulb-outline</title><path d="M12,2A7,7 0 0,1 19,9C19,11.38 17.81,13.47 16,14.74V17A1,1 0 0,1 15,18H9A1,1 0 0,1 8,17V14.74C6.19,13.47 5,11.38 5,9A7,7 0 0,1 12,2M9,21V20H15V21A1,1 0 0,1 14,22H10A1,1 0 0,1 9,21M12,4A5,5 0 0,0 7,9C7,11.05 8.23,12.81 10,13.58V16H14V13.58C15.77,12.81 17,11.05 17,9A5,5 0 0,0 12,4Z" /></svg>
+</i> Hints<a class="headerlink" href="#lightbulb-outline-embed_icon-hints" title="Permanent link">&para;</a></h3>
+<ul>
+<li>
+<p>The general flow of your script should be to parse arguments and then to
+  execute different <a href="https://en.wikipedia.org/wiki/Pipeline_(Unix)">pipelines</a>.</p>
+</li>
+<li>
+<p>You will need to expand the <code>case</code> statement to parse command line
+  arguments.</p>
+</li>
+<li>
+<p>You will probably want to use <a href="http://man7.org/linux/man-pages/man1/curl.1.html">curl</a> to fetch the appropriate weather
+  information in <code>weather_information</code>.</p>
+</li>
+<li>
+<p>You will probably want to use a <strong>conditional statement</strong> in <code>temperature</code>
+  to select which filtering <a href="https://en.wikipedia.org/wiki/Pipeline_(Unix)">pipeline</a> to use to extract the appropriate
+  information.</p>
+</li>
+<li>
+<p>You will probably want to use <a href="http://man7.org/linux/man-pages/man1/cut.1.html">cut</a>, <a href="http://man7.org/linux/man-pages/man1/grep.1.html">grep</a>, <a href="http://man7.org/linux/man-pages/man1/sed.1.html">sed</a>, or <a href="http://man7.org/linux/man-pages/man1/gawk.1.html">awk</a> to extract
+  information in <code>temperature</code> and <code>forecast</code>.</p>
+</li>
+<li>
+<p>You will need to trim leading and trailing whitespace for the forecast
+  (possibly using <a href="http://man7.org/linux/man-pages/man1/sed.1.html">sed</a>).</p>
+</li>
+</ul>
+</div>
+<h3 id="task-2-test_weathersh">Task 2: <code>test_weather.sh</code><a class="headerlink" href="#task-2-test_weathersh" title="Permanent link">&para;</a></h3>
+<p>To aid you in testing the <code>weather.sh</code> script, we provided you with
+<code>test_weather.sh</code>, which you can use as follows:</p>
+<div class="codehilite"><pre><span></span><code>$<span class="w"> </span>make<span class="w"> </span>test-weather<span class="w">     </span><span class="c1"># Download and run test script</span>
+Testing<span class="w"> </span>weather.sh<span class="w"> </span>...
+<span class="w">   </span>Usage<span class="w">                                    </span>...<span class="w"> </span>Success
+<span class="w">   </span>Default<span class="w">                                  </span>...<span class="w"> </span>Success
+<span class="w">   </span><span class="m">46556</span><span class="w">                                    </span>...<span class="w"> </span>Success
+<span class="w">   </span><span class="m">46556</span><span class="w"> </span>Celsius<span class="w">                            </span>...<span class="w"> </span>Success
+<span class="w">   </span><span class="m">46556</span><span class="w"> </span>Forecast<span class="w">                           </span>...<span class="w"> </span>Success
+<span class="w">   </span><span class="m">46556</span><span class="w"> </span>Celsius<span class="w"> </span>Forecast<span class="w">                   </span>...<span class="w"> </span>Success
+<span class="w">   </span><span class="m">54701</span><span class="w">                                    </span>...<span class="w"> </span>Success
+<span class="w">   </span><span class="m">54701</span><span class="w"> </span>Celsius<span class="w">                            </span>...<span class="w"> </span>Success
+<span class="w">   </span><span class="m">54701</span><span class="w"> </span>Forecast<span class="w">                           </span>...<span class="w"> </span>Success
+<span class="w">   </span><span class="m">54701</span><span class="w"> </span>Celsius<span class="w"> </span>Forecast<span class="w">                   </span>...<span class="w"> </span>Success
+<span class="w">   </span><span class="m">92869</span><span class="w">                                    </span>...<span class="w"> </span>Success
+<span class="w">   </span><span class="m">92869</span><span class="w"> </span>Celsius<span class="w">                            </span>...<span class="w"> </span>Success
+<span class="w">   </span><span class="m">92869</span><span class="w"> </span>Forecast<span class="w">                           </span>...<span class="w"> </span>Success
+<span class="w">   </span><span class="m">92869</span><span class="w"> </span>Celsius<span class="w"> </span>Forecast<span class="w">                   </span>...<span class="w"> </span>Success
+<span class="w">  </span>--------------------------------------------------------------
+<span class="w">   </span>Score<span class="w"> </span><span class="m">14</span>.00<span class="w"> </span>/<span class="w"> </span><span class="m">14</span>.00
+<span class="w">   </span>Grade<span class="w">  </span><span class="m">1</span>.00<span class="w"> </span>/<span class="w">  </span><span class="m">1</span>.00
+<span class="w">  </span>Status<span class="w"> </span>Success
+
+$<span class="w"> </span>./test_weather.sh<span class="w">     </span><span class="c1"># Run already downloaded test script</span>
+...
+</code></pre></div>
+
+<div class="alert warning-bg">
+<h3 id="clock-outline-embed_icon-well-do-it-live"><i class="icon icon-medium"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><title>clock-outline</title><path d="M12,20A8,8 0 0,0 20,12A8,8 0 0,0 12,4A8,8 0 0,0 4,12A8,8 0 0,0 12,20M12,2A10,10 0 0,1 22,12A10,10 0 0,1 12,22C6.47,22 2,17.5 2,12A10,10 0 0,1 12,2M12.5,7V12.25L17,14.92L16.25,16.15L11,13V7H12.5Z" /></svg>
+</i> We'll Do It Live<a class="headerlink" href="#clock-outline-embed_icon-well-do-it-live" title="Permanent link">&para;</a></h3>
+<p>Because the data is being pulled from a remote website, the tests might take
+a while (but no more than <code>30</code> seconds).</p>
+</div>
+<div class="alert danger-bg">
+<h3 id="repeat-embed_icon-retry-the-pipeline"><i class="icon icon-medium"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><title>repeat</title><path d="M17,17H7V14L3,18L7,22V19H19V13H17M7,7H17V10L21,6L17,2V5H5V11H7V7Z" /></svg>
+</i> Retry the Pipeline<a class="headerlink" href="#repeat-embed_icon-retry-the-pipeline" title="Permanent link">&para;</a></h3>
+<p>Sometimes the <strong>pipeline fails</strong> not because your code is wrong, but because
+of <strong>hiccups with the server</strong> (it is live data after all).  If you suspect
+that your code is correct, you can always <strong>retry</strong> the pipeline to see if it
+will succeed without changing your code.</p>
+<p>If it doesn't work after <strong>three</strong> retries... then your code is probably
+wrong.</p>
+</div>
+<h2 id="activity-2-zipcode-04-points">Activity 2: Zipcode (<em>0.4 Points</em>)<a class="headerlink" href="#activity-2-zipcode-04-points" title="Permanent link">&para;</a></h2>
+<p>Being able to lookup weather information based on <a href="https://en.wikipedia.org/wiki/ZIP_Code">zip codes</a> is great... if
+you know the <a href="https://en.wikipedia.org/wiki/ZIP_Code">zip code</a> of the place you are interested in.  Like most
+people, however, Sarah is not really familiar with <a href="https://en.wikipedia.org/wiki/ZIP_Code">zip codes</a> around the
+country.</p>
+<p>Like the instructor, Sarah hails from Orange County<sup id="fnref:1"><a class="footnote-ref" href="#fn:1">1</a></sup>, which is situated on
+the <a href="https://en.wikipedia.org/wiki/West_Coast_of_the_United_States">Best Coast</a> and is the home of <a href="http://www.disney.com/">Mickey Mouse</a>, <a href="http://johnwayne.com/">John Wayne</a>, <a href="http://www.nodoubt.com/">No
+Doubt</a><sup id="fnref:2"><a class="footnote-ref" href="#fn:2">2</a></sup>, and <a href="http://us.battle.net/sc2/en/">StarCraft</a><sup id="fnref:3"><a class="footnote-ref" href="#fn:3">3</a></sup> (among other things).  Having never really
+left <strong>paradise</strong><sup id="fnref:4"><a class="footnote-ref" href="#fn:4">4</a></sup>, Sarah doesn't really know much about other places in
+America.  This is problematic as she has made many friends from all over the
+country, such as her roommate from Toledo, Ohio, or her other roommate from
+Jacksonville, Florida<sup id="fnref:5"><a class="footnote-ref" href="#fn:5">5</a></sup>.  Since she needs to figure out the <a href="https://en.wikipedia.org/wiki/ZIP_Code">zip codes</a> to
+these unfamiliar places, she is creating a script called <code>zipcode.sh</code>, which
+<a href="https://en.wikipedia.org/wiki/Web_scraping">scrapes</a> the <a href="https://en.wikipedia.org/wiki/ZIP_Code">zip codes</a> from the website <a href="https://www.zipcodestogo.com/">Zip Codes To
+Go</a> and allows her to list all the <a href="https://en.wikipedia.org/wiki/ZIP_Code">zip codes</a>
+in a specific state or even a particular city.</p>
+<p>For instance, using <a href="http://man7.org/linux/man-pages/man1/curl.1.html">curl</a>, she can view all the raw <a href="https://en.wikipedia.org/wiki/HTML">HTML</a> for Indiana by
+doing the following:</p>
+<div class="codehilite"><pre><span></span><code>$<span class="w"> </span>curl<span class="w"> </span>-s<span class="w"> </span>https://www.zipcodestogo.com/Indiana/
+</code></pre></div>
+
+<p>Because you are pretty good with <a href="https://en.wikipedia.org/wiki/Regular_expression">regular expressions</a> now, you decide to
+help Sarah out with parsing this <a href="https://en.wikipedia.org/wiki/HTML">HTML</a> and extracting the <a href="https://en.wikipedia.org/wiki/ZIP_Code">zip codes</a>.</p>
+<h3 id="task-1-zipcodesh">Task 1: <code>zipcode.sh</code><a class="headerlink" href="#task-1-zipcodesh" title="Permanent link">&para;</a></h3>
+<p>The <code>zipcode.sh</code> script takes three possible flags:</p>
+<div class="codehilite"><pre><span></span><code>$ ./zipcode.sh -h
+Usage: zipcode.sh
+
+  -c      CITY    Which city to search
+  -s      STATE   Which state to search (Indiana)
+
+If no CITY is specified, then all the zip codes for the STATE are displayed.
+</code></pre></div>
+
+<p>The <code>-c</code> flag takes a <code>CITY</code> argument, which specifies the city to search for
+within the <code>STATE</code>.  If no <code>CITY</code> is specified, then the script should return
+all the <a href="https://en.wikipedia.org/wiki/ZIP_Code">zip codes</a> in the <code>STATE</code>.</p>
+<p>The <code>-s</code> flag takes a <code>STATE</code> argument, which specifies the <code>STATE</code> to search
+through.  If no <code>STATE</code> is specified, then the script should assume the
+<code>STATE</code> is "Indiana".</p>
+<p>The <code>-h</code> flag will display the usage message and exit with success.</p>
+<p>Here are some examples of <code>zipcode.sh</code> in action:</p>
+<div class="codehilite"><pre><span></span><code><span class="c1"># Show all Zip Codes from default state (Indiana)</span>
+$<span class="w"> </span>./zipcode.sh
+<span class="m">46001</span>
+<span class="m">46011</span>
+<span class="m">46012</span>
+<span class="m">46013</span>
+...
+<span class="m">47994</span>
+<span class="m">47995</span>
+
+<span class="c1"># Show all Zip Codes in South Bend, Indiana</span>
+$<span class="w"> </span>./zipcode.sh<span class="w"> </span>-s<span class="w"> </span>Indiana<span class="w"> </span>-c<span class="w"> </span><span class="s2">&quot;South Bend&quot;</span>
+<span class="m">46601</span>
+<span class="m">46613</span>
+<span class="m">46614</span>
+<span class="m">46615</span>
+<span class="m">46616</span>
+<span class="m">46617</span>
+<span class="m">46619</span>
+<span class="m">46626</span>
+<span class="m">46628</span>
+<span class="m">46635</span>
+<span class="m">46637</span>
+<span class="m">46699</span>
+</code></pre></div>
+
+<div class="alert warning-bg">
+<h3 id="code-tags-embed_icon-unique-zip-codes"><i class="icon icon-medium"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><title>code-tags</title><path d="M14.6,16.6L19.2,12L14.6,7.4L16,6L22,12L16,18L14.6,16.6M9.4,16.6L4.8,12L9.4,7.4L8,6L2,12L8,18L9.4,16.6Z" /></svg>
+</i> Unique Zip Codes<a class="headerlink" href="#code-tags-embed_icon-unique-zip-codes" title="Permanent link">&para;</a></h3>
+<p>Make sure that the <strong>zipcodes</strong> printed by <code>zipcode.sh</code> are <strong>sorted</strong> and
+<strong>unique</strong>.</p>
+</div>
+<h4 id="skeleton-code_1">Skeleton Code<a class="headerlink" href="#skeleton-code_1" title="Permanent link">&para;</a></h4>
+<p>Here is a skeleton you can use to start your <code>zipcode.sh</code> script:</p>
+<div class="codehilite"><pre><span></span><code><span class="c1"># Download zipcode.sh skeleton</span>
+$<span class="w"> </span>curl<span class="w"> </span>-LO<span class="w"> </span>https://pnutz.h4x0r.space/courses/cse.20289.sp26/static/txt/homework03/zipcode.sh
+</code></pre></div>
+
+<p>It should look something like this:</p>
+<div class="codehilite"><pre><span></span><code><span class="ch">#!/bin/sh</span>
+
+<span class="c1"># Globals</span>
+
+<span class="nv">URL</span><span class="o">=</span>https://www.zipcodestogo.com/
+<span class="nv">STATE</span><span class="o">=</span><span class="s2">&quot;Indiana&quot;</span>
+
+<span class="c1"># Functions</span>
+
+usage<span class="o">()</span><span class="w"> </span><span class="o">{</span>
+<span class="w">    </span>cat<span class="w"> </span><span class="m">1</span>&gt;<span class="p">&amp;</span><span class="m">2</span><span class="w"> </span><span class="s">&lt;&lt;EOF</span>
+<span class="s">Usage: $(basename $0)</span>
+
+<span class="s">-c  CITY    Which city to search</span>
+<span class="s">-s  STATE   Which state to search ($STATE)</span>
+
+<span class="s">If no CITY is specified, then all the zip codes for the STATE are displayed.</span>
+<span class="s">EOF</span>
+<span class="w">    </span><span class="nb">exit</span><span class="w"> </span><span class="nv">$1</span>
+<span class="o">}</span>
+
+zipcode_information<span class="o">()</span><span class="w"> </span><span class="o">{</span>
+<span class="w">    </span><span class="c1"># Fetch zipcode information from URL based on CITY and STATE</span>
+<span class="o">}</span>
+
+filter_zipcodes<span class="o">()</span><span class="w"> </span><span class="o">{</span>
+<span class="w">    </span><span class="c1"># Extract zipcodes from zipcode source</span>
+<span class="o">}</span>
+
+<span class="c1"># Parse Command Line Options</span>
+
+<span class="k">while</span><span class="w"> </span><span class="o">[</span><span class="w"> </span><span class="nv">$#</span><span class="w"> </span>-gt<span class="w"> </span><span class="m">0</span><span class="w"> </span><span class="o">]</span><span class="p">;</span><span class="w"> </span><span class="k">do</span>
+<span class="w">    </span><span class="k">case</span><span class="w"> </span><span class="nv">$1</span><span class="w"> </span><span class="k">in</span>
+<span class="w">      </span>-h<span class="o">)</span><span class="w"> </span>usage<span class="w"> </span><span class="m">0</span><span class="p">;;</span>
+<span class="w">       </span>*<span class="o">)</span><span class="w"> </span>usage<span class="w"> </span><span class="m">1</span><span class="p">;;</span>
+<span class="w">    </span><span class="k">esac</span>
+<span class="w">    </span><span class="nb">shift</span>
+<span class="k">done</span>
+
+<span class="c1"># Filter Pipeline</span>
+
+zipcode_information<span class="w"> </span><span class="p">|</span><span class="w"> </span>filter_zipcodes
+</code></pre></div>
+
+<div class="alert success-bg" markdown="1">
+<h3 id="lightbulb-outline-embed_icon-hints_1"><i class="icon icon-medium"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><title>lightbulb-outline</title><path d="M12,2A7,7 0 0,1 19,9C19,11.38 17.81,13.47 16,14.74V17A1,1 0 0,1 15,18H9A1,1 0 0,1 8,17V14.74C6.19,13.47 5,11.38 5,9A7,7 0 0,1 12,2M9,21V20H15V21A1,1 0 0,1 14,22H10A1,1 0 0,1 9,21M12,4A5,5 0 0,0 7,9C7,11.05 8.23,12.81 10,13.58V16H14V13.58C15.77,12.81 17,11.05 17,9A5,5 0 0,0 12,4Z" /></svg>
+</i> Hints<a class="headerlink" href="#lightbulb-outline-embed_icon-hints_1" title="Permanent link">&para;</a></h3>
+<ul>
+<li>
+<p>The general flow of your script should be to parse arguments and then to
+  execute the <a href="https://en.wikipedia.org/wiki/Pipeline_(Unix)">pipeline</a> at the bottom of the script.</p>
+</li>
+<li>
+<p>You will need to filter the <code>STATE</code> pages for the <strong>zipcodes</strong>
+  corresponding to the specified <code>CITY</code>.  <strong>Do not use the <code>CITY</code> specific
+  pages</strong>.</p>
+</li>
+<li>
+<p>You will need to expand the <code>case</code> statement to parse command line
+  arguments.</p>
+</li>
+<li>
+<p>You will probably want to use <a href="http://man7.org/linux/man-pages/man1/curl.1.html">curl</a> with a <strong>conditional statement</strong> in
+  the <code>zipcode_information</code> to fetch the appropriate zipcode information
+  based on the <code>URL</code>, <code>CITY</code> and <code>STATE</code>.</p>
+</li>
+<li>
+<p>You will probably want to use <a href="http://man7.org/linux/man-pages/man1/cut.1.html">cut</a>, <a href="http://man7.org/linux/man-pages/man1/grep.1.html">grep</a>, <a href="http://man7.org/linux/man-pages/man1/sed.1.html">sed</a>, or <a href="http://man7.org/linux/man-pages/man1/gawk.1.html">awk</a> to extract the
+  appropriate information in <code>filter_zipcodes</code>.</p>
+</li>
+<li>
+<p>You will probably want to use <a href="http://man7.org/linux/man-pages/man1/sort.1.html">sort</a> and <a href="http://man7.org/linux/man-pages/man1/uniq.1.html">uniq</a> to make sure the final
+  results are <strong>sorted</strong> and <strong>unique</strong>.</p>
+</li>
+<li>
+<div class="flex-col" markdown="1">
+<p>For states with spaces, you will need to replace each space with <code>%20</code>
+(ie.  <code>New York</code> becomes <code>New%20York</code>):</p>
+<div class="codehilite"><pre><span></span><code><span class="nv">STATE</span><span class="o">=</span><span class="s2">&quot;</span><span class="k">$(</span><span class="nb">echo</span><span class="w"> </span><span class="nv">$2</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>...<span class="k">)</span><span class="s2">&quot;</span>
+</code></pre></div>
+
+</li>
+</ul>
+</div>
+<h3 id="task-2-test_zipcodesh">Task 2: <code>test_zipcode.sh</code><a class="headerlink" href="#task-2-test_zipcodesh" title="Permanent link">&para;</a></h3>
+<p>To aid you in testing the <code>zipcode.sh</code> script, we provided you with
+<code>test_zipcode.sh</code>, which you can use as follows:</p>
+<div class="codehilite"><pre><span></span><code>$<span class="w"> </span>./test_zipcode.sh<span class="w">     </span><span class="c1"># Download and run test script</span>
+Testing<span class="w"> </span>zipcode.sh<span class="w"> </span>...
+<span class="w">   </span>Usage<span class="w">                                    </span>...<span class="w"> </span>Success
+<span class="w">   </span>Default<span class="w">                                  </span>...<span class="w"> </span>Success
+<span class="w">   </span>Indiana<span class="w">                                  </span>...<span class="w"> </span>Success
+<span class="w">   </span>South<span class="w"> </span>Bend,<span class="w"> </span>Indiana<span class="w">                      </span>...<span class="w"> </span>Success
+<span class="w">   </span>Indianapolis,<span class="w"> </span>Indiana<span class="w">                    </span>...<span class="w"> </span>Success
+<span class="w">   </span>Wisconsin<span class="w">                                </span>...<span class="w"> </span>Success
+<span class="w">   </span>Eau<span class="w"> </span>Claire,<span class="w"> </span>Wisconsin<span class="w">                    </span>...<span class="w"> </span>Success
+<span class="w">   </span>Milwaukee,<span class="w"> </span>Wisconsin<span class="w">                     </span>...<span class="w"> </span>Success
+<span class="w">   </span>California<span class="w">                               </span>...<span class="w"> </span>Success
+<span class="w">   </span>Orange,<span class="w"> </span>California<span class="w">                       </span>...<span class="w"> </span>Success
+<span class="w">   </span>Los<span class="w"> </span>Angeles,<span class="w"> </span>California<span class="w">                  </span>...<span class="w"> </span>Success
+<span class="w">   </span>New<span class="w"> </span>York<span class="w">                                 </span>...<span class="w"> </span>Success
+<span class="w">   </span>Buffalo,<span class="w"> </span>New<span class="w"> </span>York<span class="w">                        </span>...<span class="w"> </span>Success
+<span class="w">   </span>New<span class="w"> </span>York,<span class="w"> </span>New<span class="w"> </span>York<span class="w">                       </span>...<span class="w"> </span>Success
+<span class="w">  </span>--------------------------------------------------------------
+<span class="w">   </span>Score<span class="w"> </span><span class="m">14</span>.00<span class="w"> </span>/<span class="w"> </span><span class="m">14</span>.00
+<span class="w">   </span>Grade<span class="w">  </span><span class="m">1</span>.00<span class="w"> </span>/<span class="w">  </span><span class="m">1</span>.00
+<span class="w">  </span>Status<span class="w"> </span>Success
+
+$<span class="w"> </span>./test_script.sh<span class="w">      </span><span class="c1"># Run already downloaded test script</span>
+...
+</code></pre></div>
+
+<div class="alert warning-bg">
+<h3 id="clock-outline-embed_icon-well-do-it-live_1"><i class="icon icon-medium"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><title>clock-outline</title><path d="M12,20A8,8 0 0,0 20,12A8,8 0 0,0 12,4A8,8 0 0,0 4,12A8,8 0 0,0 12,20M12,2A10,10 0 0,1 22,12A10,10 0 0,1 12,22C6.47,22 2,17.5 2,12A10,10 0 0,1 12,2M12.5,7V12.25L17,14.92L16.25,16.15L11,13V7H12.5Z" /></svg>
+</i> We'll Do It Live<a class="headerlink" href="#clock-outline-embed_icon-well-do-it-live_1" title="Permanent link">&para;</a></h3>
+<p>Because the data is being pulled from a remote website, the tests might take
+a while (but no more than <code>30</code> seconds).</p>
+</div>
+<h2 id="activity-3-quiz-02-points">Activity 3: Quiz (<em>0.2 Points</em>)<a class="headerlink" href="#activity-3-quiz-02-points" title="Permanent link">&para;</a></h2>
+<p>Once you have completed all the activities above, you are to complete the
+following <strong>reflection quiz</strong>:</p>
+<div id="quiz-questions"></div>
+
+<div id="quiz-responses"></div>
+
+<script src="static/js/dredd-quiz.js"></script>
+<script>
+loadQuiz('static/json/homework03.json');
+</script>
+
+<pre style="display: none;" id="dr-container" class="codehilite"><code id="dredd-response"></code></pre>
+
+<p>As with <a href="reading01.html">Reading 01</a>, you will need to store your answers in a
+<code>homework03/answers.json</code> file.  You can use the form above to generate the
+contents of this file, or you can write the <a href="https://json.org/">JSON</a> by hand.</p>
+<p>To test your quiz, you can use the <code>check.py</code> script:</p>
+<div class="codehilite"><pre><span></span><code>$<span class="w"> </span>../.scripts/check.py
+Checking<span class="w"> </span>homework03<span class="w"> </span>quiz<span class="w"> </span>...
+<span class="w">     </span>Q01<span class="w">  </span><span class="m">1</span>.00<span class="w"> </span>/<span class="w">  </span><span class="m">1</span>.00
+<span class="w">     </span>Q02<span class="w">  </span><span class="m">1</span>.00<span class="w"> </span>/<span class="w">  </span><span class="m">1</span>.00
+<span class="w">     </span>Q03<span class="w">  </span><span class="m">1</span>.00<span class="w"> </span>/<span class="w">  </span><span class="m">1</span>.00
+<span class="w">     </span>Q04<span class="w">  </span><span class="m">5</span>.00<span class="w"> </span>/<span class="w">  </span><span class="m">5</span>.00
+<span class="w">  </span>--------------------
+<span class="w">   </span>Score<span class="w">  </span><span class="m">8</span>.00<span class="w"> </span>/<span class="w">  </span><span class="m">8</span>.00
+<span class="w">   </span>Grade<span class="w">  </span><span class="m">1</span>.00<span class="w"> </span>/<span class="w">  </span><span class="m">1</span>.00
+<span class="w">  </span>Status<span class="w"> </span>Success
+</code></pre></div>
+
+<h2 id="submission-1-point">Submission (<em>1 Point</em>)<a class="headerlink" href="#submission-1-point" title="Permanent link">&para;</a></h2>
+<p>To submit your assignment, please commit your work to the <code>homework03</code> folder
+of your <code>homework03</code> branch in your <strong>assignments</strong> <a href="https://github.com">GitHub</a> repository:</p>
+<div class="codehilite"><pre><span></span><code><span class="c1">#----------------------------------------------------------------------</span>
+<span class="c1"># Make sure you have already completed Activity 0: Preparation</span>
+<span class="c1">#----------------------------------------------------------------------</span>
+...
+
+$<span class="w"> </span><span class="nv">$EDITOR</span><span class="w"> </span>weather.sh<span class="w">                                  </span><span class="c1"># Edit script</span>
+$<span class="w"> </span>git<span class="w"> </span>add<span class="w"> </span>weather.sh<span class="w">                                  </span><span class="c1"># Mark changes for commit</span>
+$<span class="w"> </span>git<span class="w"> </span>commit<span class="w"> </span>-m<span class="w"> </span><span class="s2">&quot;Homework 03: weather.sh&quot;</span><span class="w">             </span><span class="c1"># Record changes</span>
+...
+
+$<span class="w"> </span><span class="nv">$EDITOR</span><span class="w"> </span>zipcode.sh<span class="w">                                  </span><span class="c1"># Edit script</span>
+$<span class="w"> </span>git<span class="w"> </span>add<span class="w"> </span>zipcode.sh<span class="w">                                  </span><span class="c1"># Mark changes for commit</span>
+$<span class="w"> </span>git<span class="w"> </span>commit<span class="w"> </span>-m<span class="w"> </span><span class="s2">&quot;Homework 03: zipcode.sh&quot;</span><span class="w">             </span><span class="c1"># Record changes</span>
+...
+
+$<span class="w"> </span><span class="nv">$EDITOR</span><span class="w"> </span>answers.json<span class="w">                                </span><span class="c1"># Edit quiz</span>
+$<span class="w"> </span>git<span class="w"> </span>add<span class="w"> </span>answers.json<span class="w">                                </span><span class="c1"># Mark changes for commit</span>
+$<span class="w"> </span>git<span class="w"> </span>commit<span class="w"> </span>-m<span class="w"> </span><span class="s2">&quot;Homework 03: Quiz&quot;</span><span class="w">                   </span><span class="c1"># Record changes</span>
+...
+
+$<span class="w"> </span>git<span class="w"> </span>push<span class="w"> </span>-u<span class="w"> </span>origin<span class="w"> </span>homework03<span class="w">                       </span><span class="c1"># Push branch to GitHub</span>
+</code></pre></div>
+
+<div class="alert danger-bg">
+<h3 id="alert-embed_icon-bashisms"><i class="icon icon-medium"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><title>alert</title><path d="M13 14H11V9H13M13 18H11V16H13M1 21H23L12 2L1 21Z" /></svg>
+</i> Bashisms<a class="headerlink" href="#alert-embed_icon-bashisms" title="Permanent link">&para;</a></h3>
+<p>Remember that our class uses <code>sh</code> and that was demonstrated in class.  In the
+testing environment, the runner <em>strictly enforces which interpreter is used</em>
+(whereas on the student machines, <code>sh</code> is aliased to <code>bash</code>), so you may pass
+on the <strong>student machines</strong> but not on <a href="https://github.com">GitHub</a> while using <code>bash</code> syntax.  Here
+are some examples of things that work in <code>bash</code> but not <code>sh</code>:</p>
+<ul>
+<li><code>[[ ... ]]</code> this is specific to <code>bash</code> ... use <code>[ ... ]</code> instead</li>
+<li><code>${asdf// /}</code> this is specific to <code>bash</code>... use <code>$(echo $var | sed 's/..//')</code> instead</li>
+<li><code>[ ... ~= ... ]</code> this is specific to <code>bash</code> ... use <code>grep</code> instead</li>
+</ul>
+<p>If you find that your script is using <code>bash</code> syntax and you do not want to
+change it, then simply modify your script's <em>she-bang</em> from <code>#!/bin/sh</code> to
+<code>#!/bin/bash</code> to reflect the appropriate language interpreter.</p>
+<p><strong>Note</strong>: for the upcoming exam, you are not expected to know <code>bash</code>, but you
+are expected to know <code>sh</code> when it comes to scripting.</p>
+</div>
+<div class="alert warning-bg">
+<h3 id="lifebuoy-embed_icon-acknowledgments"><i class="icon icon-medium"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><title>lifebuoy</title><path d="M19.79,15.41C20.74,13.24 20.74,10.75 19.79,8.59L17.05,9.83C17.65,11.21 17.65,12.78 17.06,14.17L19.79,15.41M15.42,4.21C13.25,3.26 10.76,3.26 8.59,4.21L9.83,6.94C11.22,6.35 12.79,6.35 14.18,6.95L15.42,4.21M4.21,8.58C3.26,10.76 3.26,13.24 4.21,15.42L6.95,14.17C6.35,12.79 6.35,11.21 6.95,9.82L4.21,8.58M8.59,19.79C10.76,20.74 13.25,20.74 15.42,19.78L14.18,17.05C12.8,17.65 11.22,17.65 9.84,17.06L8.59,19.79M12,2A10,10 0 0,1 22,12A10,10 0 0,1 12,22A10,10 0 0,1 2,12A10,10 0 0,1 12,2M12,8A4,4 0 0,0 8,12A4,4 0 0,0 12,16A4,4 0 0,0 16,12A4,4 0 0,0 12,8Z" /></svg>
+</i> Acknowledgments<a class="headerlink" href="#lifebuoy-embed_icon-acknowledgments" title="Permanent link">&para;</a></h3>
+<p>If you collaborated with any other students, or received help from TAs or AI
+tools on this assignment, please record this support in the <code>README.md</code> in
+the <code>homework03</code> folder and include it with your <strong>Pull Request</strong>.</p>
+</div>
+<div class="alert success-bg">
+<h3 id="account-question-embed_icon-graders"><i class="icon icon-medium"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><title>account-question</title><path d="M13,8A4,4 0 0,1 9,12A4,4 0 0,1 5,8A4,4 0 0,1 9,4A4,4 0 0,1 13,8M17,18V20H1V18C1,15.79 4.58,14 9,14C13.42,14 17,15.79 17,18M20.5,14.5V16H19V14.5H20.5M18.5,9.5H17V9A3,3 0 0,1 20,6A3,3 0 0,1 23,9C23,9.97 22.5,10.88 21.71,11.41L21.41,11.6C20.84,12 20.5,12.61 20.5,13.3V13.5H19V13.3C19,12.11 19.6,11 20.59,10.35L20.88,10.16C21.27,9.9 21.5,9.47 21.5,9A1.5,1.5 0 0,0 20,7.5A1.5,1.5 0 0,0 18.5,9V9.5Z" /></svg>
+</i> Graders<a class="headerlink" href="#account-question-embed_icon-graders" title="Permanent link">&para;</a></h3>
+<p>Once you have committed your work and pushed it to <a href="https://github.com">GitHub</a>, remember to
+create a <strong>pull request</strong> and assign it to the appropriate <strong>teaching
+assistant</strong> from the <a href="reading03_tas.html">Reading 03 TA List</a>.</p>
+</div>
+<div class="footnote">
+<hr />
+<ol>
+<li id="fn:1">
+<p>Don't you dare call it <a href="https://www.youtube.com/watch?v=03QCbAZcMwg">the OC</a>.&#160;<a class="footnote-backref" href="#fnref:1" title="Jump back to footnote 1 in the text">&#8617;</a></p>
+</li>
+<li id="fn:2">
+<p><a href="https://www.youtube.com/watch?v=TR3Vdo5etCQ">Don't speak</a>, I know what you're thinking; I don't need your reasons; Don't tell me cause it hurts.&#160;<a class="footnote-backref" href="#fnref:2" title="Jump back to footnote 2 in the text">&#8617;</a></p>
+</li>
+<li id="fn:3">
+<p><a href="http://wiki.teamliquid.net/starcraft2/Definitions">1-A</a> to <a href="https://www.youtube.com/watch?v=cWz5uYWnI5k">victory</a>.  Zerg OP.&#160;<a class="footnote-backref" href="#fnref:3" title="Jump back to footnote 3 in the text">&#8617;</a></p>
+</li>
+<li id="fn:4">
+<p>Especially after last few weeks... Brrr.&#160;<a class="footnote-backref" href="#fnref:4" title="Jump back to footnote 4 in the text">&#8617;</a></p>
+</li>
+<li id="fn:5">
+<p>This for you WenTao and Pat.  210 Dillon Hall 4 Lyfe.&#160;<a class="footnote-backref" href="#fnref:5" title="Jump back to footnote 5 in the text">&#8617;</a></p>
+</li>
+</ol>
+</div>
+</main>
+<footer>
+Built using <a href="https://python.org">Python</a>
+and <a href="https://jinja.palletsprojects.com">Jinja</a>
+with colors from <a href="https://nordtheme.com">Nord Theme</a>
+and icons from <a href="https://pictogrammers.com/library/mdi/">Material Design Icons</a>.</footer>
+</body>
+</html>
