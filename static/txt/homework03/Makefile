@@ -39,7 +39,7 @@ quiz_grade   , quiz_status    = run_and_extract('../.scripts/check.py')
 print('Grade Summary ...')
 print('  Weather {:4.2f} /  0.40'.format(0.4*weather_grade))
 print('  Zipcode {:4.2f} /  0.40'.format(0.4*zipcode_grade))
-print('  Quiz    {:4.2f} /  0.20'.format(0.4*quiz_grade))
+print('  Quiz    {:4.2f} /  0.20'.format(0.2*quiz_grade))
 print('  Total   {:4.2f} /  1.00'.format(
     0.4*weather_grade + 0.4*zipcode_grade + 0.2*quiz_grade
 ))
