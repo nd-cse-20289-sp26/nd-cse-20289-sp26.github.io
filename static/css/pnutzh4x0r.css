@@ -32,6 +32,7 @@
     --caution: var(--nord13);
     --warning: var(--nord12);
     --danger: var(--nord11);
+    --special: var(--nord15);
     --code: var(--nord11);
     --muted: light-dark(var(--nord03), var(--nord04));
     --heading: light-dark(var(--nord03), var(--nord05));
@@ -303,6 +304,10 @@ div.footnote > hr {
     display: none;
 }
 
+sup {
+    line-height: 0;
+}
+
 /* Classes */
 
 .flex-row {
@@ -474,6 +479,23 @@ div.footnote > hr {
 
 .warning-btn {
     background-color: var(--warning);
+}
+
+.special-bg {
+    border-color: var(--special);
+    background: color-mix(in srgb, var(--alert), var(--special) 25%);
+}
+
+.special-bg .icon {
+    fill: var(--special);
+}
+
+.special-bg a {
+    color: var(--special);
+}
+
+.special-btn {
+    background-color: var(--special);
 }
 
 .danger {
