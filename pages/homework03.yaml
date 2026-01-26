@@ -1,0 +1,684 @@
+title:      "Homework 03: Weathering with Zipcodes"
+body:       |
+
+  The goal of this homework assignment is to allow you to practice using
+  [regular expressions] and [filters] in [shell scripts].  In this assignment,
+  you will build on your knowledge of the [bourne shell] language to write
+  scripts that slice and dice data.
+
+  For this assignment, record your scripts and any responses to the following
+  activities in the in the `homework03` folder of your **assignments** [GitHub]
+  repository and push your work by **noon Saturday, February 7**.
+
+  [regular expressions]:https://en.wikipedia.org/wiki/Regular_expression
+  [filters]: https://en.wikipedia.org/wiki/Filter_(software)#Unix
+  [shell scripts]: https://en.wikipedia.org/wiki/Shell_script
+  [bourne shell]: https://en.wikipedia.org/wiki/Bourne_shell
+  [Unix shell]: https://en.wikipedia.org/wiki/Unix_shell
+  [bourne again shell]: https://www.gnu.org/software/bash/
+
+  ## Activity 0: Preparation
+
+  Before starting this homework assignment, you should first perform a `git
+  pull` to retrieve any changes in your remote [GitHub] repository:
+
+      :::bash
+      $ cd path/to/repository                   # Go to assignments repository
+
+      $ git switch master                       # Make sure we are in master branch
+
+      $ git pull --rebase                       # Get any remote changes not present locally
+
+  Next, create a new branch for this assignment:
+
+      :::bash
+      $ git switch -c homework03                # Create homework03 branch and check it out
+
+  Once this is done, download the `Makefile` and test scripts:
+
+      ::bash
+      # Go to homework03 folder
+      $ cd homework03
+
+      # Download the Makefile
+      $ curl -LO https://pnutz.h4x0r.space/courses/cse.20289.sp26/static/txt/homework03/Makefile
+
+      # Add and commit Makefile
+      $ git add Makefile
+      $ git commit -m "Homework 03: Makefile"
+
+      # Download the test scripts
+      $ make test-scripts
+
+  <div class="alert info-bg" markdown="1">
+  **Note**, you do not need to add and commit the test scripts since the
+  `Makefile` will automatically download them again whenever you run `make`.
+  </div>
+
+  You are now ready to work on the activities below.
+
+  <div class="alert warning-bg" markdown="1">
+
+  ### <i class="icon icon-medium">{{ "code-tags" | embed_icon }}</i> Cause we never go out of style
+
+  Note, the provided test scripts are used to verify the correctness of your
+  code (ie. does it do the right thing).  Good code, however, requires more
+  than just correct behavior; it demands **consistent formatting** and
+  **concise** implementation.  Because of this, your scripts will also be
+  graded on **coding style**.  In general, we expect you to strive for **[clean code]** and
+  will look for the following:
+
+  -   <div class="flex-col" markdown="1">
+
+      **Consistency**
+
+      - Naming, whitespace, and indentation
+      - No dead code
+
+  -   <div class="flex-col" markdown="1">
+
+      **Readability**
+
+      - Idiomatic usage of language syntax and features
+      - Code is mostly self-documenting (with comments when necessary)
+      - Not too dense, not too sparse
+
+  -   <div class="flex-col" markdown="1">
+
+      **Organization**
+
+      - Reasonably sized functions
+      - Reasonably structured and ordered
+
+  </div>
+
+  [clean code]: https://dzone.com/articles/clean-code-explanation-benefits-amp-examples
+
+  ## Activity 1: Weather (*0.4 Points*)
+
+  Michael is not amused by all the cold snow on campus and longs for the warmth
+  and comfort of spring.  Obsessed with the weather, he compulsively checks
+  [weather.gov], which is a website by the [National Weather Service].  While
+  checking the weather for the fifth time on his phone during class, he
+  realized that he could actually apply some of the things he is learning in
+  class to his current obsession.
+
+  For example, he realized that he can fetch the weather information for any
+  [zip code], using the following [URL]:
+
+      :::bash
+      $ curl -sL https://forecast.weather.gov/zipcity.php?inputstring=$ZIPCODE
+
+  For instance, the weather information for Notre Dame, Indiana can be
+  retrieved using:
+
+      :::bash
+      $ curl -sL https://forecast.weather.gov/zipcity.php?inputstring=46556
+
+  Looking at the data retrieved from the website, he notices that the forecast
+  and temperature information is wrapped in [HTML] fields that contain the text
+  "myforecast":
+
+      :::html
+      ...
+      <p class="myforecast-current">Overcast</p>
+      <p class="myforecast-current-lrg">37&deg;F</p>
+      <p class="myforecast-current-sm">3&deg;C</p>
+      ...
+
+  Michael wants to make a script `weather.sh` that will fetch the weather
+  information for any specified [zip code] and extract the temperature and
+  forecast.  Unfortunately, despite taking AP Computer Science in high school,
+  he is still a bit confused about [pipelines] and [shell scripting].
+
+  You decide that you could use some practice wth [shell scripting] and
+  [regular expressions], so you help him complete the script.
+
+  [weather.gov]: https://www.weather.gov/
+  [National Weather Service]: https://www.weather.gov/
+
+  ### Task 1: `weather.sh`
+
+  The `weather.sh` script takes three possible flags:
+
+      :::text
+      $ ./weather.sh -h
+      Usage: weather.sh [zipcode]
+
+      -c    Use Celsius degrees instead of Fahrenheit for temperature
+      -f    Display forecast text after temperature
+
+      If zipcode is not provided, then it defaults to 46556.
+
+  The `-c` flag will have the script output the temperature as Celsius rather
+  than Fahrenheit (the default).
+
+  The `-f` flag will have the script output the forecast text after the
+  current temperature.
+
+  The `-h` flag will display the usage message and exit with success.
+
+  Here are some examples of `weather.sh` in action:
+
+      :::bash
+      # Show current temperature for Notre Dame, Indiana (46556)
+      $ ./weather.sh
+      Temperature: 0 degrees
+
+      # Show current temperature and forecast for Orange, California (92869)
+      $ ./weather.sh -f 92869
+      Temperature: 61 degrees
+      Forecast:    NA
+
+      # Show current temperature and forecast (celsius) for Eau Claire, Wisconsin (54701)
+      $ ./weather.sh -c -f 54701
+      Temperature: -19 degrees
+      Forecast:    A Few Clouds
+
+  #### Skeleton Code
+
+  Here is a skeleton you can use to start your `weather.sh` script:
+
+      :::bash
+      # Download weather.sh skeleton
+      $ curl -LO https://pnutz.h4x0r.space/courses/cse.20289.sp26/static/txt/homework03/weather.sh
+
+  It should look something like this:
+
+      :::bash
+      #!/bin/sh
+
+      # Globals
+
+      URL="https://forecast.weather.gov/zipcity.php"
+      ZIPCODE=46556
+      FORECAST=0
+      CELSIUS=0
+
+      # Functions
+
+      usage() {
+          cat 1>&2 <<EOF
+      Usage: $(basename $0) [zipcode]
+
+      -c    Use Celsius degrees instead of Fahrenheit for temperature
+      -f    Display forecast text after the temperature
+
+      If zipcode is not provided, then it defaults to $ZIPCODE.
+      EOF
+          exit $1
+      }
+
+      weather_information() {
+          # Fetch weather information from URL based on ZIPCODE
+      }
+
+      temperature() {
+          # Extract temperature information from weather source
+          weather_information | ...
+      }
+
+      forecast() {
+          # Extract forecast information from weather source
+          weather_information | ...
+      }
+
+      # Parse Command Line Options
+
+      while [ $# -gt 0 ]; do
+          case $1 in
+              -h) usage 0;;
+          esac
+          shift
+      done
+
+      # Display Information
+
+      echo "Temperature: $(temperature) degrees"
+
+  <div class="alert success-bg" markdown="1">
+
+  ### <i class="icon icon-medium">{{ "lightbulb-outline" | embed_icon }}</i> Hints
+
+  - The general flow of your script should be to parse arguments and then to
+    execute different [pipelines].
+
+  - You will need to expand the `case` statement to parse command line
+    arguments.
+
+  - You will probably want to use [curl] to fetch the appropriate weather
+    information in `weather_information`.
+
+  - You will probably want to use a **conditional statement** in `temperature`
+    to select which filtering [pipeline] to use to extract the appropriate
+    information.
+
+  - You will probably want to use [cut], [grep], [sed], or [awk] to extract
+    information in `temperature` and `forecast`.
+
+  - You will need to trim leading and trailing whitespace for the forecast
+    (possibly using [sed]).
+
+  </div>
+
+  [URL]: https://en.wikipedia.org/wiki/URL
+  [shell scripting]: https://en.wikipedia.org/wiki/Shell_script
+
+  ### Task 2: `test_weather.sh`
+
+  To aid you in testing the `weather.sh` script, we provided you with
+  `test_weather.sh`, which you can use as follows:
+
+      :::bash
+      $ make test-weather     # Download and run test script
+      Testing weather.sh ...
+         Usage                                    ... Success
+         Default                                  ... Success
+         46556                                    ... Success
+         46556 Celsius                            ... Success
+         46556 Forecast                           ... Success
+         46556 Celsius Forecast                   ... Success
+         54701                                    ... Success
+         54701 Celsius                            ... Success
+         54701 Forecast                           ... Success
+         54701 Celsius Forecast                   ... Success
+         92869                                    ... Success
+         92869 Celsius                            ... Success
+         92869 Forecast                           ... Success
+         92869 Celsius Forecast                   ... Success
+        --------------------------------------------------------------
+         Score 14.00 / 14.00
+         Grade  1.00 /  1.00
+        Status Success
+
+      $ ./test_weather.sh     # Run already downloaded test script
+      ...
+
+  <div class="alert warning-bg" markdown="1">
+
+  ### <i class="icon icon-medium">{{ "clock-outline" | embed_icon }}</i> We'll Do It Live
+
+  Because the data is being pulled from a remote website, the tests might take
+  a while (but no more than `30` seconds).
+
+  </div>
+
+  <div class="alert danger-bg" markdown="1">
+
+  ### <i class="icon icon-medium">{{ "repeat" | embed_icon }}</i> Retry the Pipeline
+
+  Sometimes the **pipeline fails** not because your code is wrong, but because
+  of **hiccups with the server** (it is live data after all).  If you suspect
+  that your code is correct, you can always **retry** the pipeline to see if it
+  will succeed without changing your code.
+
+  If it doesn't work after **three** retries... then your code is probably
+  wrong.
+
+  </div>
+
+  ## Activity 2: Zipcode (*0.4 Points*)
+
+  Being able to lookup weather information based on [zip codes] is great... if
+  you know the [zip code] of the place you are interested in.  Like most
+  people, however, Sarah is not really familiar with [zip codes] around the
+  country.
+
+  Like the instructor, Sarah hails from Orange County[^1], which is situated on
+  the [Best Coast] and is the home of [Mickey Mouse], [John Wayne], [No
+  Doubt][^2], and [StarCraft][^3] (among other things).  Having never really
+  left **paradise**[^4], Sarah doesn't really know much about other places in
+  America.  This is problematic as she has made many friends from all over the
+  country, such as her roommate from Toledo, Ohio, or her other roommate from
+  Jacksonville, Florida[^5].  Since she needs to figure out the [zip codes] to
+  these unfamiliar places, she is creating a script called `zipcode.sh`, which
+  [scrapes] the [zip codes] from the website [Zip Codes To
+  Go](https://www.zipcodestogo.com/) and allows her to list all the [zip codes]
+  in a specific state or even a particular city.
+
+  For instance, using [curl], she can view all the raw [HTML] for Indiana by
+  doing the following:
+
+      :::bash
+      $ curl -s https://www.zipcodestogo.com/Indiana/
+
+  Because you are pretty good with [regular expressions] now, you decide to
+  help Sarah out with parsing this [HTML] and extracting the [zip codes].
+
+  ### Task 1: `zipcode.sh`
+
+  The `zipcode.sh` script takes three possible flags:
+
+      :::text
+      $ ./zipcode.sh -h
+      Usage: zipcode.sh
+
+        -c      CITY    Which city to search
+        -s      STATE   Which state to search (Indiana)
+
+      If no CITY is specified, then all the zip codes for the STATE are displayed.
+
+  The `-c` flag takes a `CITY` argument, which specifies the city to search for
+  within the `STATE`.  If no `CITY` is specified, then the script should return
+  all the [zip codes] in the `STATE`.
+
+  The `-s` flag takes a `STATE` argument, which specifies the `STATE` to search
+  through.  If no `STATE` is specified, then the script should assume the
+  `STATE` is "Indiana".
+
+  The `-h` flag will display the usage message and exit with success.
+
+  Here are some examples of `zipcode.sh` in action:
+
+      :::bash
+      # Show all Zip Codes from default state (Indiana)
+      $ ./zipcode.sh
+      46001
+      46011
+      46012
+      46013
+      ...
+      47994
+      47995
+
+      # Show all Zip Codes in South Bend, Indiana
+      $ ./zipcode.sh -s Indiana -c "South Bend"
+      46601
+      46613
+      46614
+      46615
+      46616
+      46617
+      46619
+      46626
+      46628
+      46635
+      46637
+      46699
+
+  <div class="alert warning-bg" markdown="1">
+
+  ### <i class="icon icon-medium">{{ "code-tags" | embed_icon }}</i> Unique Zip Codes
+
+  Make sure that the **zipcodes** printed by `zipcode.sh` are **sorted** and
+  **unique**.
+
+  </div>
+
+  #### Skeleton Code
+
+  Here is a skeleton you can use to start your `zipcode.sh` script:
+
+      :::bash
+      # Download zipcode.sh skeleton
+      $ curl -LO https://pnutz.h4x0r.space/courses/cse.20289.sp26/static/txt/homework03/zipcode.sh
+
+  It should look something like this:
+
+      :::bash
+      #!/bin/sh
+
+      # Globals
+
+      URL=https://www.zipcodestogo.com/
+      STATE="Indiana"
+
+      # Functions
+
+      usage() {
+          cat 1>&2 <<EOF
+      Usage: $(basename $0)
+
+      -c	CITY	Which city to search
+      -s	STATE	Which state to search ($STATE)
+
+      If no CITY is specified, then all the zip codes for the STATE are displayed.
+      EOF
+          exit $1
+      }
+
+      zipcode_information() {
+          # Fetch zipcode information from URL based on CITY and STATE
+      }
+
+      filter_zipcodes() {
+          # Extract zipcodes from zipcode source
+      }
+
+      # Parse Command Line Options
+
+      while [ $# -gt 0 ]; do
+          case $1 in
+            -h) usage 0;;
+             *) usage 1;;
+          esac
+          shift
+      done
+
+      # Filter Pipeline
+
+      zipcode_information | filter_zipcodes
+
+  <div class="alert success-bg" markdown="1">
+
+  ### <i class="icon icon-medium">{{ "lightbulb-outline" | embed_icon }}</i> Hints
+
+  - The general flow of your script should be to parse arguments and then to
+    execute the [pipeline] at the bottom of the script.
+
+  - You will need to filter the `STATE` pages for the **zipcodes**
+    corresponding to the specified `CITY`.  **Do not use the `CITY` specific
+    pages**.
+
+  - You will need to expand the `case` statement to parse command line
+    arguments.
+
+  - You will probably want to use [curl] with a **conditional statement** in
+    the `zipcode_information` to fetch the appropriate zipcode information
+    based on the `URL`, `CITY` and `STATE`.
+
+  - You will probably want to use [cut], [grep], [sed], or [awk] to extract the
+    appropriate information in `filter_zipcodes`.
+
+  - You will probably want to use [sort] and [uniq] to make sure the final
+    results are **sorted** and **unique**.
+
+  - <div class="flex-col" markdown="1">
+
+      For states with spaces, you will need to replace each space with `%20`
+      (ie.  `New York` becomes `New%20York`):
+
+          :::bash
+          STATE="$(echo $2 | ...)"
+
+  </div>
+
+  [Mickey Mouse]: http://www.disney.com/
+  [John Wayne]: http://johnwayne.com/
+  [No Doubt]: http://www.nodoubt.com/
+  [StarCraft]: http://us.battle.net/sc2/en/
+  [Best Coast]: https://en.wikipedia.org/wiki/West_Coast_of_the_United_States
+  [scrapes]: https://en.wikipedia.org/wiki/Web_scraping
+  [zip code]: https://en.wikipedia.org/wiki/ZIP_Code
+  [zip codes]: https://en.wikipedia.org/wiki/ZIP_Code
+  [HTML]: https://en.wikipedia.org/wiki/HTML
+  [CSV]: https://en.wikipedia.org/wiki/Comma-separated_values
+  [functions]: https://www.shellscript.sh/functions.html
+  [filters]: https://en.wikipedia.org/wiki/Filter_(software)#Unix
+  [grep]: http://man7.org/linux/man-pages/man1/grep.1.html
+  [pipeline]: https://en.wikipedia.org/wiki/Pipeline_(Unix)
+  [pipelines]: https://en.wikipedia.org/wiki/Pipeline_(Unix)
+  [curl]: https://curl.haxx.se/docs/manpage.html
+  [awk]: http://man7.org/linux/man-pages/man1/gawk.1.html
+  [sed]: http://man7.org/linux/man-pages/man1/sed.1.html
+  [cut]: http://man7.org/linux/man-pages/man1/cut.1.html
+  [sort]: http://man7.org/linux/man-pages/man1/sort.1.html
+  [uniq]: http://man7.org/linux/man-pages/man1/uniq.1.html
+
+  ### Task 2: `test_zipcode.sh`
+
+  To aid you in testing the `zipcode.sh` script, we provided you with
+  `test_zipcode.sh`, which you can use as follows:
+
+      :::bash
+      $ ./test_zipcode.sh     # Download and run test script
+      Testing zipcode.sh ...
+         Usage                                    ... Success
+         Default                                  ... Success
+         Indiana                                  ... Success
+         South Bend, Indiana                      ... Success
+         Indianapolis, Indiana                    ... Success
+         Wisconsin                                ... Success
+         Eau Claire, Wisconsin                    ... Success
+         Milwaukee, Wisconsin                     ... Success
+         California                               ... Success
+         Orange, California                       ... Success
+         Los Angeles, California                  ... Success
+         New York                                 ... Success
+         Buffalo, New York                        ... Success
+         New York, New York                       ... Success
+        --------------------------------------------------------------
+         Score 14.00 / 14.00
+         Grade  1.00 /  1.00
+        Status Success
+
+      $ ./test_script.sh      # Run already downloaded test script
+      ...
+
+  <div class="alert warning-bg" markdown="1">
+
+  ### <i class="icon icon-medium">{{ "clock-outline" | embed_icon }}</i> We'll Do It Live
+
+  Because the data is being pulled from a remote website, the tests might take
+  a while (but no more than `30` seconds).
+
+  </div>
+
+
+  [^1]: Don't you dare call it [the OC](https://www.youtube.com/watch?v=03QCbAZcMwg).
+  [^2]: [Don't speak](https://www.youtube.com/watch?v=TR3Vdo5etCQ), I know what you're thinking; I don't need your reasons; Don't tell me cause it hurts.
+  [^3]: [1-A](http://wiki.teamliquid.net/starcraft2/Definitions) to [victory](https://www.youtube.com/watch?v=cWz5uYWnI5k).  Zerg OP.
+  [^4]: Especially after last few weeks... Brrr.
+  [^5]: This for you WenTao and Pat.  210 Dillon Hall 4 Lyfe.
+
+  ## Activity 3: Quiz (*0.2 Points*)
+
+  Once you have completed all the activities above, you are to complete the
+  following **reflection quiz**:
+
+  <div id="quiz-questions"></div>
+
+  <div id="quiz-responses"></div>
+
+  <script src="static/js/dredd-quiz.js"></script>
+  <script>
+  loadQuiz('static/json/homework03.json');
+  </script>
+
+  <pre style="display: none;" id="dr-container" class="codehilite"><code id="dredd-response"></code></pre>
+
+  As with [Reading 01], you will need to store your answers in a
+  `homework03/answers.json` file.  You can use the form above to generate the
+  contents of this file, or you can write the [JSON] by hand.
+
+  To test your quiz, you can use the `check.py` script:
+
+      :::bash
+      $ ../.scripts/check.py
+      Checking homework03 quiz ...
+           Q01  1.00 /  1.00
+           Q02  1.00 /  1.00
+           Q03  1.00 /  1.00
+           Q04  5.00 /  5.00
+        --------------------
+         Score  8.00 /  8.00
+         Grade  1.00 /  1.00
+        Status Success
+
+  ## Submission (*1 Point*)
+
+  To submit your assignment, please commit your work to the `homework03` folder
+  of your `homework03` branch in your **assignments** [GitHub] repository:
+
+      :::bash
+      #----------------------------------------------------------------------
+      # Make sure you have already completed Activity 0: Preparation
+      #----------------------------------------------------------------------
+      ...
+
+      $ $EDITOR weather.sh                                  # Edit script
+      $ git add weather.sh                                  # Mark changes for commit
+      $ git commit -m "Homework 03: weather.sh"             # Record changes
+      ...
+
+      $ $EDITOR zipcode.sh                                  # Edit script
+      $ git add zipcode.sh                                  # Mark changes for commit
+      $ git commit -m "Homework 03: zipcode.sh"             # Record changes
+      ...
+
+      $ $EDITOR answers.json                                # Edit quiz
+      $ git add answers.json                                # Mark changes for commit
+      $ git commit -m "Homework 03: Quiz"                   # Record changes
+      ...
+
+      $ git push -u origin homework03                       # Push branch to GitHub
+
+  <div class="alert danger-bg" markdown="1">
+
+  ### <i class="icon icon-medium">{{ "alert" | embed_icon }}</i> Bashisms
+
+  Remember that our class uses `sh` and that was demonstrated in class.  In the
+  testing environment, the runner *strictly enforces which interpreter is used*
+  (whereas on the student machines, `sh` is aliased to `bash`), so you may pass
+  on the **student machines** but not on [GitHub] while using `bash` syntax.  Here
+  are some examples of things that work in `bash` but not `sh`:
+
+  - `[[ ... ]]` this is specific to `bash` ... use `[ ... ]` instead
+  - `${asdf// /}` this is specific to `bash`... use `$(echo $var | sed 's/..//')` instead
+  - `[ ... ~= ... ]` this is specific to `bash` ... use `grep` instead
+
+  If you find that your script is using `bash` syntax and you do not want to
+  change it, then simply modify your script's *she-bang* from `#!/bin/sh` to
+  `#!/bin/bash` to reflect the appropriate language interpreter.
+
+  **Note**: for the upcoming exam, you are not expected to know `bash`, but you
+  are expected to know `sh` when it comes to scripting.
+
+  </div>
+
+  <div class="alert warning-bg" markdown="1">
+
+  ### <i class="icon icon-medium">{{ "lifebuoy" | embed_icon }}</i> Acknowledgments
+
+  If you collaborated with any other students, or received help from TAs or AI
+  tools on this assignment, please record this support in the `README.md` in
+  the `homework03` folder and include it with your **Pull Request**.
+
+  </div>
+
+  <div class="alert success-bg" markdown="1">
+
+  ### <i class="icon icon-medium">{{ "account-question" | embed_icon }}</i> Graders
+
+  Once you have committed your work and pushed it to [GitHub], remember to
+  create a **pull request** and assign it to the appropriate **teaching
+  assistant** from the [Reading 03 TA List].
+
+  </div>
+
+  [git]: https://git-scm.com/
+  [clone]:https://git-scm.com/docs/git-clone
+  [commit]: https://git-scm.com/docs/git-commit
+  [push]: https://git-scm.com/docs/git-push
+  [branching]: https://git-scm.com/docs/git-branch
+  [code review]: https://en.wikipedia.org/wiki/Code_review
+  [GitHub]: https://github.com
+  [Linux]: https://kernel.org
+  [branch]: https://git-scm.com/docs/git-branch
+  [add]: https://git-scm.com/docs/git-add
+  [Reading 01]: reading01.html
+  [Reading 03 TA List]: reading03_tas.html
+  [curl]: http://man7.org/linux/man-pages/man1/curl.1.html
+  [wget]: http://man7.org/linux/man-pages/man1/wget.1.html
+  [JSON]: https://json.org/
+  [ESC]: https://esc.nd.edu/
