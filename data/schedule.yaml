@@ -78,6 +78,8 @@
         items:
           - name:       Slides 07
             link:       https://docs.google.com/presentation/d/1iP0HgKRyItx3mVXZkrdijrJdRpufAAnM0JkXsorFj8s/edit?usp=sharing
+          - name:       Panopto
+            link:       https://notredame.hosted.panopto.com/Panopto/Pages/Viewer.aspx?id=d0566a82-5463-4a64-87e7-b3e0013bf57c
 
       - date:           Fri 01/30
         topics:         Pipelines
