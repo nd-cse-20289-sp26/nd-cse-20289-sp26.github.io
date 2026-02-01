@@ -86,6 +86,8 @@
         items:
           - name:       Slides 08
             link:       https://docs.google.com/presentation/d/1tTGu3KGFixkGXDGZlhYP-UiIeZ5xTsXv_ZFEtBBDuas/edit?usp=sharing
+          - name:       Panopto
+            link:       https://notredame.hosted.panopto.com/Panopto/Pages/Viewer.aspx?id=30d0d09a-a470-4127-b27c-b3e2015733f5
 
       - date:           Sat 01/31
         topics:         '<i class="muted">Meeting the Oracle</i>'
