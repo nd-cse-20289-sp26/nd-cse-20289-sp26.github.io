@@ -1,0 +1,737 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<!-- Favicon -->
+<link rel="icon" type="image/png" sizes="32x32" href="static/ico/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="static/ico/favicon-16x16.png">
+<link rel="manifest" href="static/ico/site.webmanifest">
+<!-- Stylesheets -->
+<link rel="stylesheet" href="static/css/pnutzh4x0r.css">
+<title>Checklist 01</title>
+</head>
+<body>
+<header>
+<a class="logo" href="checklist01.html">
+    <h1>Checklist 01</h1>
+</a>
+<nav>
+    <ul>
+        <li><a href="index.html"><h4>Home</h4></a></li>
+        </ul>
+</nav></header>
+<main>
+<h2 id="overview">Overview<a class="headerlink" href="#overview" title="Permanent link">&para;</a></h2>
+<p>Here is a general outline of the <strong>key</strong> concepts and commands (arranged by
+topic) that you should know for <strong>Exam 01</strong>.</p>
+<p>The exam will have the following format:</p>
+<ol>
+<li>
+<p><strong>Commands</strong>: Identify which commands perform certain tasks
+  (<em>multiple-choice</em>, <em>fill-in-the-blank</em>).</p>
+</li>
+<li>
+<p><strong>Shell</strong>: Identify ways to perform certain tasks in the shell
+  (<em>multiple-choice</em>, <em>fill-in-the-blank</em>).</p>
+</li>
+<li>
+<p><strong>Files and Processes</strong>: Identify ways to perform operations on files
+  and processes (<em>multiple-choice</em>, <em>fill-in-the-blank</em>).</p>
+</li>
+<li>
+<p><strong>I/O Redirection</strong>: Describe I/O redirection and the <strong>Unix
+  Philosophy</strong> (<em>multiple-choice</em>, <em>fill-in-the-blank</em>).</p>
+</li>
+<li>
+<p><strong>Networking</strong>: Identify ways to perform networking and tasks
+  (<em>multiple-choice</em>, <em>fill-in-the-blank</em>).</p>
+</li>
+<li>
+<p><strong>Shell Scripting</strong>: Debug, fix, and evaluate a shell script
+  (<em>multiple-choice</em>, <em>fill-in-the-blank</em>).</p>
+</li>
+<li>
+<p><strong>Pipelines and Filters</strong>: Construct <strong>pipelines using unix </strong>filters<em><em>
+  to answer some questions (</em>coding on the computer</em>).</p>
+</li>
+</ol>
+<p>Parts <strong>1</strong> through <strong>6</strong> are to be done first on <strong>paper</strong>. Once that
+portion is completed and submitted, you will do part <strong>7</strong> on your own
+computer and submit code to your <strong>assignments</strong> repository.</p>
+<div class="alert warning-bg">
+<h3 id="check-all-embed_icon-representative-but-not-exhaustive"><i class="icon icon-medium"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><title>check-all</title><path d="M0.41,13.41L6,19L7.41,17.58L1.83,12M22.24,5.58L11.66,16.17L7.5,12L6.07,13.41L11.66,19L23.66,7M18,7L16.59,5.58L10.24,11.93L11.66,13.34L18,7Z" /></svg>
+</i> Representative, But Not Exhaustive<a class="headerlink" href="#check-all-embed_icon-representative-but-not-exhaustive" title="Permanent link">&para;</a></h3>
+<p>This checklist is meant to be representative, rather than exhaustive (ie.
+there may be questions that show up on the exam that are not shown below).</p>
+</div>
+<h2 id="logistics">Logistics<a class="headerlink" href="#logistics" title="Permanent link">&para;</a></h2>
+<p><strong>Exam 01</strong> will take place during our normal lecture session on
+<strong>Wednesday, February 11</strong> from <strong>12:50 PM - 1:40 PM</strong> in <strong>155 DeBartolo
+Hall</strong>.</p>
+<p>As noted above, the first portion of the exam with be on <strong>paper</strong>, while
+the remaining component with require <strong>coding</strong> and submitting work to your
+<strong>assignments</strong> <a href="https://github.com">GitHub</a> repository.</p>
+<p>During the <strong>paper</strong> portion of the exam, students will only be allowed to
+use <strong>one cheatsheet</strong>.  This <strong>paper</strong> component of the exam must be
+submitted before students can access the <strong>coding</strong> section.</p>
+<p>For the <strong>coding</strong> portion, students will use their own computer, and thus
+are permitted access to any material in their textbooks, notes,
+assignments, and the Internet.</p>
+<div class="alert danger-bg">
+<h3 id="alert-embed_icon-honor-code-violations"><i class="icon icon-medium"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><title>alert</title><path d="M13 14H11V9H13M13 18H11V16H13M1 21H23L12 2L1 21Z" /></svg>
+</i> Honor Code Violations<a class="headerlink" href="#alert-embed_icon-honor-code-violations" title="Permanent link">&para;</a></h3>
+<p>Although students are allowed to use their computers and the Internet
+during the <strong>coding</strong> portion of the exam, students <strong>may not communicate
+with others</strong> or <strong>solicit answers from others</strong>.  <strong>Nor may they use AI
+tools</strong> such as <strong>ChatGPT</strong> or <strong>Co-Pilot</strong> during the exam.  Students
+caught sharing solutions or violating any portion of the honor code will
+<strong>receive a zero on the exam</strong>.</p>
+<p>Furthermore, students are not allowed to consult, copy, or share material
+from previous sections of this course.</p>
+</div>
+<h2 id="introduction">Introduction<a class="headerlink" href="#introduction" title="Permanent link">&para;</a></h2>
+<h3 id="concepts">Concepts<a class="headerlink" href="#concepts" title="Permanent link">&para;</a></h3>
+<ul>
+<li>
+<p>What is <strong>Unix</strong>?</p>
+</li>
+<li>
+<p>What is a <strong>shell</strong>?</p>
+</li>
+<li>
+<div class="flex-col" markdown="1">
+<p>How would do you use <strong>git</strong> to:</p>
+<ul>
+<li>
+<p>Create a copy a repository.</p>
+</li>
+<li>
+<p>Create a new branch.</p>
+</li>
+<li>
+<p>View the changes you've made.</p>
+</li>
+<li>
+<p>Save a change you've made.</p>
+</li>
+<li>
+<p>Share the changes you've made.</p>
+</li>
+<li>
+<p>Retrieve the changes from a remote location.</p>
+</li>
+</ul>
+</li>
+<li>
+<div class="flex-col" markdown="1">
+<p>What are <strong>aliases</strong>?</p>
+<p><em>You should know how to create one and how you would make them
+persistent (ie. survive the current shell session).</em></p>
+</li>
+<li>
+<div class="flex-col" markdown="1">
+<p>What are <strong>environment variables</strong>?</p>
+<p><em>You should know how to set and modify them.  In particular, you should
+be familiar with the following </em><em>environment variables</em><em>:</em> <code>HOME</code>,
+<code>PATH</code>, <code>SHELL</code>.</p>
+</li>
+</ul>
+<h3 id="commands">Commands<a class="headerlink" href="#commands" title="Permanent link">&para;</a></h3>
+<ol>
+<li>
+<div class="flex-col" markdown="1">
+<p><a href="http://man7.org/linux/man-pages/man1/git.1.html">git</a></p>
+<p>Version control system for managing our files.</p>
+</li>
+<li>
+<div class="flex-col" markdown="1">
+<p><a href="https://man7.org/linux/man-pages/man1/pwd.1.html">pwd</a></p>
+<p>Print current working directory.</p>
+</li>
+<li>
+<div class="flex-col" markdown="1">
+<p><a href="https://man7.org/linux/man-pages/man1/whoami.1.html">whoami</a></p>
+<p>Print username of current user.</p>
+</li>
+<li>
+<div class="flex-col" markdown="1">
+<p><a href="https://man7.org/linux/man-pages/man1/id.1.html">id</a></p>
+<p>Print user and group information.</p>
+</li>
+</ol>
+<div class="alert success-bg">
+<h3 id="help-embed_icon-sample-questions"><i class="icon icon-medium"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><title>help</title><path d="M10,19H13V22H10V19M12,2C17.35,2.22 19.68,7.62 16.5,11.67C15.67,12.67 14.33,13.33 13.67,14.17C13,15 13,16 13,17H10C10,15.33 10,13.92 10.67,12.92C11.33,11.92 12.67,11.33 13.5,10.67C15.92,8.43 15.32,5.26 12,5A3,3 0 0,0 9,8H6A6,6 0 0,1 12,2Z" /></svg>
+</i> Sample Questions<a class="headerlink" href="#help-embed_icon-sample-questions" title="Permanent link">&para;</a></h3>
+<ol>
+<li>
+<div class="flex-col" markdown="1">
+<p>Which environmental variable does the shell search to locate an
+executable?</p>
+<ul>
+<li><code>APPS</code></li>
+<li><code>HOME</code></li>
+<li><code>PATH</code></li>
+<li><p><code>PROGRAMS</code></p></li>
+</ul>
+</li>
+<li>
+<p>How would you create a new <code>checklist01</code> branch off an up-to-date
+<code>master</code> branch?</p>
+</li>
+</ol>
+</div>
+<h2 id="files">Files<a class="headerlink" href="#files" title="Permanent link">&para;</a></h2>
+<h3 id="concepts_1">Concepts<a class="headerlink" href="#concepts_1" title="Permanent link">&para;</a></h3>
+<ul>
+<li>
+<div class="flex-col" markdown="1">
+<p>What is the general layout or hierarchy of a typical Unix
+<strong>filesystem</strong>?</p>
+<p><em>You should be familiar with the most common directories found in a
+typical <a href="https://en.wikipedia.org/wiki/Unix">Unix</a> filesystem (e.g. <code>/bin</code>, <code>/etc</code>, <code>/lib</code>, <code>/usr</code>, <code>/tmp</code>,
+<code>/var</code>, etc.).</em></p>
+</li>
+<li>
+<div class="flex-col" markdown="1">
+<p>What is the difference between an <strong>absolute</strong> and <strong>relative</strong> path?</p>
+<p><em>You should know how to reference a file using both methods.</em></p>
+</li>
+<li>
+<div class="flex-col" markdown="1">
+<p>How do Unix file <strong>permissions</strong> work?  How would you set them to
+restrict access for certain operations and certain classes?</p>
+<p><em>You should be able to translate from </em><em>octal</em><em> to <code>rwx</code> triplets and
+back.</em></p>
+</li>
+<li>
+<div class="flex-col" markdown="1">
+<p>What is the difference between a <strong>hard link</strong> and a <strong>soft link</strong>?</p>
+<p><em>You should know the command to create both.</em></p>
+</li>
+</ul>
+<h3 id="commands_1">Commands<a class="headerlink" href="#commands_1" title="Permanent link">&para;</a></h3>
+<ol>
+<li>
+<div class="flex-col" markdown="1">
+<p><a href="http://man7.org/linux/man-pages/man1/ls.1.html">ls</a></p>
+<p>List the contents of a directory (long, human-readable, sorted)</p>
+</li>
+<li>
+<div class="flex-col" markdown="1">
+<p><a href="http://man7.org/linux/man-pages/man1/chmod.1.html">chmod</a></p>
+<p>Set permissions using <strong>octal</strong> and symbolic arguments.</p>
+</li>
+<li>
+<div class="flex-col" markdown="1">
+<p><a href="http://man7.org/linux/man-pages/man1/stat.1.html">stat</a></p>
+<p>View the inode information for a file.</p>
+</li>
+<li>
+<div class="flex-col" markdown="1">
+<p><a href="http://man7.org/linux/man-pages/man1/du.1.html">du</a></p>
+<p>View the total disk usage for a file or directory.</p>
+</li>
+<li>
+<div class="flex-col" markdown="1">
+<p><a href="http://man7.org/linux/man-pages/man1/ln.1.html">ln</a></p>
+<p>Create hard and soft links.</p>
+</li>
+<li>
+<div class="flex-col" markdown="1">
+<p><a href="http://man7.org/linux/man-pages/man1/find.1.html">find</a></p>
+<p>Search directory for files by name and type.</p>
+</li>
+</ol>
+<div class="alert success-bg">
+<h3 id="help-embed_icon-sample-questions_1"><i class="icon icon-medium"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><title>help</title><path d="M10,19H13V22H10V19M12,2C17.35,2.22 19.68,7.62 16.5,11.67C15.67,12.67 14.33,13.33 13.67,14.17C13,15 13,16 13,17H10C10,15.33 10,13.92 10.67,12.92C11.33,11.92 12.67,11.33 13.5,10.67C15.92,8.43 15.32,5.26 12,5A3,3 0 0,0 9,8H6A6,6 0 0,1 12,2Z" /></svg>
+</i> Sample Questions<a class="headerlink" href="#help-embed_icon-sample-questions_1" title="Permanent link">&para;</a></h3>
+<ol>
+<li>
+<div class="flex-col" markdown="1">
+<p>Which of the following commands makes a file executable?</p>
+<ul>
+<li><code>chmod +x file</code></li>
+<li><code>stat file</code></li>
+<li><code>make file</code></li>
+<li><code>test -x file</code></li>
+</ul>
+</li>
+<li>
+<div class="flex-col" markdown="1">
+<p>Which of the following commands shows the meta-data of a file?</p>
+<ul>
+<li><code>ls -l file</code></li>
+<li><code>stat file</code></li>
+<li><code>du file</code></li>
+<li><code>find file</code></li>
+</ul>
+</li>
+</ol>
+</div>
+<h2 id="process">Process<a class="headerlink" href="#process" title="Permanent link">&para;</a></h2>
+<h3 id="concepts_2">Concepts<a class="headerlink" href="#concepts_2" title="Permanent link">&para;</a></h3>
+<ul>
+<li>
+<div class="flex-col" markdown="1">
+<p>What is a <strong>process</strong>?  What attributes does it have?</p>
+<p><em>You should know at a high-level the typical attributes of a process
+(ie. PID, UID, etc.).</em></p>
+</li>
+<li>
+<div class="flex-col" markdown="1">
+<p>What does it mean to <strong>signal</strong> a process?  What do different the
+different signals do (<code>TERM</code>, <code>INT</code>, <code>KILL</code>)?</p>
+<p><em>You should know the difference between terminating a process gracefully
+and terminating it forcefully.</em></p>
+</li>
+<li>
+<div class="flex-col" markdown="1">
+<p>How do we <strong>suspend</strong>, <strong>foreground</strong>, and <strong>background</strong> a process?</p>
+<p><em>You should know the appropriate keybindings and commands to perform
+these actions.</em></p>
+</li>
+</ul>
+<h3 id="commands_2">Commands<a class="headerlink" href="#commands_2" title="Permanent link">&para;</a></h3>
+<ol>
+<li>
+<div class="flex-col" markdown="1">
+<p><a href="http://man7.org/linux/man-pages/man1/ps.1.html">ps</a></p>
+<p>List the processes for the current user and for the whole system.</p>
+</li>
+<li>
+<div class="flex-col" markdown="1">
+<p><a href="http://man7.org/linux/man-pages/man1/top.1.html">top</a></p>
+<p>Interactively view and manage processes.</p>
+</li>
+<li>
+<div class="flex-col" markdown="1">
+<p><a href="http://man7.org/linux/man-pages/man1/kill.1.html">kill</a></p>
+<p>Signal a process by PID.</p>
+</li>
+<li>
+<div class="flex-col" markdown="1">
+<p><a href="http://man7.org/linux/man-pages/man1/time.1.html">time</a></p>
+<p>Measure how long it takes a process to execute.</p>
+</li>
+<li>
+<div class="flex-col" markdown="1">
+<p><a href="http://man7.org/linux/man-pages/man1/kill.1.html">pkill</a></p>
+<p>Signal a process by name.</p>
+</li>
+</ol>
+<div class="alert success-bg">
+<h3 id="help-embed_icon-sample-questions_2"><i class="icon icon-medium"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><title>help</title><path d="M10,19H13V22H10V19M12,2C17.35,2.22 19.68,7.62 16.5,11.67C15.67,12.67 14.33,13.33 13.67,14.17C13,15 13,16 13,17H10C10,15.33 10,13.92 10.67,12.92C11.33,11.92 12.67,11.33 13.5,10.67C15.92,8.43 15.32,5.26 12,5A3,3 0 0,0 9,8H6A6,6 0 0,1 12,2Z" /></svg>
+</i> Sample Questions<a class="headerlink" href="#help-embed_icon-sample-questions_2" title="Permanent link">&para;</a></h3>
+<ol>
+<li>
+<div class="flex-col" markdown="1">
+<p>Which of the following commands forcefully terminates a process?</p>
+<ul>
+<li><code>kill PID</code></li>
+<li><code>kill -9 PID</code></li>
+<li><code>sudo kill PID</code></li>
+<li><code>kill -KILL PID</code></li>
+</ul>
+</li>
+<li>
+<div class="flex-col" markdown="1">
+<p>Suppose we were running <code>cat</code>.  How would we signal to the program that
+we are done inputting text?</p>
+<ul>
+<li><code>Control-Z</code></li>
+<li><code>Control-I</code></li>
+<li><code>Control-D</code></li>
+<li><code>Control-C</code></li>
+</ul>
+</li>
+</ol>
+</div>
+<h2 id="io-redirection">I/O Redirection<a class="headerlink" href="#io-redirection" title="Permanent link">&para;</a></h2>
+<h3 id="concepts_3">Concepts<a class="headerlink" href="#concepts_3" title="Permanent link">&para;</a></h3>
+<ul>
+<li>
+<p>What three <strong>files</strong> does every process start with?</p>
+</li>
+<li>
+<p>How do you redirect the output of a command into a new file?</p>
+</li>
+<li>
+<p>How do you redirect the output of a command and append it to a file?</p>
+</li>
+<li>
+<p>How do you redirect the output of one command as the input to another?</p>
+</li>
+<li>
+<p>How do you direct the contents of a file into the input of command?</p>
+</li>
+<li>
+<p>What is <code>/dev/null</code>?  How would you use it to output <code>stderr</code> but ignore
+<code>stdout</code> of a program?</p>
+</li>
+<li>
+<p>What is a <strong>here document</strong> and how would you use it?</p>
+</li>
+</ul>
+<h3 id="commands_3">Commands<a class="headerlink" href="#commands_3" title="Permanent link">&para;</a></h3>
+<ol>
+<li>
+<div class="flex-col" markdown="1">
+<p><a href="http://man7.org/linux/man-pages/man1/tee.1.html">tee</a></p>
+<p>Redirect <code>stdin</code> to both <code>stdout</code> and a file.</p>
+</li>
+<li>
+<div class="flex-col" markdown="1">
+<p><a href="http://man7.org/linux/man-pages/man1/write.1.html">write</a></p>
+<p>Write to another users terminal.</p>
+</li>
+</ol>
+<div class="alert success-bg">
+<h3 id="help-embed_icon-sample-questions_3"><i class="icon icon-medium"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><title>help</title><path d="M10,19H13V22H10V19M12,2C17.35,2.22 19.68,7.62 16.5,11.67C15.67,12.67 14.33,13.33 13.67,14.17C13,15 13,16 13,17H10C10,15.33 10,13.92 10.67,12.92C11.33,11.92 12.67,11.33 13.5,10.67C15.92,8.43 15.32,5.26 12,5A3,3 0 0,0 9,8H6A6,6 0 0,1 12,2Z" /></svg>
+</i> Sample Questions<a class="headerlink" href="#help-embed_icon-sample-questions_3" title="Permanent link">&para;</a></h3>
+<ol>
+<li>
+<div class="flex-col" markdown="1">
+<p>Which of the following pipelines counts all the "Permission denied"
+errors encountered when recursively searching file names under the
+"/etc" directory?</p>
+<ul>
+<li><code>find /etc &gt; /dev/null | wc -l</code></li>
+<li><code>find /etc 2&gt;&amp;1 &gt; /dev/null | wc -l</code></li>
+<li><code>find /etc 2&gt; /dev/null | wc -l</code></li>
+<li><p><code>find /etc &gt; /dev/null 2&gt;&amp;1 | wc -l</code></p></li>
+</ul>
+</li>
+<li>
+<div class="flex-col" markdown="1">
+<p>Which of the following appends the standard output of a program to a
+file?</p>
+<ul>
+<li><code>program &gt; output</code></li>
+<li><code>program 2&gt; output</code></li>
+<li><code>program &gt;&gt; output</code></li>
+<li><p><code>program &amp;&gt; output</code></p></li>
+</ul>
+</li>
+</ol>
+</div>
+<hr>
+
+<h2 id="networking">Networking<a class="headerlink" href="#networking" title="Permanent link">&para;</a></h2>
+<h3 id="concepts_4">Concepts<a class="headerlink" href="#concepts_4" title="Permanent link">&para;</a></h3>
+<ul>
+<li>
+<div class="flex-col" markdown="1">
+<p>What is <strong>bandwidth</strong> and <strong>latency</strong>?</p>
+<p><em>You should know what each measures and what programs we would use to
+perform these measurements.</em></p>
+</li>
+<li>
+<div class="flex-col" markdown="1">
+<p>What is an <strong>IP address</strong>?  How is a <strong>domain name</strong> related to it?</p>
+<p><em>You should know the commands to lookup this information.</em></p>
+</li>
+<li>
+<div class="flex-col" markdown="1">
+<p>What is a network <strong>port</strong>?</p>
+<p><em>You should know how to scan for ports and how to connect to a machine
+at a specific a domain or address and port number.</em></p>
+</li>
+</ul>
+<h3 id="commands_4">Commands<a class="headerlink" href="#commands_4" title="Permanent link">&para;</a></h3>
+<ol>
+<li>
+<div class="flex-col" markdown="1">
+<p><a href="http://man7.org/linux/man-pages/man8/ip.8.html">ip</a> /
+<a href="http://man7.org/linux/man-pages/man8/ifconfig.8.html">ifconfig</a></p>
+<p>List the IP addresses of the current machine.</p>
+</li>
+<li>
+<div class="flex-col" markdown="1">
+<p><a href="http://man7.org/linux/man-pages/man1/nmap.1.html">nmap</a></p>
+<p>Scan remote machine for open ports.</p>
+</li>
+<li>
+<div class="flex-col" markdown="1">
+<p><a href="http://linux.die.net/man/1/nc">nc</a></p>
+<p>General purpose tools to communicate with TCP-based network services.</p>
+</li>
+<li>
+<div class="flex-col" markdown="1">
+<p><a href="http://curl.haxx.se/docs/manpage.html">curl</a></p>
+<p>Communicate using HTTP (ie. download files from the web).</p>
+</li>
+<li>
+<div class="flex-col" markdown="1">
+<p><a href="http://man7.org/linux/man-pages/man8/ping.8.html">ping</a></p>
+<p>Measure the latency from host to remote machine.</p>
+</li>
+</ol>
+<div class="alert success-bg">
+<h3 id="help-embed_icon-sample-questions_4"><i class="icon icon-medium"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><title>help</title><path d="M10,19H13V22H10V19M12,2C17.35,2.22 19.68,7.62 16.5,11.67C15.67,12.67 14.33,13.33 13.67,14.17C13,15 13,16 13,17H10C10,15.33 10,13.92 10.67,12.92C11.33,11.92 12.67,11.33 13.5,10.67C15.92,8.43 15.32,5.26 12,5A3,3 0 0,0 9,8H6A6,6 0 0,1 12,2Z" /></svg>
+</i> Sample Questions<a class="headerlink" href="#help-embed_icon-sample-questions_4" title="Permanent link">&para;</a></h3>
+<ol>
+<li>
+<div class="flex-col" markdown="1">
+<p>Which of the following commands can be used to measure bandwidth?</p>
+<ul>
+<li><code>wget URL</code></li>
+<li><code>ping URL</code></li>
+<li><code>nmap URL</code></li>
+<li><code>curl URL</code></li>
+</ul>
+</li>
+<li>
+<div class="flex-col" markdown="1">
+<p>Which of the following statements are true (<em>choose all that apply</em>)?</p>
+<ul>
+<li>Every domain name translates to at least one IP address.</li>
+<li>Every IP address is publically accessible.</li>
+<li>Every IP address maps to exactly one domain name.</li>
+<li>Every device has an IP address of 127.0.0.1.</li>
+</ul>
+</li>
+</ol>
+</div>
+<hr>
+
+<h2 id="shell-scripting">Shell Scripting<a class="headerlink" href="#shell-scripting" title="Permanent link">&para;</a></h2>
+<h3 id="concepts_5">Concepts<a class="headerlink" href="#concepts_5" title="Permanent link">&para;</a></h3>
+<ol>
+<li>
+<div class="flex-col" markdown="1">
+<p>What is a <strong>shell script</strong>?  What is a <strong>she-bang</strong> and why do we need
+it (or what does it do)?</p>
+<p><em>You should understand how a </em><em>shell script</em><em> is interpreted and the
+impact the </em><em>she-bang</em><em> has on this interpretation.  You should also
+know how to execute a </em><em>shell script</em><em>.</em></p>
+</li>
+<li>
+<div class="flex-col" markdown="1">
+<p>You should know the basics of the shell programming language:</p>
+<ol>
+<li>
+<p><strong>variables</strong></p>
+</li>
+<li>
+<p><strong>command substitution</strong></p>
+</li>
+<li>
+<p><strong>short circuit evaluation</strong></p>
+</li>
+<li>
+<p><strong>if</strong> statement</p>
+</li>
+<li>
+<p><strong>case</strong> statement</p>
+</li>
+<li>
+<p><strong>for</strong> loop</p>
+</li>
+<li>
+<p><strong>while</strong> loop</p>
+</li>
+<li>
+<p><strong>function</strong></p>
+</li>
+</ol>
+</li>
+<li>
+<p>How do we <strong>parse command line arguments</strong> in a <strong>shell script</strong>?</p>
+</li>
+</ol>
+<h3 id="commands_5">Commands<a class="headerlink" href="#commands_5" title="Permanent link">&para;</a></h3>
+<ol>
+<li>
+<div class="flex-col" markdown="1">
+<p><a href="https://www.freebsd.org/cgi/man.cgi?query=sh&amp;sektion=&amp;n=1">sh</a></p>
+<p>Bourne shell interpreter.</p>
+</li>
+<li>
+<div class="flex-col" markdown="1">
+<p><a href="http://man7.org/linux/man-pages/man1/test.1.html">test</a></p>
+<p>Perform checks on file types and values.</p>
+</li>
+<li>
+<div class="flex-col" markdown="1">
+<p><a href="http://man7.org/linux/man-pages/man1/tar.1.html">tar</a></p>
+<p>Extract or compress tarballs.</p>
+</li>
+<li>
+<div class="flex-col" markdown="1">
+<p><a href="http://man7.org/linux/man-pages/man1/seq.1.html">seq</a></p>
+<p>Produce sequence of numbers.</p>
+</li>
+</ol>
+<div class="alert success-bg">
+<h3 id="help-embed_icon-sample-questions_5"><i class="icon icon-medium"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><title>help</title><path d="M10,19H13V22H10V19M12,2C17.35,2.22 19.68,7.62 16.5,11.67C15.67,12.67 14.33,13.33 13.67,14.17C13,15 13,16 13,17H10C10,15.33 10,13.92 10.67,12.92C11.33,11.92 12.67,11.33 13.5,10.67C15.92,8.43 15.32,5.26 12,5A3,3 0 0,0 9,8H6A6,6 0 0,1 12,2Z" /></svg>
+</i> Sample Questions<a class="headerlink" href="#help-embed_icon-sample-questions_5" title="Permanent link">&para;</a></h3>
+<p>The following scripts contain errors. Identify and correct all the bugs.</p>
+<ol>
+<li>
+<div class="flex-col" markdown="1">
+<p>This script checks each file passed via command line arguments and
+reports if the file is readable.</p>
+<div class="codehilite"><pre><span></span><code>for $file in &#39;$@&#39;; do
+    [-r $file] | echo file is readable!
+done
+</code></pre></div>
+
+</li>
+<li>
+<div class="flex-col" markdown="1">
+<p>This script checks each file passed via command line arguments and
+reports if the file is readable.</p>
+<div class="codehilite"><pre><span></span><code>is_readable() {
+    test -r $@
+}
+
+while (-n &quot;$#&quot;); do
+    is_readable(&quot;$@&quot;) | echo $@ is readable!
+
+done
+</code></pre></div>
+
+</li>
+</ol>
+</div>
+<h2 id="filters">Filters<a class="headerlink" href="#filters" title="Permanent link">&para;</a></h2>
+<h3 id="concepts_6">Concepts<a class="headerlink" href="#concepts_6" title="Permanent link">&para;</a></h3>
+<ol>
+<li>
+<p>What are the <strong>three tenets</strong> of the <strong>Unix Philosophy</strong>?</p>
+</li>
+<li>
+<div class="flex-col" markdown="1">
+<p>What are <strong>regular expressions</strong>?</p>
+<p>You will need to know the basic <strong>metacharacters</strong> such as</p>
+<ul>
+<li><code>.</code></li>
+<li><code>*</code></li>
+<li><code>[]</code></li>
+<li><code>[^]</code></li>
+<li><code>^</code></li>
+<li><code>$</code></li>
+<li><code>()</code></li>
+<li><code>|</code></li>
+<li><code>\n</code></li>
+<li><p><code>{m, n}</code></p></li>
+</ul>
+<p><em>You will also need to be familiar with the basic </em><em>character classes</em><em>
+and their </em><em>character set</em><em> equivalents such as:</em></p>
+<ul>
+<li><code>[:alpha:] = [a-zA-Z]</code></li>
+<li><code>[:lower:] = [a-z]</code></li>
+<li><code>[:upper:] = [A-Z]</code></li>
+<li><code>[:space:] = [ \t\r\n\v\f]</code></li>
+<li><p><code>[:digit:] = [0-9]</code></p></li>
+</ul>
+</li>
+<li>
+<div class="flex-col" markdown="1">
+<p>What are <strong>filters</strong>?</p>
+<p><em>You should be familiar with the general idea of a </em><em>filter</em><em> and know
+how to use specific tools for certain tasks.</em></p>
+</li>
+</ol>
+<h3 id="commands_6">Commands<a class="headerlink" href="#commands_6" title="Permanent link">&para;</a></h3>
+<ol>
+<li>
+<div class="flex-col" markdown="1">
+<p><a href="http://man7.org/linux/man-pages/man1/cut.1.html">cut</a></p>
+<p>Extract fields or characters.</p>
+</li>
+<li>
+<div class="flex-col" markdown="1">
+<p><a href="http://man7.org/linux/man-pages/man1/sort.1.html">sort</a></p>
+<p>Order text.</p>
+</li>
+<li>
+<div class="flex-col" markdown="1">
+<p><a href="http://man7.org/linux/man-pages/man1/uniq.1.html">uniq</a></p>
+<p>Remove duplicates.</p>
+</li>
+<li>
+<div class="flex-col" markdown="1">
+<p><a href="http://man7.org/linux/man-pages/man1/tr.1.html">tr</a></p>
+<p>Translate from one set of characters to another.</p>
+</li>
+<li>
+<div class="flex-col" markdown="1">
+<p><a href="http://man7.org/linux/man-pages/man1/grep.1.html">grep</a></p>
+<p>Search based on pattern.</p>
+</li>
+<li>
+<div class="flex-col" markdown="1">
+<p><a href="http://man7.org/linux/man-pages/man1/sed.1.html">sed</a></p>
+<p>Search and replace or extract text based on regular expressions.</p>
+</li>
+<li>
+<div class="flex-col" markdown="1">
+<p><a href="http://man7.org/linux/man-pages/man1/head.1.html">head</a></p>
+<p>Display first few lines of input.</p>
+</li>
+<li>
+<div class="flex-col" markdown="1">
+<p><a href="http://man7.org/linux/man-pages/man1/tail.1.html">tail</a></p>
+<p>Display last few lines of input.</p>
+</li>
+</ol>
+<div class="alert success-bg">
+<h3 id="help-embed_icon-sample-questions_6"><i class="icon icon-medium"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><title>help</title><path d="M10,19H13V22H10V19M12,2C17.35,2.22 19.68,7.62 16.5,11.67C15.67,12.67 14.33,13.33 13.67,14.17C13,15 13,16 13,17H10C10,15.33 10,13.92 10.67,12.92C11.33,11.92 12.67,11.33 13.5,10.67C15.92,8.43 15.32,5.26 12,5A3,3 0 0,0 9,8H6A6,6 0 0,1 12,2Z" /></svg>
+</i> Sample Questions<a class="headerlink" href="#help-embed_icon-sample-questions_6" title="Permanent link">&para;</a></h3>
+<p>Given the file <code>tmnt.txt</code>, which contains:</p>
+<div class="codehilite"><pre><span></span><code>Leonardo:blue:katana
+Donatello:purple:bo
+Raphael:red:sai
+Michelangelo:orange:nunchucks
+</code></pre></div>
+
+<p>Given the <code>tmnt.txt</code> file above, write Unix pipelines that perform the
+following tasks:</p>
+<ul>
+<li>
+<p>List only the names of the turtles in sorted order.</p>
+</li>
+<li>
+<p>List only the colors of the turtles in sorted order.</p>
+</li>
+<li>
+<p>List only the weapons of the turtles in sorted order.</p>
+</li>
+<li>
+<p>List only the turtles whose names end in <code>lo</code>.</p>
+</li>
+<li>
+<p>List only the turtles with last names that contain two consecutive vowels.</p>
+</li>
+<li>
+<p>Count how many colors begin with a <code>b</code>.</p>
+</li>
+<li>
+<p>Count how many colors end with an <code>e</code>.</p>
+</li>
+<li>
+<p>List only the turtles names whose name ends with a vowel and whose weapon
+  ends with a vowel.</p>
+</li>
+<li>
+<p>List only the turtles names with two of the same consecutive letter (i.e.
+  <code>aa</code>, <code>bb</code>, etc.)</p>
+</li>
+<li>
+<p>List the colors that don't end with a vowel.</p>
+</li>
+<li>
+<p>List the weapons that contains a repeat letter anywhere in the string.</p>
+</li>
+</ul>
+</div>
+</main>
+<footer>
+Built using <a href="https://python.org">Python</a>
+and <a href="https://jinja.palletsprojects.com">Jinja</a>
+with colors from <a href="https://nordtheme.com">Nord Theme</a>
+and icons from <a href="https://pictogrammers.com/library/mdi/">Material Design Icons</a>.</footer>
+</body>
+</html>
