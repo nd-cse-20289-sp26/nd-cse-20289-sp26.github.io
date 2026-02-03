@@ -129,6 +129,7 @@
         topics:         ''
         items:
           - name:       Checklist 01
+            link:       checklist01.html
 
       - date:           Wed 02/11
         topics:         ''
