@@ -1,0 +1,97 @@
+title:      Interview 01
+body:       |
+
+    Next week, you will have the opportunity to demonstrate your mastery of the
+    skills and concepts discussed in **Unit 01: Bourne Shell** to the instructor or a
+    teaching assistant in a `15` minute in-person **coding interview**.
+
+    This interview will evaluate your proficiency in the following areas:
+
+    1. **Using [git]**
+
+    2. **Using the shell**
+
+    3. **Shell Scripting**
+
+    4. **Pipelines/Filters**
+
+    More details of what you need to know about these particular areas can be
+    found in [Checklist 01].
+
+    ## Scheduling
+
+    To schedule a **coding interview** appointment, put your **netid** (ie.
+    `pbui`) in an open cell in a timeslot with an interviewer in the following:
+
+    <div class="centered">
+      <a class="badge warning-btn" href="https://docs.google.com/spreadsheets/d/19LusSEgKdltLO7IvgOfUKpsBKYw17zeFMNrqRpbf8I0/edit?usp=sharing" target="_new" style="font-size: 150%;">Interview 01 Spreadsheet</a>
+    </div>
+
+    The location of the interviewer can be found in the **Locations** tab of
+    the [Interview 01 Spreadsheet].
+
+    <div class="alert warning-bg" markdown="1">
+
+    ### <i class="icon icon-medium">{{ "calendar-clock" | embed_icon }}</i> Scheduling Deadline
+
+    For planning purposes, please schedule your **Interview 01** appointment by
+    **midnight, Friday, February 6**.
+
+    You may only signup for **one** appointment timeslot.
+
+    </div>
+
+    [Interview 01 Spreadsheet]: https://docs.google.com/spreadsheets/d/19LusSEgKdltLO7IvgOfUKpsBKYw17zeFMNrqRpbf8I0/edit?usp=sharing
+
+    ## Sample Interview
+
+    Here is an example of the types of tasks the interviewer mask ask you to
+    perform:
+
+    - [ ] Locate the `$NETID.sh` script in the `~pbui/pub/scratch/practice01`
+      directory and copy it to the `practice01` folder in the assignments
+      repository.
+
+    - [ ] Complete the `$NETID.sh` script such that it outputs the first three
+      characters of each command line argument using a `for` loop.
+
+    - <div class="flex-col" markdown="1">
+
+        [ ] Filter the output of running the script with the test input:
+
+        - [ ] Output words in uppercase.
+        - [ ] Count words with multiple vowels.
+
+    <div class="alert success-bg" markdown="1">
+
+    ### <i class="icon icon-medium">{{ "lightbulb-outline" | embed_icon }}</i> Hints
+
+    - You should be familiar with using [git] to create a branch, record a
+      commit, and upload changes to [GitHub].
+
+    - You should be familiar with downloading files using [curl] or [wget].
+
+    - You should be familiar with extracting tarballs.
+
+    </div>
+
+    <div class="alert warning-bg" markdown="1">
+
+    ### <i class="icon icon-medium">{{ "alert" | embed_icon }}</i> Consulting Resources
+
+    As with your **Reading** and **Homework** assignments, you are allowed to
+    consult the course texts, slides, notes, the Internet, and even **AI
+    tools**.  However, you cannot communicate with anyone else nor can you ask
+    an **AI tool** to generate a solution.
+
+    Be mindful that the interviewer is assessing your **proficiency** and how
+    much you have **internalized**.  Over reliance on any external resource
+    will be viewed **negatively** in regards to your **mastery** of the material.
+
+    </div>
+
+    [Checklist 01]: checklist01.html
+    [git]: https://git-scm.com/
+    [GitHub]: https://github.com/
+    [curl]: https://curl.haxx.se/docs/manpage.html
+    [wget]: http://man7.org/linux/man-pages/man1/wget.1.html
