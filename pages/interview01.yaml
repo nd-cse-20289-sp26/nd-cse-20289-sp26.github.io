@@ -48,9 +48,9 @@ body:       |
     Here is an example of the types of tasks the interviewer mask ask you to
     perform:
 
-    - [ ] Locate the `$NETID.sh` script in the `~pbui/pub/scratch/practice01`
-      directory and copy it to the `practice01` folder in the assignments
-      repository.
+    - [ ] Locate the `$NETID.sh` script in the
+      `~pbui/pub/scratch/cse.20289.sp26/practice01` directory and copy it to
+      the `practice01` folder in the assignments repository.
 
     - [ ] Complete the `$NETID.sh` script such that it outputs the first three
       characters of each command line argument using a `for` loop.
