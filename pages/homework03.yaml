@@ -382,7 +382,7 @@ body:       |
       47995
 
       # Show all Zip Codes in South Bend, Indiana
-      $ ./zipcode.sh -s Indiana -c "South Bend"
+      $ ./zipcode.sh -s "Indiana" -c "South Bend"
       46601
       46613
       46614
