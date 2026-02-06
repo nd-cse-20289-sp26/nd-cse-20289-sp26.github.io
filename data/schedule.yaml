@@ -119,6 +119,8 @@
         items:
           - name:       Slides 08
             link:       https://docs.google.com/presentation/d/1tTGu3KGFixkGXDGZlhYP-UiIeZ5xTsXv_ZFEtBBDuas/edit?usp=sharing
+          - name:       Panopto
+            link:       https://notredame.hosted.panopto.com/Panopto/Pages/Viewer.aspx?id=a6767aa5-8590-47f6-b6fd-b3e9013888a6
 
       - date:           Sat 02/07
         topics:         '<i class="muted">Weathering with Zipcodes</i>'
