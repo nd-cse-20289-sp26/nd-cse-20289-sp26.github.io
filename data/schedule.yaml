@@ -134,6 +134,8 @@
         items:
           - name:       Checklist 01
             link:       checklist01.html
+          - name:       Slides R01
+            link:       https://docs.google.com/presentation/d/1LgicsrElB_AohsfvYx3_3qqrpH39cnd_gOUZt_y0NFg/edit?usp=sharing
 
       - date:           Wed 02/11
         topics:         ''
