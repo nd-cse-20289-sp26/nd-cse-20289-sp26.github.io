@@ -151,6 +151,8 @@
         items:
           - name:       Slides 09
             link:       https://docs.google.com/presentation/d/1d-Xdow6IbzJ7p6yaD8_J6l-btwTpJhK43b2RviCm0jI/edit?usp=sharing
+          - name:       Panopto
+            link:       https://notredame.hosted.panopto.com/Panopto/Pages/Viewer.aspx?id=c6b29d0e-5c96-4c41-92c0-b3f00139a2af
 
 - name:     "Unit 02: Python"
 
