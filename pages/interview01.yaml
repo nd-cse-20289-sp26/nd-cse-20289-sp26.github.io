@@ -95,3 +95,22 @@ body:       |
     [GitHub]: https://github.com/
     [curl]: https://curl.haxx.se/docs/manpage.html
     [wget]: http://man7.org/linux/man-pages/man1/wget.1.html
+
+    ## Extra Credit
+
+    For **extra credit**, you can demonstrate your **shell customizations** to
+    a **TA** by **Friday, February 20, 2026**.  This was the *optional* [Just
+    For Fun] idea from [Homework 01].
+
+    <div class="alert success-bg" markdown="1">
+
+    If you already received `0.5 points` from the **Interview 01**, then you
+    are not eligible for this **extra credit**.
+
+    This is only available to anyone who has not already received the full `0.5
+    points` of **extra credit** for **Unit 01: Bourne Shell**.
+
+    </div>
+
+    [Just For Fun]: homework01.html#just-for-fun-optional
+    [Homework 01]: homework01.html
