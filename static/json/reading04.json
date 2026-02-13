@@ -1,0 +1,70 @@
+{
+    "q1": {
+        "type": "multiple",
+        "question": "\n<p>Given the following Python script, <code>echo.py</code>:</p>\n\n<pre>\n#!/usr/bin/env python3\n\nimport sys\n\nfor arg in sys.argv[1:]:\n    print(arg)\n</pre>\n\n<p>Which of the following statements are true (<i>choose all that apply</i>)?</p>\n",
+        "responses": {
+            "module": "The line <code>import sys</code> loads the <code>sys</code> Python module.",
+            "argv": "The command-line arguments to the script are stored in <code>sys.argv</code>.",
+            "first": "Due to the <code>[1:]</code>, the script only prints out the first argument.",
+            "print": "It is necessary to include the parentheses in the <code>print</code> function.",
+            "arg": "The <code>arg</code> variable needs a <code>$</code> in front of it just like in shell.",
+            "shebang": "The <b>shebang</b> is not necessary if we want to run the script with <code>./echo.py</code>."
+        }
+    },
+    "q2": {
+        "type": "multiple",
+        "question": "\n<p>Given the following Python script, <code>env.py</code>:</p>\n\n<pre>\n#!/usr/bin/env python3\n\nimport os\n\nfor key, value in sorted(os.environ.items()):\n    print(f'{key}={value}')\n</pre>\n\n<p>Which of the following statements are true (<i>choose all that apply</i>)?</p>\n",
+        "responses": {
+            "dict": "The <code>os.environ</code> is a dictionary-like object.",
+            "list": "The <code>os.environ</code> is a list-like object.",
+            "svars": "This script prints all the variables inside the script.",
+            "evars": "This script prints all environmental variables from the shell.",
+            "format": "Instead of <code>print(f'{key}={value}')</code>, we could do <code>print('{}={}'.format(key, value))</code>.",
+            "concat": "Instead of <code>print(f'{key}={value}')</code>, we could do <code>print(key + '=' + value)</code>."
+        }
+    },
+    "q3": {
+        "type": "multiple",
+        "question": "\n<p>Given the following Python script, <code>pokemon.py</code>:</p>\n\n<pre>\n#!/usr/bin/env python3\n\nPokemon = ['pikachu', 'charmander', 'bulbasaur', 'squirtle']\n\nfor pokemon in Pokemon:\n    if pokemon.endswith('r'):\n        print(pokemon.upper())\n    else:\n        print(pokemon.title())\n</pre>\n\n<p>Which of the following statements are true (<i>choose all that apply</i>)?</p>\n",
+        "responses": {
+            "add": "To add 'meowth' to the list of <code>Pokemon</code>, we could do <code>Pokemon.add('meowth')</code>.",
+            "append": "To add 'meowth' to the list of <code>Pokemon</code>, we could do <code>Pokemon.append('meowth')</code>.",
+            "last_item": "To access the last item in the <code>Pokemon</code> list, we could do <code>Pokemon[-1]</code>",
+            "endswith": "The <code>pokemon.endswith('r')</code> checks if the string contains the letter <code>r</code>.",
+            "upper": "The <code>pokemon.upper()</code> permanently converts the current <code>pokemon</code> string into upper-case.",
+            "output": "The output of this script is <code>Pikachu CHARMANDER BULBASAUR Squirtle</code> (where each word is on a separate line)."
+        }
+    },
+    "q4": {
+        "type": "multiple",
+        "question": "\n<p>Which of the following statements about <b>lists</b> and\n<b>dictionaries</b> are true (<i>choose all that apply</i>)?</p>\n",
+        "responses": {
+            "index": "Like a list, a dictionary's key must be an integer.",
+            "values": "Like a list, iterating through a dictionary provides the values in the data structure.",
+            "length": "Like a list, the <code>len()</code> function can be used to get the number of elements in a dictionary.",
+            "update": "Unlike a list, a dictionary cannot be updated after it has been declared.",
+            "slice": "Unlike a list, a dictionary cannot be sliced.",
+            "contains": "Unlike a list, a dictionary cannot be searched with the <code>in</code> operator."
+        }
+    },
+    "q5": {
+        "type": "blank",
+        "question": "\n<p>Given the following Python script, <code>ruthless.py</code>:</p>\n\n<pre>\n#!/usr/bin/env python3\n\nlyric  = \"I finally know now what I should have known then That I could still be ruthless if you'll let me\"\ncounts = {}\n\nfor letter in lyric.lower():\n    counts[letter] = counts.get(letter, 0) + 1\n</pre>\n\n<p>After executing the code in the <code>ruthless.py</code> script, what are\nthe following values?</p>\n\n<ol>\n    <li><code>len(counts)</code> ____</li>\n    <li><code>counts['i']</code> ____</li>\n    <li><code>counts['r']</code> ____</li>\n    <li><code>counts['a']</code> ____</li>\n    <li><code>counts['t']</code> ____</li>\n    <li><code>counts['e']</code> ____</li>\n    <li><code>min(counts.values())</code> ____</li>\n    <li><code>max(counts.values())</code> ____</li>\n</ol>\n"
+    },
+    "q6": {
+        "type": "order",
+        "question": "\n<p>Given the following Python script, <code>words.py</code>:\n\n<pre>\n#!/usr/bin/env python3\nwords  = 'I made a life out of chasin a ghost'\n    for letter in word:\n        result.append(word)\n            keep = True\nprint(' '.join(result))\nfor word in words.split():\n        if letter in 'life':\n    if keep:\n    keep = False\nresult = []\n</pre>\n\n<p>The code is suppose to only keep sub-strings in the <code>words</code>\nstring that contain any of the letters in <code>life</code>.  For instance,\nexecuting the script above should print out: \"made life of chasin\".\nUnfortunately, the lines of code are scrambled.  Unscramble them below so\nthat the script produces the correct output.</p>\n",
+        "responses": {
+            "A": "<code>words  = 'I made a life out of chasin a ghost'</code>",
+            "B": "<code>    for letter in word:</code>",
+            "C": "<code>        result.append(word)</code>",
+            "D": "<code>            keep = True</code>",
+            "E": "<code>print(' '.join(result))</code>",
+            "F": "<code>for word in words.split():</code>",
+            "G": "<code>        if letter in 'life':</code>",
+            "H": "<code>    if keep:</code>",
+            "I": "<code>    keep = False</code>",
+            "J": "<code>result = []</code>"
+        }
+    }
+}

@@ -1,0 +1,54 @@
+title:      Reading 04 - TA Assignment
+external:
+    mapping:  data/reading04.yaml
+    repos:    data/repos.yaml
+body:       |
+    <table>
+      <thead>
+        <tr>
+          <th style="text-align: left; width: 10rem;">Student</th>
+          <th style="text-align: left;">Grader</th>
+        </tr>
+      </thead>
+      <tbody>
+      {% for m in page.external['mapping'] | sort(attribute='student') %}
+        <tr>
+          <td class="info-bg"><a href="{{ page.external['repos'][m['student']] }}">{{ m['student'] }}</a></td>
+          <td class="danger-bg"><a href="https://github.com/{{ m['grader'] }}">{{ m['grader'] }}</a></td>
+        </tr>
+        {% if loop.index % 10 == 0 %}
+        <tr>
+          <td colspan="2"></td>
+        </tr>
+        {% endif %}
+      {% endfor %}
+      </tbody>
+    </table>
+
+    <hr>
+
+    <table>
+      <thead>
+        <tr>
+          <th style="text-align: left; width: 10rem;">Grader</th>
+          <th style="text-align: left;">Student</th>
+        </tr>
+      </thead>
+      <tbody>
+      {% set ns = namespace(grader=None) %}
+      {% for m in page.external['mapping'] | sort(attribute='grader') %}
+        {% if ns.grader and ns.grader != m['grader'] %}
+        <tr>
+          <td colspan="2"></td>
+        </tr>
+        {% endif %}
+
+        {% set ns.grader = m['grader'] %}
+
+        <tr>
+          <td class="danger-bg"><a href="https://github.com/{{ m['grader'] }}">{{ m['grader'] }}</a></td>
+          <td class="info-bg"><a href="{{ page.external['repos'][m['student']] }}">{{ m['student'] }}</a></td>
+        </tr>
+      {% endfor %}
+      </tbody>
+    </table>
