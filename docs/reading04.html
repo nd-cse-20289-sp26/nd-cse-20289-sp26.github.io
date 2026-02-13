@@ -1,0 +1,234 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<!-- Favicon -->
+<link rel="icon" type="image/png" sizes="32x32" href="static/ico/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="static/ico/favicon-16x16.png">
+<link rel="manifest" href="static/ico/site.webmanifest">
+<!-- Stylesheets -->
+<link rel="stylesheet" href="static/css/pnutzh4x0r.css">
+<title>Reading 04: Python Scripting</title>
+</head>
+<body>
+<header>
+<a class="logo" href="reading04.html">
+    <h1>Reading 04: Python Scripting</h1>
+</a>
+<nav>
+    <ul>
+        <li><a href="index.html"><h4>Home</h4></a></li>
+        </ul>
+</nav></header>
+<main>
+<p><strong>Everyone</strong>:</p>
+<p>Next week, we will transition from <a href="https://en.wikipedia.org/wiki/Shell_script">shell scripting</a> and <a href="https://en.wikipedia.org/wiki/Filter_(software)#Unix">filters</a> to
+creating more sophisticated scripts using the <a href="https://www.python.org/">Python</a> programming language.
+Using a more advanced scripting language such as <a href="https://www.python.org/">Python</a> will allow us to
+use sequence data structures such as <a href="https://docs.python.org/3/library/stdtypes.html#sequence-types-list-tuple-range">lists</a> and mapping data structures such
+as <a href="https://docs.python.org/3/library/stdtypes.html#mapping-types-dict">dictionaries</a>, and thus perform more sophisticated data manipulation
+efficiently and effectively.</p>
+<div class="alert info-bg">
+<h3 id="book-embed_icon-tldr"><i class="icon icon-medium"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><title>book</title><path d="M18,22A2,2 0 0,0 20,20V4C20,2.89 19.1,2 18,2H12V9L9.5,7.5L7,9V2H6A2,2 0 0,0 4,4V20A2,2 0 0,0 6,22H18Z" /></svg>
+</i> TL;DR<a class="headerlink" href="#book-embed_icon-tldr" title="Permanent link">&para;</a></h3>
+<p>The focus of this reading is to introduce scripting in <a href="https://www.python.org/">Python</a>.</p>
+</div>
+<h2 id="readings">Readings<a class="headerlink" href="#readings" title="Permanent link">&para;</a></h2>
+<div class="flex-row">
+<div class="flex-col">
+<p>The readings for this week are:</p>
+<ol>
+<li>
+<p><a href="https://lectures.scientific-python.org/intro/language/python_language.html">Scientific Python Lecture Notes: 1.2. The Python
+  language</a></p>
+</li>
+<li>
+<p><a href="https://python.swaroopch.com/data_structures.html">A Byte of Python - Data
+Structures</a></p>
+</li>
+</ol>
+</div>
+<div class="flex-col-25">
+<p><img src="static/img/python.png"></p>
+</div>
+</div>
+<h3 id="optional-resources">Optional Resources<a class="headerlink" href="#optional-resources" title="Permanent link">&para;</a></h3>
+<p>Here are some additional resources:</p>
+<ol>
+<li>
+<p><a href="http://python.swaroopch.com/">A Byte of Python</a></p>
+</li>
+<li>
+<p><a href="https://automatetheboringstuff.com/">Automate The Boring Stuff</a></p>
+</li>
+</ol>
+<div class="alert success-bg">
+<h3 id="python-embed_icon-python-3"><i class="icon icon-medium"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><title>language-python</title><path d="M19.14,7.5A2.86,2.86 0 0,1 22,10.36V14.14A2.86,2.86 0 0,1 19.14,17H12C12,17.39 12.32,17.96 12.71,17.96H17V19.64A2.86,2.86 0 0,1 14.14,22.5H9.86A2.86,2.86 0 0,1 7,19.64V15.89C7,14.31 8.28,13.04 9.86,13.04H15.11C16.69,13.04 17.96,11.76 17.96,10.18V7.5H19.14M14.86,19.29C14.46,19.29 14.14,19.59 14.14,20.18C14.14,20.77 14.46,20.89 14.86,20.89A0.71,0.71 0 0,0 15.57,20.18C15.57,19.59 15.25,19.29 14.86,19.29M4.86,17.5C3.28,17.5 2,16.22 2,14.64V10.86C2,9.28 3.28,8 4.86,8H12C12,7.61 11.68,7.04 11.29,7.04H7V5.36C7,3.78 8.28,2.5 9.86,2.5H14.14C15.72,2.5 17,3.78 17,5.36V9.11C17,10.69 15.72,11.96 14.14,11.96H8.89C7.31,11.96 6.04,13.24 6.04,14.82V17.5H4.86M9.14,5.71C9.54,5.71 9.86,5.41 9.86,4.82C9.86,4.23 9.54,4.11 9.14,4.11C8.75,4.11 8.43,4.23 8.43,4.82C8.43,5.41 8.75,5.71 9.14,5.71Z" /></svg>
+</i> Python 3<a class="headerlink" href="#python-embed_icon-python-3" title="Permanent link">&para;</a></h3>
+<p>In this course, we will be using <a href="https://www.python.org/">Python</a> <code>3.12+</code> and some additional
+libraries such as <a href="https://requests.readthedocs.io/en/latest/">Requests</a>.</p>
+<p>On the <strong>student</strong> machines, you can use the instructor's copy of <a href="https://www.python.org/">Python</a> by
+making the following modifications to your <code>PATH</code> environmental variable:</p>
+<div class="codehilite"><pre><span></span><code><span class="nb">export</span><span class="w"> </span><span class="nv">PATH</span><span class="o">=</span>~pbui/pub/pkgsrc/bin:<span class="nv">$PATH</span>
+</code></pre></div>
+
+<p>This will give you access to a more current version of <a href="https://www.python.org/">Python</a> along with
+some of the libraries we will be using such as <a href="https://requests.readthedocs.io/en/latest/">Requests</a>.</p>
+<p>To make this <strong>persistent</strong>, you should add this to the bottom of your
+<code>~/.bashrc</code> if you have not already.</p>
+</div>
+<h2 id="quiz">Quiz<a class="headerlink" href="#quiz" title="Permanent link">&para;</a></h2>
+<p>This week, your reading quiz is split into two sections: the first part is
+your normal <a href="https://dredd.h4x0r.space">dredd</a> quiz, while the second part involves one <a href="https://www.python.org/">Python</a>
+script: <code>exists.py</code>.</p>
+<p>To test this script, you will need to download the <a href="https://pnutz.h4x0r.space/courses/cse.20289.sp26/static/txt/reading04/Makefile">Makefile</a> and test scripts:</p>
+<div class="codehilite"><pre><span></span><code>$<span class="w"> </span>git<span class="w"> </span>switch<span class="w"> </span>master<span class="w">                   </span><span class="c1"># Make sure we are in master branch</span>
+$<span class="w"> </span>git<span class="w"> </span>pull<span class="w"> </span>--rebase<span class="w">                   </span><span class="c1"># Make sure we are up-to-date with GitHub</span>
+
+$<span class="w"> </span>git<span class="w"> </span>switch<span class="w"> </span>-c<span class="w"> </span>reading04<span class="w">             </span><span class="c1"># Create reading04 branch and check it out</span>
+
+$<span class="w"> </span><span class="nb">cd</span><span class="w"> </span>reading04<span class="w">                        </span><span class="c1"># Go into reading04 folder</span>
+
+<span class="c1"># Download Reading 04 Makefile</span>
+$<span class="w"> </span>curl<span class="w"> </span>-LO<span class="w"> </span>https://pnutz.h4x0r.space/courses/cse.20289.sp26/static/txt/reading04/Makefile
+
+<span class="c1"># Execute tests (and download them)</span>
+$<span class="w"> </span>make
+</code></pre></div>
+
+<h3 id="questions">Questions<a class="headerlink" href="#questions" title="Permanent link">&para;</a></h3>
+<p>Record the answers to the following <a href="static/json/reading04.json">Reading 04 Quiz</a> questions in your
+<code>reading04</code> branch:</p>
+<div id="quiz-questions"></div>
+
+<div id="quiz-responses"></div>
+
+<script src="static/js/dredd-quiz.js"></script>
+
+<script>
+loadQuiz('static/json/reading04.json');
+</script>
+
+<pre style="display: none;" id="dr-container" class="codehilite"><code id="dredd-response"></code></pre>
+
+<h3 id="script-existspy">Script: <code>exists.py</code><a class="headerlink" href="#script-existspy" title="Permanent link">&para;</a></h3>
+<p>Use the <code>echo.py</code> script as the basis for a Python script called <code>exists.py</code>,
+which accomplishes the same task as the modified version of <code>exists.sh</code> in <a href="reading02.html">Reading 02</a>:</p>
+<div class="codehilite"><pre><span></span><code><span class="c1"># Run script and check error code</span>
+$./exists.py<span class="w"> </span>*<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="nb">echo</span><span class="w"> </span>Success
+exists.py<span class="w"> </span>exists!
+README.md<span class="w"> </span>exists!
+Success
+
+$<span class="w"> </span>./exists.py<span class="w"> </span>*<span class="w"> </span>ASDF<span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="nb">echo</span><span class="w"> </span>Success
+<span class="c1"># Run script and check error code</span>
+exists.py<span class="w"> </span>exists!
+README.md<span class="w"> </span>exists!
+ASDF<span class="w"> </span>does<span class="w"> </span>not<span class="w"> </span>exist!
+Success
+</code></pre></div>
+
+<h4 id="testing">Testing<a class="headerlink" href="#testing" title="Permanent link">&para;</a></h4>
+<p>To test your <code>exists.py</code>, you can use the <code>test_exists.sh</code> script downloaded
+by the <a href="https://pnutz.h4x0r.space/courses/cse.20289.sp26/static/txt/reading04/Makefile">Makefile</a>:</p>
+<div class="codehilite"><pre><span></span><code>$<span class="w"> </span>./test_exists.sh<span class="w">                    </span><span class="c1"># Test your exists.py</span>
+Checking<span class="w"> </span>reading04<span class="w"> </span>exists.py<span class="w"> </span>...
+<span class="w">  </span>exists.py<span class="w">                                </span>...<span class="w"> </span>Success
+<span class="w">  </span>exists.py<span class="w"> </span>*<span class="w">                              </span>...<span class="w"> </span>Success
+<span class="w">  </span>exists.py<span class="w"> </span>*<span class="w"> </span>ASDF<span class="w">                         </span>...<span class="w"> </span>Success
+<span class="w">  </span>exists.py<span class="w"> </span>ASDF<span class="w"> </span>*<span class="w"> </span>FDSA<span class="w">                    </span>...<span class="w"> </span>Success
+<span class="w">  </span>exists.py<span class="w"> </span>/lib/*<span class="w">                         </span>...<span class="w"> </span>Success
+<span class="w">  </span>--------------------
+<span class="w">   </span>Score<span class="w"> </span><span class="m">5</span>.00<span class="w"> </span>/<span class="w"> </span><span class="m">5</span>.00
+<span class="w">   </span>Grade<span class="w"> </span><span class="m">1</span>.00<span class="w"> </span>/<span class="w"> </span><span class="m">1</span>.00
+<span class="w">  </span>Status<span class="w"> </span>Success
+</code></pre></div>
+
+<div class="alert success-bg">
+<h4 id="hints">Hints<a class="headerlink" href="#hints" title="Permanent link">&para;</a></h4>
+<ul>
+<li>
+<p>You will probably want to use <a href="https://docs.python.org/3/library/os.path.html#os.path.exists">os.path.exists</a> to check if a file exists.</p>
+</li>
+<li>
+<p>You will probably want to use <a href="https://docs.python.org/3/library/sys.html#sys.exit">sys.exit</a> at the end of the script to return
+  <code>0</code> if all files exist, otherwise return <code>1</code> any of the files does not
+  exist.</p>
+</li>
+<li>
+<p>You will probably want to use <a href="https://pyformat.info/">string formatting</a> or <a href="http://zetcode.com/python/fstring/">f-strings</a> when
+  printing.</p>
+</li>
+</ul>
+</div>
+<h2 id="submission">Submission<a class="headerlink" href="#submission" title="Permanent link">&para;</a></h2>
+<p>To submit your work, follow the same process outlined in <a href="reading01.html">Reading 01</a>:</p>
+<div class="codehilite"><pre><span></span><code><span class="c1">#--------------------------------------------------</span>
+<span class="c1"># BE SURE TO DO THE PREPARATION STEPS ABOVE</span>
+<span class="c1">#--------------------------------------------------</span>
+
+$<span class="w"> </span><span class="nb">cd</span><span class="w"> </span>reading04<span class="w">                        </span><span class="c1"># Go into reading04 folder</span>
+$<span class="w"> </span><span class="nv">$EDITOR</span><span class="w"> </span>answers.json<span class="w">                </span><span class="c1"># Edit your answers.json file</span>
+
+$<span class="w"> </span>../.scripts/check.py<span class="w">                </span><span class="c1"># Check reading04 quiz</span>
+Checking<span class="w"> </span>reading04<span class="w"> </span>quiz<span class="w"> </span>...
+<span class="w">      </span>Q1<span class="w">  </span><span class="m">3</span>.00<span class="w"> </span>/<span class="w">  </span><span class="m">3</span>.00
+<span class="w">      </span>Q2<span class="w">  </span><span class="m">4</span>.00<span class="w"> </span>/<span class="w">  </span><span class="m">4</span>.00
+<span class="w">      </span>Q3<span class="w">  </span><span class="m">3</span>.00<span class="w"> </span>/<span class="w">  </span><span class="m">3</span>.00
+<span class="w">      </span>Q4<span class="w">  </span><span class="m">2</span>.00<span class="w"> </span>/<span class="w">  </span><span class="m">2</span>.00
+<span class="w">      </span>Q5<span class="w">  </span><span class="m">8</span>.00<span class="w"> </span>/<span class="w">  </span><span class="m">8</span>.00
+<span class="w">      </span>Q6<span class="w"> </span><span class="m">10</span>.00<span class="w"> </span>/<span class="w"> </span><span class="m">10</span>.00
+<span class="w">  </span>--------------------
+<span class="w">   </span>Score<span class="w"> </span><span class="m">30</span>.00<span class="w"> </span>/<span class="w"> </span><span class="m">30</span>.00
+<span class="w">   </span>Grade<span class="w">  </span><span class="m">1</span>.00<span class="w"> </span>/<span class="w">  </span><span class="m">1</span>.00
+<span class="w">  </span>Status<span class="w"> </span>Success
+
+$<span class="w"> </span>git<span class="w"> </span>add<span class="w"> </span>answers.json<span class="w">                </span><span class="c1"># Add answers.json to staging area</span>
+$<span class="w"> </span>git<span class="w"> </span>commit<span class="w"> </span>-m<span class="w"> </span><span class="s2">&quot;Reading 04: Quiz&quot;</span><span class="w">    </span><span class="c1"># Commit work</span>
+
+$<span class="w"> </span><span class="nv">$EDITOR</span><span class="w"> </span>exists.py<span class="w">                   </span><span class="c1"># Edit your exists.py file</span>
+
+$<span class="w"> </span>./test_exists.sh<span class="w">                    </span><span class="c1"># Test your exists.py</span>
+Checking<span class="w"> </span>reading04<span class="w"> </span>exists.py<span class="w"> </span>...
+<span class="w">  </span>exists.py<span class="w">                                </span>...<span class="w"> </span>Success
+<span class="w">  </span>exists.py<span class="w"> </span>*<span class="w">                              </span>...<span class="w"> </span>Success
+<span class="w">  </span>exists.py<span class="w"> </span>*<span class="w"> </span>ASDF<span class="w">                         </span>...<span class="w"> </span>Success
+<span class="w">  </span>exists.py<span class="w"> </span>ASDF<span class="w"> </span>*<span class="w"> </span>FDSA<span class="w">                    </span>...<span class="w"> </span>Success
+<span class="w">  </span>exists.py<span class="w"> </span>/lib/*<span class="w">                         </span>...<span class="w"> </span>Success
+<span class="w">  </span>--------------------
+<span class="w">   </span>Score<span class="w"> </span><span class="m">5</span>.00<span class="w"> </span>/<span class="w"> </span><span class="m">5</span>.00
+<span class="w">   </span>Grade<span class="w"> </span><span class="m">1</span>.00<span class="w"> </span>/<span class="w"> </span><span class="m">1</span>.00
+<span class="w">  </span>Status<span class="w"> </span>Success
+
+$<span class="w"> </span>git<span class="w"> </span>add<span class="w"> </span>Makefile<span class="w">                    </span><span class="c1"># Add Makefile to staging area</span>
+$<span class="w"> </span>git<span class="w"> </span>add<span class="w"> </span>exists.py<span class="w">                   </span><span class="c1"># Add exists.py to staging area</span>
+$<span class="w"> </span>git<span class="w"> </span>commit<span class="w"> </span>-m<span class="w"> </span><span class="s2">&quot;Reading 04: Code&quot;</span><span class="w">    </span><span class="c1"># Commit work</span>
+
+$<span class="w"> </span>git<span class="w"> </span>push<span class="w"> </span>-u<span class="w"> </span>origin<span class="w"> </span>reading04<span class="w">        </span><span class="c1"># Push branch to GitHub</span>
+</code></pre></div>
+
+<div class="alert warning-bg">
+<h3 id="lifebuoy-embed_icon-acknowledgments"><i class="icon icon-medium"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><title>lifebuoy</title><path d="M19.79,15.41C20.74,13.24 20.74,10.75 19.79,8.59L17.05,9.83C17.65,11.21 17.65,12.78 17.06,14.17L19.79,15.41M15.42,4.21C13.25,3.26 10.76,3.26 8.59,4.21L9.83,6.94C11.22,6.35 12.79,6.35 14.18,6.95L15.42,4.21M4.21,8.58C3.26,10.76 3.26,13.24 4.21,15.42L6.95,14.17C6.35,12.79 6.35,11.21 6.95,9.82L4.21,8.58M8.59,19.79C10.76,20.74 13.25,20.74 15.42,19.78L14.18,17.05C12.8,17.65 11.22,17.65 9.84,17.06L8.59,19.79M12,2A10,10 0 0,1 22,12A10,10 0 0,1 12,22A10,10 0 0,1 2,12A10,10 0 0,1 12,2M12,8A4,4 0 0,0 8,12A4,4 0 0,0 12,16A4,4 0 0,0 16,12A4,4 0 0,0 12,8Z" /></svg>
+</i> Acknowledgments<a class="headerlink" href="#lifebuoy-embed_icon-acknowledgments" title="Permanent link">&para;</a></h3>
+<p>If you collaborated with any other students, or received help from TAs or AI
+tools on this assignment, please record this support in the <code>README.md</code> in
+the <code>reading04</code> folder and include it with your <strong>Pull Request</strong>.</p>
+</div>
+<div class="alert success-bg">
+<h3 id="account-question-embed_icon-graders"><i class="icon icon-medium"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><title>account-question</title><path d="M13,8A4,4 0 0,1 9,12A4,4 0 0,1 5,8A4,4 0 0,1 9,4A4,4 0 0,1 13,8M17,18V20H1V18C1,15.79 4.58,14 9,14C13.42,14 17,15.79 17,18M20.5,14.5V16H19V14.5H20.5M18.5,9.5H17V9A3,3 0 0,1 20,6A3,3 0 0,1 23,9C23,9.97 22.5,10.88 21.71,11.41L21.41,11.6C20.84,12 20.5,12.61 20.5,13.3V13.5H19V13.3C19,12.11 19.6,11 20.59,10.35L20.88,10.16C21.27,9.9 21.5,9.47 21.5,9A1.5,1.5 0 0,0 20,7.5A1.5,1.5 0 0,0 18.5,9V9.5Z" /></svg>
+</i> Graders<a class="headerlink" href="#account-question-embed_icon-graders" title="Permanent link">&para;</a></h3>
+<p>Once you have committed your work and pushed it to <a href="https://github.com">GitHub</a>, remember to
+create a <strong>pull request</strong> and assign it to the appropriate <strong>teaching
+assistant</strong> from the <a href="reading04_tas.html">Reading 04 TA List</a>.</p>
+<p><strong>Note</strong>: this list changes each week, so be sure to consult the appropriate
+list for each assignment.</p>
+</div>
+</main>
+<footer>
+Built using <a href="https://python.org">Python</a>
+and <a href="https://jinja.palletsprojects.com">Jinja</a>
+with colors from <a href="https://nordtheme.com">Nord Theme</a>
+and icons from <a href="https://pictogrammers.com/library/mdi/">Material Design Icons</a>.</footer>
+</body>
+</html>

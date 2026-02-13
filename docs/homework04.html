@@ -1,0 +1,558 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<!-- Favicon -->
+<link rel="icon" type="image/png" sizes="32x32" href="static/ico/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="static/ico/favicon-16x16.png">
+<link rel="manifest" href="static/ico/site.webmanifest">
+<!-- Stylesheets -->
+<link rel="stylesheet" href="static/css/pnutzh4x0r.css">
+<title>Homework 04: Cut, WC</title>
+</head>
+<body>
+<header>
+<a class="logo" href="homework04.html">
+    <h1>Homework 04: Cut, WC</h1>
+</a>
+<nav>
+    <ul>
+        <li><a href="index.html"><h4>Home</h4></a></li>
+        </ul>
+</nav></header>
+<main>
+<p>The goal of this homework assignment is to allow you to practice writing
+<a href="https://www.python.org/">Python</a> scripts to create simple <a href="https://en.wikipedia.org/wiki/Unix">Unix</a> filters or utilities that utilize
+<a href="https://en.wikipedia.org/wiki/Data_structure">data structures</a> such as <a href="https://docs.python.org/3/tutorial/datastructures.html#more-on-lists">lists</a> and <a href="https://docs.python.org/3/tutorial/datastructures.html#dictionaries">dicts</a>.</p>
+<p>For this assignment, record your scripts and any responses to the following
+activities in the <code>homework04</code> folder of your <strong>assignments</strong> <a href="https://github.com">GitHub</a>
+repository and push your work by <strong>noon Saturday, February 21</strong>.</p>
+<h2 id="activity-0-preparation">Activity 0: Preparation<a class="headerlink" href="#activity-0-preparation" title="Permanent link">&para;</a></h2>
+<p>Before starting this homework assignment, you should first perform a <code>git
+pull</code> to retrieve any changes in your remote <a href="https://github.com">GitHub</a> repository:</p>
+<div class="codehilite"><pre><span></span><code>$<span class="w"> </span><span class="nb">cd</span><span class="w"> </span>path/to/repository<span class="w">                   </span><span class="c1"># Go to assignments repository</span>
+
+$<span class="w"> </span>git<span class="w"> </span>switch<span class="w"> </span>master<span class="w">                       </span><span class="c1"># Make sure we are in master branch</span>
+
+$<span class="w"> </span>git<span class="w"> </span>pull<span class="w"> </span>--rebase<span class="w">                       </span><span class="c1"># Get any remote changes not present locally</span>
+</code></pre></div>
+
+<p>Next, create a new branch for this assignment:</p>
+<div class="codehilite"><pre><span></span><code>$<span class="w"> </span>git<span class="w"> </span>switch<span class="w"> </span>-c<span class="w"> </span>homework04<span class="w">                </span><span class="c1"># Create homework04 branch and check it out</span>
+</code></pre></div>
+
+<h3 id="task-1-skeleton-code">Task 1: Skeleton Code<a class="headerlink" href="#task-1-skeleton-code" title="Permanent link">&para;</a></h3>
+<p>To help you get started, the instructor has provided you with the following <strong>skeleton code</strong>:</p>
+<div class="codehilite"><pre><span></span><code><span class="c1"># Go to homework04 folder</span>
+$<span class="w"> </span><span class="nb">cd</span><span class="w"> </span>homework04
+
+<span class="c1"># Download Makefile</span>
+$<span class="w"> </span>curl<span class="w"> </span>-LO<span class="w"> </span>https://pnutz.h4x0r.space/courses/cse.20289.sp26/static/txt/homework04/Makefile
+
+<span class="c1"># Download Python skeleton code</span>
+$<span class="w"> </span>curl<span class="w"> </span>-LO<span class="w"> </span>https://pnutz.h4x0r.space/courses/cse.20289.sp26/static/txt/homework04/cut.py
+$<span class="w"> </span>curl<span class="w"> </span>-LO<span class="w"> </span>https://pnutz.h4x0r.space/courses/cse.20289.sp26/static/txt/homework04/wc.py
+</code></pre></div>
+
+<p>Once downloaded, you should see the following files in your <code>homework04</code> directory:</p>
+<div class="codehilite"><pre><span></span><code>homework04
+<span class="w">    </span><span class="se">\_</span><span class="w"> </span>Makefile<span class="w">     </span><span class="c1"># This is the Makefile building all the assignment artifacts</span>
+<span class="w">    </span><span class="se">\_</span><span class="w"> </span>cut.py<span class="w">       </span><span class="c1"># This is the Python script for the cut utility</span>
+<span class="w">    </span><span class="se">\_</span><span class="w"> </span>wc.py<span class="w">        </span><span class="c1"># This is the Python script for the wc utility</span>
+</code></pre></div>
+
+<div class="alert warning-bg">
+<h3 id="alert-embed_icon-doctests"><i class="icon icon-medium"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><title>alert</title><path d="M13 14H11V9H13M13 18H11V16H13M1 21H23L12 2L1 21Z" /></svg>
+</i> DocTests<a class="headerlink" href="#alert-embed_icon-doctests" title="Permanent link">&para;</a></h3>
+<p>You may notice that in addition to the usual comments and <code>TODOs</code>, the
+<a href="https://peps.python.org/pep-0257/">docstrings</a> of each method also contains a few <a href="https://docs.python.org/3/library/doctest.html">doctests</a>.</p>
+<p>You are <strong>not</strong> to modify these <a href="https://docs.python.org/3/library/doctest.html">doctests</a> and must keep them in-place. They
+are used to verify the correctness of your code.</p>
+<p>Your code goes <strong>below</strong> the <a href="https://peps.python.org/pep-0257/">docstrings</a>, where the <code>TODO</code> and <code>pass</code>
+commands are (you may remove the pass once you complete the method).</p>
+</div>
+<h3 id="task-2-initial-import">Task 2: Initial Import<a class="headerlink" href="#task-2-initial-import" title="Permanent link">&para;</a></h3>
+<p>Now that the files are downloaded into the <code>homework04</code> folder, you can
+<strong>commit</strong> them to your <a href="https://git-scm.com/">git</a> repository:</p>
+<div class="codehilite"><pre><span></span><code>$<span class="w"> </span>git<span class="w"> </span>add<span class="w"> </span>Makefile<span class="w">                            </span><span class="c1"># Mark changes for commit</span>
+$<span class="w"> </span>git<span class="w"> </span>add<span class="w"> </span>*.py
+$<span class="w"> </span>git<span class="w"> </span>commit<span class="w"> </span>-m<span class="w"> </span><span class="s2">&quot;Homework 04: Initial Import&quot;</span><span class="w"> </span><span class="c1"># Record changes</span>
+</code></pre></div>
+
+<h3 id="task-3-unit-tests">Task 3: Unit Tests<a class="headerlink" href="#task-3-unit-tests" title="Permanent link">&para;</a></h3>
+<p>After downloading these files, you can run the <code>make</code> command to run the
+tests.</p>
+<div class="codehilite"><pre><span></span><code><span class="c1"># Run all tests (will trigger automatic download)</span>
+$<span class="w"> </span>make
+</code></pre></div>
+
+<p>You will notice that the Makefile downloads these additional test data and scripts:</p>
+<div class="codehilite"><pre><span></span><code>homework04
+<span class="w">    </span><span class="se">\_</span><span class="w"> </span>cut.input<span class="w">    </span><span class="c1"># This is the input file for the cut test script</span>
+<span class="w">    </span><span class="se">\_</span><span class="w"> </span>cut.test<span class="w">     </span><span class="c1"># This is the Python test for the cut utility</span>
+<span class="w">    </span><span class="se">\_</span><span class="w"> </span>wc.input<span class="w">     </span><span class="c1"># This is the input file for the wc test script</span>
+<span class="w">    </span><span class="se">\_</span><span class="w"> </span>wc.test<span class="w">      </span><span class="c1"># This is the Python test for the wc utility</span>
+</code></pre></div>
+
+<p>In addition to the embedded <a href="https://docs.python.org/3/library/doctest.html">doctests</a> in the <strong>skeleton code</strong>, you will be
+using these <a href="https://en.wikipedia.org/wiki/Unit_testing">unit tests</a> to verify the correctness and behavior of your code.</p>
+<div class="alert info-bg">
+<h3 id="download-embed_icon-automatic-downloads"><i class="icon icon-medium"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><title>download</title><path d="M5,20H19V18H5M19,9H15V3H9V9H5L12,16L19,9Z" /></svg>
+</i> Automatic Downloads<a class="headerlink" href="#download-embed_icon-automatic-downloads" title="Permanent link">&para;</a></h3>
+<p>The <code>test</code> scripts are automatically downloaded by the <code>Makefile</code>, so any
+modifications you do to them will be lost when you run <code>make</code> again. Likewise,
+because they are automatically downloaded, you do not need to <code>add</code> or <code>commit</code>
+them to your <a href="https://git-scm.com/">git</a> repository.</p>
+</div>
+<p>The details on what you need to implement for this assignment are described
+in the following sections.</p>
+<div class="alert success-bg">
+<h3 id="help-embed_icon-frequently-asked-questions"><i class="icon icon-medium"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><title>help</title><path d="M10,19H13V22H10V19M12,2C17.35,2.22 19.68,7.62 16.5,11.67C15.67,12.67 14.33,13.33 13.67,14.17C13,15 13,16 13,17H10C10,15.33 10,13.92 10.67,12.92C11.33,11.92 12.67,11.33 13.5,10.67C15.92,8.43 15.32,5.26 12,5A3,3 0 0,0 9,8H6A6,6 0 0,1 12,2Z" /></svg>
+</i> Frequently Asked Questions<a class="headerlink" href="#help-embed_icon-frequently-asked-questions" title="Permanent link">&para;</a></h3>
+<div class="centered">
+<iframe allowfullscreen="true" frameborder="0" height="749" mozallowfullscreen="true" src="https://docs.google.com/presentation/d/e/2PACX-1vQKy22ePhpxtPuAWxtU_mcdzjALuqpyPbsfaRWEpISUdqTkNWAX_a040W78feh21IIZiFDNnv4VtmTG/pubembed?start=false&amp;loop=false&amp;delayms=3000" webkitallowfullscreen="true" width="960"></iframe>
+</div>
+</div>
+<h2 id="activity-1-cut-04-points">Activity 1: Cut (<em>0.4 Points</em>)<a class="headerlink" href="#activity-1-cut-04-points" title="Permanent link">&para;</a></h2>
+<p>For the first activity, you are to re-create a simplified version of the <a href="https://man7.org/linux/man-pages/man1/cut.1.html">cut</a> filter:</p>
+<div class="codehilite"><pre><span></span><code><span class="c1"># Display usage message</span>
+$<span class="w"> </span>./cut.py<span class="w"> </span>-h
+Usage:<span class="w"> </span>cut<span class="w"> </span>-d<span class="w"> </span>DELIMITER<span class="w"> </span>-f<span class="w"> </span>FIELDS
+
+Print<span class="w"> </span>selected<span class="w"> </span>parts<span class="w"> </span>of<span class="w"> </span>lines<span class="w"> </span>from<span class="w"> </span>stream<span class="w"> </span>to<span class="w"> </span>standard<span class="w"> </span>output.
+
+<span class="w">    </span>-d<span class="w"> </span>DELIMITER<span class="w">    </span>Use<span class="w"> </span>DELIM<span class="w"> </span>instead<span class="w"> </span>of<span class="w"> </span>TAB<span class="w"> </span><span class="k">for</span><span class="w"> </span>field<span class="w"> </span>delimiter
+<span class="w">    </span>-f<span class="w"> </span>FIELDS<span class="w">       </span>Select<span class="w"> </span>only<span class="w"> </span>these<span class="w"> </span>fields
+$<span class="w"> </span><span class="nb">echo</span><span class="w"> </span><span class="nv">$?</span>
+<span class="m">0</span>
+
+$<span class="w"> </span>./cut.py
+Usage:<span class="w"> </span>cut<span class="w"> </span>-d<span class="w"> </span>DELIMITER<span class="w"> </span>-f<span class="w"> </span>FIELDS
+
+Print<span class="w"> </span>selected<span class="w"> </span>parts<span class="w"> </span>of<span class="w"> </span>lines<span class="w"> </span>from<span class="w"> </span>stream<span class="w"> </span>to<span class="w"> </span>standard<span class="w"> </span>output.
+
+<span class="w">    </span>-d<span class="w"> </span>DELIMITER<span class="w">    </span>Use<span class="w"> </span>DELIM<span class="w"> </span>instead<span class="w"> </span>of<span class="w"> </span>TAB<span class="w"> </span><span class="k">for</span><span class="w"> </span>field<span class="w"> </span>delimiter
+<span class="w">    </span>-f<span class="w"> </span>FIELDS<span class="w">       </span>Select<span class="w"> </span>only<span class="w"> </span>these<span class="w"> </span>fields
+$<span class="w"> </span><span class="nb">echo</span><span class="w"> </span><span class="nv">$?</span>
+<span class="m">1</span>
+
+<span class="c1"># Extract the first field</span>
+$<span class="w"> </span><span class="nb">echo</span><span class="w"> </span><span class="s1">&#39;Harder, Better, Faster, Stronger&#39;</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>./cut.py<span class="w"> </span>-d<span class="w"> </span>,<span class="w"> </span>-f<span class="w"> </span><span class="m">1</span>
+Harder
+
+<span class="c1"># Extract the second and fourth fields</span>
+$<span class="w"> </span><span class="nb">echo</span><span class="w"> </span><span class="s1">&#39;Harder, Better, Faster, Stronger&#39;</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>./cut.py<span class="w"> </span>-d<span class="w"> </span>,<span class="w"> </span>-f<span class="w"> </span><span class="m">2</span>,4
+<span class="w"> </span>Better,<span class="w"> </span>Stronger
+
+<span class="c1"># Extract the first field with test input (first four lines)</span>
+$<span class="w"> </span>./cut.py<span class="w"> </span>-d<span class="w"> </span>,<span class="w"> </span>-f<span class="w"> </span><span class="m">1</span><span class="w"> </span>&lt;<span class="w"> </span>cut.input<span class="w"> </span><span class="p">|</span><span class="w"> </span>head<span class="w"> </span>-n<span class="w"> </span><span class="m">4</span>
+Work<span class="w"> </span>it
+Do<span class="w"> </span>it
+Harder
+Faster
+</code></pre></div>
+
+<p>The <code>cut.py</code> script reads input from <a href="https://en.wikipedia.org/wiki/Standard_streams#Standard_input_(stdin)">standard input</a> and takes the following
+possible flags:</p>
+<ul>
+<li>
+<p><code>-d</code>: This allows the user to specify a <code>DELIMITER</code>.  By default, it is the
+  <code>TAB</code> character (ie. <code>\t</code>).</p>
+</li>
+<li>
+<p><code>-f</code>: This allows the user to specify which fields to select.  The user
+  <strong>must</strong> specify this flag, otherwise it should result in a usage message
+  and a failure exit status as shown above.</p>
+</li>
+<li>
+<p><code>-h</code>: This prints the usage message and exits with success.</p>
+</li>
+</ul>
+<p>If the user specifies an unknown flag, then the program should print the
+usage message and exit with a failure status.</p>
+<p>As with <a href="https://man7.org/linux/man-pages/man1/cut.1.html">cut</a>, <code>cut.py</code> processes each line from <a href="https://en.wikipedia.org/wiki/Standard_streams#Standard_input_(stdin)">standard input</a> by
+splitting the line by the <code>DELIMITER</code>, combining specified <code>FIELDS</code> by the
+<code>DELIMITER</code>, and then printing out the resulting selection.</p>
+<h3 id="task-1-cutpy">Task 1: <code>cut.py</code><a class="headerlink" href="#task-1-cutpy" title="Permanent link">&para;</a></h3>
+<p>To build this filter, you will need to complete the <code>cut.py</code> <a href="https://www.python.org/">Python</a> script
+by implementing the following functions:</p>
+<ol>
+<li>
+<div class="flex-col" markdown="1">
+<p><code>strs_to_ints(strings: list[str]) -&gt; list[int]</code></p>
+<blockquote>
+<p>This function converts a list of <code>strings</code> into a list of <a href="https://docs.python.org/3/library/functions.html#int">int</a>s.</p>
+</blockquote>
+</li>
+<li>
+<div class="flex-col" markdown="1">
+<p><code>cut_line(line: str, delimiter: str='\t', fields: list[int]=[]) -&gt; list[str]</code></p>
+<blockquote>
+<p>This function splits the given <code>line</code> by the <code>delimiter</code> and returns a
+<a href="https://docs.python.org/3/tutorial/datastructures.html#more-on-lists">list</a> containing only the specified <code>fields</code>.</p>
+</blockquote>
+<div class="alert success-bg" markdown="1">
+<p><strong>Hint:</strong> Consider what you want to loop over and how you can use a
+<code>try/except</code> to handle <code>IndexError</code>s.</p>
+</div>
+</li>
+<li>
+<div class="flex-col" markdown="1">
+<p><code>cut_stream(stream=sys.stdin, delimiter: str='\t', fields: list[int]=[]) -&gt; None</code></p>
+<blockquote>
+<p>This function calls <code>cut_line</code> on each line in <code>stream</code> with the
+specified <code>delimiter</code> and <code>fields</code>.  It joins each result from <code>cut_line</code>
+with the <code>delimiter</code> and then prints out the selection.</p>
+</blockquote>
+<div class="alert success-bg" markdown="1">
+<p><strong>Hint:</strong> Consider using <a href="https://docs.python.org/3/library/stdtypes.html#str.rstrip">str.rstrip</a> to remove trailing whitespace from
+each line while using <a href="https://docs.python.org/3/library/stdtypes.html#str.join">str.join</a> to combine the selections extracted from
+each line.</p>
+</div>
+</li>
+<li>
+<div class="flex-col" markdown="1">
+<p><code>main(arguments=sys.argv[1:], stream=sys.stdin) -&gt; None</code></p>
+<blockquote>
+<p>This function processes the command-line <code>arguments</code> to determine the
+user specified <code>DELIMITER</code> and <code>FIELDS</code> (as described above) and then
+calls <code>cut_stream</code> with the given <code>stream</code> and computed <code>DELIMITER</code> and
+<code>FIELDS</code>.</p>
+</blockquote>
+<div class="alert success-bg" markdown="1">
+<p><strong>Hint:</strong> Consider when to use <code>strs_to_ints</code> and how to check if the
+user did not specify any <code>FIELDS</code>.</p>
+</div>
+</li>
+</ol>
+<h3 id="task-2-testing">Task 2: Testing<a class="headerlink" href="#task-2-testing" title="Permanent link">&para;</a></h3>
+<p>As you implement <code>cut.py</code>, you can use the provided <a href="https://docs.python.org/3/library/doctest.html">doctests</a> to verify the
+correctness of your code:</p>
+<div class="codehilite"><pre><span></span><code><span class="c1"># Run doctests</span>
+$<span class="w"> </span>python3<span class="w"> </span>-m<span class="w"> </span>doctest<span class="w"> </span>cut.py<span class="w"> </span>-v
+...
+<span class="m">2</span><span class="w"> </span>items<span class="w"> </span>had<span class="w"> </span>no<span class="w"> </span>tests:
+<span class="w">    </span>cut
+<span class="w">    </span>cut.usage
+<span class="m">4</span><span class="w"> </span>items<span class="w"> </span>passed<span class="w"> </span>all<span class="w"> </span>tests:
+<span class="w">   </span><span class="m">1</span><span class="w"> </span>tests<span class="w"> </span><span class="k">in</span><span class="w"> </span>cut.cut_line
+<span class="w">   </span><span class="m">1</span><span class="w"> </span>tests<span class="w"> </span><span class="k">in</span><span class="w"> </span>cut.cut_stream
+<span class="w">   </span><span class="m">1</span><span class="w"> </span>tests<span class="w"> </span><span class="k">in</span><span class="w"> </span>cut.main
+<span class="w">   </span><span class="m">1</span><span class="w"> </span>tests<span class="w"> </span><span class="k">in</span><span class="w"> </span>cut.strs_to_ints
+<span class="m">4</span><span class="w"> </span>tests<span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="m">6</span><span class="w"> </span>items.
+<span class="m">4</span><span class="w"> </span>passed<span class="w"> </span>and<span class="w"> </span><span class="m">0</span><span class="w"> </span>failed.
+Test<span class="w"> </span>passed.
+</code></pre></div>
+
+<p>You can also use <code>make</code> to run both the <a href="https://docs.python.org/3/library/doctest.html">doctests</a> and the <a href="https://en.wikipedia.org/wiki/Unit_testing">unit tests</a>:</p>
+<div class="codehilite"><pre><span></span><code><span class="c1"># Run unit tests (and doctests)</span>
+$<span class="w"> </span>make<span class="w"> </span>test-cut
+Testing<span class="w"> </span>Cut<span class="w"> </span>...
+test_00_doctest<span class="w"> </span><span class="o">(</span>__main__.CutTest<span class="o">)</span><span class="w"> </span>...<span class="w"> </span>ok
+test_01_mypy<span class="w"> </span><span class="o">(</span>__main__.CutTest<span class="o">)</span><span class="w"> </span>...<span class="w"> </span>ok
+test_02_strs_to_ints<span class="w"> </span><span class="o">(</span>__main__.CutTest<span class="o">)</span><span class="w"> </span>...<span class="w"> </span>ok
+test_03_cut_line<span class="w"> </span><span class="o">(</span>__main__.CutTest<span class="o">)</span><span class="w"> </span>...<span class="w"> </span>ok
+test_04_cut_stream<span class="w"> </span><span class="o">(</span>__main__.CutTest<span class="o">)</span><span class="w"> </span>...<span class="w"> </span>ok
+test_05_main_usage<span class="w"> </span><span class="o">(</span>__main__.CutTest<span class="o">)</span><span class="w"> </span>...<span class="w"> </span>ok
+test_06_main_1<span class="w"> </span><span class="o">(</span>__main__.CutTest<span class="o">)</span><span class="w"> </span>...<span class="w"> </span>ok
+test_07_main_1_2<span class="w"> </span><span class="o">(</span>__main__.CutTest<span class="o">)</span><span class="w"> </span>...<span class="w"> </span>ok
+test_08_main_1_2_4<span class="w"> </span><span class="o">(</span>__main__.CutTest<span class="o">)</span><span class="w"> </span>...<span class="w"> </span>ok
+
+<span class="w">   </span>Score<span class="w"> </span><span class="m">9</span>.00<span class="w"> </span>/<span class="w"> </span><span class="m">9</span>.00
+<span class="w">   </span>Grade<span class="w"> </span><span class="m">1</span>.00<span class="w"> </span>/<span class="w"> </span><span class="m">1</span>.00
+<span class="w">  </span>Status<span class="w"> </span>Success
+
+----------------------------------------------------------------------
+Ran<span class="w"> </span><span class="m">9</span><span class="w"> </span>tests<span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="m">0</span>.052s
+
+OK
+</code></pre></div>
+
+<p>To just run the <a href="https://en.wikipedia.org/wiki/Unit_testing">unit tests</a>, you can do the following:</p>
+<div class="codehilite"><pre><span></span><code><span class="c1"># Run unit tests</span>
+$<span class="w"> </span>./cut.test<span class="w"> </span>-v
+...
+</code></pre></div>
+
+<p>To run a specific <a href="https://en.wikipedia.org/wiki/Unit_testing">unit test</a>, you can specify the <strong>method name</strong>:</p>
+<div class="codehilite"><pre><span></span><code><span class="c1"># Run only mypy unit test</span>
+$<span class="w"> </span>./cut.test<span class="w"> </span>-v<span class="w"> </span>CutTest.test_01_mypy
+...
+</code></pre></div>
+
+<p>To manually check your types, you can use <a href="https://mypy-lang.org/">mypy</a>:</p>
+<div class="codehilite"><pre><span></span><code><span class="c1"># Run mypy to check types</span>
+$<span class="w"> </span>mypy<span class="w"> </span>cut.py
+</code></pre></div>
+
+<p>To use the test input with the script, you can utilize <a href="https://en.wikipedia.org/wiki/Redirection_(computing)">I/O redirection</a>:</p>
+<div class="codehilite"><pre><span></span><code><span class="c1"># Run script with input</span>
+$<span class="w"> </span>./cut.py<span class="w"> </span>-d<span class="w"> </span>,<span class="w"> </span>-f<span class="w"> </span><span class="m">1</span><span class="w"> </span>&lt;<span class="w"> </span>cut.input
+...
+</code></pre></div>
+
+<h2 id="activity-2-wc-04-points">Activity 2: WC (<em>0.4 Points</em>)<a class="headerlink" href="#activity-2-wc-04-points" title="Permanent link">&para;</a></h2>
+<p>For the second activity, you are to re-create a simplified version of the <a href="https://man7.org/linux/man-pages/man1/wc.1.html">wc</a> utility:</p>
+<div class="codehilite"><pre><span></span><code><span class="c1"># Display usage message</span>
+$<span class="w"> </span>./wc.py<span class="w"> </span>-h
+Usage:<span class="w"> </span>wc.py<span class="w"> </span><span class="o">[</span>-l<span class="w"> </span><span class="p">|</span><span class="w"> </span>-w<span class="w"> </span><span class="p">|</span><span class="w"> </span>-c<span class="o">]</span>
+
+Print<span class="w"> </span>newline,<span class="w"> </span>word,<span class="w"> </span>and<span class="w"> </span>byte<span class="w"> </span>counts<span class="w"> </span>from<span class="w"> </span>standard<span class="w"> </span>input.
+
+The<span class="w"> </span>options<span class="w"> </span>below<span class="w"> </span>may<span class="w"> </span>be<span class="w"> </span>used<span class="w"> </span>to<span class="w"> </span><span class="k">select</span><span class="w"> </span>which<span class="w"> </span>counts<span class="w"> </span>are<span class="w"> </span>printed,<span class="w"> </span>always<span class="w"> </span><span class="k">in</span>
+the<span class="w"> </span>following<span class="w"> </span>order:<span class="w"> </span>newline,<span class="w"> </span>word,<span class="w"> </span>byte.
+
+<span class="w">    </span>-c<span class="w">      </span>Print<span class="w"> </span>byte<span class="w"> </span>counts
+<span class="w">    </span>-l<span class="w">      </span>Print<span class="w"> </span>newline<span class="w"> </span>counts
+<span class="w">    </span>-w<span class="w">      </span>Print<span class="w"> </span>word<span class="w"> </span>counts
+
+<span class="c1"># Count newlines, words, and bytes</span>
+$<span class="w"> </span>wc<span class="w"> </span>&lt;<span class="w"> </span>wc.input
+<span class="w"> </span><span class="m">18</span><span class="w">  </span><span class="m">97</span><span class="w"> </span><span class="m">439</span>
+
+<span class="c1"># Count only newlines</span>
+$<span class="w"> </span>./wc.py<span class="w"> </span>-l<span class="w"> </span>&lt;<span class="w"> </span>wc.input
+<span class="m">18</span>
+</code></pre></div>
+
+<p>The <code>wc.py</code> script reads input from <a href="https://en.wikipedia.org/wiki/Standard_streams#Standard_input_(stdin)">standard input</a> and takes the following
+possible flags:</p>
+<ul>
+<li><code>-c</code>: This allows the user to specify that the program should print <strong>byte</strong> counts.</li>
+<li><code>-l</code>: This allows the user to specify that the program should print <strong>newline</strong> counts.</li>
+<li><code>-w</code>: This allows the user to specify that the program should print <strong>word</strong> counts.</li>
+<li><code>-h</code>: This prints the usage message and exits with success.</li>
+</ul>
+<p>If the user specifies an unknown flag, then the program should print the
+usage message and exit with a failure status.</p>
+<p>As with <a href="https://man7.org/linux/man-pages/man1/wc.1.html">wc</a>, <code>wc.py</code> computes the newline, word, and byte counts of the data
+from <a href="https://en.wikipedia.org/wiki/Standard_streams#Standard_input_(stdin)">standard input</a> and prints out the selected counts.  If no options are
+specified, then all three options are reported.</p>
+<h3 id="task-1-wcpy">Task 1: <code>wc.py</code><a class="headerlink" href="#task-1-wcpy" title="Permanent link">&para;</a></h3>
+<p>To build this utility, you will need to complete the <code>wc.py</code> <a href="https://www.python.org/">Python</a> script
+by implementing the following functions:</p>
+<ol>
+<li>
+<div class="flex-col" markdown="1">
+<p><code>count_stream(stream=sys.stdin) -&gt; dict[str, int]</code></p>
+<blockquote>
+<p>This function counts the number of <strong>newlines</strong>, <strong>words</strong>, and
+<strong>bytes</strong> and returns a <a href="https://docs.python.org/3/tutorial/datastructures.html#dictionaries">dict</a> in the form: <code>{'newlines': ..., 'words': ...,
+'bytes': ...}</code>.</p>
+</blockquote>
+<div class="alert success-bg" markdown="1">
+<p><strong>Hint</strong>: Consider looping over the <code>stream</code> line-by-line, and consider
+  how to handle possible <code>KeyError</code>s when updating the count for one of
+  the options.</p>
+</div>
+</li>
+<li>
+<div class="flex-col" markdown="1">
+<p><code>print_counts(counts: dict[str, int], options: list[str]) -&gt; None</code></p>
+<blockquote>
+<p>This function prints the <code>counts</code> of the specified <code>options</code>.  If no
+<code>options</code> are specified (e.g. <code>options</code> is an empty <a href="https://docs.python.org/3/tutorial/datastructures.html#more-on-lists">list</a>), then all
+<code>options</code> are reported (ie. <code>newlines</code>, <code>words</code>, <code>bytes</code>).</p>
+</blockquote>
+<div class="alert success-bg" markdown="1">
+<p><strong>Hint</strong>: Consider what you should loop over and what you should search
+  to determine if an option is selected or not.</p>
+<p>Note, the traditional <a href="https://man7.org/linux/man-pages/man1/wc.1.html">wc</a> computes the maximum width (ie. number of
+  digits) of the counts and uses that to organize the counts into evenly
+  spaced columns.</p>
+<ul>
+<li>
+<div class="flex-col" markdown="1">
+<p>Once you know the maximum number of digits from the counts, you can
+  use <a href="https://docs.python.org/3/library/stdtypes.html#str.rjust">str.rjust</a> to format the count to a specific width.</p>
+<div class="codehilite"><pre><span></span><code><span class="nb">str</span><span class="p">(</span><span class="n">count</span><span class="p">)</span><span class="o">.</span><span class="n">rjust</span><span class="p">(</span><span class="n">count_width</span><span class="p">)</span>
+</code></pre></div>
+
+</li>
+<li>
+<p>If only one option is specified (e.g. <code>wc -l</code>), then no adjustment
+    needs to be made (ie. <code>count_width</code> should be <code>0</code>).</p>
+</li>
+<li>
+<p>As reference, you can look at the <a href="https://github.com/coreutils/coreutils/blob/master/src/wc.c#L690">wc.c</a> source code from the <a href="https://www.gnu.org/software/coreutils/">GNU
+    coreutils</a>.</p>
+</li>
+</ul>
+<p>Print the selected and adjusted counts by combining them with a space
+  (ie. <code>' '</code>) delimiter via <a href="https://docs.python.org/3/library/stdtypes.html#str.join">str.join</a>.</p>
+</div>
+</li>
+<li>
+<div class="flex-col" markdown="1">
+<p><code>main(arguments=sys.argv[1:], stream=sys.stdin) -&gt; None</code></p>
+<blockquote>
+<p>This function processes the command-line <code>arguments</code> to determine the
+user specified options, computes the counts using <code>count_stream</code> on
+<code>stream</code>, and then reports the counts using <code>print_counts</code>.</p>
+</blockquote>
+<div class="alert success-bg" markdown="1">
+<p><strong>Hint</strong>: Consider how to keep track of the <code>options</code> while looping
+  through the arguments.</p>
+</div>
+</li>
+</ol>
+<h3 id="task-2-testing_1">Task 2: Testing<a class="headerlink" href="#task-2-testing_1" title="Permanent link">&para;</a></h3>
+<p>As you implement <code>wc.py</code>, you can use the provided <a href="https://docs.python.org/3/library/doctest.html">doctests</a> to verify the
+correctness of your code:</p>
+<div class="codehilite"><pre><span></span><code><span class="c1"># Run doctests</span>
+$<span class="w"> </span>python3<span class="w"> </span>-m<span class="w"> </span>doctest<span class="w"> </span>wc.py<span class="w"> </span>-v
+...
+<span class="m">2</span><span class="w"> </span>items<span class="w"> </span>had<span class="w"> </span>no<span class="w"> </span>tests:
+<span class="w">    </span>wc
+<span class="w">    </span>wc.usage
+<span class="m">3</span><span class="w"> </span>items<span class="w"> </span>passed<span class="w"> </span>all<span class="w"> </span>tests:
+<span class="w">   </span><span class="m">1</span><span class="w"> </span>tests<span class="w"> </span><span class="k">in</span><span class="w"> </span>wc.count_stream
+<span class="w">   </span><span class="m">1</span><span class="w"> </span>tests<span class="w"> </span><span class="k">in</span><span class="w"> </span>wc.main
+<span class="w">   </span><span class="m">1</span><span class="w"> </span>tests<span class="w"> </span><span class="k">in</span><span class="w"> </span>wc.print_counts
+<span class="m">3</span><span class="w"> </span>tests<span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="m">5</span><span class="w"> </span>items.
+<span class="m">3</span><span class="w"> </span>passed<span class="w"> </span>and<span class="w"> </span><span class="m">0</span><span class="w"> </span>failed.
+Test<span class="w"> </span>passed.
+</code></pre></div>
+
+<p>You can also use <code>make</code> to run both the <a href="https://docs.python.org/3/library/doctest.html">doctests</a> and the <a href="https://en.wikipedia.org/wiki/Unit_testing">unit tests</a>:</p>
+<div class="codehilite"><pre><span></span><code><span class="c1"># Run unit tests (and doctests)</span>
+$<span class="w"> </span>make<span class="w"> </span>test-wc
+Testing<span class="w"> </span>WC<span class="w"> </span>...
+test_00_doctest<span class="w"> </span><span class="o">(</span>__main__.WCTest<span class="o">)</span><span class="w"> </span>...<span class="w"> </span>ok
+test_01_mypy<span class="w"> </span><span class="o">(</span>__main__.WCTest<span class="o">)</span><span class="w"> </span>...<span class="w"> </span>ok
+test_02_count_stream<span class="w"> </span><span class="o">(</span>__main__.WCTest<span class="o">)</span><span class="w"> </span>...<span class="w"> </span>ok
+test_03_print_counts_all<span class="w"> </span><span class="o">(</span>__main__.WCTest<span class="o">)</span><span class="w"> </span>...<span class="w"> </span>ok
+test_04_print_counts_newlines<span class="w"> </span><span class="o">(</span>__main__.WCTest<span class="o">)</span><span class="w"> </span>...<span class="w"> </span>ok
+test_05_print_counts_words<span class="w"> </span><span class="o">(</span>__main__.WCTest<span class="o">)</span><span class="w"> </span>...<span class="w"> </span>ok
+test_06_print_counts_bytes<span class="w"> </span><span class="o">(</span>__main__.WCTest<span class="o">)</span><span class="w"> </span>...<span class="w"> </span>ok
+test_07_print_counts_newlines_words<span class="w"> </span><span class="o">(</span>__main__.WCTest<span class="o">)</span><span class="w"> </span>...<span class="w"> </span>ok
+test_08_print_counts_newlines_bytes<span class="w"> </span><span class="o">(</span>__main__.WCTest<span class="o">)</span><span class="w"> </span>...<span class="w"> </span>ok
+test_09_print_counts_words_bytes<span class="w"> </span><span class="o">(</span>__main__.WCTest<span class="o">)</span><span class="w"> </span>...<span class="w"> </span>ok
+test_10_main_usage<span class="w"> </span><span class="o">(</span>__main__.WCTest<span class="o">)</span><span class="w"> </span>...<span class="w"> </span>ok
+test_11_main_counts_all<span class="w"> </span><span class="o">(</span>__main__.WCTest<span class="o">)</span><span class="w"> </span>...<span class="w"> </span>ok
+test_12_main_counts_newlines<span class="w"> </span><span class="o">(</span>__main__.WCTest<span class="o">)</span><span class="w"> </span>...<span class="w"> </span>ok
+test_13_main_counts_words<span class="w"> </span><span class="o">(</span>__main__.WCTest<span class="o">)</span><span class="w"> </span>...<span class="w"> </span>ok
+test_14_main_counts_bytes<span class="w"> </span><span class="o">(</span>__main__.WCTest<span class="o">)</span><span class="w"> </span>...<span class="w"> </span>ok
+test_15_main_counts_newlines_words<span class="w"> </span><span class="o">(</span>__main__.WCTest<span class="o">)</span><span class="w"> </span>...<span class="w"> </span>ok
+test_16_main_counts_newlines_bytes<span class="w"> </span><span class="o">(</span>__main__.WCTest<span class="o">)</span><span class="w"> </span>...<span class="w"> </span>ok
+test_17_main_counts_words_bytes<span class="w"> </span><span class="o">(</span>__main__.WCTest<span class="o">)</span><span class="w"> </span>...<span class="w"> </span>ok
+
+<span class="w">   </span>Score<span class="w"> </span><span class="m">18</span>.00<span class="w"> </span>/<span class="w"> </span><span class="m">18</span>.00
+<span class="w">   </span>Grade<span class="w"> </span><span class="m">1</span>.00<span class="w"> </span>/<span class="w"> </span><span class="m">1</span>.00
+<span class="w">  </span>Status<span class="w"> </span>Success
+
+----------------------------------------------------------------------
+Ran<span class="w"> </span><span class="m">18</span><span class="w"> </span>tests<span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="m">0</span>.108s
+
+OK
+</code></pre></div>
+
+<p>To just run the <a href="https://en.wikipedia.org/wiki/Unit_testing">unit tests</a>, you can do the following:</p>
+<div class="codehilite"><pre><span></span><code><span class="c1"># Run unit tests</span>
+$<span class="w"> </span>./wc.test<span class="w"> </span>-v
+...
+</code></pre></div>
+
+<p>To run a specific <a href="https://en.wikipedia.org/wiki/Unit_testing">unit test</a>, you can specify the <strong>method name</strong>:</p>
+<div class="codehilite"><pre><span></span><code><span class="c1"># Run only mypy unit test</span>
+$<span class="w"> </span>./wc.test<span class="w"> </span>-v<span class="w"> </span>WCTest.test_01_mypy
+...
+</code></pre></div>
+
+<p>To manually check your types, you can use <a href="https://mypy-lang.org/">mypy</a>:</p>
+<div class="codehilite"><pre><span></span><code><span class="c1"># Run mypy to check types</span>
+$<span class="w"> </span>mypy<span class="w"> </span>wc.py
+</code></pre></div>
+
+<p>To use the test input with the script, you can utilize <a href="https://en.wikipedia.org/wiki/Redirection_(computing)">I/O redirection</a>:</p>
+<div class="codehilite"><pre><span></span><code><span class="c1"># Run script with input</span>
+$<span class="w"> </span>./wc.py<span class="w"> </span>&lt;<span class="w"> </span>wc.input
+...
+</code></pre></div>
+
+<h2 id="activity-3-quiz-02-points">Activity 3: Quiz (<em>0.2 Points</em>)<a class="headerlink" href="#activity-3-quiz-02-points" title="Permanent link">&para;</a></h2>
+<p>Once you have completed all the activities above, you are to complete the
+following <strong>reflection quiz</strong>:</p>
+<div id="quiz-questions"></div>
+
+<div id="quiz-responses"></div>
+
+<script src="static/js/dredd-quiz.js"></script>
+<script>
+loadQuiz('static/json/homework04.json');
+</script>
+
+<pre style="display: none;" id="dr-container" class="codehilite"><code id="dredd-response"></code></pre>
+
+<p>As with <a href="reading01.html">Reading 01</a>, you will need to store your answers in a
+<code>homework04/answers.json</code> file.  You can use the form above to generate the
+contents of this file, or you can write the <a href="https://json.org/">JSON</a> by hand.</p>
+<p>To test your quiz, you can use the <code>check.py</code> script:</p>
+<div class="codehilite"><pre><span></span><code>$<span class="w"> </span>../.scripts/check.py
+Checking<span class="w"> </span>homework04<span class="w"> </span>quiz<span class="w"> </span>...
+<span class="w">     </span>Q01<span class="w">  </span><span class="m">3</span>.00<span class="w"> </span>/<span class="w">  </span><span class="m">3</span>.00
+<span class="w">     </span>Q02<span class="w">  </span><span class="m">7</span>.00<span class="w"> </span>/<span class="w">  </span><span class="m">7</span>.00
+<span class="w">     </span>Q03<span class="w">  </span><span class="m">2</span>.00<span class="w"> </span>/<span class="w">  </span><span class="m">2</span>.00
+<span class="w">     </span>Q04<span class="w">  </span><span class="m">6</span>.00<span class="w"> </span>/<span class="w">  </span><span class="m">6</span>.00
+<span class="w">     </span>Q05<span class="w">  </span><span class="m">2</span>.00<span class="w"> </span>/<span class="w">  </span><span class="m">2</span>.00
+<span class="w">  </span>--------------------
+<span class="w">   </span>Score<span class="w"> </span><span class="m">20</span>.00<span class="w"> </span>/<span class="w"> </span><span class="m">20</span>.00
+<span class="w">   </span>Grade<span class="w">  </span><span class="m">1</span>.00<span class="w"> </span>/<span class="w">  </span><span class="m">1</span>.00
+<span class="w">  </span>Status<span class="w"> </span>Success
+</code></pre></div>
+
+<h2 id="submission-1-point">Submission (<em>1 Point</em>)<a class="headerlink" href="#submission-1-point" title="Permanent link">&para;</a></h2>
+<p>To submit your assignment, please commit your work to the <code>homework04</code> folder
+of your <code>homework04</code> branch in your <strong>assignments</strong> <a href="https://github.com">GitHub</a> repository.
+Your <code>homework04</code> folder should <strong>only</strong> contain the following files:</p>
+<ul>
+<li><code>Makefile</code></li>
+<li><code>answers.json</code></li>
+<li><code>cut.py</code></li>
+<li><code>wc.py</code></li>
+</ul>
+<div class="alert caution-bg">
+<p><strong>Note</strong>: You do not need to commit the test scripts because the <code>Makefile</code>
+automatically downloads them.</p>
+</div>
+<div class="codehilite"><pre><span></span><code><span class="c1">#-----------------------------------------------------------------------</span>
+<span class="c1"># Make sure you have already completed Activity 0: Preparation</span>
+<span class="c1">#-----------------------------------------------------------------------</span>
+...
+$<span class="w"> </span>git<span class="w"> </span>add<span class="w"> </span>cut.py<span class="w">                                      </span><span class="c1"># Mark changes for commit</span>
+$<span class="w"> </span>git<span class="w"> </span>commit<span class="w"> </span>-m<span class="w"> </span><span class="s2">&quot;Homework 04: cut.py&quot;</span><span class="w">                 </span><span class="c1"># Record changes</span>
+...
+$<span class="w"> </span>git<span class="w"> </span>add<span class="w"> </span>wc.py<span class="w">                                       </span><span class="c1"># Mark changes for commit</span>
+$<span class="w"> </span>git<span class="w"> </span>commit<span class="w"> </span>-m<span class="w"> </span><span class="s2">&quot;Homework 04: wc.py&quot;</span><span class="w">                  </span><span class="c1"># Record changes</span>
+...
+$<span class="w"> </span>git<span class="w"> </span>add<span class="w"> </span>answers.json<span class="w">                                </span><span class="c1"># Mark changes for commit</span>
+$<span class="w"> </span>git<span class="w"> </span>commit<span class="w"> </span>-m<span class="w"> </span><span class="s2">&quot;Homework 04: Quiz&quot;</span><span class="w">                   </span><span class="c1"># Record changes</span>
+...
+$<span class="w"> </span>git<span class="w"> </span>push<span class="w"> </span>-u<span class="w"> </span>origin<span class="w"> </span>homework04<span class="w">                       </span><span class="c1"># Push branch to GitHub</span>
+</code></pre></div>
+
+<div class="alert warning-bg">
+<h3 id="lifebuoy-embed_icon-acknowledgments"><i class="icon icon-medium"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><title>lifebuoy</title><path d="M19.79,15.41C20.74,13.24 20.74,10.75 19.79,8.59L17.05,9.83C17.65,11.21 17.65,12.78 17.06,14.17L19.79,15.41M15.42,4.21C13.25,3.26 10.76,3.26 8.59,4.21L9.83,6.94C11.22,6.35 12.79,6.35 14.18,6.95L15.42,4.21M4.21,8.58C3.26,10.76 3.26,13.24 4.21,15.42L6.95,14.17C6.35,12.79 6.35,11.21 6.95,9.82L4.21,8.58M8.59,19.79C10.76,20.74 13.25,20.74 15.42,19.78L14.18,17.05C12.8,17.65 11.22,17.65 9.84,17.06L8.59,19.79M12,2A10,10 0 0,1 22,12A10,10 0 0,1 12,22A10,10 0 0,1 2,12A10,10 0 0,1 12,2M12,8A4,4 0 0,0 8,12A4,4 0 0,0 12,16A4,4 0 0,0 16,12A4,4 0 0,0 12,8Z" /></svg>
+</i> Acknowledgments<a class="headerlink" href="#lifebuoy-embed_icon-acknowledgments" title="Permanent link">&para;</a></h3>
+<p>If you collaborated with any other students, or received help from TAs or AI
+tools on this assignment, please record this support in the <code>README.md</code> in
+the <code>homework04</code> folder and include it with your <strong>Pull Request</strong>.</p>
+</div>
+<div class="alert success-bg">
+<h3 id="account-question-embed_icon-graders"><i class="icon icon-medium"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><title>account-question</title><path d="M13,8A4,4 0 0,1 9,12A4,4 0 0,1 5,8A4,4 0 0,1 9,4A4,4 0 0,1 13,8M17,18V20H1V18C1,15.79 4.58,14 9,14C13.42,14 17,15.79 17,18M20.5,14.5V16H19V14.5H20.5M18.5,9.5H17V9A3,3 0 0,1 20,6A3,3 0 0,1 23,9C23,9.97 22.5,10.88 21.71,11.41L21.41,11.6C20.84,12 20.5,12.61 20.5,13.3V13.5H19V13.3C19,12.11 19.6,11 20.59,10.35L20.88,10.16C21.27,9.9 21.5,9.47 21.5,9A1.5,1.5 0 0,0 20,7.5A1.5,1.5 0 0,0 18.5,9V9.5Z" /></svg>
+</i> Graders<a class="headerlink" href="#account-question-embed_icon-graders" title="Permanent link">&para;</a></h3>
+<p>Once you have committed your work and pushed it to <a href="https://github.com">GitHub</a>, remember to
+create a <strong>pull request</strong> and assign it to the appropriate <strong>teaching
+assistant</strong> from the <a href="reading04_tas.html">Reading 04 TA List</a>.</p>
+<p><strong>Note</strong>: this list changes each week, so be sure to consult the appropriate
+list for each assignment.</p>
+</div>
+</main>
+<footer>
+Built using <a href="https://python.org">Python</a>
+and <a href="https://jinja.palletsprojects.com">Jinja</a>
+with colors from <a href="https://nordtheme.com">Nord Theme</a>
+and icons from <a href="https://pictogrammers.com/library/mdi/">Material Design Icons</a>.</footer>
+</body>
+</html>

@@ -1,0 +1,28 @@
+{
+    "q01": {
+        "type": "multiple",
+        "question": "\n<p>Considring both <code>cut.py</code> and <code>wc.py</code>, which of the\nfollowing statements regarding <b>command line arguments</b> and\n<b>standard input</b> are true (<i>choose all that apply</i>)?</p>\n",
+        "responses": {
+            "lists": "Both command line arguments and standard input are represented as lists.",
+            "strings": "Both command line arguments and standard input contain strings.",
+            "sys": "Both command line arguments and standard input are access through the <code>sys</code> module.",
+            "loop": "Both command line arguments and standard input can be iterated over."
+        }
+    },
+    "q02": {
+        "type": "blank",
+        "question": "\n<p>In <code>cut.py</code>, you used a Python <code>list</code> as to store both the\nfields and the selected words.  Given a <code>list</code> variable named\n<code>fields</code>, how would you perform the following:</p>\n\n<ol>\n    <li>Get the number of elements in <code>fields</code>: ____</li>\n    <li>Access the first element in <code>fields</code>: ____</li>\n    <li>Access the last element in <code>fields</code>: ____</li>\n    <li>Create a list of the first four elements in <code>fields</code>: ____</li>\n    <li>Create a list of the last four elements in <code>fields</code>: ____</li>\n    <li>Add <code>value</code> to the end of <code>fields</code>: ____</li>\n    <li>Search if <code>value</code> is in <code>fields</code>: <code>if</code> ____<code>:</code></li>\n</ol>\n"
+    },
+    "q03": {
+        "type": "blank",
+        "question": "\n<p>Use your <code>cut.py</code> in a <b>Unix pipeline</b> to answer the\nfollowing questions:</p>\n\n<ol>\n    <li>What is the most common first word in <code>cut.input</code>? ____</li>\n    <li>What is the count of the most frequent second field (split by commas) in <code>cut.input</code>? ____</li>\n</ol>\n"
+    },
+    "q04": {
+        "type": "blank",
+        "question": "\n<p>In <code>wc.py</code>, you used a Python <code>dict</code> to keep track of the\ncounts of newlines, words, and bytes.  Given a <code>dict</code> variable named\n<code>counts</code>, how would you perform the following:</p>\n\n<ol>\n    <li>Get the number of pairs in <code>counts</code>: ____</li>\n    <li>Get the keys in <code>counts</code>: ____</li>\n    <li>Get the values in <code>counts</code>: ____</li>\n    <li>Get the pairs in <code>counts</code>: ____</li>\n    <li>Get the value associated with <code>key</code> in <code>counts</code> (defaulting to <code>0</code> if it is not there): ____</li>\n    <li>Search if <code>key</code> is in <code>counts</code>: <code>if</code> ____<code>:</code></li>\n</ol>\n"
+    },
+    "q05": {
+        "type": "blank",
+        "question": "\n<p>Use your <code>wc.py</code> in a <b>Unix pipeline</b> with the text from\n<code>https://www.gutenberg.org/cache/epub/1342/pg1342.txt</code> to answer the\nfollowing questions:</p>\n\n<ol>\n  <li>How many <b>lines</b> are in that data? ____</li>\n  <li>How many <b>words</b> are in that data? ____</li>\n</ol>\n"
+    }
+}

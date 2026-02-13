@@ -1,0 +1,141 @@
+#!/usr/bin/env python3
+
+import doctest
+import itertools
+import io
+import math
+import mypy.api
+import subprocess
+import unittest
+import unittest.mock
+
+import cut
+
+# Unit Tests
+
+class CutTest(unittest.TestCase):
+    Path   = 'cut.input'
+    Input  = open(Path).read()
+    Total  = 9
+    Points = 0
+
+    @classmethod
+    def setupClass(cls):
+        cls.Points = 0
+
+    @classmethod
+    def tearDownClass(cls):
+        print()
+        print(f'   Score {cls.Points:.2f} / {cls.Total:.2f}')
+        print(f'   Grade {cls.Points/cls.Total:.2f} / {1.0:.2f}')
+        print(f'  Status {"Success" if math.isclose(cls.Points, cls.Total) else "Failure"}')
+        print()
+
+    def test_00_doctest(self):
+        failures, tests = doctest.testmod(cut, verbose=False)
+        self.assertEqual(failures, 0)
+        self.assertEqual(tests, 4)
+        CutTest.Points += 1.0
+
+    def test_01_mypy(self):
+        _, _, exit_status = mypy.api.run(['cut.py'])
+        self.assertTrue(exit_status == 0)
+        CutTest.Points += 1.0
+
+    def test_02_strs_to_ints(self):
+        self.assertEqual(cut.strs_to_ints(['5', '7', '4']), [5, 7, 4])
+        CutTest.Points += 0.5
+        self.assertEqual(cut.strs_to_ints(['9', '2', '8', '6', '7']), [9, 2, 8, 6, 7])
+        CutTest.Points += 0.5
+
+    def test_03_cut_line(self):
+        self.assertEqual(
+            cut.cut_line('Harder\tBetter\tFaster\tStronger', fields=[1, 4]),
+            ['Harder', 'Stronger']
+        )
+        CutTest.Points += 0.5
+        self.assertEqual(
+            cut.cut_line('Harder\tBetter\tFaster\tStronger', fields=[2, 3]),
+            cut.cut_line('Harder,Better,Faster,Stronger', ',', [2, 3])
+        )
+        CutTest.Points += 0.5
+
+    def test_04_cut_stream(self):
+        with unittest.mock.patch('sys.stdout', new=io.StringIO()) as output:
+            cut.cut_stream(io.StringIO(self.Input), delimiter=',', fields=[1, 4])
+            with open(self.Path) as input_stream:
+                process = subprocess.run('cut -d , -f 1,4'.split(), stdin=input_stream, capture_output=True)
+
+        output_lines  = output.getvalue().splitlines()
+        process_lines = process.stdout.splitlines()
+        for output_line, process_line in itertools.zip_longest(output_lines, process_lines):
+            self.assertEqual(output_line, process_line.decode())
+        CutTest.Points += 1.0
+
+    def test_05_main_usage(self):
+        with unittest.mock.patch('sys.stderr', new=io.StringIO()) as output:
+            with self.assertRaises(SystemExit) as context:
+                cut.main('-h'.split(), io.StringIO(self.Input))
+            self.assertTrue('Usage' in output.getvalue())
+        self.assertEqual(str(context.exception), '0')
+
+        CutTest.Points += 0.25
+
+        with unittest.mock.patch('sys.stderr', new=io.StringIO()) as output:
+            with self.assertRaises(SystemExit) as context:
+                cut.main('-p'.split(), io.StringIO(self.Input))
+            self.assertTrue('Usage' in output.getvalue())
+        self.assertEqual(str(context.exception), '1')
+
+        CutTest.Points += 0.25
+
+        with unittest.mock.patch('sys.stderr', new=io.StringIO()) as output:
+            with self.assertRaises(SystemExit) as context:
+                cut.main('-d ,'.split(), io.StringIO(self.Input))
+            self.assertTrue('Usage' in output.getvalue())
+        self.assertEqual(str(context.exception), '1')
+
+        CutTest.Points += 0.50
+
+    def test_06_main_1(self):
+        with unittest.mock.patch('sys.stdout', new=io.StringIO()) as output:
+            cut.main('-d , -f 1'.split(), io.StringIO(self.Input))
+            with open(self.Path) as input_stream:
+                process = subprocess.run('cut -d , -f 1'.split(), stdin=input_stream, capture_output=True)
+
+        output_lines  = output.getvalue().splitlines()
+        process_lines = process.stdout.splitlines()
+        for output_line, process_line in itertools.zip_longest(output_lines, process_lines):
+            self.assertEqual(output_line, process_line.decode())
+        CutTest.Points += 1.0
+
+    def test_07_main_1_2(self):
+        with unittest.mock.patch('sys.stdout', new=io.StringIO()) as output:
+            cut.main('-d , -f 1,2'.split(), io.StringIO(self.Input))
+            with open(self.Path) as input_stream:
+                process = subprocess.run('cut -d , -f 1,2'.split(), stdin=input_stream, capture_output=True)
+
+        output_lines  = output.getvalue().splitlines()
+        process_lines = process.stdout.splitlines()
+        for output_line, process_line in itertools.zip_longest(output_lines, process_lines):
+            self.assertEqual(output_line, process_line.decode())
+        CutTest.Points += 1.0
+
+    def test_08_main_1_2_4(self):
+        with unittest.mock.patch('sys.stdout', new=io.StringIO()) as output:
+            cut.main(['-d', ' ', '-f', '1,2,4'], io.StringIO(self.Input))
+            with open(self.Path) as input_stream:
+                process = subprocess.run(['cut', '-d', ' ', '-f', '1,2,4'], stdin=input_stream, capture_output=True)
+
+        output_lines  = output.getvalue().splitlines()
+        process_lines = process.stdout.splitlines()
+        for output_line, process_line in itertools.zip_longest(output_lines, process_lines):
+            self.assertEqual(output_line, process_line.decode())
+        CutTest.Points += 1.0
+
+# Main Execution
+
+if __name__ == '__main__':
+    unittest.main()
+
+# vim: set sts=4 sw=4 ts=8 expandtab ft=python:

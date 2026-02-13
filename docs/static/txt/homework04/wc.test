@@ -1,0 +1,204 @@
+#!/usr/bin/env python3
+
+import doctest
+import io
+import math
+import mypy.api
+import subprocess
+import unittest
+import unittest.mock
+
+import wc
+
+# Unit Tests
+
+class WCTest(unittest.TestCase):
+    Path   = 'wc.input'
+    Input  = open(Path).read()
+    Total  = 18
+    Points = 0
+
+    @classmethod
+    def setupClass(cls):
+        cls.Points = 0
+
+    @classmethod
+    def tearDownClass(cls):
+        print()
+        print(f'   Score {cls.Points:.2f} / {cls.Total:.2f}')
+        print(f'   Grade {cls.Points/cls.Total:.2f} / {1.0:.2f}')
+        print(f'  Status {"Success" if math.isclose(cls.Points, cls.Total) else "Failure"}')
+        print()
+
+    def test_00_doctest(self):
+        failures, tests = doctest.testmod(wc, verbose=False)
+        self.assertEqual(failures, 0)
+        self.assertEqual(tests, 3)
+        WCTest.Points += 1.0
+
+    def test_01_mypy(self):
+        _, _, exit_status = mypy.api.run(['wc.py'])
+        self.assertTrue(exit_status == 0)
+        WCTest.Points += 1.0
+
+    def test_02_count_stream(self):
+        counts = wc.count_stream(io.StringIO(self.Input))
+        self.assertEqual(counts, {'newlines': 18, 'words': 97, 'bytes': 439})
+        WCTest.Points += 1.0
+
+    def test_03_print_counts_all(self):
+        counts = wc.count_stream(io.StringIO(self.Input))
+        self.assertEqual(counts, {'newlines': 18, 'words': 97, 'bytes': 439})
+
+        with unittest.mock.patch('sys.stdout', new=io.StringIO()) as output:
+            wc.print_counts(counts, [])
+            self.assertEqual(output.getvalue(), ' 18  97 439\n')
+
+        WCTest.Points += 1.0
+
+    def test_04_print_counts_newlines(self):
+        counts = wc.count_stream(io.StringIO(self.Input))
+        self.assertEqual(counts, {'newlines': 18, 'words': 97, 'bytes': 439})
+
+        with unittest.mock.patch('sys.stdout', new=io.StringIO()) as output:
+            wc.print_counts(counts, ['newlines'])
+            self.assertEqual(output.getvalue(), '18\n')
+
+        WCTest.Points += 1.0
+
+    def test_05_print_counts_words(self):
+        counts = wc.count_stream(io.StringIO(self.Input))
+        self.assertEqual(counts, {'newlines': 18, 'words': 97, 'bytes': 439})
+
+        with unittest.mock.patch('sys.stdout', new=io.StringIO()) as output:
+            wc.print_counts(counts, ['words'])
+            self.assertEqual(output.getvalue(), '97\n')
+
+        WCTest.Points += 1.0
+
+    def test_06_print_counts_bytes(self):
+        counts = wc.count_stream(io.StringIO(self.Input))
+        self.assertEqual(counts, {'newlines': 18, 'words': 97, 'bytes': 439})
+
+        with unittest.mock.patch('sys.stdout', new=io.StringIO()) as output:
+            wc.print_counts(counts, ['bytes'])
+            self.assertEqual(output.getvalue(), '439\n')
+
+        WCTest.Points += 1.0
+
+    def test_07_print_counts_newlines_words(self):
+        counts = wc.count_stream(io.StringIO(self.Input))
+        self.assertEqual(counts, {'newlines': 18, 'words': 97, 'bytes': 439})
+
+        with unittest.mock.patch('sys.stdout', new=io.StringIO()) as output:
+            wc.print_counts(counts, ['newlines', 'words'])
+            self.assertEqual(output.getvalue(), ' 18  97\n')
+
+        WCTest.Points += 1.0
+
+    def test_08_print_counts_newlines_bytes(self):
+        counts = wc.count_stream(io.StringIO(self.Input))
+        self.assertEqual(counts, {'newlines': 18, 'words': 97, 'bytes': 439})
+
+        with unittest.mock.patch('sys.stdout', new=io.StringIO()) as output:
+            wc.print_counts(counts, ['newlines', 'bytes'])
+            self.assertEqual(output.getvalue(), ' 18 439\n')
+
+        WCTest.Points += 1.0
+
+    def test_09_print_counts_words_bytes(self):
+        counts = wc.count_stream(io.StringIO(self.Input))
+        self.assertEqual(counts, {'newlines': 18, 'words': 97, 'bytes': 439})
+
+        with unittest.mock.patch('sys.stdout', new=io.StringIO()) as output:
+            wc.print_counts(counts, ['words', 'bytes'])
+            self.assertEqual(output.getvalue(), ' 97 439\n')
+
+        WCTest.Points += 1.0
+
+    def test_10_main_usage(self):
+        with unittest.mock.patch('sys.stderr', new=io.StringIO()) as output:
+            with self.assertRaises(SystemExit) as context:
+                wc.main('-h'.split(), io.StringIO(self.Input))
+            self.assertTrue('Usage' in output.getvalue())
+        self.assertEqual(str(context.exception), '0')
+
+        WCTest.Points += 0.5
+
+        with unittest.mock.patch('sys.stderr', new=io.StringIO()) as output:
+            with self.assertRaises(SystemExit) as context:
+                wc.main('-p'.split(), io.StringIO(self.Input))
+            self.assertTrue('Usage' in output.getvalue())
+        self.assertEqual(str(context.exception), '1')
+
+        WCTest.Points += 0.5
+
+    def test_11_main_counts_all(self):
+        with unittest.mock.patch('sys.stdout', new=io.StringIO()) as output:
+            wc.main([], io.StringIO(self.Input))
+            with open(self.Path) as input_stream:
+                process = subprocess.run('wc'.split(), stdin=input_stream, capture_output=True)
+            self.assertEqual(output.getvalue(), process.stdout.decode())
+
+        WCTest.Points += 1.0
+
+    def test_12_main_counts_newlines(self):
+        with unittest.mock.patch('sys.stdout', new=io.StringIO()) as output:
+            wc.main('-l'.split(), io.StringIO(self.Input))
+            with open(self.Path) as input_stream:
+                process = subprocess.run('wc -l'.split(), stdin=input_stream, capture_output=True)
+            self.assertEqual(output.getvalue(), process.stdout.decode())
+
+        WCTest.Points += 1.0
+
+    def test_13_main_counts_words(self):
+        with unittest.mock.patch('sys.stdout', new=io.StringIO()) as output:
+            wc.main('-w'.split(), io.StringIO(self.Input))
+            with open(self.Path) as input_stream:
+                process = subprocess.run('wc -w'.split(), stdin=input_stream, capture_output=True)
+            self.assertEqual(output.getvalue(), process.stdout.decode())
+
+        WCTest.Points += 1.0
+
+    def test_14_main_counts_bytes(self):
+        with unittest.mock.patch('sys.stdout', new=io.StringIO()) as output:
+            wc.main('-c'.split(), io.StringIO(self.Input))
+            with open(self.Path) as input_stream:
+                process = subprocess.run('wc -c'.split(), stdin=input_stream, capture_output=True)
+            self.assertEqual(output.getvalue(), process.stdout.decode())
+
+        WCTest.Points += 1.0
+
+    def test_15_main_counts_newlines_words(self):
+        with unittest.mock.patch('sys.stdout', new=io.StringIO()) as output:
+            wc.main('-l -w'.split(), io.StringIO(self.Input))
+            with open(self.Path) as input_stream:
+                process = subprocess.run('wc -l -w'.split(), stdin=input_stream, capture_output=True)
+            self.assertEqual(output.getvalue(), process.stdout.decode())
+
+        WCTest.Points += 1.0
+
+    def test_16_main_counts_newlines_bytes(self):
+        with unittest.mock.patch('sys.stdout', new=io.StringIO()) as output:
+            wc.main('-l -c'.split(), io.StringIO(self.Input))
+            with open(self.Path) as input_stream:
+                process = subprocess.run('wc -l -c'.split(), stdin=input_stream, capture_output=True)
+            self.assertEqual(output.getvalue(), process.stdout.decode())
+
+        WCTest.Points += 1.0
+
+    def test_17_main_counts_words_bytes(self):
+        with unittest.mock.patch('sys.stdout', new=io.StringIO()) as output:
+            wc.main('-w -c'.split(), io.StringIO(self.Input))
+            with open(self.Path) as input_stream:
+                process = subprocess.run('wc -w -c'.split(), stdin=input_stream, capture_output=True)
+            self.assertEqual(output.getvalue(), process.stdout.decode())
+
+        WCTest.Points += 1.0
+
+# Main Execution
+
+if __name__ == '__main__':
+    unittest.main()
+
+# vim: set sts=4 sw=4 ts=8 expandtab ft=python:
