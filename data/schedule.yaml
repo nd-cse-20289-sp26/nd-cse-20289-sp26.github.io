@@ -148,6 +148,9 @@
 
       - date:           Fri 02/13
         topics:         Python Scripting
+        items:
+          - name:       Slides 09
+            link:       https://docs.google.com/presentation/d/1d-Xdow6IbzJ7p6yaD8_J6l-btwTpJhK43b2RviCm0jI/edit?usp=sharing
 
 - name:     "Unit 02: Python"
 
@@ -157,12 +160,21 @@
         topics:         Tests, Data Structures, Arguments, I/O
         assignments:
           - Reading 04
+        items:
+          - name:       Slides 10
+            link:       https://docs.google.com/presentation/d/1EBv1YLP9LQSraunpnSY4YAZx55uYlyAsGlHRW1JwE10/edit?usp=sharing
 
       - date:           Wed 02/18
         topics:         Regular Expressions, Processes, Requests
+        items:
+          - name:       Slides 11
+            link:       https://docs.google.com/presentation/d/1UHBex8vaFrs_ZoJU28lpAv7DXBkAMp8SfyttVWlKbOM/edit?usp=sharing
 
       - date:           Fri 02/20
         topics:         CSV, JSON
+        items:
+          - name:       Slides 12
+            link:       https://docs.google.com/presentation/d/1i-gPwLEqp_GzIqG0Y_6bL4aZtkzgxSjMPZJdM8sxWtE/edit?usp=sharing
 
       - date:           Sat 02/21
         topics:         '<i class="muted">Cut, WC</i>'
