@@ -1,0 +1,641 @@
+title:      "Homework 04: Cut, WC"
+body:       |
+
+  The goal of this homework assignment is to allow you to practice writing
+  [Python] scripts to create simple [Unix] filters or utilities that utilize
+  [data structures] such as [lists] and [dicts].
+
+  For this assignment, record your scripts and any responses to the following
+  activities in the `homework04` folder of your **assignments** [GitHub]
+  repository and push your work by **noon Saturday, February 21**.
+
+  [Python]: https://www.python.org/
+  [data structures]: https://en.wikipedia.org/wiki/Data_structure
+  [list]: https://docs.python.org/3/tutorial/datastructures.html#more-on-lists
+  [lists]: https://docs.python.org/3/tutorial/datastructures.html#more-on-lists
+  [dicts]: https://docs.python.org/3/tutorial/datastructures.html#dictionaries
+  [dict]: https://docs.python.org/3/tutorial/datastructures.html#dictionaries
+  [Unix]: https://en.wikipedia.org/wiki/Unix
+  [cut]: https://man7.org/linux/man-pages/man1/cut.1.html
+  [wc]: https://man7.org/linux/man-pages/man1/wc.1.html
+
+  ## Activity 0: Preparation
+
+  Before starting this homework assignment, you should first perform a `git
+  pull` to retrieve any changes in your remote [GitHub] repository:
+
+      :::bash
+      $ cd path/to/repository                   # Go to assignments repository
+
+      $ git switch master                       # Make sure we are in master branch
+
+      $ git pull --rebase                       # Get any remote changes not present locally
+
+  Next, create a new branch for this assignment:
+
+      :::bash
+      $ git switch -c homework04                # Create homework04 branch and check it out
+
+  ### Task 1: Skeleton Code
+
+  To help you get started, the instructor has provided you with the following **skeleton code**:
+
+      ::bash
+      # Go to homework04 folder
+      $ cd homework04
+
+      # Download Makefile
+      $ curl -LO https://pnutz.h4x0r.space/courses/cse.20289.sp26/static/txt/homework04/Makefile
+
+      # Download Python skeleton code
+      $ curl -LO https://pnutz.h4x0r.space/courses/cse.20289.sp26/static/txt/homework04/cut.py
+      $ curl -LO https://pnutz.h4x0r.space/courses/cse.20289.sp26/static/txt/homework04/wc.py
+
+  Once downloaded, you should see the following files in your `homework04` directory:
+
+      :::bash
+      homework04
+          \_ Makefile     # This is the Makefile building all the assignment artifacts
+          \_ cut.py       # This is the Python script for the cut utility
+          \_ wc.py        # This is the Python script for the wc utility
+
+  <div class="alert warning-bg" markdown="1">
+
+  ### <i class="icon icon-medium">{{ "alert" | embed_icon }}</i> DocTests
+
+  You may notice that in addition to the usual comments and `TODOs`, the
+  [docstrings] of each method also contains a few [doctests].
+
+  You are **not** to modify these [doctests] and must keep them in-place. They
+  are used to verify the correctness of your code.
+
+  Your code goes **below** the [docstrings], where the `TODO` and `pass`
+  commands are (you may remove the pass once you complete the method).
+
+  </div>
+
+  [docstrings]: https://peps.python.org/pep-0257/
+  [doctests]: https://docs.python.org/3/library/doctest.html
+
+  ### Task 2: Initial Import
+
+  Now that the files are downloaded into the `homework04` folder, you can
+  **commit** them to your [git] repository:
+
+      :::bash
+      $ git add Makefile                            # Mark changes for commit
+      $ git add *.py
+      $ git commit -m "Homework 04: Initial Import" # Record changes
+
+  ### Task 3: Unit Tests
+
+  After downloading these files, you can run the `make` command to run the
+  tests.
+
+      :::bash
+      # Run all tests (will trigger automatic download)
+      $ make
+
+  You will notice that the Makefile downloads these additional test data and scripts:
+
+      :::bash
+      homework04
+          \_ cut.input    # This is the input file for the cut test script
+          \_ cut.test     # This is the Python test for the cut utility
+          \_ wc.input     # This is the input file for the wc test script
+          \_ wc.test      # This is the Python test for the wc utility
+
+  In addition to the embedded [doctests] in the **skeleton code**, you will be
+  using these [unit tests] to verify the correctness and behavior of your code.
+
+  <div class="alert info-bg" markdown="1">
+
+  ### <i class="icon icon-medium">{{ "download" | embed_icon }}</i> Automatic Downloads
+
+  The `test` scripts are automatically downloaded by the `Makefile`, so any
+  modifications you do to them will be lost when you run `make` again. Likewise,
+  because they are automatically downloaded, you do not need to `add` or `commit`
+  them to your [git] repository.
+
+  </div>
+
+  The details on what you need to implement for this assignment are described
+  in the following sections.
+
+  <div class="alert success-bg" markdown="1">
+
+  ### <i class="icon icon-medium">{{ "help" | embed_icon }}</i> Frequently Asked Questions
+
+  <div class="centered">
+  <iframe src="https://docs.google.com/presentation/d/e/2PACX-1vQKy22ePhpxtPuAWxtU_mcdzjALuqpyPbsfaRWEpISUdqTkNWAX_a040W78feh21IIZiFDNnv4VtmTG/pubembed?start=false&loop=false&delayms=3000" frameborder="0" width="960" height="749" allowfullscreen="true" mozallowfullscreen="true" webkitallowfullscreen="true"></iframe>
+  </div>
+
+  </div>
+
+  ## Activity 1: Cut (*0.4 Points*)
+
+  For the first activity, you are to re-create a simplified version of the [cut] filter:
+
+      :::bash
+      # Display usage message
+      $ ./cut.py -h
+      Usage: cut -d DELIMITER -f FIELDS
+
+      Print selected parts of lines from stream to standard output.
+
+          -d DELIMITER    Use DELIM instead of TAB for field delimiter
+          -f FIELDS       Select only these fields
+      $ echo $?
+      0
+
+      $ ./cut.py
+      Usage: cut -d DELIMITER -f FIELDS
+
+      Print selected parts of lines from stream to standard output.
+
+          -d DELIMITER    Use DELIM instead of TAB for field delimiter
+          -f FIELDS       Select only these fields
+      $ echo $?
+      1
+
+      # Extract the first field
+      $ echo 'Harder, Better, Faster, Stronger' | ./cut.py -d , -f 1
+      Harder
+
+      # Extract the second and fourth fields
+      $ echo 'Harder, Better, Faster, Stronger' | ./cut.py -d , -f 2,4
+       Better, Stronger
+
+      # Extract the first field with test input (first four lines)
+      $ ./cut.py -d , -f 1 < cut.input | head -n 4
+      Work it
+      Do it
+      Harder
+      Faster
+
+  The `cut.py` script reads input from [standard input] and takes the following
+  possible flags:
+
+  - `-d`: This allows the user to specify a `DELIMITER`.  By default, it is the
+    `TAB` character (ie. `\t`).
+
+  - `-f`: This allows the user to specify which fields to select.  The user
+    **must** specify this flag, otherwise it should result in a usage message
+    and a failure exit status as shown above.
+
+  - `-h`: This prints the usage message and exits with success.
+
+  If the user specifies an unknown flag, then the program should print the
+  usage message and exit with a failure status.
+
+  As with [cut], `cut.py` processes each line from [standard input] by
+  splitting the line by the `DELIMITER`, combining specified `FIELDS` by the
+  `DELIMITER`, and then printing out the resulting selection.
+
+  [standard input]: https://en.wikipedia.org/wiki/Standard_streams#Standard_input_(stdin)
+
+  ### Task 1: `cut.py`
+
+  To build this filter, you will need to complete the `cut.py` [Python] script
+  by implementing the following functions:
+
+  1.  <div class="flex-col" markdown="1">
+
+      `strs_to_ints(strings: list[str]) -> list[int]`
+
+      > This function converts a list of `strings` into a list of [int]s.
+
+  2.  <div class="flex-col" markdown="1">
+
+      `cut_line(line: str, delimiter: str='\t', fields: list[int]=[]) -> list[str]`
+
+      > This function splits the given `line` by the `delimiter` and returns a
+      [list] containing only the specified `fields`.
+
+      <div class="alert success-bg" markdown="1">
+
+      **Hint:** Consider what you want to loop over and how you can use a
+      `try/except` to handle `IndexError`s.
+
+      </div>
+
+  3.  <div class="flex-col" markdown="1">
+
+      `cut_stream(stream=sys.stdin, delimiter: str='\t', fields: list[int]=[]) -> None`
+
+      > This function calls `cut_line` on each line in `stream` with the
+      specified `delimiter` and `fields`.  It joins each result from `cut_line`
+      with the `delimiter` and then prints out the selection.
+
+      <div class="alert success-bg" markdown="1">
+
+      **Hint:** Consider using [str.rstrip] to remove trailing whitespace from
+      each line while using [str.join] to combine the selections extracted from
+      each line.
+
+      </div>
+
+  4.  <div class="flex-col" markdown="1">
+
+      `main(arguments=sys.argv[1:], stream=sys.stdin) -> None`
+
+      > This function processes the command-line `arguments` to determine the
+      user specified `DELIMITER` and `FIELDS` (as described above) and then
+      calls `cut_stream` with the given `stream` and computed `DELIMITER` and
+      `FIELDS`.
+
+      <div class="alert success-bg" markdown="1">
+
+      **Hint:** Consider when to use `strs_to_ints` and how to check if the
+      user did not specify any `FIELDS`.
+
+      </div>
+
+  [int]: https://docs.python.org/3/library/functions.html#int
+  [str.join]: https://docs.python.org/3/library/stdtypes.html#str.join
+  [str.rstrip]: https://docs.python.org/3/library/stdtypes.html#str.rstrip
+
+  ### Task 2: Testing
+
+  As you implement `cut.py`, you can use the provided [doctests] to verify the
+  correctness of your code:
+
+      :::bash
+      # Run doctests
+      $ python3 -m doctest cut.py -v
+      ...
+      2 items had no tests:
+          cut
+          cut.usage
+      4 items passed all tests:
+         1 tests in cut.cut_line
+         1 tests in cut.cut_stream
+         1 tests in cut.main
+         1 tests in cut.strs_to_ints
+      4 tests in 6 items.
+      4 passed and 0 failed.
+      Test passed.
+
+  You can also use `make` to run both the [doctests] and the [unit tests]:
+
+      :::bash
+      # Run unit tests (and doctests)
+      $ make test-cut
+      Testing Cut ...
+      test_00_doctest (__main__.CutTest) ... ok
+      test_01_mypy (__main__.CutTest) ... ok
+      test_02_strs_to_ints (__main__.CutTest) ... ok
+      test_03_cut_line (__main__.CutTest) ... ok
+      test_04_cut_stream (__main__.CutTest) ... ok
+      test_05_main_usage (__main__.CutTest) ... ok
+      test_06_main_1 (__main__.CutTest) ... ok
+      test_07_main_1_2 (__main__.CutTest) ... ok
+      test_08_main_1_2_4 (__main__.CutTest) ... ok
+
+         Score 9.00 / 9.00
+         Grade 1.00 / 1.00
+        Status Success
+
+      ----------------------------------------------------------------------
+      Ran 9 tests in 0.052s
+
+      OK
+
+  To just run the [unit tests], you can do the following:
+
+      :::bash
+      # Run unit tests
+      $ ./cut.test -v
+      ...
+
+  To run a specific [unit test], you can specify the **method name**:
+
+      :::bash
+      # Run only mypy unit test
+      $ ./cut.test -v CutTest.test_01_mypy
+      ...
+
+  To manually check your types, you can use [mypy]:
+
+      :::bash
+      # Run mypy to check types
+      $ mypy cut.py
+
+  To use the test input with the script, you can utilize [I/O redirection]:
+
+      :::bash
+      # Run script with input
+      $ ./cut.py -d , -f 1 < cut.input
+      ...
+
+  [I/O redirection]: https://en.wikipedia.org/wiki/Redirection_(computing)
+  [mypy]: https://mypy-lang.org/
+
+  ## Activity 2: WC (*0.4 Points*)
+
+  For the second activity, you are to re-create a simplified version of the [wc] utility:
+
+      :::bash
+      # Display usage message
+      $ ./wc.py -h
+      Usage: wc.py [-l | -w | -c]
+
+      Print newline, word, and byte counts from standard input.
+
+      The options below may be used to select which counts are printed, always in
+      the following order: newline, word, byte.
+
+          -c      Print byte counts
+          -l      Print newline counts
+          -w      Print word counts
+
+      # Count newlines, words, and bytes
+      $ wc < wc.input
+       18  97 439
+
+      # Count only newlines
+      $ ./wc.py -l < wc.input
+      18
+
+  The `wc.py` script reads input from [standard input] and takes the following
+  possible flags:
+
+  - `-c`: This allows the user to specify that the program should print **byte** counts.
+  - `-l`: This allows the user to specify that the program should print **newline** counts.
+  - `-w`: This allows the user to specify that the program should print **word** counts.
+  - `-h`: This prints the usage message and exits with success.
+
+  If the user specifies an unknown flag, then the program should print the
+  usage message and exit with a failure status.
+
+  As with [wc], `wc.py` computes the newline, word, and byte counts of the data
+  from [standard input] and prints out the selected counts.  If no options are
+  specified, then all three options are reported.
+
+  ### Task 1: `wc.py`
+
+  To build this utility, you will need to complete the `wc.py` [Python] script
+  by implementing the following functions:
+
+  1.  <div class="flex-col" markdown="1">
+
+      `count_stream(stream=sys.stdin) -> dict[str, int]`
+
+      > This function counts the number of **newlines**, **words**, and
+      **bytes** and returns a [dict] in the form: `{'newlines': ..., 'words': ...,
+      'bytes': ...}`.
+
+      <div class="alert success-bg" markdown="1">
+
+      **Hint**: Consider looping over the `stream` line-by-line, and consider
+        how to handle possible `KeyError`s when updating the count for one of
+        the options.
+
+      </div>
+
+  2.  <div class="flex-col" markdown="1">
+
+      `print_counts(counts: dict[str, int], options: list[str]) -> None`
+
+      > This function prints the `counts` of the specified `options`.  If no
+      `options` are specified (e.g. `options` is an empty [list]), then all
+      `options` are reported (ie. `newlines`, `words`, `bytes`).
+
+      <div class="alert success-bg" markdown="1">
+
+      **Hint**: Consider what you should loop over and what you should search
+        to determine if an option is selected or not.
+
+        Note, the traditional [wc] computes the maximum width (ie. number of
+        digits) of the counts and uses that to organize the counts into evenly
+        spaced columns.
+
+        -   <div class="flex-col" markdown="1">
+
+            Once you know the maximum number of digits from the counts, you can
+            use [str.rjust] to format the count to a specific width.
+
+              :::python
+              str(count).rjust(count_width)
+
+        - If only one option is specified (e.g. `wc -l`), then no adjustment
+          needs to be made (ie. `count_width` should be `0`).
+
+        - As reference, you can look at the [wc.c] source code from the [GNU
+          coreutils].
+
+        Print the selected and adjusted counts by combining them with a space
+        (ie. `' '`) delimiter via [str.join].
+
+      </div>
+
+  3.  <div class="flex-col" markdown="1">
+
+      `main(arguments=sys.argv[1:], stream=sys.stdin) -> None`
+
+      > This function processes the command-line `arguments` to determine the
+      user specified options, computes the counts using `count_stream` on
+      `stream`, and then reports the counts using `print_counts`.
+
+      <div class="alert success-bg" markdown="1">
+
+      **Hint**: Consider how to keep track of the `options` while looping
+        through the arguments.
+
+      </div>
+
+    [wc.c]: https://github.com/coreutils/coreutils/blob/master/src/wc.c#L690
+    [GNU coreutils]: https://www.gnu.org/software/coreutils/
+    [str.rjust]: https://docs.python.org/3/library/stdtypes.html#str.rjust
+    [str.join]: https://docs.python.org/3/library/stdtypes.html#str.join
+
+  ### Task 2: Testing
+
+  As you implement `wc.py`, you can use the provided [doctests] to verify the
+  correctness of your code:
+
+      :::bash
+      # Run doctests
+      $ python3 -m doctest wc.py -v
+      ...
+      2 items had no tests:
+          wc
+          wc.usage
+      3 items passed all tests:
+         1 tests in wc.count_stream
+         1 tests in wc.main
+         1 tests in wc.print_counts
+      3 tests in 5 items.
+      3 passed and 0 failed.
+      Test passed.
+
+  You can also use `make` to run both the [doctests] and the [unit tests]:
+
+      :::bash
+      # Run unit tests (and doctests)
+      $ make test-wc
+      Testing WC ...
+      test_00_doctest (__main__.WCTest) ... ok
+      test_01_mypy (__main__.WCTest) ... ok
+      test_02_count_stream (__main__.WCTest) ... ok
+      test_03_print_counts_all (__main__.WCTest) ... ok
+      test_04_print_counts_newlines (__main__.WCTest) ... ok
+      test_05_print_counts_words (__main__.WCTest) ... ok
+      test_06_print_counts_bytes (__main__.WCTest) ... ok
+      test_07_print_counts_newlines_words (__main__.WCTest) ... ok
+      test_08_print_counts_newlines_bytes (__main__.WCTest) ... ok
+      test_09_print_counts_words_bytes (__main__.WCTest) ... ok
+      test_10_main_usage (__main__.WCTest) ... ok
+      test_11_main_counts_all (__main__.WCTest) ... ok
+      test_12_main_counts_newlines (__main__.WCTest) ... ok
+      test_13_main_counts_words (__main__.WCTest) ... ok
+      test_14_main_counts_bytes (__main__.WCTest) ... ok
+      test_15_main_counts_newlines_words (__main__.WCTest) ... ok
+      test_16_main_counts_newlines_bytes (__main__.WCTest) ... ok
+      test_17_main_counts_words_bytes (__main__.WCTest) ... ok
+
+         Score 18.00 / 18.00
+         Grade 1.00 / 1.00
+        Status Success
+
+      ----------------------------------------------------------------------
+      Ran 18 tests in 0.108s
+
+      OK
+
+  To just run the [unit tests], you can do the following:
+
+      :::bash
+      # Run unit tests
+      $ ./wc.test -v
+      ...
+
+  To run a specific [unit test], you can specify the **method name**:
+
+      :::bash
+      # Run only mypy unit test
+      $ ./wc.test -v WCTest.test_01_mypy
+      ...
+
+  To manually check your types, you can use [mypy]:
+
+      :::bash
+      # Run mypy to check types
+      $ mypy wc.py
+
+  To use the test input with the script, you can utilize [I/O redirection]:
+
+      :::bash
+      # Run script with input
+      $ ./wc.py < wc.input
+      ...
+
+  ## Activity 3: Quiz (*0.2 Points*)
+
+  Once you have completed all the activities above, you are to complete the
+  following **reflection quiz**:
+
+  <div id="quiz-questions"></div>
+
+  <div id="quiz-responses"></div>
+
+  <script src="static/js/dredd-quiz.js"></script>
+  <script>
+  loadQuiz('static/json/homework04.json');
+  </script>
+
+  <pre style="display: none;" id="dr-container" class="codehilite"><code id="dredd-response"></code></pre>
+
+  As with [Reading 01], you will need to store your answers in a
+  `homework04/answers.json` file.  You can use the form above to generate the
+  contents of this file, or you can write the [JSON] by hand.
+
+  To test your quiz, you can use the `check.py` script:
+
+      :::bash
+      $ ../.scripts/check.py
+      Checking homework04 quiz ...
+           Q01  3.00 /  3.00
+           Q02  7.00 /  7.00
+           Q03  2.00 /  2.00
+           Q04  6.00 /  6.00
+           Q05  2.00 /  2.00
+        --------------------
+         Score 20.00 / 20.00
+         Grade  1.00 /  1.00
+        Status Success
+
+  ## Submission (*1 Point*)
+
+  To submit your assignment, please commit your work to the `homework04` folder
+  of your `homework04` branch in your **assignments** [GitHub] repository.
+  Your <code>homework04</code> folder should **only** contain the following files:
+
+  - <code>Makefile</code>
+  - <code>answers.json</code>
+  - <code>cut.py</code>
+  - <code>wc.py</code>
+
+  <div class="alert caution-bg" markdown="1">
+  **Note**: You do not need to commit the test scripts because the `Makefile`
+  automatically downloads them.
+  </div>
+
+      :::bash
+      #-----------------------------------------------------------------------
+      # Make sure you have already completed Activity 0: Preparation
+      #-----------------------------------------------------------------------
+      ...
+      $ git add cut.py                                      # Mark changes for commit
+      $ git commit -m "Homework 04: cut.py"                 # Record changes
+      ...
+      $ git add wc.py                                       # Mark changes for commit
+      $ git commit -m "Homework 04: wc.py"                  # Record changes
+      ...
+      $ git add answers.json                                # Mark changes for commit
+      $ git commit -m "Homework 04: Quiz"                   # Record changes
+      ...
+      $ git push -u origin homework04                       # Push branch to GitHub
+
+  <div class="alert warning-bg" markdown="1">
+
+  ### <i class="icon icon-medium">{{ "lifebuoy" | embed_icon }}</i> Acknowledgments
+
+  If you collaborated with any other students, or received help from TAs or AI
+  tools on this assignment, please record this support in the `README.md` in
+  the `homework04` folder and include it with your **Pull Request**.
+
+  </div>
+
+  <div class="alert success-bg" markdown="1">
+
+  ### <i class="icon icon-medium">{{ "account-question" | embed_icon }}</i> Graders
+
+  Once you have committed your work and pushed it to [GitHub], remember to
+  create a **pull request** and assign it to the appropriate **teaching
+  assistant** from the [Reading 04 TA List].
+
+  **Note**: this list changes each week, so be sure to consult the appropriate
+  list for each assignment.
+
+  </div>
+
+  [Markdown]:   https://daringfireball.net/projects/markdown/
+  [git]:    https://git-scm.com/
+  [clone]:  https://git-scm.com/docs/git-clone
+  [commit]: https://git-scm.com/docs/git-commit
+  [push]:   https://git-scm.com/docs/git-push
+  [branching]:   https://git-scm.com/docs/git-branch
+  [code review]: https://en.wikipedia.org/wiki/Code_review
+  [GitHub]: https://github.com
+  [Linux]:  https://kernel.org
+  [branch]: https://git-scm.com/docs/git-branch
+  [add]:    https://git-scm.com/docs/git-add
+  [Reading 01]:         reading01.html
+  [Reading 04 TA List]: reading04_tas.html
+  [curl]:   http://man7.org/linux/man-pages/man1/curl.1.html
+  [wget]:   http://man7.org/linux/man-pages/man1/wget.1.html
+  [JSON]:   https://json.org/
+  [ESC]:    https://esc.nd.edu/
+  [unit tests]: https://en.wikipedia.org/wiki/Unit_testing
+  [unit test]: https://en.wikipedia.org/wiki/Unit_testing
