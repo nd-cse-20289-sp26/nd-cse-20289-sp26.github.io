@@ -165,6 +165,8 @@
         items:
           - name:       Slides 10
             link:       https://docs.google.com/presentation/d/1EBv1YLP9LQSraunpnSY4YAZx55uYlyAsGlHRW1JwE10/edit?usp=sharing
+          - name:       Panopto
+            link:       https://notredame.hosted.panopto.com/Panopto/Pages/Viewer.aspx?id=217ba0c3-513f-4ef0-9666-b3f3013833c4
 
       - date:           Wed 02/18
         topics:         Regular Expressions, Processes, Requests
