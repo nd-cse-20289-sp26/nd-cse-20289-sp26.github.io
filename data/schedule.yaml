@@ -193,12 +193,21 @@
         topics:         Functional Programming
         assignments:
           - Reading 05
+        items:
+          - name:       Slides 13
+            link:       https://docs.google.com/presentation/d/1UmT8J1sQXWyY-ihyJ1dwJeVG1PEHyNmrcKPbH7IssOc/edit?usp=sharing
 
       - date:           Wed 02/25
         topics:         Iterators, Generators
+        items:
+          - name:       Slides 14
+            link:       https://docs.google.com/presentation/d/1oUCbEDNZ_lx-m3NYNxujOkVA9kweNCeatGT_RfKx9lk/edit?usp=sharing
 
       - date:           Fri 02/27
         topics:         Parallel Computing
+        items:
+          - name:       Slides 15
+            link:       https://docs.google.com/presentation/d/1DZ_Humdv_DS06q4PZ2K2oObJlpmekLst-Ox6clDK9uo/edit?usp=sharing
 
       - date:           Sat 02/28
         topics:         '<i class="muted">SearX, Hulk</i>'
