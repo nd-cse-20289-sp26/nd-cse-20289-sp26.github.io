@@ -1,0 +1,22 @@
+{
+    "q1": {
+        "type": "order",
+        "question": "\n<p>Given the following <b>Python</b> script, <code>courses.py</code>:</p>\n\n<pre>\nfor course, count in sorted(counts.items(), key=lambda p: (-p[1], p[0])):\nfor course in re.findall(r'CSE [0-9]{5}', data):\n    counts[course] = counts.get(course, 0) + 1\n    print(f'{count:>7} {course}')\ndata   = requests.get('https://pnutz.h4x0r.space/courses/').text\ncounts = {}\n</pre>\n\n<p>This script is suppose to extract all the CSE courses taught by the\ninstructor from his website and print out a count of how often each course\nwas taught in descending order by occurrence.</p>\n\n<pre>\n$ ./courses.py\n     10 CSE 20289\n     10 CSE 30872\n     ...\n      1 CSE 40850\n      1 CSE 40872\n      1 CSE 40881\n</pre>\n\n<p>Unfortunately, the lines of code are scrambled. Unscramble them below so\nthat the script produces the correct output. <b>Note</b>: You can assume\n<code>requests</code> and <code>re</code> are already <code>imported</code>.</p>\n",
+        "responses": {
+            "a": "<code>for course, count in sorted(counts.items(), key=lambda p: (-p[1], p[0])):</code>",
+            "b": "<code>for course in re.findall(r'CSE [0-9]{5}', data):</code>",
+            "c": "<code>counts[course] = counts.get(course, 0) + 1</code>",
+            "d": "<code>print(f'{count:>7} {course}')</code>",
+            "e": "<code>data   = requests.get('https://www3.nd.edu/~pbui/teaching/').text</code>",
+            "f": "<code>counts = {}</code>"
+        }
+    },
+    "q2": {
+        "type": "blank",
+        "question": "\n<p>Given the following <b>Python</b> script, <code>shells.py</code>:</p>\n\n<pre>\nshells = ____\nfor record in csv.reader(____, delimiter=____):\n    shells.add(____)\n\nfor shell in sorted(shells):\n    print(shell)\n</pre>\n\n<p>This script is suppose to print out all of the shells in\n<code>/etc/passwd</code> in sorted order and without any duplicates.</p>\n\n<pre>\n$ ./shells.py\n/bin/bash\n/bin/false\n/bin/sync\n/usr/sbin/nologin\n</pre>\n\n<p>Complete this script by filling in the blanks.</p>\n"
+    },
+    "q3": {
+        "type": "blank",
+        "question": "\n<p>Given the following <b>Python</b> script, <code>machines.py</code>:</p>\n\n<pre>\nimport requests\n\nURL = 'http://catalog.cse.nd.edu:9097/query.json'\n\nresponse = ____\ndata     = ____\n\nfor machine in data:\n    if ____  == 'chirp':\n        print(____, ____)\n</pre>\n\n<p>This script parses the <b>JSON</b> data from\n<code>http://catalog.cse.nd.edu:9097/query.json</code>, which contains a\nlisting of all the machines and services registered with <a\nhref=\"https://ccl.cse.nd.edu\">Cooperative Computing Lab</a>, and displays\nthe <b>name</b> and <b>address</b> of the machines with the type\n<code>chirp</code>.</p>\n\n<pre>\n$ ./machines.py\n140.221.79.11 140.221.79.11\ncamd01.crc.nd.edu 10.32.77.80\ncamd02.crc.nd.edu 10.32.77.82\ncamd03.crc.nd.edu 10.32.77.84\ncamd04.crc.nd.edu 10.32.77.86\n...\n</pre>\n\n<p>Complete this script by filling in the blanks.</p>\n"
+    }
+}

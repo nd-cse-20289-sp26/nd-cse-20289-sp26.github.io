@@ -1,0 +1,100 @@
+#!/usr/bin/env python3
+
+import doctest
+import itertools
+import io
+import math
+import mypy.api
+import subprocess
+import unittest
+import unittest.mock
+
+import odds
+
+# Unit Tests
+
+class OddsTest(unittest.TestCase):
+    Input    = '\n'.join(map(str, range(1, 1_000_000)))
+    Total    = 8
+    Points   = 0
+
+    @classmethod
+    def setupClass(cls):
+        cls.Points = 0
+
+    @classmethod
+    def tearDownClass(cls):
+        print()
+        print(f'   Score {cls.Points:.2f} / {cls.Total:.2f}')
+        print(f'   Grade {cls.Points/cls.Total:.2f} / {1.0:.2f}')
+        print(f'  Status {"Success" if math.isclose(cls.Points, cls.Total) else "Failure"}')
+        print()
+
+    def test_00_doctest(self):
+        failures, tests = doctest.testmod(odds, verbose=False)
+        self.assertEqual(failures, 0)
+        self.assertEqual(tests, 4)
+        OddsTest.Points += 1.0
+
+    def test_01_mypy(self):
+        _, _, exit_status = mypy.api.run(['odds.py'])
+        self.assertTrue(exit_status == 0)
+        OddsTest.Points += 1.0
+
+    def test_02_odds_fp(self):
+        odds1 = odds.odds(io.StringIO(self.Input))
+        odds2 = odds.odds_fp(io.StringIO(self.Input))
+        for a, b in itertools.zip_longest(odds1, odds2):
+            self.assertEqual(a, b)
+        OddsTest.Points += 1.0
+
+    def test_03_odds_lc(self):
+        odds1 = odds.odds(io.StringIO(self.Input))
+        odds2 = odds.odds_lc(io.StringIO(self.Input))
+        for a, b in itertools.zip_longest(odds1, odds2):
+            self.assertEqual(a, b)
+        OddsTest.Points += 1.0
+
+    def test_04_odds_gr(self):
+        odds1 = odds.odds(io.StringIO(self.Input))
+        odds2 = odds.odds_gr(io.StringIO(self.Input))
+        for a, b in itertools.zip_longest(odds1, odds2):
+            self.assertEqual(a, b)
+        OddsTest.Points += 1.0
+
+    def test_05_main_fp(self):
+        with unittest.mock.patch('sys.stdout', new=io.StringIO()) as output0:
+            odds.main('-n'.split(), io.StringIO(self.Input))
+
+        with unittest.mock.patch('sys.stdout', new=io.StringIO()) as output1:
+            odds.main('-f'.split(), io.StringIO(self.Input))
+
+        self.assertEqual(output0.getvalue(), output1.getvalue())
+        OddsTest.Points += 1.0
+
+    def test_06_main_lc(self):
+        with unittest.mock.patch('sys.stdout', new=io.StringIO()) as output0:
+            odds.main('-n'.split(), io.StringIO(self.Input))
+
+        with unittest.mock.patch('sys.stdout', new=io.StringIO()) as output1:
+            odds.main('-l'.split(), io.StringIO(self.Input))
+
+        self.assertEqual(output0.getvalue(), output1.getvalue())
+        OddsTest.Points += 1.0
+
+    def test_07_main_gr(self):
+        with unittest.mock.patch('sys.stdout', new=io.StringIO()) as output0:
+            odds.main('-n'.split(), io.StringIO(self.Input))
+
+        with unittest.mock.patch('sys.stdout', new=io.StringIO()) as output1:
+            odds.main('-l'.split(), io.StringIO(self.Input))
+
+        self.assertEqual(output0.getvalue(), output1.getvalue())
+        OddsTest.Points += 1.0
+
+# Main Execution
+
+if __name__ == '__main__':
+    unittest.main()
+
+# vim: set sts=4 sw=4 ts=8 expandtab ft=python:

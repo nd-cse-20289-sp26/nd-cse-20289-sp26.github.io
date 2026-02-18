@@ -1,0 +1,278 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<!-- Favicon -->
+<link rel="icon" type="image/png" sizes="32x32" href="static/ico/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="static/ico/favicon-16x16.png">
+<link rel="manifest" href="static/ico/site.webmanifest">
+<!-- Stylesheets -->
+<link rel="stylesheet" href="static/css/pnutzh4x0r.css">
+<title>Reading 05: Functional Programming</title>
+</head>
+<body>
+<header>
+<a class="logo" href="reading05.html">
+    <h1>Reading 05: Functional Programming</h1>
+</a>
+<nav>
+    <ul>
+        <li><a href="index.html"><h4>Home</h4></a></li>
+        </ul>
+</nav></header>
+<main>
+<p><strong>Everyone</strong>:</p>
+<p>Next week, we will explore a new programming paradigm called <a href="https://en.wikipedia.org/wiki/Functional_programming">functional
+programming</a>, which, if you look closely, is similar to the <a href="https://en.wikipedia.org/wiki/Unix_philosophy">Unix Philosophy</a>:</p>
+<blockquote>
+<p>By decomposing data processing problems into small functions that <strong>work
+together</strong> to process data without side-effects, we can expose opportunities
+for <a href="https://en.wikipedia.org/wiki/Concurrency_(computer_science)">concurrency</a> and <a href="https://en.wikipedia.org/wiki/Parallel_computing">parallelism</a> to build powerful <strong>abstractions</strong> such
+as <a href="https://research.google/pubs/pub62/">MapReduce</a>.</p>
+</blockquote>
+<div class="alert info-bg">
+<h3 id="book-embed_icon-tldr"><i class="icon icon-medium"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><title>book</title><path d="M18,22A2,2 0 0,0 20,20V4C20,2.89 19.1,2 18,2H12V9L9.5,7.5L7,9V2H6A2,2 0 0,0 4,4V20A2,2 0 0,0 6,22H18Z" /></svg>
+</i> TL;DR<a class="headerlink" href="#book-embed_icon-tldr" title="Permanent link">&para;</a></h3>
+<p>The focus of this reading is to introduce you to common data formats such as
+<a href="https://en.wikipedia.org/wiki/Comma-separated_values">CSV</a> and <a href="https://json.org/">JSON</a>, and then to let you explore <a href="https://en.wikipedia.org/wiki/Functional_programming">functional programming</a> in
+<a href="https://www.python.org/">Python</a>.</p>
+</div>
+<h2 id="readings">Readings<a class="headerlink" href="#readings" title="Permanent link">&para;</a></h2>
+<div class="flex-row">
+<div class="flex-col">
+<p>The readings for this week are:</p>
+<ol>
+<li>
+<div class="flex-col" markdown="1">
+<p><a href="https://realpython.com/">Real Python</a> - Requests, CSV, Sorting</p>
+<ul>
+<li>
+<p><a href="https://realpython.com/python-requests/">Python's Requests Library (Guide)</a></p>
+</li>
+<li>
+<p><a href="https://realpython.com/python-csv/">Reading and Writing CSV Files in Python</a></p>
+</li>
+<li>
+<p><a href="https://realpython.com/python-sort/">How to Use sorted() and .sort() in Python</a></p>
+</li>
+</ul>
+</li>
+<li>
+<div class="flex-col" markdown="1">
+<p><a href="https://realpython.com/">Real Python</a> - Functional Programming</p>
+<ul>
+<li>
+<p><a href="https://realpython.com/python-functional-programming/">Functional Programming in Python: When and How to Use It</a></p>
+</li>
+<li>
+<p><a href="https://realpython.com/list-comprehension-python/">When to Use a List Comprehension in Python</a></p>
+</li>
+<li>
+<p><a href="https://realpython.com/introduction-to-python-generators/">How to Use Generators and yield in Python</a></p>
+</li>
+</ul>
+</li>
+</ol>
+</div>
+<div class="flex-col">
+<div class="centered">
+  <img src="static/img/python.png">
+</div>
+<h3 id="optional-resources">Optional Resources<a class="headerlink" href="#optional-resources" title="Permanent link">&para;</a></h3>
+<p>Here are some additional resources:</p>
+<ol>
+<li>
+<p><a href="https://docs.python.org/3/howto/functional.html">Functional Programming HOWTO</a></p>
+</li>
+<li>
+<p><a href="https://maryrosecook.com/blog/post/a-practical-introduction-to-functional-programming">A practical introduction to functional programming</a></p>
+</li>
+<li>
+<p><a href="https://lectures.scientific-python.org/advanced/advanced_python/index.html#iterators-generator-expressions-and-generators">Iterators, generator expressions and generators</a></p>
+</li>
+<li>
+<p><a href="https://www.geeksforgeeks.org/functional-programming-in-python/">Functional Programming in Python</a></p>
+</li>
+</ol>
+</div>
+</div>
+<h2 id="quiz">Quiz<a class="headerlink" href="#quiz" title="Permanent link">&para;</a></h2>
+<p>This week the reading is split into two sections: the first part is a short
+<a href="https://dredd.h4x0r.space">dredd</a> quiz, while the second part involves a <a href="https://www.python.org/">Python</a> script: <code>odds.py</code>.</p>
+<h3 id="preparation">Preparation<a class="headerlink" href="#preparation" title="Permanent link">&para;</a></h3>
+<p>To test this script, you will need to download the <a href="https://pnutz.h4x0r.space/courses/cse.20289.sp26/static/txt/reading05/Makefile">Makefile</a> and test
+scripts:</p>
+<div class="codehilite"><pre><span></span><code>$<span class="w"> </span>git<span class="w"> </span>switch<span class="w"> </span>master<span class="w">                   </span><span class="c1"># Make sure we are in master branch</span>
+$<span class="w"> </span>git<span class="w"> </span>pull<span class="w"> </span>--rebase<span class="w">                   </span><span class="c1"># Make sure we are up-to-date with GitHub</span>
+
+$<span class="w"> </span>git<span class="w"> </span>switch<span class="w"> </span>-c<span class="w"> </span>reading05<span class="w">             </span><span class="c1"># Create reading05 branch and check it out</span>
+
+$<span class="w"> </span><span class="nb">cd</span><span class="w"> </span>reading05<span class="w">                        </span><span class="c1"># Go into reading05 folder</span>
+
+<span class="c1"># Download Makefile</span>
+$<span class="w"> </span>curl<span class="w"> </span>-LO<span class="w"> </span>https://pnutz.h4x0r.space/courses/cse.20289.sp26/static/txt/reading05/Makefile
+
+<span class="c1"># Download Skeleton Code</span>
+$<span class="w"> </span>curl<span class="w"> </span>-LO<span class="w"> </span>https://pnutz.h4x0r.space/courses/cse.20289.sp26/static/txt/reading05/odds.py
+</code></pre></div>
+
+<h3 id="questions-05-points">Questions (<em>0.5 Points</em>)<a class="headerlink" href="#questions-05-points" title="Permanent link">&para;</a></h3>
+<p>Record the answers to the following <a href="static/json/reading05.json">Reading 05 Quiz</a> questions in your
+<code>reading05</code> branch:</p>
+<div id="quiz-questions"></div>
+
+<div id="quiz-responses"></div>
+
+<script src="static/js/dredd-quiz.js"></script>
+
+<script>
+loadQuiz('static/json/reading05.json');
+</script>
+
+<pre style="display: none;" id="dr-container" class="codehilite"><code id="dredd-response"></code></pre>
+
+<p>As with <a href="reading01.html">Reading 01</a>, you will need to store your answers in a
+<code>reading05/answers.json</code> file. You can use the form above to generate the
+contents of this file, or you can write the <a href="https://json.org/">JSON</a> by hand.</p>
+<p>To test your quiz, you can use the <code>check.py</code> script:</p>
+<div class="codehilite"><pre><span></span><code>$<span class="w"> </span>../.scripts/check.py
+Checking<span class="w"> </span>reading05<span class="w"> </span>quiz<span class="w"> </span>...
+<span class="w">      </span>Q1<span class="w">  </span><span class="m">6</span>.00<span class="w"> </span>/<span class="w">  </span><span class="m">6</span>.00
+<span class="w">      </span>Q2<span class="w">  </span><span class="m">4</span>.00<span class="w"> </span>/<span class="w">  </span><span class="m">4</span>.00
+<span class="w">      </span>Q3<span class="w">  </span><span class="m">5</span>.00<span class="w"> </span>/<span class="w">  </span><span class="m">5</span>.00
+<span class="w">  </span>--------------------
+<span class="w">   </span>Score<span class="w"> </span><span class="m">15</span>.00<span class="w"> </span>/<span class="w"> </span><span class="m">15</span>.00
+<span class="w">   </span>Grade<span class="w">  </span><span class="m">1</span>.00<span class="w"> </span>/<span class="w">  </span><span class="m">1</span>.00
+<span class="w">  </span>Status<span class="w"> </span>Success
+</code></pre></div>
+
+<h3 id="script-oddspy-05-points">Script: <code>odds.py</code> (<em>0.5 Points</em>)<a class="headerlink" href="#script-oddspy-05-points" title="Permanent link">&para;</a></h3>
+<p>The <code>odds.py</code> script has four implementations of an <code>odds</code> function that
+processes a stream of input and returns a sequence of only the odd numbers.
+The first implementation, called <code>odds</code>, is provided to you:</p>
+<div class="codehilite"><pre><span></span><code><span class="k">def</span> <span class="nf">odds</span><span class="p">(</span><span class="n">stream</span><span class="o">=</span><span class="n">sys</span><span class="o">.</span><span class="n">stdin</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">int</span><span class="p">]:</span>
+    <span class="n">results</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">stream</span><span class="p">:</span>
+        <span class="n">number</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">line</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">number</span> <span class="o">%</span> <span class="mi">2</span><span class="p">:</span>
+            <span class="n">results</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">number</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">results</span>
+</code></pre></div>
+
+<p>Your task is to implement the three other versions of the same <code>odds</code>
+function:</p>
+<ol>
+<li>
+<div class="flex-col" markdown="1">
+<p><code>odds_fp(stream=sys.stdin) -&gt; Iterator[int]</code></p>
+<blockquote>
+<p>This function uses <a href="https://docs.python.org/3/library/functions.html#map">map</a>, <a href="https://docs.python.org/3/library/functions.html#filter">filter</a>, and a <a href="https://docs.python.org/3/tutorial/controlflow.html#lambda-expressions">lambda</a> expression to
+produce a sequence of only the odd numbers from <code>stream</code>.</p>
+</blockquote>
+</li>
+<li>
+<div class="flex-col" markdown="1">
+<p><code>odds_lc(stream=sys.stdin) -&gt; list[int]</code></p>
+<blockquote>
+<p>This function uses a <a href="https://docs.python.org/3/tutorial/datastructures.html#list-comprehensions">list comprehension</a> to produce a sequence of only
+the odd numbers from <code>stream</code>.</p>
+</blockquote>
+</li>
+<li>
+<div class="flex-col" markdown="1">
+<p><code>odds_gr(stream=sys.stdin) -&gt; Iterator[int]</code></p>
+<blockquote>
+<p>This function uses <a href="https://docs.python.org/3/reference/simple_stmts.html#yield">yield</a> to generate a sequence of only the odd
+numbers from <code>stream</code>.</p>
+</blockquote>
+</li>
+</ol>
+<h4 id="testing">Testing<a class="headerlink" href="#testing" title="Permanent link">&para;</a></h4>
+<p>As you implement <code>odds.py</code>, you can use the provided <a href="https://docs.python.org/3/library/doctest.html">doctests</a> to verify the
+correctness of your code:</p>
+<div class="codehilite"><pre><span></span><code><span class="c1"># Run doctests</span>
+$<span class="w"> </span>python3<span class="w"> </span>-m<span class="w"> </span>doctest<span class="w"> </span>odds.py<span class="w"> </span>-v
+<span class="m">2</span><span class="w"> </span>items<span class="w"> </span>had<span class="w"> </span>no<span class="w"> </span>tests:
+<span class="w">    </span>odds
+<span class="w">    </span>odds.main
+<span class="m">4</span><span class="w"> </span>items<span class="w"> </span>passed<span class="w"> </span>all<span class="w"> </span>tests:
+<span class="w">   </span><span class="m">1</span><span class="w"> </span>tests<span class="w"> </span><span class="k">in</span><span class="w"> </span>odds.odds
+<span class="w">   </span><span class="m">1</span><span class="w"> </span>tests<span class="w"> </span><span class="k">in</span><span class="w"> </span>odds.odds_fp
+<span class="w">   </span><span class="m">1</span><span class="w"> </span>tests<span class="w"> </span><span class="k">in</span><span class="w"> </span>odds.odds_gr
+<span class="w">   </span><span class="m">1</span><span class="w"> </span>tests<span class="w"> </span><span class="k">in</span><span class="w"> </span>odds.odds_lc
+<span class="m">4</span><span class="w"> </span>tests<span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="m">6</span><span class="w"> </span>items.
+<span class="m">4</span><span class="w"> </span>passed<span class="w"> </span>and<span class="w"> </span><span class="m">0</span><span class="w"> </span>failed.
+Test<span class="w"> </span>passed.
+</code></pre></div>
+
+<p>You can also use <code>make</code> to run both the <a href="https://docs.python.org/3/library/doctest.html">doctests</a> and the <a href="https://en.wikipedia.org/wiki/Unit_testing">unit tests</a>:</p>
+<div class="codehilite"><pre><span></span><code><span class="c1"># Run unit tests (and doctests)</span>
+$<span class="w"> </span>make<span class="w"> </span>test-odds
+Testing<span class="w"> </span>Odds<span class="w"> </span>...
+test_00_doctest<span class="w"> </span><span class="o">(</span>__main__.OddsTest<span class="o">)</span><span class="w"> </span>...<span class="w"> </span>ok
+test_01_mypy<span class="w"> </span><span class="o">(</span>__main__.OddsTest<span class="o">)</span><span class="w"> </span>...<span class="w"> </span>ok
+test_02_odds_fp<span class="w"> </span><span class="o">(</span>__main__.OddsTest<span class="o">)</span><span class="w"> </span>...<span class="w"> </span>ok
+test_03_odds_lc<span class="w"> </span><span class="o">(</span>__main__.OddsTest<span class="o">)</span><span class="w"> </span>...<span class="w"> </span>ok
+test_04_odds_gr<span class="w"> </span><span class="o">(</span>__main__.OddsTest<span class="o">)</span><span class="w"> </span>...<span class="w"> </span>ok
+test_05_main_fp<span class="w"> </span><span class="o">(</span>__main__.OddsTest<span class="o">)</span><span class="w"> </span>...<span class="w"> </span>ok
+test_06_main_lc<span class="w"> </span><span class="o">(</span>__main__.OddsTest<span class="o">)</span><span class="w"> </span>...<span class="w"> </span>ok
+test_07_main_gr<span class="w"> </span><span class="o">(</span>__main__.OddsTest<span class="o">)</span><span class="w"> </span>...<span class="w"> </span>ok
+
+<span class="w">   </span>Score<span class="w"> </span><span class="m">8</span>.00<span class="w"> </span>/<span class="w"> </span><span class="m">8</span>.00
+<span class="w">   </span>Grade<span class="w"> </span><span class="m">1</span>.00<span class="w"> </span>/<span class="w"> </span><span class="m">1</span>.00
+<span class="w">  </span>Status<span class="w"> </span>Success
+
+
+----------------------------------------------------------------------
+Ran<span class="w"> </span><span class="m">8</span><span class="w"> </span>tests<span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="m">3</span>.407s
+
+OK
+</code></pre></div>
+
+<p>To just run the <a href="https://en.wikipedia.org/wiki/Unit_testing">unit tests</a>, you can do the following:</p>
+<div class="codehilite"><pre><span></span><code><span class="c1"># Run unit tests</span>
+$<span class="w"> </span>./odds.test<span class="w"> </span>-v
+...
+</code></pre></div>
+
+<h2 id="submission">Submission<a class="headerlink" href="#submission" title="Permanent link">&para;</a></h2>
+<p>To submit you work, follow the same process outlined in <a href="reading01.html">Reading 01</a>:</p>
+<div class="codehilite"><pre><span></span><code><span class="c1">#--------------------------------------------------</span>
+<span class="c1"># Make sure you have already completed Preparation</span>
+<span class="c1">#--------------------------------------------------</span>
+...
+$<span class="w"> </span>git<span class="w"> </span>add<span class="w"> </span>answers.json<span class="w">                </span><span class="c1"># Mark changes for commit</span>
+$<span class="w"> </span>git<span class="w"> </span>commit<span class="w"> </span>-m<span class="w"> </span><span class="s2">&quot;Reading 05: Quiz&quot;</span><span class="w">    </span><span class="c1"># Record changes</span>
+...
+$<span class="w"> </span>git<span class="w"> </span>add<span class="w"> </span>Makefile<span class="w">                    </span><span class="c1"># Mark changes for commit</span>
+$<span class="w"> </span>git<span class="w"> </span>add<span class="w"> </span>odds.py<span class="w">                     </span><span class="c1"># Mark changes for commit</span>
+$<span class="w"> </span>git<span class="w"> </span>commit<span class="w"> </span>-m<span class="w"> </span><span class="s2">&quot;Reading 05: Code&quot;</span><span class="w">    </span><span class="c1"># Record changes</span>
+...
+$<span class="w"> </span>git<span class="w"> </span>push<span class="w"> </span>-u<span class="w"> </span>origin<span class="w"> </span>reading05<span class="w">        </span><span class="c1"># Push branch to GitHub</span>
+</code></pre></div>
+
+<div class="alert warning-bg">
+<h3 id="lifebuoy-embed_icon-acknowledgments"><i class="icon icon-medium"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><title>lifebuoy</title><path d="M19.79,15.41C20.74,13.24 20.74,10.75 19.79,8.59L17.05,9.83C17.65,11.21 17.65,12.78 17.06,14.17L19.79,15.41M15.42,4.21C13.25,3.26 10.76,3.26 8.59,4.21L9.83,6.94C11.22,6.35 12.79,6.35 14.18,6.95L15.42,4.21M4.21,8.58C3.26,10.76 3.26,13.24 4.21,15.42L6.95,14.17C6.35,12.79 6.35,11.21 6.95,9.82L4.21,8.58M8.59,19.79C10.76,20.74 13.25,20.74 15.42,19.78L14.18,17.05C12.8,17.65 11.22,17.65 9.84,17.06L8.59,19.79M12,2A10,10 0 0,1 22,12A10,10 0 0,1 12,22A10,10 0 0,1 2,12A10,10 0 0,1 12,2M12,8A4,4 0 0,0 8,12A4,4 0 0,0 12,16A4,4 0 0,0 16,12A4,4 0 0,0 12,8Z" /></svg>
+</i> Acknowledgments<a class="headerlink" href="#lifebuoy-embed_icon-acknowledgments" title="Permanent link">&para;</a></h3>
+<p>If you collaborated with any other students, or received help from TAs or AI
+tools on this assignment, please record this support in the <code>README.md</code> in
+the <code>reading05</code> folder and include it with your <strong>Pull Request</strong>.</p>
+</div>
+<div class="alert success-bg">
+<h3 id="account-question-embed_icon-graders"><i class="icon icon-medium"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><title>account-question</title><path d="M13,8A4,4 0 0,1 9,12A4,4 0 0,1 5,8A4,4 0 0,1 9,4A4,4 0 0,1 13,8M17,18V20H1V18C1,15.79 4.58,14 9,14C13.42,14 17,15.79 17,18M20.5,14.5V16H19V14.5H20.5M18.5,9.5H17V9A3,3 0 0,1 20,6A3,3 0 0,1 23,9C23,9.97 22.5,10.88 21.71,11.41L21.41,11.6C20.84,12 20.5,12.61 20.5,13.3V13.5H19V13.3C19,12.11 19.6,11 20.59,10.35L20.88,10.16C21.27,9.9 21.5,9.47 21.5,9A1.5,1.5 0 0,0 20,7.5A1.5,1.5 0 0,0 18.5,9V9.5Z" /></svg>
+</i> Graders<a class="headerlink" href="#account-question-embed_icon-graders" title="Permanent link">&para;</a></h3>
+<p>Once you have committed your work and pushed it to <a href="https://github.com">GitHub</a>, remember to
+create a <strong>pull request</strong> and assign it to the appropriate <strong>teaching
+assistant</strong> from the <a href="reading05_tas.html">Reading 05 TA List</a>.</p>
+<p><strong>Note</strong>: this list changes each week, so be sure to consult the appropriate
+list for each assignment.</p>
+</div>
+</main>
+<footer>
+Built using <a href="https://python.org">Python</a>
+and <a href="https://jinja.palletsprojects.com">Jinja</a>
+with colors from <a href="https://nordtheme.com">Nord Theme</a>
+and icons from <a href="https://pictogrammers.com/library/mdi/">Material Design Icons</a>.</footer>
+</body>
+</html>
