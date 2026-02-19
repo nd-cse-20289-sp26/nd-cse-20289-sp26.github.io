@@ -1,0 +1,204 @@
+#!/usr/bin/env python3
+
+import doctest
+import json
+import itertools
+import io
+import math
+import mypy.api
+import subprocess
+import unittest
+import unittest.mock
+import urllib.request
+
+import searx
+
+# Unit Tests
+
+class SearxTest(unittest.TestCase):
+    Base    = 'https://pnutz.h4x0r.space/courses/cse.20289.sp26/static/txt/homework05/searx'
+    URL     = f'{Base}.json'
+    Output0 = f'{Base}.output.0'
+    Output1 = f'{Base}.output.1'
+    Output2 = f'{Base}.output.2'
+    Output3 = f'{Base}.output.3'
+    Total   = 18.0
+    Points  = 0
+
+    @classmethod
+    def setupClass(cls):
+        cls.Points = 0
+
+    @classmethod
+    def tearDownClass(cls):
+        print()
+        print(f'   Score {cls.Points:.2f} / {cls.Total:.2f}')
+        print(f'   Grade {cls.Points/cls.Total:.2f} / {1.0:.2f}')
+        print(f'  Status {"Success" if math.isclose(cls.Points, cls.Total) else "Failure"}')
+
+    def test_00_doctest(self):
+        failures, tests = doctest.testmod(searx, verbose=False)
+        self.assertEqual(failures, 0)
+        self.assertEqual(tests, 3)
+        SearxTest.Points += 1.0
+
+    def test_01_mypy(self):
+        _, _, exit_status = mypy.api.run(['searx.py'])
+        self.assertTrue(exit_status == 0)
+        SearxTest.Points += 1.0
+
+    def test_02_searx_query_python(self):
+        results = searx.searx_query('Python')
+        self.assertTrue(len(results) >= 5)
+        self.assertTrue(any(result['title'] == 'Welcome to Python.org' for result in results))
+        SearxTest.Points += 1.0
+
+    def test_03_searx_query_peter_bui(self):
+        results = searx.searx_query('peter bui')
+        self.assertTrue(len(results) >= 5)
+        self.assertTrue(any(result['url'] == 'https://engineering.nd.edu/faculty/peter-bui/' for result in results))
+        SearxTest.Points += 1.0
+
+    def test_04_searx_query_ndlug(self):
+        results = searx.searx_query('ndlug')
+        self.assertTrue(len(results) >= 5)
+        self.assertTrue(all([
+            any(result['title'] == 'Notre Dame Linux Users Group' for result in results),
+            any(result['url'].startswith('https://ndlug.org') for result in results),
+            any(result['url'].startswith('https://social.ndlug.org/') for result in results),
+        ]))
+        SearxTest.Points += 1.0
+
+    def test_05_searx_query_url(self):
+        results = searx.searx_query('Python', url=self.URL)
+        self.assertEqual(
+            results,
+            json.load(urllib.request.urlopen(self.URL))['results']
+        )
+        SearxTest.Points += 1.0
+
+    def test_06_print_results(self):
+        results  = json.load(urllib.request.urlopen(self.URL))['results']
+        expected = urllib.request.urlopen(self.Output0).read()
+
+        with unittest.mock.patch('sys.stdout', new=io.StringIO()) as output:
+            searx.print_results(results)
+
+        self.assertEqual(output.getvalue(), expected.decode())
+        SearxTest.Points += 1.0
+
+    def test_07_print_results_limit_1(self):
+        results  = json.load(urllib.request.urlopen(self.URL))['results']
+        expected = urllib.request.urlopen(self.Output1).read()
+
+        with unittest.mock.patch('sys.stdout', new=io.StringIO()) as output:
+            searx.print_results(results, limit=1)
+
+        self.assertEqual(output.getvalue(), expected.decode())
+        SearxTest.Points += 1.0
+
+    def test_08_print_results_orderby_title(self):
+        results  = json.load(urllib.request.urlopen(self.URL))['results']
+        expected = urllib.request.urlopen(self.Output2).read()
+
+        with unittest.mock.patch('sys.stdout', new=io.StringIO()) as output:
+            searx.print_results(results, orderby='title')
+
+        self.assertEqual(output.getvalue(), expected.decode())
+        SearxTest.Points += 1.0
+
+    def test_09_print_results_limit_3_orderby_url(self):
+        results  = json.load(urllib.request.urlopen(self.URL))['results']
+        expected = urllib.request.urlopen(self.Output3).read()
+
+        with unittest.mock.patch('sys.stdout', new=io.StringIO()) as output:
+            searx.print_results(results, limit=3, orderby='url')
+
+        self.assertEqual(output.getvalue(), expected.decode())
+        SearxTest.Points += 1.0
+
+    def test_10_main_usage(self):
+        with unittest.mock.patch('sys.stderr', new=io.StringIO()) as output:
+            with self.assertRaises(SystemExit) as context:
+                searx.main('-h'.split())
+            self.assertTrue('Usage' in output.getvalue())
+        self.assertEqual(str(context.exception), '0')
+
+        SearxTest.Points += 0.5
+
+        with unittest.mock.patch('sys.stderr', new=io.StringIO()) as output:
+            with self.assertRaises(SystemExit) as context:
+                searx.main('-p'.split())
+            self.assertTrue('Usage' in output.getvalue())
+        self.assertEqual(str(context.exception), '1')
+
+        SearxTest.Points += 0.5
+
+    def test_11_main_python(self):
+        with unittest.mock.patch('sys.stdout', new=io.StringIO()) as output:
+            searx.main('Python'.split())
+        outputs = output.getvalue().splitlines()
+        self.assertEqual(len(outputs), 14)
+        self.assertTrue(any('wikipedia.org' in output for output in outputs))
+        self.assertTrue(any('python.org' in output for output in outputs))
+        SearxTest.Points += 1.0
+
+    def test_12_main_peter_bui(self):
+        with unittest.mock.patch('sys.stdout', new=io.StringIO()) as output:
+            searx.main('peter bui'.split())
+        outputs = output.getvalue().splitlines()
+        self.assertEqual(len(outputs), 14)
+        self.assertTrue(any('https://engineering.nd.edu/faculty/peter-bui/' in output for output in outputs))
+        SearxTest.Points += 1.0
+
+    def test_13_main_ndlug(self):
+        with unittest.mock.patch('sys.stdout', new=io.StringIO()) as output:
+            searx.main('ndlug'.split())
+        outputs = output.getvalue().splitlines()
+        self.assertEqual(len(outputs), 14)
+        self.assertTrue(any('Notre Dame Linux Users Group' in output for output in outputs))
+        self.assertTrue(any('https://ndlug.org' in output for output in outputs))
+        SearxTest.Points += 1.0
+
+    def test_14_main_url_python(self):
+        with unittest.mock.patch('sys.stdout', new=io.StringIO()) as output:
+            searx.main(f'-u {self.URL} Python'.split())
+        self.assertEqual(
+            output.getvalue(),
+            urllib.request.urlopen(self.Output0).read().decode()
+        )
+        SearxTest.Points += 1.0
+
+    def test_15_main_limit_1_url_python(self):
+        with unittest.mock.patch('sys.stdout', new=io.StringIO()) as output:
+            searx.main(f'-n 1 -u {self.URL} Python'.split())
+        self.assertEqual(
+            output.getvalue(),
+            urllib.request.urlopen(self.Output1).read().decode()
+        )
+        SearxTest.Points += 1.0
+
+    def test_16_main_url_orderby_title_python(self):
+        with unittest.mock.patch('sys.stdout', new=io.StringIO()) as output:
+            searx.main(f'-u {self.URL} -o title Python'.split())
+        self.assertEqual(
+            output.getvalue(),
+            urllib.request.urlopen(self.Output2).read().decode()
+        )
+        SearxTest.Points += 1.0
+
+    def test_17_main_url_orderby_url_limit_3_python(self):
+        with unittest.mock.patch('sys.stdout', new=io.StringIO()) as output:
+            searx.main(f'-u {self.URL} -o url -n 3 Python'.split())
+        self.assertEqual(
+            output.getvalue(),
+            urllib.request.urlopen(self.Output3).read().decode()
+        )
+        SearxTest.Points += 1.0
+
+# Main Execution
+
+if __name__ == '__main__':
+    unittest.main()
+
+# vim: set sts=4 sw=4 ts=8 expandtab ft=python:

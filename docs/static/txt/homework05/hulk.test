@@ -1,0 +1,371 @@
+#!/usr/bin/env python3
+
+import doctest
+import inspect
+import itertools
+import io
+import math
+import mypy.api
+import os
+import re
+import subprocess
+import tempfile
+import time
+import unittest
+import unittest.mock
+
+import hulk
+
+# Unit Tests
+
+class HulkTest(unittest.TestCase):
+    ''' Hulk Unit Tests '''
+    Total      = 26.0
+    Points     = 0
+    HashesPath = 'hulk.hashes'
+    HashesDict = {
+        'a'  : '86f7e437faa5a7fce15d1ddcb9eaeaea377667b8',
+        'b'  : 'e9d71f5ee7c92d6dc9e92ffdad17b8bd49418f98',
+        'c'  : '84a516841ba77a5b4648de2cd0dfcb30ea46dbb4',
+        'ab' : 'da23614e02469a0d7c7bd1bdab5c9c474b1904dc',
+        'abc': 'a9993e364706816aba3e25717850c26c9cd0d89d',
+    }
+
+    @classmethod
+    def setupClass(cls):
+        cls.Points = 0
+
+    @classmethod
+    def tearDownClass(cls):
+        print()
+        print(f'   Score {cls.Points:.2f} / {cls.Total:.2f}')
+        print(f'   Grade {cls.Points/cls.Total:.2f} / {1.0:.2f}')
+        print(f'  Status {"Success" if math.isclose(cls.Points, cls.Total) else "Failure"}')
+
+    def test_00_doctest(self):
+        failures, tests = doctest.testmod(hulk, verbose=False)
+        self.assertEqual(failures, 0)
+        self.assertEqual(tests, 7)
+        HulkTest.Points += 1.0
+
+    def test_01_mypy(self):
+        _, _, exit_status = mypy.api.run(['hulk.py'])
+        self.assertTrue(exit_status == 0)
+        HulkTest.Points += 1.0
+
+    def test_02_sha1sum(self):
+        for password, sha1sum in self.HashesDict.items():
+            self.assertEqual(hulk.sha1sum(password), sha1sum)
+            HulkTest.Points += 1/len(self.HashesDict)
+
+    def test_03_permutations(self):
+        tests = (
+            (0, 'abc', ['']),
+            (1, 'abc', ['a', 'b', 'c']),
+            (2, 'abc', ['aa', 'ab', 'ac', 'ba', 'bb', 'bc', 'ca', 'cb', 'cc']),
+            (3, 'abc', [
+                'aaa', 'aab', 'aac', 'aba', 'abb', 'abc', 'aca', 'acb', 'acc',
+                'baa', 'bab', 'bac', 'bba', 'bbb', 'bbc', 'bca', 'bcb', 'bcc',
+                'caa', 'cab', 'cac', 'cba', 'cbb', 'cbc', 'cca', 'ccb', 'ccc',
+            ]),
+        )
+        self.assertTrue(inspect.isgeneratorfunction(hulk.permutations))
+
+        for length, alphabet, permutations in tests:
+            results = hulk.permutations(length, alphabet)
+            for result, expected in itertools.zip_longest(results, permutations):
+                self.assertEqual(result, expected)
+            HulkTest.Points += 1/len(tests)
+
+    def test_04_flatten(self):
+        tests = (
+            (('abc', 'def', 'ghi')     , 'abcdefghi'),
+            ((range(0, 3), range(3, 6)), range(0, 6)),
+        )
+        self.assertTrue(inspect.isgeneratorfunction(hulk.flatten))
+
+        for sequence, flattened in tests:
+            results = hulk.flatten(sequence)
+            for result, expected in itertools.zip_longest(results, flattened):
+                self.assertEqual(result, expected)
+            HulkTest.Points += 1/len(tests)
+
+    def test_05_crack(self):
+        tests = (
+            (
+                (self.HashesDict.values(), 1),
+                ['a', 'b', 'c']
+            ),
+            (
+                (self.HashesDict.values(), 1, 'def'),
+                []
+            ),
+            (
+                (self.HashesDict.values(), 2),
+                ['ab']
+            ),
+            (
+                (self.HashesDict.values(), 2, hulk.ALPHABET, 'a'),
+                ['abc']
+            ),
+            (
+                (self.HashesDict.values(), 3),
+                ['abc']
+            ),
+        )
+        for arguments, results in tests:
+            self.assertEqual(hulk.crack(*arguments), results)
+            HulkTest.Points += 1/len(tests)
+
+    def test_06_whack(self):
+        tests = (
+            (
+                (self.HashesDict.values(), 1, hulk.ALPHABET, ''),
+                ['a', 'b', 'c']
+            ),
+            (
+                (self.HashesDict.values(), 1, 'def', ''),
+                []
+            ),
+            (
+                (self.HashesDict.values(), 2, hulk.ALPHABET, ''),
+                ['ab']
+            ),
+            (
+                (self.HashesDict.values(), 2, hulk.ALPHABET, 'a'),
+                ['abc']
+            ),
+            (
+                (self.HashesDict.values(), 3, hulk.ALPHABET, ''),
+                ['abc']
+            ),
+        )
+        for arguments, results in tests:
+            self.assertEqual(hulk.whack(arguments), results)
+            HulkTest.Points += 1/len(tests)
+
+    def test_07_smash(self):
+        tests = (
+            (
+                (set(self.HashesDict.values()), 1, hulk.ALPHABET, '', 1),
+                ['a', 'b', 'c']
+            ),
+            (
+                (set(self.HashesDict.values()), 1, 'def', '', 1),
+                []
+            ),
+            (
+                (set(self.HashesDict.values()), 2, hulk.ALPHABET, '', 2),
+                ['ab']
+            ),
+            (
+                (set(self.HashesDict.values()), 2, hulk.ALPHABET, 'a', 2),
+                ['abc']
+            ),
+            (
+                (set(self.HashesDict.values()), 3, hulk.ALPHABET, '', 3),
+                ['abc']
+            ),
+        )
+        for arguments, results in tests:
+            self.assertEqual(list(hulk.smash(*arguments)), results)
+            HulkTest.Points += 1/len(tests)
+
+    def test_08_main_usage(self):
+        with unittest.mock.patch('sys.stderr', new=io.StringIO()) as output:
+            with self.assertRaises(SystemExit) as context:
+                hulk.main('-h'.split())
+            self.assertTrue('Usage' in output.getvalue())
+        self.assertEqual(str(context.exception), '0')
+        HulkTest.Points += 0.5
+
+        with unittest.mock.patch('sys.stderr', new=io.StringIO()) as output:
+            with self.assertRaises(SystemExit) as context:
+                hulk.main('-z'.split())
+            self.assertTrue('Usage' in output.getvalue())
+        self.assertEqual(str(context.exception), '1')
+        HulkTest.Points += 0.5
+
+    def test_09_main_no_arguments(self):
+        with unittest.mock.patch('sys.stdout', new=io.StringIO()) as output:
+            hulk.main(''.split())
+            self.assertEqual(len(output.getvalue().splitlines()), 25)
+            self.assertEqual(
+                hulk.sha1sum('\n'.join(sorted(output.getvalue().splitlines())) + '\n'),
+                '6844a2a252d59cb9cb38db47d2decd99075b0cec'
+            )
+        HulkTest.Points += 1.0
+
+    def test_10_main_length_1(self):
+        with unittest.mock.patch('sys.stdout', new=io.StringIO()) as output:
+            hulk.main('-l 1'.split())
+            self.assertEqual(len(output.getvalue().splitlines()), 25)
+            self.assertEqual(
+                hulk.sha1sum('\n'.join(sorted(output.getvalue().splitlines())) + '\n'),
+                '6844a2a252d59cb9cb38db47d2decd99075b0cec'
+            )
+        HulkTest.Points += 1.0
+
+    def test_11_main_length_1_alphabet_abc(self):
+        with unittest.mock.patch('sys.stdout', new=io.StringIO()) as output:
+            hulk.main('-l 1 -a abc'.split())
+            self.assertEqual(len(output.getvalue().splitlines()), 3)
+            self.assertEqual(
+                hulk.sha1sum('\n'.join(sorted(output.getvalue().splitlines())) + '\n'),
+                '3ca69e8d6c234a469d16ac28a4a658c92267c423'
+            )
+        HulkTest.Points += 1.0
+
+    def test_12_main_length_1_prefix_a(self):
+        with unittest.mock.patch('sys.stdout', new=io.StringIO()) as output:
+            hulk.main('-l 1 -p a'.split())
+            self.assertEqual(len(output.getvalue().splitlines()), 5)
+            self.assertEqual(
+                hulk.sha1sum('\n'.join(sorted(output.getvalue().splitlines())) + '\n'),
+                '4acee00b2b08a972d2ffb8885e19b7b0fa0e76f0'
+            )
+        HulkTest.Points += 1.0
+
+    def test_13_main_length_1_cores_1(self):
+        with unittest.mock.patch('sys.stdout', new=io.StringIO()) as output:
+            hulk.main('-l 1 -c 1'.split())
+            self.assertEqual(len(output.getvalue().splitlines()), 25)
+            self.assertEqual(
+                hulk.sha1sum('\n'.join(sorted(output.getvalue().splitlines())) + '\n'),
+                '6844a2a252d59cb9cb38db47d2decd99075b0cec'
+            )
+        HulkTest.Points += 1.0
+
+    def test_14_main_length_1_prefix_a_cores_1(self):
+        with unittest.mock.patch('sys.stdout', new=io.StringIO()) as output:
+            hulk.main('-l 1 -p a -c 1'.split())
+            self.assertEqual(len(output.getvalue().splitlines()), 5)
+            self.assertEqual(
+                hulk.sha1sum('\n'.join(sorted(output.getvalue().splitlines())) + '\n'),
+                '4acee00b2b08a972d2ffb8885e19b7b0fa0e76f0'
+            )
+        HulkTest.Points += 1.0
+
+    def test_15_main_length_2(self):
+        with unittest.mock.patch('sys.stdout', new=io.StringIO()) as output:
+            hulk.main('-l 2'.split())
+            self.assertEqual(len(output.getvalue().splitlines()), 92)
+            self.assertEqual(
+                hulk.sha1sum('\n'.join(sorted(output.getvalue().splitlines())) + '\n'),
+                'bf371faad4774e1971d9a8f4bd95c34a4322b376'
+            )
+        HulkTest.Points += 1.0
+
+    def test_16_main_length_2_alphabet_abc(self):
+        with unittest.mock.patch('sys.stdout', new=io.StringIO()) as output:
+            hulk.main('-l 2 -a abc'.split())
+            self.assertEqual(len(output.getvalue().splitlines()), 0)
+            self.assertEqual(
+                hulk.sha1sum('\n'.join(sorted(output.getvalue().splitlines())) + '\n'),
+                'adc83b19e793491b1c6ea0fd8b46cd9f32e592fc'
+            )
+        HulkTest.Points += 1.0
+
+    def test_17_main_length_2_prefix_a(self):
+        with unittest.mock.patch('sys.stdout', new=io.StringIO()) as output:
+            hulk.main('-l 2 -p a'.split())
+            self.assertEqual(len(output.getvalue().splitlines()), 53)
+            self.assertEqual(
+                hulk.sha1sum('\n'.join(sorted(output.getvalue().splitlines())) + '\n'),
+                '862a34bfae0ba9a7631aa0bb9872958f53f55748'
+            )
+        HulkTest.Points += 1.0
+
+    def test_18_main_length_2_cores_2(self):
+        with unittest.mock.patch('sys.stdout', new=io.StringIO()) as output:
+            hulk.main('-l 2 -c 2'.split())
+            self.assertEqual(len(output.getvalue().splitlines()), 92)
+            self.assertEqual(
+                hulk.sha1sum('\n'.join(sorted(output.getvalue().splitlines())) + '\n'),
+                'bf371faad4774e1971d9a8f4bd95c34a4322b376'
+            )
+        HulkTest.Points += 1.0
+
+    def test_19_main_length_2_prefix_a_cores_2(self):
+        with unittest.mock.patch('sys.stdout', new=io.StringIO()) as output:
+            hulk.main('-l 2 -p a -c 2'.split())
+            self.assertEqual(len(output.getvalue().splitlines()), 53)
+            self.assertEqual(
+                hulk.sha1sum('\n'.join(sorted(output.getvalue().splitlines())) + '\n'),
+                '862a34bfae0ba9a7631aa0bb9872958f53f55748'
+            )
+        HulkTest.Points += 1.0
+
+    def test_20_main_length_3(self):
+        with unittest.mock.patch('sys.stdout', new=io.StringIO()) as output:
+            hulk.main('-l 3'.split())
+            self.assertEqual(len(output.getvalue().splitlines()), 571)
+            self.assertEqual(
+                hulk.sha1sum('\n'.join(sorted(output.getvalue().splitlines())) + '\n'),
+                '2eab66fe5e6c106acd992b23966701cd2d84c9cb'
+            )
+        HulkTest.Points += 1.0
+
+    def test_21_main_length_3_alphabet_abc(self):
+        with unittest.mock.patch('sys.stdout', new=io.StringIO()) as output:
+            hulk.main('-l 3 -a abc'.split())
+            self.assertEqual(len(output.getvalue().splitlines()), 7)
+            self.assertEqual(
+                hulk.sha1sum('\n'.join(sorted(output.getvalue().splitlines())) + '\n'),
+                '2969d199f7fd59c40b90faa96b0645df505c02dc'
+            )
+        HulkTest.Points += 1.0
+
+    def test_22_main_length_3_prefix_a(self):
+        with unittest.mock.patch('sys.stdout', new=io.StringIO()) as output:
+            hulk.main('-l 3 -p a'.split())
+            self.assertEqual(len(output.getvalue().splitlines()), 75)
+            self.assertEqual(
+                hulk.sha1sum('\n'.join(sorted(output.getvalue().splitlines())) + '\n'),
+                '06fa3efa8dddf903c32ddf06a8345a9829592ec3'
+            )
+        HulkTest.Points += 1.0
+
+    def test_23_main_length_3_cores_3(self):
+        with unittest.mock.patch('sys.stdout', new=io.StringIO()) as output:
+            hulk.main('-l 3 -c 3'.split())
+            self.assertEqual(len(output.getvalue().splitlines()), 571)
+            self.assertEqual(
+                hulk.sha1sum('\n'.join(sorted(output.getvalue().splitlines())) + '\n'),
+                '2eab66fe5e6c106acd992b23966701cd2d84c9cb'
+            )
+        HulkTest.Points += 1.0
+
+    def test_24_main_length_3_prefix_a_cores_3(self):
+        with unittest.mock.patch('sys.stdout', new=io.StringIO()) as output:
+            hulk.main('-l 3 -p a -c 3'.split())
+            self.assertEqual(len(output.getvalue().splitlines()), 75)
+            self.assertEqual(
+                hulk.sha1sum('\n'.join(sorted(output.getvalue().splitlines())) + '\n'),
+                '06fa3efa8dddf903c32ddf06a8345a9829592ec3'
+            )
+        HulkTest.Points += 1.0
+
+    def test_25_script_length_4_cores_4(self):
+        self.assertTrue(os.access('hulk.py', os.X_OK))
+        with tempfile.TemporaryDirectory() as destination:
+            command = f'strace -e clone ./hulk.py -l 4 -c 4'
+            start   = time.time()
+            process = subprocess.run(command, shell=True, capture_output=True)
+            stderr  = process.stderr.decode()
+            stdout  = process.stdout.decode()
+            elapsed = time.time() - start
+            self.assertEqual(len(re.findall(r'clone\(child_stack=NULL.*\)', stderr)), 4)
+            self.assertEqual(
+                hulk.sha1sum('\n'.join(sorted(stdout.splitlines())) + '\n'),
+                'bdf47108e34f711c132dd8f85efdcd7fa7804e23'
+            )
+            self.assertTrue(elapsed <= 1.5)
+        HulkTest.Points += 1.0
+
+# Main Execution
+
+if __name__ == '__main__':
+    unittest.main()
+
+# vim: set sts=4 sw=4 ts=8 expandtab ft=python:

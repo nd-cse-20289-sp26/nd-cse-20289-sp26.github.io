@@ -1,0 +1,840 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<!-- Favicon -->
+<link rel="icon" type="image/png" sizes="32x32" href="static/ico/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="static/ico/favicon-16x16.png">
+<link rel="manifest" href="static/ico/site.webmanifest">
+<!-- Stylesheets -->
+<link rel="stylesheet" href="static/css/pnutzh4x0r.css">
+<title>Homework 05: SearX, Hulk</title>
+</head>
+<body>
+<header>
+<a class="logo" href="homework05.html">
+    <h1>Homework 05: SearX, Hulk</h1>
+</a>
+<nav>
+    <ul>
+        <li><a href="index.html"><h4>Home</h4></a></li>
+        </ul>
+</nav></header>
+<main>
+<p>The first goal of this homework assignment is to allow you to practice using
+<a href="https://www.python.org/">Python</a> to create scripts that require sophisticated parsing of data and
+manipulation of <a href="https://en.wikipedia.org/wiki/Data_structure">data structures</a>. In the first program, you will process
+data in <a href="https://json.org/">JSON</a> format and then present the information to the user in the
+terminal.</p>
+<p>The second goal of this homework assignment is to allow you to practice using
+<a href="https://en.wikipedia.org/wiki/Functional_programming">functional programming</a> to process data in <a href="https://www.python.org/">Python</a>.  In this assignment,
+you will write a script that <a href="https://en.wikipedia.org/wiki/Brute-force_attack">brute-force</a> attacks a large collection of
+passwords using <strong>multiple processes</strong>.  That is, we will use <a href="https://en.wikipedia.org/wiki/Functional_programming">functional
+programming</a> to construct a concurrent application, and then exploit this
+<a href="https://en.wikipedia.org/wiki/Concurrency_(computer_science)">concurrency</a> by using multiple CPU cores to execute the program in
+<a href="https://en.wikipedia.org/wiki/Parallel_computing">parallel</a>.</p>
+<p>For this assignment, record your scripts and any responses to the following
+activities in the <code>homework05</code> folder of your <strong>assignments</strong> <a href="https://github.com">GitHub</a>
+repository and push your work by <strong>noon Saturday, March 1</strong>.</p>
+<h2 id="activity-0-preparation">Activity 0: Preparation<a class="headerlink" href="#activity-0-preparation" title="Permanent link">&para;</a></h2>
+<p>Before starting this homework assignment, you should first perform a <code>git
+pull</code> to retrieve any changes in your remote <a href="https://github.com">GitHub</a> repository:</p>
+<div class="codehilite"><pre><span></span><code>$<span class="w"> </span><span class="nb">cd</span><span class="w"> </span>path/to/repository<span class="w">                   </span><span class="c1"># Go to assignments repository</span>
+
+$<span class="w"> </span>git<span class="w"> </span>switch<span class="w"> </span>master<span class="w">                       </span><span class="c1"># Make sure we are in master branch</span>
+
+$<span class="w"> </span>git<span class="w"> </span>pull<span class="w"> </span>--rebase<span class="w">                       </span><span class="c1"># Get any remote changes not present locally</span>
+</code></pre></div>
+
+<p>Next, create a new branch for this assignment:</p>
+<div class="codehilite"><pre><span></span><code>$<span class="w"> </span>git<span class="w"> </span>switch<span class="w"> </span>-c<span class="w"> </span>homework05<span class="w">                </span><span class="c1"># Create homework05 branch and check it out</span>
+</code></pre></div>
+
+<h3 id="task-1-skeleton-code">Task 1: Skeleton Code<a class="headerlink" href="#task-1-skeleton-code" title="Permanent link">&para;</a></h3>
+<p>To help you get started, the instructor has provided you with the following <strong>skeleton code</strong>:</p>
+<div class="codehilite"><pre><span></span><code><span class="c1"># Go to homework05 folder</span>
+$<span class="w"> </span><span class="nb">cd</span><span class="w"> </span>homework05
+
+<span class="c1"># Download Makefile</span>
+$<span class="w"> </span>curl<span class="w"> </span>-LO<span class="w"> </span>https://pnutz.h4x0r.space/courses/cse.20289.sp26/static/txt/homework05/Makefile
+
+<span class="c1"># Download Python skeleton code</span>
+$<span class="w"> </span>curl<span class="w"> </span>-LO<span class="w"> </span>https://pnutz.h4x0r.space/courses/cse.20289.sp26/static/txt/homework05/searx.py
+$<span class="w"> </span>curl<span class="w"> </span>-LO<span class="w"> </span>https://pnutz.h4x0r.space/courses/cse.20289.sp26/static/txt/homework05/hulk.py
+</code></pre></div>
+
+<p>Once downloaded, you should see the following files in your <code>homework05</code> directory:</p>
+<div class="codehilite"><pre><span></span><code>homework05
+<span class="w">    </span><span class="se">\_</span><span class="w"> </span>Makefile<span class="w">       </span><span class="c1"># This is the Makefile building all the assignment artifacts</span>
+<span class="w">    </span><span class="se">\_</span><span class="w"> </span>hulk.py<span class="w">        </span><span class="c1"># This is the Python script for the hulk script</span>
+<span class="w">    </span><span class="se">\_</span><span class="w"> </span>searx.py<span class="w">       </span><span class="c1"># This is the Python script for the searx script</span>
+</code></pre></div>
+
+<div class="alert warning-bg">
+<h3 id="alert-embed_icon-doctests"><i class="icon icon-medium"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><title>alert</title><path d="M13 14H11V9H13M13 18H11V16H13M1 21H23L12 2L1 21Z" /></svg>
+</i> DocTests<a class="headerlink" href="#alert-embed_icon-doctests" title="Permanent link">&para;</a></h3>
+<p>You may notice that in addition to the usual comments and <code>TODOs</code>, the
+<a href="https://peps.python.org/pep-0257/">docstrings</a> of each method also contains a few <a href="https://docs.python.org/3/library/doctest.html">doctests</a>.</p>
+<p>You are <strong>not</strong> to modify these <a href="https://docs.python.org/3/library/doctest.html">doctests</a> and must keep them in-place. They
+are used to verify the correctness of your code.</p>
+<p>Your code goes <strong>below</strong> the <a href="https://peps.python.org/pep-0257/">docstrings</a>, where the <code>TODO</code> and <code>pass</code>
+commands are (you may remove the pass once you complete the method).</p>
+</div>
+<h3 id="task-2-initial-import">Task 2: Initial Import<a class="headerlink" href="#task-2-initial-import" title="Permanent link">&para;</a></h3>
+<p>Now that the files are downloaded into the <code>homework05</code> folder, you can
+<strong>commit</strong> them to your <a href="https://git-scm.com/">git</a> repository:</p>
+<div class="codehilite"><pre><span></span><code>$<span class="w"> </span>git<span class="w"> </span>add<span class="w"> </span>Makefile<span class="w">                            </span><span class="c1"># Mark changes for commit</span>
+$<span class="w"> </span>git<span class="w"> </span>add<span class="w"> </span>*.py
+$<span class="w"> </span>git<span class="w"> </span>commit<span class="w"> </span>-m<span class="w"> </span><span class="s2">&quot;Homework 05: Initial Import&quot;</span><span class="w"> </span><span class="c1"># Record changes</span>
+</code></pre></div>
+
+<h3 id="task-3-unit-tests">Task 3: Unit Tests<a class="headerlink" href="#task-3-unit-tests" title="Permanent link">&para;</a></h3>
+<p>After downloading these files, you can run the <code>make</code> command to run the
+tests.</p>
+<div class="codehilite"><pre><span></span><code><span class="c1"># Run all tests (will trigger automatic download)</span>
+$<span class="w"> </span>make
+</code></pre></div>
+
+<p>You will notice that the Makefile downloads these additional test data and scripts:</p>
+<div class="codehilite"><pre><span></span><code>homework05
+<span class="w">    </span><span class="se">\_</span><span class="w"> </span>hulk.hashes<span class="w">          </span><span class="c1"># This is the list of SHA1 hashes for the hulk script</span>
+<span class="w">    </span><span class="se">\_</span><span class="w"> </span>hulk.test<span class="w">            </span><span class="c1"># This is the Python test for the hulk script</span>
+<span class="w">    </span><span class="se">\_</span><span class="w"> </span>searx.test<span class="w">           </span><span class="c1"># This is the Python test for the searx script</span>
+</code></pre></div>
+
+<p>In addition to the embedded <a href="https://docs.python.org/3/library/doctest.html">doctests</a> in the <strong>skeleton code</strong>, you will be
+using these <a href="https://en.wikipedia.org/wiki/Unit_testing">unit tests</a> to verify the correctness and behavior of your code.</p>
+<div class="alert info-bg">
+<h3 id="download-embed_icon-automatic-download"><i class="icon icon-medium"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><title>download</title><path d="M5,20H19V18H5M19,9H15V3H9V9H5L12,16L19,9Z" /></svg>
+</i> Automatic Download<a class="headerlink" href="#download-embed_icon-automatic-download" title="Permanent link">&para;</a></h3>
+<p>The <code>test</code> scripts are automatically downloaded by the <code>Makefile</code>, so any
+modifications you do to them will be lost when you run <code>make</code> again. Likewise,
+because they are automatically downloaded, you do not need to <code>add</code> or <code>commit</code>
+them to your <a href="https://git-scm.com/">git</a> repository.</p>
+</div>
+<p>The details on what you need to implement for this assignment are described
+in the following sections.</p>
+<div class="alert success-bg">
+<h3 id="help-embed_icon-frequently-asked-questions"><i class="icon icon-medium"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><title>help</title><path d="M10,19H13V22H10V19M12,2C17.35,2.22 19.68,7.62 16.5,11.67C15.67,12.67 14.33,13.33 13.67,14.17C13,15 13,16 13,17H10C10,15.33 10,13.92 10.67,12.92C11.33,11.92 12.67,11.33 13.5,10.67C15.92,8.43 15.32,5.26 12,5A3,3 0 0,0 9,8H6A6,6 0 0,1 12,2Z" /></svg>
+</i> Frequently Asked Questions<a class="headerlink" href="#help-embed_icon-frequently-asked-questions" title="Permanent link">&para;</a></h3>
+<div class="text-center">
+<iframe allowfullscreen="true" frameborder="0" height="749" mozallowfullscreen="true" src="https://docs.google.com/presentation/d/e/2PACX-1vTAxPLHtFEH74cOeMxoIjeUYYN9-k0hp3yPUTOwJ7da04-kJ3bNA8dfnzmHflgP8rNPiI2PJWi3GbXi/pubembed?start=false&amp;loop=false&amp;delayms=3000" webkitallowfullscreen="true" width="960"></iframe>
+</div>
+</div>
+<h2 id="activity-1-searx-04-points">Activity 1: SearX (<em>0.4 Points</em>)<a class="headerlink" href="#activity-1-searx-04-points" title="Permanent link">&para;</a></h2>
+<p>For the second activity, you are to write a script called <code>searx.py</code>, which
+fetches search results from <a href="https://searx.ndlug.org">searx.ndlug.org</a>, a
+website running <a href="https://docs.searxng.org/">SearXNG</a>:</p>
+<blockquote>
+<p><a href="https://docs.searxng.org/">SearXNG</a> is a metasearch engine, aggregating the results of other search
+engines while not storing information about its users.</p>
+</blockquote>
+<p>With this script, you can search the Internet right from your terminal!</p>
+<div class="codehilite"><pre><span></span><code><span class="c1"># Display usage</span>
+$<span class="w"> </span>./searx.py
+Usage:<span class="w"> </span>searx.py<span class="w"> </span><span class="o">[</span>-u<span class="w"> </span>URL<span class="w"> </span>-n<span class="w"> </span>LIMIT<span class="w"> </span>-o<span class="w"> </span>ORDERBY<span class="o">]</span><span class="w"> </span>QUERY
+
+Fetch<span class="w"> </span>SearX<span class="w"> </span>results<span class="w"> </span><span class="k">for</span><span class="w"> </span>QUERY<span class="w"> </span>and<span class="w"> </span>print<span class="w"> </span>them<span class="w"> </span>out.
+
+<span class="w">    </span>-u<span class="w"> </span>URL<span class="w">      </span>Use<span class="w"> </span>URL<span class="w"> </span>as<span class="w"> </span>the<span class="w"> </span>SearX<span class="w"> </span>instance<span class="w"> </span><span class="o">(</span>default<span class="w"> </span>is:<span class="w"> </span>https://searx.ndlug.org/search<span class="o">)</span>
+<span class="w">    </span>-n<span class="w"> </span>LIMIT<span class="w">    </span>Only<span class="w"> </span>display<span class="w"> </span>up<span class="w"> </span>to<span class="w"> </span>LIMIT<span class="w"> </span>results<span class="w"> </span><span class="o">(</span>default<span class="w"> </span>is:<span class="w"> </span><span class="m">5</span><span class="o">)</span>
+<span class="w">    </span>-o<span class="w"> </span>ORDERBY<span class="w">  </span>Sort<span class="w"> </span>the<span class="w"> </span>search<span class="w"> </span>results<span class="w"> </span>by<span class="w"> </span>ORDERBY<span class="w"> </span><span class="o">(</span>default<span class="w"> </span>is:<span class="w"> </span>score<span class="o">)</span>
+
+If<span class="w"> </span>ORDERBY<span class="w"> </span>is<span class="w"> </span>score,<span class="w"> </span>the<span class="w"> </span>results<span class="w"> </span>are<span class="w"> </span>shown<span class="w"> </span><span class="k">in</span><span class="w"> </span>descending<span class="w"> </span>order.<span class="w">  </span>Otherwise,
+results<span class="w"> </span>are<span class="w"> </span>shown<span class="w"> </span><span class="k">in</span><span class="w"> </span>ascending<span class="w"> </span>order.
+
+<span class="c1"># Search for notre dame</span>
+$<span class="w"> </span>./searx.py<span class="w"> </span>notre<span class="w"> </span>dame
+<span class="w">   </span><span class="m">1</span>.<span class="w">   </span>University<span class="w"> </span>of<span class="w"> </span>Notre<span class="w"> </span>Dame<span class="w"> </span>-<span class="w"> </span>Wikipedia<span class="w"> </span><span class="o">[</span><span class="m">2</span>.24<span class="o">]</span>
+<span class="w">        </span>https://en.wikipedia.org/wiki/University_of_Notre_Dame
+
+<span class="w">   </span><span class="m">2</span>.<span class="w">   </span>Notre<span class="w"> </span>Dame<span class="w"> </span>Athletics<span class="w"> </span><span class="p">|</span><span class="w"> </span>The<span class="w"> </span>Fighting<span class="w"> </span>Irish<span class="w"> </span><span class="o">[</span><span class="m">1</span>.33<span class="o">]</span>
+<span class="w">        </span>https://fightingirish.com/
+
+<span class="w">   </span><span class="m">3</span>.<span class="w">   </span>Notre<span class="w"> </span>Dame<span class="w"> </span><span class="o">[</span><span class="m">1</span>.00<span class="o">]</span>
+<span class="w">        </span>https://en.wikipedia.org/wiki/Notre_Dame
+
+<span class="w">   </span><span class="m">4</span>.<span class="w">   </span>University<span class="w"> </span>of<span class="w"> </span>Notre<span class="w"> </span>Dame<span class="w"> </span><span class="o">[</span><span class="m">1</span>.00<span class="o">]</span>
+<span class="w">        </span>https://www.nd.edu
+
+<span class="w">   </span><span class="m">5</span>.<span class="w">   </span>University<span class="w"> </span>of<span class="w"> </span>Notre<span class="w"> </span>Dame<span class="w"> </span><span class="o">[</span><span class="m">1</span>.00<span class="o">]</span>
+<span class="w">        </span>https://www.nd.edu/
+
+<span class="c1"># Search for notre dame, limit to one result, order by title</span>
+$<span class="w"> </span>./searx.py<span class="w"> </span>-n<span class="w"> </span><span class="m">1</span><span class="w"> </span>-o<span class="w"> </span>title<span class="w"> </span>notre<span class="w"> </span>dame
+<span class="w">   </span><span class="m">1</span>.<span class="w">   </span>About<span class="w"> </span>-<span class="w"> </span>University<span class="w"> </span>of<span class="w"> </span>Notre<span class="w"> </span>Dame<span class="w"> </span><span class="o">[</span><span class="m">0</span>.11<span class="o">]</span>
+<span class="w">        </span>https://www.nd.edu/about/
+</code></pre></div>
+
+<p>The <code>searx.py</code> script takes the following possible arguments:</p>
+<ul>
+<li>
+<p><code>-u</code>: This allows the user to set the <code>URL</code> of the <a href="https://docs.searxng.org/">SearXNG</a> instance to
+    search.  By default, this is
+    <a href="https://searx.ndlug.org/search">https://searx.ndlug.org/search</a>.</p>
+</li>
+<li>
+<p><code>-n</code>: This allows the user to limit the number of search results to print
+    out.  By default, this is <code>5</code>.</p>
+</li>
+<li>
+<p><code>-o</code>: This allows the user to specify how to sort the results.  By
+    default, it will sort by <code>score</code> in descending order.  Otherwise, it will
+    sort either the <code>title</code> or <code>url</code> in ascending order.</p>
+</li>
+<li>
+<p><code>-h</code>: This prints the usage message and exits with success.</p>
+</li>
+</ul>
+<p>After the flags, the remaining arguments is the <code>QUERY</code> to search.</p>
+<div class="alert danger-bg">
+<p>If an unsupported flag is specified, or if no <code>QUERY</code> is given, then
+<code>searx.py</code> should print out the <strong>usage</strong> message and exit with failure.</p>
+</div>
+<h3 id="task-1-searxpy">Task 1: <code>searx.py</code><a class="headerlink" href="#task-1-searxpy" title="Permanent link">&para;</a></h3>
+<p>To implement the <code>searx.py</code> <a href="https://www.python.org/">Python</a> script, you will need to complete the
+following functions:</p>
+<ol>
+<li>
+<div class="flex-col" markdown="1">
+<p><code>searx_query(query: str, url: str=URL) -&gt; list[dict]</code></p>
+<blockquote>
+<p>This function makes a <a href="https://en.wikipedia.org/wiki/HTTP">HTTP</a> request to the <a href="https://docs.searxng.org/">SearXNG</a> instance
+specified by <code>url</code> and returns the search results corresponding to
+<code>query</code>.</p>
+</blockquote>
+<div class="alert success-bg" markdown="1">
+<p><strong>Hints</strong>: To fetch the results from <a href="https://docs.searxng.org/">SearXNG</a>, you will need to specify
+the following <strong>parameters</strong> when making a <a href="https://en.wikipedia.org/wiki/HTTP">HTTP</a> request:</p>
+<div class="codehilite"><pre><span></span><code><span class="p">{</span><span class="s1">&#39;q&#39;</span><span class="p">:</span> <span class="n">query</span><span class="p">,</span> <span class="s1">&#39;format&#39;</span><span class="p">:</span> <span class="s1">&#39;json&#39;</span><span class="p">}</span>
+</code></pre></div>
+
+<p>To do so, you can use <a href="https://requests.readthedocs.io/en/latest/user/quickstart/#passing-parameters-in-urls">requests.get</a>:</p>
+<div class="codehilite"><pre><span></span><code><span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">params</span><span class="o">=...</span><span class="p">)</span>
+</code></pre></div>
+
+<p>Remember that you want to return just the <a href="https://docs.python.org/3/tutorial/datastructures.html#more-on-lists">list</a> of results inside the
+<a href="https://json.org/">JSON</a> data, and not the whole response.</p>
+</div>
+</li>
+<li>
+<div class="flex-col" markdown="1">
+<p><code>print_results(results: list[dict], limit: int=LIMIT, orderby: str=ORDERBY) -&gt; None</code></p>
+<blockquote>
+<p>This function prints up to <code>limit</code> search <code>results</code> sorted by
+<code>orderby</code>.</p>
+</blockquote>
+<div class="alert success-bg" markdown="1">
+<p><strong>Hints</strong>: Each search result should be printed out in the following
+format:</p>
+<div class="codehilite"><pre><span></span><code><span class="s1">&#39;</span><span class="si">{index:&gt;4}</span><span class="s1">.</span><span class="se">\t</span><span class="si">{title}</span><span class="s1"> [</span><span class="si">{score:0.2f}</span><span class="s1">]&#39;</span>
+<span class="s1">&#39;</span><span class="se">\t</span><span class="si">{url}</span><span class="s1">&#39;</span>
+</code></pre></div>
+
+<p><strong>Note</strong>: There should be a <strong>blank line</strong> between each search result,
+  but not before the first result or after the last result.</p>
+<p>You should <strong>sort</strong> the results using <a href="https://docs.python.org/3/library/functions.html#sorted">sorted</a> before <strong>slicing</strong> it up
+to the <code>limit</code>.  Remember that you can control how each element is compared
+in <a href="https://docs.python.org/3/library/functions.html#sorted">sorted</a> by specifying a <code>key</code> function:</p>
+<div class="codehilite"><pre><span></span><code><span class="nb">sorted</span><span class="p">(</span><span class="n">results</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">r</span><span class="p">:</span> <span class="n">r</span><span class="p">[</span><span class="s1">&#39;score&#39;</span><span class="p">],</span> <span class="n">reverse</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</code></pre></div>
+
+<p>The code above would return a sequence of results ordered by <code>score</code>
+in <strong>descending</strong> order.</p>
+</div>
+</li>
+<li>
+<div class="flex-col" markdown="1">
+<p><code>main(arguments=sys.argv[1:]) -&gt; None</code></p>
+<blockquote>
+<p>This function processes the command line <code>arguments</code>, fetches the
+search results for <code>QUERY</code>, and then prints out the results.</p>
+</blockquote>
+<div class="alert success-bg" markdown="1">
+<p><strong>Hints</strong>: You may wish to use [str.join] to combine the remaining
+  arguments into a single <code>query</code>.</p>
+</div>
+</li>
+</ol>
+<h3 id="task-2-testing">Task 2: Testing<a class="headerlink" href="#task-2-testing" title="Permanent link">&para;</a></h3>
+<p>As you implement <code>searx.py</code>, you can use the provided <a href="https://docs.python.org/3/library/doctest.html">doctests</a> to verify the
+correctness of your code:</p>
+<div class="codehilite"><pre><span></span><code><span class="c1"># Run doctests</span>
+$<span class="w"> </span>python3<span class="w"> </span>-m<span class="w"> </span>doctest<span class="w"> </span>searx.py<span class="w"> </span>-v
+...
+<span class="m">2</span><span class="w"> </span>items<span class="w"> </span>had<span class="w"> </span>no<span class="w"> </span>tests:
+<span class="w">    </span>searx
+<span class="w">    </span>searx.usage
+<span class="m">3</span><span class="w"> </span>items<span class="w"> </span>passed<span class="w"> </span>all<span class="w"> </span>tests:
+<span class="w">   </span><span class="m">1</span><span class="w"> </span>tests<span class="w"> </span><span class="k">in</span><span class="w"> </span>searx.main
+<span class="w">   </span><span class="m">1</span><span class="w"> </span>tests<span class="w"> </span><span class="k">in</span><span class="w"> </span>searx.print_results
+<span class="w">   </span><span class="m">1</span><span class="w"> </span>tests<span class="w"> </span><span class="k">in</span><span class="w"> </span>searx.searx_query
+<span class="m">3</span><span class="w"> </span>tests<span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="m">5</span><span class="w"> </span>items.
+<span class="m">3</span><span class="w"> </span>passed<span class="w"> </span>and<span class="w"> </span><span class="m">0</span><span class="w"> </span>failed.
+Test<span class="w"> </span>passed.
+</code></pre></div>
+
+<p>You can also use <code>make</code> to run both the <a href="https://docs.python.org/3/library/doctest.html">doctests</a> and the <a href="https://en.wikipedia.org/wiki/Unit_testing">unit tests</a>:</p>
+<div class="codehilite"><pre><span></span><code><span class="c1"># Run unit tests (and doctests)</span>
+$<span class="w"> </span>make<span class="w"> </span>test-searx
+Testing<span class="w"> </span>SearX<span class="w"> </span>...
+test_00_doctest<span class="w"> </span><span class="o">(</span>__main__.SearxTest.test_00_doctest<span class="o">)</span><span class="w"> </span>...<span class="w"> </span>ok
+test_01_mypy<span class="w"> </span><span class="o">(</span>__main__.SearxTest.test_01_mypy<span class="o">)</span><span class="w"> </span>...<span class="w"> </span>ok
+test_02_searx_query_python<span class="w"> </span><span class="o">(</span>__main__.SearxTest.test_02_searx_query_python<span class="o">)</span><span class="w"> </span>...<span class="w"> </span>ok
+test_03_searx_query_peter_bui<span class="w"> </span><span class="o">(</span>__main__.SearxTest.test_03_searx_query_peter_bui<span class="o">)</span><span class="w"> </span>...<span class="w"> </span>ok
+test_04_searx_query_ndlug<span class="w"> </span><span class="o">(</span>__main__.SearxTest.test_04_searx_query_ndlug<span class="o">)</span><span class="w"> </span>...<span class="w"> </span>ok
+test_05_searx_query_url<span class="w"> </span><span class="o">(</span>__main__.SearxTest.test_05_searx_query_url<span class="o">)</span><span class="w"> </span>...<span class="w"> </span>ok
+test_06_print_results<span class="w"> </span><span class="o">(</span>__main__.SearxTest.test_06_print_results<span class="o">)</span><span class="w"> </span>...<span class="w"> </span>ok
+test_07_print_results_limit_1<span class="w"> </span><span class="o">(</span>__main__.SearxTest.test_07_print_results_limit_1<span class="o">)</span><span class="w"> </span>...<span class="w"> </span>ok
+test_08_print_results_orderby_title<span class="w"> </span><span class="o">(</span>__main__.SearxTest.test_08_print_results_orderby_title<span class="o">)</span><span class="w"> </span>...<span class="w"> </span>ok
+test_09_print_results_limit_3_orderby_url<span class="w"> </span><span class="o">(</span>__main__.SearxTest.test_09_print_results_limit_3_orderby_url<span class="o">)</span><span class="w"> </span>...<span class="w"> </span>ok
+test_10_main_usage<span class="w"> </span><span class="o">(</span>__main__.SearxTest.test_10_main_usage<span class="o">)</span><span class="w"> </span>...<span class="w"> </span>ok
+test_11_main_python<span class="w"> </span><span class="o">(</span>__main__.SearxTest.test_11_main_python<span class="o">)</span><span class="w"> </span>...<span class="w"> </span>ok
+test_12_main_peter_bui<span class="w"> </span><span class="o">(</span>__main__.SearxTest.test_12_main_peter_bui<span class="o">)</span><span class="w"> </span>...<span class="w"> </span>ok
+test_13_main_ndlug<span class="w"> </span><span class="o">(</span>__main__.SearxTest.test_13_main_ndlug<span class="o">)</span><span class="w"> </span>...<span class="w"> </span>ok
+test_14_main_url_python<span class="w"> </span><span class="o">(</span>__main__.SearxTest.test_14_main_url_python<span class="o">)</span><span class="w"> </span>...<span class="w"> </span>ok
+test_15_main_limit_1_url_python<span class="w"> </span><span class="o">(</span>__main__.SearxTest.test_15_main_limit_1_url_python<span class="o">)</span><span class="w"> </span>...<span class="w"> </span>ok
+test_16_main_url_orderby_title_python<span class="w"> </span><span class="o">(</span>__main__.SearxTest.test_16_main_url_orderby_title_python<span class="o">)</span><span class="w"> </span>...<span class="w"> </span>ok
+test_17_main_url_orderby_url_limit_3_python<span class="w"> </span><span class="o">(</span>__main__.SearxTest.test_17_main_url_orderby_url_limit_3_python<span class="o">)</span><span class="w"> </span>...<span class="w"> </span>ok
+
+<span class="w">   </span>Score<span class="w"> </span><span class="m">18</span>.00<span class="w"> </span>/<span class="w"> </span><span class="m">18</span>.00
+<span class="w">   </span>Grade<span class="w"> </span><span class="m">1</span>.00<span class="w"> </span>/<span class="w"> </span><span class="m">1</span>.00
+<span class="w">  </span>Status<span class="w"> </span>Success
+
+----------------------------------------------------------------------
+Ran<span class="w"> </span><span class="m">18</span><span class="w"> </span>tests<span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="m">6</span>.124s
+
+OK
+</code></pre></div>
+
+<p>To just run the <a href="https://en.wikipedia.org/wiki/Unit_testing">unit tests</a>, you can do the following:</p>
+<div class="codehilite"><pre><span></span><code><span class="c1"># Run unit tests</span>
+$<span class="w"> </span>./searx.test<span class="w"> </span>-v
+...
+</code></pre></div>
+
+<p>To run a specific <a href="https://en.wikipedia.org/wiki/Unit_testing">unit test</a>, you can specify the <strong>method name</strong>:</p>
+<div class="codehilite"><pre><span></span><code><span class="c1"># Run only mypy unit test</span>
+$<span class="w"> </span>./searx.test<span class="w"> </span>-v<span class="w"> </span>SearxTest.test_01_mypy
+...
+</code></pre></div>
+
+<p>To manually check your types, you can use <a href="https://mypy-lang.org/">mypy</a>:</p>
+<div class="codehilite"><pre><span></span><code><span class="c1"># Run mypy to check types</span>
+$<span class="w"> </span>mypy<span class="w"> </span>searx.py
+</code></pre></div>
+
+<h2 id="activity-3-hulk-04-points">Activity 3: Hulk (<em>0.4 Points</em>)<a class="headerlink" href="#activity-3-hulk-04-points" title="Permanent link">&para;</a></h2>
+<div class="flex-row">
+<div class="flex-col">
+<p>With various <a href="https://www.wired.com/story/collection-leak-usernames-passwords-billions/">password
+leaks</a>
+being announced on a <a href="https://www.reuters.com/business/healthcare-pharmaceuticals/unitedhealth-confirms-190-million-americans-affected-by-hack-tech-unit-2025-01-24/">weekly
+basis</a>
+there has been a lot of discussion on <a href="https://lifehacker.com/how-to-create-a-strong-password-1797681069">password
+hygiene</a>
+and <a href="https://www.fbi.gov/contact-us/field-offices/portland/news/press-releases/oregon-fbi-tech-tuesday-building-a-digital-defense-with-passwords">password
+strength</a>.
+There is even a website to check <a href="https://haveibeenpwned.com/">have i been
+pwned</a>.</p>
+<p>In all decent password accounting systems, the raw password is rarely stored.
+Instead a <a href="https://en.wikipedia.org/wiki/Cryptographic_hash_function">cryptographic hash</a> such as <a href="https://en.wikipedia.org/wiki/MD5">MD5</a> or <a href="https://en.wikipedia.org/wiki/SHA1">SHA1</a> is used to record a
+user's password digest or checksum and it is these hashes that are leaked to
+outsiders in these all too frequent breaches.  Because these <a href="https://en.wikipedia.org/wiki/Cryptographic_hash_function">cryptographic
+hash</a> functions are generally considered <a href="https://en.wikipedia.org/wiki/One-way_function">one-way functions</a>, attackers
+cannot directly obtain the original input password even though they know the
+output of the <a href="https://en.wikipedia.org/wiki/Cryptographic_hash_function">cryptographic hash</a>.</p>
+</div>
+<div class="flex-col-25">
+<p><img src="static/img/homework05-hulk.png"></p>
+</div>
+</div>
+<p>For instance, the <a href="https://en.wikipedia.org/wiki/SHA1">SHA1</a> digest of <code>goirish</code> is:</p>
+<div class="codehilite"><pre><span></span><code>$<span class="w"> </span><span class="nb">printf</span><span class="w"> </span>goirish<span class="w"> </span><span class="p">|</span><span class="w"> </span>sha1sum
+d546785e887d9aaae85102c28769becfb86dde7d<span class="w">  </span>-
+</code></pre></div>
+
+<p>As you can see, the string <code>d546785e887d9aaae85102c28769becfb86dde7d</code> does
+not provide an attacker any clues about the original password <code>goirish</code>.  To
+obtain the original text, attackers often employ <a href="https://arstechnica.com/security/2013/05/how-crackers-make-minced-meat-out-of-your-passwords/">various
+techniques</a>
+such as [brute-force cracking].</p>
+<p>For this activity, you are to create <code>hulk.py</code>, which is a script that uses
+<a href="https://en.wikipedia.org/wiki/Brute-force_attack">brute-force</a> to <strong>smash</strong> a set of <a href="https://en.wikipedia.org/wiki/SHA1">SHA1</a> hashes:</p>
+<div class="codehilite"><pre><span></span><code>$ ./hulk.py -h
+Usage: hulk.py [-a alphabet -c CORES -l LENGTH -p PREFIX -s HASHES]
+    -a ALPHABET Alphabet to use in permutations
+    -c CORES    CPU Cores to use
+    -l LENGTH   Length of permutations
+    -p PREFIX   Prefix for all permutations
+    -s HASHES   Path of hashes file
+</code></pre></div>
+
+<p>The <code>hulk.py</code> script takes the following possible arguments:</p>
+<ul>
+<li>
+<p><code>-a</code>: This allows the user to set the <code>ALPHABET</code> to use when generating
+    all possible permutations. By default, this is
+    <code>abcdefghijklmnopqrstuvwxyz0123456789</code>.</p>
+</li>
+<li>
+<p><code>-c</code>: This allows the user to set the number of CPU <code>CORES</code> (ie.
+    [processes]) to use concurrently.  By default, this is <code>1</code>.</p>
+</li>
+<li>
+<p><code>-l</code>: This allows the user to set the <code>LENGTH</code> of the permutations to
+    consider.  By default, this is <code>1</code>.</p>
+</li>
+<li>
+<p><code>-p</code>: This allows the user to set the <code>PREFIX</code> to be added in front of
+    each permutation to consider.  By default, this is an empty string.</p>
+</li>
+<li>
+<p><code>-s</code>: This allows the user to set the path to the file containing <a href="https://en.wikipedia.org/wiki/SHA1">SHA1</a>
+    <code>HASHES</code> to checked against.  By default, this is <code>hulk.hashes</code>.</p>
+</li>
+<li>
+<p><code>-h</code>: This prints the usage message and exits with success.</p>
+</li>
+</ul>
+<p>Given an <code>ALPHABET</code> (default is <code>abcdefghijklmnopqrstuvwxyz0123456789</code>),
+<code>hulk.py</code> will compute the <a href="https://en.wikipedia.org/wiki/SHA1">SHA1</a> hash of every <a href="https://en.wikipedia.org/wiki/Permutation">permutation</a> of the
+<code>ALPHABET</code> for the specified <code>LENGTH</code> and check if it is in the <a href="https://docs.python.org/3/library/stdtypes.html#set">set</a> of
+<code>HASHES</code> (default is <code>hulk.hashes</code>).  If a <code>PREFIX</code> is specified, then this
+should be inserted before each candidate <a href="https://en.wikipedia.org/wiki/Permutation">permutation</a>.</p>
+<div class="alert warning-bg">
+<h4 id="chegg-passwords"><i class="fa fa-warning"></i> Chegg Passwords<a class="headerlink" href="#chegg-passwords" title="Permanent link">&para;</a></h4>
+<p>Many of the passwords in the <code>hulk.hashes</code> password collection were pulled
+from a <a href="https://ndsmcobserver.com/2019/10/saint-marys-email-addresses-appear-in-credential-dump-following-chegg-data-breach/">Chegg password leak</a>.</p>
+</div>
+<h4 id="examples">Examples<a class="headerlink" href="#examples" title="Permanent link">&para;</a></h4>
+<p>For instance, suppose we had a <code>sample.hashes</code> file that contained the
+following <a href="https://en.wikipedia.org/wiki/SHA1">SHA1</a> checksums:</p>
+<div class="codehilite"><pre><span></span><code>86f7e437faa5a7fce15d1ddcb9eaeaea377667b8
+e9d71f5ee7c92d6dc9e92ffdad17b8bd49418f98
+84a516841ba77a5b4648de2cd0dfcb30ea46dbb4
+da23614e02469a0d7c7bd1bdab5c9c474b1904dc
+a9993e364706816aba3e25717850c26c9cd0d89d
+</code></pre></div>
+
+<p>If we executed <code>hulk.py</code> with a <code>LENGTH</code> of <code>1</code>, we should get the following
+result:</p>
+<div class="codehilite"><pre><span></span><code>$ ./hulk.py -l 1 -s sample.hashes
+a
+b
+c
+</code></pre></div>
+
+<p>That is, <code>hulk.py</code> determined that three of the hashes correspond to the
+passwords <code>a</code>, <code>b</code>, and <code>c</code>.</p>
+<p>If we executed <code>hulk.py</code> with a <code>LENGTH</code> of <code>2</code> and a <code>PREFIX</code> of <code>a</code>, we
+should get the following result:</p>
+<div class="codehilite"><pre><span></span><code>$ ./hulk.py -l 2 -s sample.hashes -p a
+abc
+</code></pre></div>
+
+<p>That is, <code>hulk.py</code> determined that 1 of the hashes corresponds to the
+password <code>abc</code>.  Note, we could have achieved the same results by executing:</p>
+<div class="codehilite"><pre><span></span><code>$ ./hulk.py -l 3 -s sample.hashes
+abc
+</code></pre></div>
+
+<p>The difference is the former searches each <a href="https://en.wikipedia.org/wiki/Permutation">permutation</a> in the form <code>aXX</code>
+where <code>X</code> is a letter from the <code>ALPHABET</code> due to the <code>PREFIX</code> of <code>a</code>, while
+the latter searches each <a href="https://en.wikipedia.org/wiki/Permutation">permutation</a> in the form <code>XXX</code>.</p>
+<p>Finally, if <code>CORES</code> is greater than <code>1</code> and the <code>LENGTH</code> is greater than <code>1</code>,
+the script will use the <a href="https://docs.python.org/3/library/concurrent.futures.html">concurrent.futures</a> module to <a href="https://en.wikipedia.org/wiki/Brute-force_attack">brute-force</a> passwords
+in parallel with the specified number of <code>CORES</code>:</p>
+<div class="codehilite"><pre><span></span><code>$ ./hulk.py -l 1 -c 2 -s sample.hashes
+a
+b
+c
+</code></pre></div>
+
+<h3 id="task-1-hulkpy">Task 1: <code>hulk.py</code><a class="headerlink" href="#task-1-hulkpy" title="Permanent link">&para;</a></h3>
+<p>To implement the <code>hulk.py</code> <a href="https://www.python.org/">Python</a> script, you will need to complete the
+following functions:</p>
+<ol>
+<li>
+<div class="flex-col" markdown="1">
+<p><code>sha1sum(s: str) -&gt; str</code></p>
+<blockquote>
+<p>This function computes the <a href="https://en.wikipedia.org/wiki/SHA1">SHA1</a> checksum of the given string <code>s</code> and
+returns the corresponding <strong>hex digest</strong>.</p>
+</blockquote>
+<div class="alert success-bg" markdown="1">
+<p><strong>Hints</strong>: Consider using the <a href="https://docs.python.org/3/library/hashlib.html">hashlib</a> library and the <a href="https://docs.python.org/3/library/stdtypes.html#str.encode">str.encode</a>
+  method of the string object to convert <a href="https://docs.python.org/3/howto/unicode.html#converting-to-bytes">unicode</a> into <a href="https://docs.python.org/3/library/stdtypes.html#binary-sequence-types-bytes-bytearray-memoryview">bytes</a>.</p>
+</div>
+</li>
+<li>
+<div class="flex-col" markdown="1">
+<p><code>permutations(length: int, alphabet: str=ALPHABET) -&gt; Iterator[str]</code></p>
+<blockquote>
+<p>This function uses a <a href="https://en.wikipedia.org/wiki/Recursion_(computer_science)">recursive</a> algorithm to implement a <a href="https://docs.python.org/3/howto/functional.html#generators">generator</a>
+using the <a href="https://docs.python.org/3/reference/simple_stmts.html#yield">yield</a> statement to produce all the permutations of the given
+<code>length</code> with the corresponding <code>alphabet</code>.</p>
+</blockquote>
+<div class="alert success-bg" markdown="1">
+<p><strong>Hints</strong>: Consider the following approach.</p>
+<ul>
+<li>
+<p>For the <strong>base</strong> case, you will want to consider what permutations (if
+  any) should be <code>yielded</code> with a <code>length</code> of <code>0</code>.</p>
+</li>
+<li>
+<p>For the <strong>recursive</strong> case, how you can combine the <code>alphabet</code> with the
+  results of <code>permutations</code> of <code>length - 1</code> to <code>yield</code> each
+  <strong>permutation</strong> of the specified <code>length</code>.</p>
+</li>
+</ul>
+<p>The structure of the <code>permutations</code> function should look something like this:</p>
+<div class="codehilite"><pre><span></span><code><span class="k">if</span> <span class="n">length</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>   <span class="c1"># Base case</span>
+    <span class="k">yield</span> <span class="n">base</span> <span class="n">case</span>
+<span class="k">else</span><span class="p">:</span>             <span class="c1"># Recursive case</span>
+    <span class="k">yield</span> <span class="n">the</span> <span class="n">combination</span> <span class="n">of</span> <span class="n">each</span> <span class="n">letter</span> <span class="k">with</span> <span class="n">each</span> <span class="n">permutation</span> <span class="n">of</span> <span class="n">length</span> <span class="o">-</span> <span class="mi">1</span>
+</code></pre></div>
+
+</div>
+<div class="alert danger-bg" markdown="1">
+<p>Note, you <strong>may not</strong> use any of the utilities in the <a href="https://docs.python.org/3/library/itertools.html">itertools</a> module
+for this function.</p>
+</div>
+</li>
+<li>
+<div class="flex-col" markdown="1">
+<p><code>flatten(sequence: Iterable[Iterable[str]]) -&gt; Iterator[str]</code></p>
+<blockquote>
+<p>This function flattens a sequence of iterables into a single sequence
+of values from the nested data.</p>
+</blockquote>
+<p>The idea with this function is that given a nested sequence of iterables
+such as <code>[[A, B, C], [D, E, F]]</code>, you <code>yield</code> each item from the
+subsequences: <code>A, B, C, D, E, F</code>.</p>
+<div class="alert success-bg" markdown="1">
+<p><strong>Hints</strong>: Consider using <code>yield from</code> on the subsequences.</p>
+</div>
+</li>
+<li>
+<div class="flex-col" markdown="1">
+<p><code>crack(hashes: set[str], length: int, alphabet: str=ALPHABET, prefix: str='') -&gt; list[str]</code></p>
+<blockquote>
+<p>This function returns all password permutations of specified <code>length</code>,
+<code>alphabet</code>, and <code>prefix</code> that are in <code>hashes</code> set by trying
+all possible permutations sequentially.</p>
+</blockquote>
+<div class="alert success-bg" markdown="1">
+<p><strong>Hints</strong>: Consider using <a href="https://docs.python.org/3/tutorial/datastructures.html#list-comprehensions">list comprehensions</a> or <a href="https://www.python.org/dev/peps/pep-0289/">generator
+  expressions</a> to implement this function.</p>
+<p>Pay careful attention to <strong>not</strong> use <strong>too much memory</strong> in this
+function, particularly when producing all possible <code>permutations</code>.</p>
+</div>
+</li>
+<li>
+<div class="flex-col" markdown="1">
+<p><code>whack(arguments: tuple[set[str], int, str, str]) -&gt; list[str]</code></p>
+<blockquote>
+<p>This function calls <code>crack</code> with the given <a href="https://docs.python.org/3/tutorial/datastructures.html#tuples-and-sequences">tuple</a> of <code>arguments</code>.</p>
+</blockquote>
+<p>This function exists because <code>map</code> can only pass a single argument to the
+function it applies.  To workaround this limitation, we create the
+<code>whack</code> helper function which takes a <a href="https://docs.python.org/3/tutorial/datastructures.html#tuples-and-sequences">tuple</a> of arguments which can then
+unpack to call <code>crack</code>.  That is, <code>whack</code> takes a <a href="https://docs.python.org/3/tutorial/datastructures.html#tuples-and-sequences">tuple</a> of <strong>four</strong>
+items which correspond to the parameters to <code>crack</code> and we simply need to
+call <code>crack</code> with these items:</p>
+<div class="codehilite"><pre><span></span><code><span class="c1"># Calling whack should result in calling crack with the arguments</span>
+<span class="c1"># tuple unpacked as parameters.</span>
+<span class="n">whack</span><span class="p">((</span><span class="n">hashes</span><span class="p">,</span> <span class="n">length</span><span class="p">,</span> <span class="n">alphabet</span><span class="p">,</span> <span class="n">prefix</span><span class="p">))</span> <span class="o">-&gt;</span> <span class="n">crack</span><span class="p">(</span><span class="n">hashes</span><span class="p">,</span> <span class="n">length</span><span class="p">,</span> <span class="n">alphabet</span><span class="p">,</span> <span class="n">prefix</span><span class="p">)</span>
+</code></pre></div>
+
+<div class="alert success-bg" markdown="1">
+<p><strong>Hints</strong>: Consider using <code>*</code> to <a href="https://docs.python.org/3/tutorial/controlflow.html#tut-unpacking-arguments">unpack an argument list</a>.</p>
+</div>
+</li>
+<li>
+<div class="flex-col" markdown="1">
+<p><code>smash(hashes: set[str], length: int, alphabet: str=ALPHABET, prefix: str='', cores: int=1) -&gt; Iterator[str]</code></p>
+<blockquote>
+<p>This function returns all password permutations of specified <code>length</code>,
+<code>alphabet</code>, and <code>prefix</code> that are in <code>hashes</code> set by trying all possible
+permutations concurrently with the specified number of <code>cores</code>.</p>
+</blockquote>
+<p>To allow for parallel execution, you will need to do <strong>divide up the
+work</strong> normally done by one process. The easiest way to accomplish this
+is by taking advantage of the <code>prefix</code> feature of <code>crack</code>.</p>
+<p>For instance, if the specified <code>LENGTH</code> is <code>4</code>, you can <code>crack</code> passwords
+of length <code>3</code> with prefixes of <code>[a, b, ..., 9]</code> to achieve the same result:</p>
+<div class="codehilite"><pre><span></span><code>Passwords of length 4     Prefixes + Passwords of length 3
+
+aaaa                      a + aaa -&gt; aaaa
+aaab                      a + aab -&gt; aaab
+....                      ....
+baaa                      b + aaa -&gt; baaa
+baab                      b + aab -&gt; baab
+....                      ....
+</code></pre></div>
+
+<div class="alert success-bg" markdown="1">
+<p><strong>Hints</strong>: Consider using the <code>map</code> method of the <a href="https://docs.python.org/3/library/concurrent.futures.html#concurrent.futures.ProcessPoolExecutor">ProcessPoolExecutor</a>
+  from the <a href="https://docs.python.org/3/library/concurrent.futures.html">concurrent.futures</a> module in order to take advantage of
+  multiple CPU <code>cores</code>.</p>
+<p>In <code>smash</code>, you will need to create an <code>arguments</code> sequence that consists
+of the argument tuples to pass to <code>whack</code>.  As explained above, each tuple
+consists of the arguments to <code>crack</code>: <code>hashes</code>, <code>length</code>, <code>alphabet</code>,
+<code>prefix</code>.  Based on the previous description, only the <code>length</code> and
+<code>prefix</code> arguments need to be modified in the arguments sequence:</p>
+<div class="codehilite"><pre><span></span><code><span class="p">(</span><span class="n">original</span> <span class="n">hashes</span><span class="p">,</span> <span class="n">new</span> <span class="n">length</span><span class="p">,</span> <span class="n">original</span> <span class="n">alphabet</span><span class="p">,</span> <span class="n">new</span> <span class="n">prefix</span><span class="p">)</span>
+</code></pre></div>
+
+<p>For simplicity, we suggest that you use each letter in the <code>alphabet</code> as
+part of the <code>prefix</code> in the arguments tuple, while keeping in mind that
+you still need to account for the <code>prefix</code> passed to <code>smash</code> itself.</p>
+<p>Because we are now using the <code>prefix</code> feature of <code>crack</code>, you will also
+need to update the <code>length</code> argument in the <code>tuple</code>.</p>
+<p>Your code should look something like this:</p>
+<div class="codehilite"><pre><span></span><code><span class="c1"># Generator expression representing a sequence of arguments to pass</span>
+<span class="c1"># to `whack` (hashes, length, alphabet remain constant, but prefix</span>
+<span class="c1"># should change for each argument tuple).</span>
+<span class="n">arguments</span> <span class="o">=</span> <span class="p">((</span><span class="o">...</span><span class="p">)</span> <span class="k">for</span> <span class="o">...</span> <span class="ow">in</span> <span class="o">...</span><span class="p">)</span>
+
+<span class="c1"># Create a ProcessPoolExecutor and then apply whack to the</span>
+<span class="c1"># arguments</span>
+<span class="k">with</span> <span class="n">concurrent</span><span class="o">.</span><span class="n">futures</span><span class="o">.</span><span class="n">ProcessPoolExecutor</span><span class="p">(</span><span class="n">cores</span><span class="p">)</span> <span class="k">as</span> <span class="n">executor</span><span class="p">:</span>
+    <span class="o">...</span> <span class="n">executor</span><span class="o">.</span><span class="n">map</span><span class="p">(</span><span class="o">...</span><span class="p">)</span>
+</code></pre></div>
+
+<p>Because the <code>executor.map</code> will return a sequence of sequences, you will
+want to use the <code>flatten</code> function you wrote to convert the result into a
+single sequence.
+</div></p>
+</li>
+<li>
+<div class="flex-col" markdown="1">
+<p><code>main(arguments: list[str]=sys.argv[1:]) -&gt; None</code></p>
+<blockquote>
+<p>This function smashes the given hashes to determine the original
+passwords with specified alphabet, length, and prefix using multiple
+cores (ie. processes).</p>
+</blockquote>
+<div class="alert success-bg" markdown="1">
+<p><strong>Hints</strong>: Considering parsing command line options using the <code>while</code> loop
+  we have used in the past or investigate using <a href="https://docs.python.org/3/library/argparse.html#module-argparse">argparse</a> or <a href="https://docs.python.org/3/library/getopt.html">getopt</a>.</p>
+<p>For the best performance, consider using a <a href="https://docs.python.org/3/library/stdtypes.html#set">set</a> to store the collection
+  of <a href="https://en.wikipedia.org/wiki/SHA1">SHA1</a> hashes.</p>
+</div>
+</li>
+</ol>
+<h3 id="task-2-testing_1">Task 2: Testing<a class="headerlink" href="#task-2-testing_1" title="Permanent link">&para;</a></h3>
+<p>As you implement <code>hulk.py</code>, you can use the provided <a href="https://docs.python.org/3/library/doctest.html">doctests</a> to verify the
+correctness of your code:</p>
+<div class="codehilite"><pre><span></span><code><span class="c1"># Run doctests</span>
+$<span class="w"> </span>python3<span class="w"> </span>-m<span class="w"> </span>doctest<span class="w"> </span>hulk.py<span class="w"> </span>-v
+...
+<span class="m">2</span><span class="w"> </span>items<span class="w"> </span>had<span class="w"> </span>no<span class="w"> </span>tests:
+<span class="w">    </span>hulk
+<span class="w">    </span>hulk.usage
+<span class="m">7</span><span class="w"> </span>items<span class="w"> </span>passed<span class="w"> </span>all<span class="w"> </span>tests:
+<span class="w">   </span><span class="m">1</span><span class="w"> </span>tests<span class="w"> </span><span class="k">in</span><span class="w"> </span>hulk.crack
+<span class="w">   </span><span class="m">1</span><span class="w"> </span>tests<span class="w"> </span><span class="k">in</span><span class="w"> </span>hulk.flatten
+<span class="w">   </span><span class="m">1</span><span class="w"> </span>tests<span class="w"> </span><span class="k">in</span><span class="w"> </span>hulk.main
+<span class="w">   </span><span class="m">1</span><span class="w"> </span>tests<span class="w"> </span><span class="k">in</span><span class="w"> </span>hulk.permutations
+<span class="w">   </span><span class="m">1</span><span class="w"> </span>tests<span class="w"> </span><span class="k">in</span><span class="w"> </span>hulk.sha1sum
+<span class="w">   </span><span class="m">1</span><span class="w"> </span>tests<span class="w"> </span><span class="k">in</span><span class="w"> </span>hulk.smash
+<span class="w">   </span><span class="m">1</span><span class="w"> </span>tests<span class="w"> </span><span class="k">in</span><span class="w"> </span>hulk.whack
+<span class="m">7</span><span class="w"> </span>tests<span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="m">9</span><span class="w"> </span>items.
+<span class="m">7</span><span class="w"> </span>passed<span class="w"> </span>and<span class="w"> </span><span class="m">0</span><span class="w"> </span>failed.
+Test<span class="w"> </span>passed.
+</code></pre></div>
+
+<p>You can also use <code>make</code> to run both the <a href="https://docs.python.org/3/library/doctest.html">doctests</a> and the <a href="https://en.wikipedia.org/wiki/Unit_testing">unit tests</a>:</p>
+<div class="codehilite"><pre><span></span><code><span class="c1"># Run unit tests (and doctests)</span>
+$<span class="w"> </span>make<span class="w"> </span>test-hulk
+Testing<span class="w"> </span>Hulk<span class="w"> </span>...
+test_00_doctest<span class="w"> </span><span class="o">(</span>__main__.HulkTest.test_00_doctest<span class="o">)</span><span class="w"> </span>...<span class="w"> </span>ok
+test_01_mypy<span class="w"> </span><span class="o">(</span>__main__.HulkTest.test_01_mypy<span class="o">)</span><span class="w"> </span>...<span class="w"> </span>ok
+test_02_sha1sum<span class="w"> </span><span class="o">(</span>__main__.HulkTest.test_02_sha1sum<span class="o">)</span><span class="w"> </span>...<span class="w"> </span>ok
+test_03_permutations<span class="w"> </span><span class="o">(</span>__main__.HulkTest.test_03_permutations<span class="o">)</span><span class="w"> </span>...<span class="w"> </span>ok
+test_04_flatten<span class="w"> </span><span class="o">(</span>__main__.HulkTest.test_04_flatten<span class="o">)</span><span class="w"> </span>...<span class="w"> </span>ok
+test_05_crack<span class="w"> </span><span class="o">(</span>__main__.HulkTest.test_05_crack<span class="o">)</span><span class="w"> </span>...<span class="w"> </span>ok
+test_06_whack<span class="w"> </span><span class="o">(</span>__main__.HulkTest.test_06_whack<span class="o">)</span><span class="w"> </span>...<span class="w"> </span>ok
+test_07_smash<span class="w"> </span><span class="o">(</span>__main__.HulkTest.test_07_smash<span class="o">)</span><span class="w"> </span>...<span class="w"> </span>ok
+test_08_main_usage<span class="w"> </span><span class="o">(</span>__main__.HulkTest.test_08_main_usage<span class="o">)</span><span class="w"> </span>...<span class="w"> </span>ok
+test_09_main_no_arguments<span class="w"> </span><span class="o">(</span>__main__.HulkTest.test_09_main_no_arguments<span class="o">)</span><span class="w"> </span>...<span class="w"> </span>ok
+test_10_main_length_1<span class="w"> </span><span class="o">(</span>__main__.HulkTest.test_10_main_length_1<span class="o">)</span><span class="w"> </span>...<span class="w"> </span>ok
+test_11_main_length_1_alphabet_abc<span class="w"> </span><span class="o">(</span>__main__.HulkTest.test_11_main_length_1_alphabet_abc<span class="o">)</span><span class="w"> </span>...<span class="w"> </span>ok
+test_12_main_length_1_prefix_a<span class="w"> </span><span class="o">(</span>__main__.HulkTest.test_12_main_length_1_prefix_a<span class="o">)</span><span class="w"> </span>...<span class="w"> </span>ok
+test_13_main_length_1_cores_1<span class="w"> </span><span class="o">(</span>__main__.HulkTest.test_13_main_length_1_cores_1<span class="o">)</span><span class="w"> </span>...<span class="w"> </span>ok
+test_14_main_length_1_prefix_a_cores_1<span class="w"> </span><span class="o">(</span>__main__.HulkTest.test_14_main_length_1_prefix_a_cores_1<span class="o">)</span><span class="w"> </span>...<span class="w"> </span>ok
+test_15_main_length_2<span class="w"> </span><span class="o">(</span>__main__.HulkTest.test_15_main_length_2<span class="o">)</span><span class="w"> </span>...<span class="w"> </span>ok
+test_16_main_length_2_alphabet_abc<span class="w"> </span><span class="o">(</span>__main__.HulkTest.test_16_main_length_2_alphabet_abc<span class="o">)</span><span class="w"> </span>...<span class="w"> </span>ok
+test_17_main_length_2_prefix_a<span class="w"> </span><span class="o">(</span>__main__.HulkTest.test_17_main_length_2_prefix_a<span class="o">)</span><span class="w"> </span>...<span class="w"> </span>ok
+test_18_main_length_2_cores_2<span class="w"> </span><span class="o">(</span>__main__.HulkTest.test_18_main_length_2_cores_2<span class="o">)</span><span class="w"> </span>...<span class="w"> </span>ok
+test_19_main_length_2_prefix_a_cores_2<span class="w"> </span><span class="o">(</span>__main__.HulkTest.test_19_main_length_2_prefix_a_cores_2<span class="o">)</span><span class="w"> </span>...<span class="w"> </span>ok
+test_20_main_length_3<span class="w"> </span><span class="o">(</span>__main__.HulkTest.test_20_main_length_3<span class="o">)</span><span class="w"> </span>...<span class="w"> </span>ok
+test_21_main_length_3_alphabet_abc<span class="w"> </span><span class="o">(</span>__main__.HulkTest.test_21_main_length_3_alphabet_abc<span class="o">)</span><span class="w"> </span>...<span class="w"> </span>ok
+test_22_main_length_3_prefix_a<span class="w"> </span><span class="o">(</span>__main__.HulkTest.test_22_main_length_3_prefix_a<span class="o">)</span><span class="w"> </span>...<span class="w"> </span>ok
+test_23_main_length_3_cores_3<span class="w"> </span><span class="o">(</span>__main__.HulkTest.test_23_main_length_3_cores_3<span class="o">)</span><span class="w"> </span>...<span class="w"> </span>ok
+test_24_main_length_3_prefix_a_cores_3<span class="w"> </span><span class="o">(</span>__main__.HulkTest.test_24_main_length_3_prefix_a_cores_3<span class="o">)</span><span class="w"> </span>...<span class="w"> </span>ok
+test_25_script_length_4_cores_4<span class="w"> </span><span class="o">(</span>__main__.HulkTest.test_25_script_length_4_cores_4<span class="o">)</span><span class="w"> </span>...<span class="w"> </span>ok
+
+<span class="w">   </span>Score<span class="w"> </span><span class="m">26</span>.00<span class="w"> </span>/<span class="w"> </span><span class="m">26</span>.00
+<span class="w">   </span>Grade<span class="w"> </span><span class="m">1</span>.00<span class="w"> </span>/<span class="w"> </span><span class="m">1</span>.00
+<span class="w">  </span>Status<span class="w"> </span>Success
+
+----------------------------------------------------------------------
+Ran<span class="w"> </span><span class="m">26</span><span class="w"> </span>tests<span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="m">2</span>.163s
+
+OK
+</code></pre></div>
+
+<p>To just run the <a href="https://en.wikipedia.org/wiki/Unit_testing">unit tests</a>, you can do the following:</p>
+<div class="codehilite"><pre><span></span><code><span class="c1"># Run unit tests</span>
+$<span class="w"> </span>./hulk.test<span class="w"> </span>-v
+...
+</code></pre></div>
+
+<p>To run a specific <a href="https://en.wikipedia.org/wiki/Unit_testing">unit test</a>, you can specify the <strong>method name</strong>:</p>
+<div class="codehilite"><pre><span></span><code><span class="c1"># Run only mypy unit test</span>
+$<span class="w"> </span>./hulk.test<span class="w"> </span>-v<span class="w"> </span>HulkTest.test_01_mypy
+...
+</code></pre></div>
+
+<p>To manually check your types, you can use <a href="https://mypy-lang.org/">mypy</a>:</p>
+<div class="codehilite"><pre><span></span><code><span class="c1"># Run mypy to check types</span>
+$<span class="w"> </span>mypy<span class="w"> </span>hulk.py
+</code></pre></div>
+
+<h3 id="task-3-deadpool-optional">Task 3: Deadpool (<em>Optional</em>)<a class="headerlink" href="#task-3-deadpool-optional" title="Permanent link">&para;</a></h3>
+<p>Just for fun, once you are confident that your program is correct, you can
+use <code>hulk.py</code> to <a href="https://en.wikipedia.org/wiki/Brute-force_attack">brute-force</a> crack set of <code>12050</code> password hashes found in
+<code>hulk.hashes</code>.</p>
+<div class="alert warning-bg">
+<p>This is an <strong>optional</strong> activity and you can skip it if you wish.</p>
+</div>
+<p>To keep track of who has cracked the most passwords, you can submit your set
+of discovered passwords to the [deadpool]:</p>
+<div class="codehilite"><pre><span></span><code>$<span class="w"> </span>cat<span class="w"> </span>PASSWORDS<span class="w"> </span><span class="p">|</span><span class="w"> </span>curl<span class="w"> </span>--data-binary<span class="w"> </span>@-<span class="w"> </span>http://xavier.h4x0r.space:9111/NETID
+</code></pre></div>
+
+<p>Replace <code>PASSWORDS</code> with the name of the file with your passwords and <code>NETID</code>
+with your Notre Dame NetID:</p>
+<div class="codehilite"><pre><span></span><code><span class="c1"># Generate passwords of length 1 and store them in passwords.txt</span>
+$<span class="w"> </span>./hulk.py<span class="w"> </span>-l<span class="w"> </span><span class="m">1</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>tee<span class="w"> </span>-a<span class="w"> </span>passwords.txt
+...
+
+<span class="c1"># Upload passwords.txt</span>
+$<span class="w"> </span>cat<span class="w"> </span>passwords.txt<span class="w"> </span><span class="p">|</span><span class="w"> </span>curl<span class="w"> </span>--data-binary<span class="w"> </span>@-<span class="w"> </span>http://xavier.h4x0r.space:9111/pbui
+<span class="o">{</span><span class="s2">&quot;timestamp&quot;</span>:<span class="w"> </span><span class="m">1488333215</span>.967784,<span class="w"> </span><span class="s2">&quot;passwords&quot;</span>:<span class="w"> </span><span class="m">36</span><span class="o">}</span>
+</code></pre></div>
+
+<p>Each password is no more than <code>8</code> characters long and only consists of
+lowercase letters and numeric digits.</p>
+<div class="alert info-bg">
+<h3 id="cpu-64-bit-embed_icon-multiple-cores"><i class="icon icon-medium"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><title>cpu-64-bit</title><path d="M9,3V5H7A2,2 0 0,0 5,7V9H3V11H5V13H3V15H5V17A2,2 0 0,0 7,19H9V21H11V19H13V21H15V19H17A2,2 0 0,0 19,17V15H21V13H19V11H21V9H19V7A2,2 0 0,0 17,5H15V3H13V5H11V3M8,9H11.5V10.5H8.5V11.25H10.5A1,1 0 0,1 11.5,12.25V14A1,1 0 0,1 10.5,15H8A1,1 0 0,1 7,14V10A1,1 0 0,1 8,9M12.5,9H14V11H15.5V9H17V15H15.5V12.5H12.5M8.5,12.75V13.5H10V12.75" /></svg>
+</i> Multiple Cores<a class="headerlink" href="#cpu-64-bit-embed_icon-multiple-cores" title="Permanent link">&para;</a></h3>
+<p>To speed up your computations, consider using different values for
+<code>CORES</code>:</p>
+<div class="codehilite"><pre><span></span><code>$<span class="w"> </span>./hulk.py<span class="w"> </span>-l<span class="w"> </span><span class="m">6</span><span class="w"> </span>-c<span class="w"> </span><span class="m">8</span><span class="w">  </span><span class="c1"># Use 8 processes</span>
+</code></pre></div>
+
+<p>To find out how many cores a Linux machine has, you can do:</p>
+<div class="codehilite"><pre><span></span><code>$<span class="w"> </span>lscpu
+</code></pre></div>
+
+</div>
+<div class="alert danger-bg">
+<h3 id="handshake-outline-embed_icon-shared-resources"><i class="icon icon-medium"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><title>handshake-outline</title><path d="M21.71 8.71C22.96 7.46 22.39 6 21.71 5.29L18.71 2.29C17.45 1.04 16 1.61 15.29 2.29L13.59 4H11C9.1 4 8 5 7.44 6.15L3 10.59V14.59L2.29 15.29C1.04 16.55 1.61 18 2.29 18.71L5.29 21.71C5.83 22.25 6.41 22.45 6.96 22.45C7.67 22.45 8.32 22.1 8.71 21.71L11.41 19H15C16.7 19 17.56 17.94 17.87 16.9C19 16.6 19.62 15.74 19.87 14.9C21.42 14.5 22 13.03 22 12V9H21.41L21.71 8.71M20 12C20 12.45 19.81 13 19 13L18 13L18 14C18 14.45 17.81 15 17 15L16 15L16 16C16 16.45 15.81 17 15 17H10.59L7.31 20.28C7 20.57 6.82 20.4 6.71 20.29L3.72 17.31C3.43 17 3.6 16.82 3.71 16.71L5 15.41V11.41L7 9.41V11C7 12.21 7.8 14 10 14S13 12.21 13 11H20V12M20.29 7.29L18.59 9H11V11C11 11.45 10.81 12 10 12S9 11.45 9 11V8C9 7.54 9.17 6 11 6H14.41L16.69 3.72C17 3.43 17.18 3.6 17.29 3.71L20.28 6.69C20.57 7 20.4 7.18 20.29 7.29Z" /></svg>
+</i> Shared Resources<a class="headerlink" href="#handshake-outline-embed_icon-shared-resources" title="Permanent link">&para;</a></h3>
+<p>Remember that you need to <strong>share</strong> the <strong>student</strong> machines with all the
+other students in class.</p>
+<p><strong>Therefore, do not run <code>hulk.py</code> on lengths larger than <code>6</code>...  otherwise
+you will take up significant CPU resources away from other students for long
+periods of time.</strong></p>
+<p>If you want to crack passwords of length greater than <code>6</code>, you will need to
+run <a href="https://hashcat.net/hashcat/">hashcat</a> on your own machines.</p>
+</div>
+<h2 id="activity-3-quiz-02-points">Activity 3: Quiz (<em>0.2 Points</em>)<a class="headerlink" href="#activity-3-quiz-02-points" title="Permanent link">&para;</a></h2>
+<p>Once you have completed all the activities above, you are to complete the
+following <strong>reflection quiz</strong>:</p>
+<div id="quiz-questions"></div>
+
+<div id="quiz-responses"></div>
+
+<script src="static/js/dredd-quiz.js"></script>
+<script>
+loadQuiz('static/json/homework05.json');
+</script>
+
+<pre style="display: none;" id="dr-container" class="codehilite"><code id="dredd-response"></code></pre>
+
+<p>As with <a href="reading01.html">Reading 01</a>, you will need to store your answers in a
+<code>homework05/answers.json</code> file.  You can use the form above to generate the
+contents of this file, or you can write the <a href="https://json.org/">JSON</a> by hand.</p>
+<p>To test your quiz, you can use the <code>check.py</code> script:</p>
+<div class="codehilite"><pre><span></span><code>$<span class="w"> </span>../.scripts/check.py
+Checking<span class="w"> </span>homework05<span class="w"> </span>quiz<span class="w"> </span>...
+<span class="w">     </span>Q01<span class="w">  </span><span class="m">5</span>.00<span class="w"> </span>/<span class="w">  </span><span class="m">5</span>.00
+<span class="w">     </span>Q02<span class="w">  </span><span class="m">5</span>.00<span class="w"> </span>/<span class="w">  </span><span class="m">5</span>.00
+<span class="w">     </span>Q03<span class="w">  </span><span class="m">3</span>.00<span class="w"> </span>/<span class="w">  </span><span class="m">3</span>.00
+<span class="w">     </span>Q04<span class="w">  </span><span class="m">2</span>.00<span class="w"> </span>/<span class="w">  </span><span class="m">2</span>.00
+<span class="w">  </span>--------------------
+<span class="w">   </span>Score<span class="w"> </span><span class="m">15</span>.00<span class="w"> </span>/<span class="w"> </span><span class="m">15</span>.00
+<span class="w">   </span>Grade<span class="w">  </span><span class="m">1</span>.00<span class="w"> </span>/<span class="w">  </span><span class="m">1</span>.00
+<span class="w">  </span>Status<span class="w"> </span>Success
+</code></pre></div>
+
+<h2 id="submission-1-points">Submission (<em>1 Points</em>)<a class="headerlink" href="#submission-1-points" title="Permanent link">&para;</a></h2>
+<p>To submit your assignment, please commit your work to the <code>homework05</code> folder
+of your <code>homework05</code> branch in your <strong>assignments</strong> <a href="https://github.com">GitHub</a> repository.
+Your <tt>homework05</tt> folder should <strong>only</strong> contain the following files:</p>
+<ul>
+<li><tt>Makefile</tt></li>
+<li><tt>answers.json</tt></li>
+<li><tt>hulk.py</tt></li>
+<li><tt>searx.py</tt></li>
+</ul>
+<div class="alert info-bg">
+<p><strong>Note</strong>: You do not need to commit the test scripts because the <code>Makefile</code>
+automatically downloads them.</p>
+</div>
+<div class="codehilite"><pre><span></span><code><span class="c1">#-----------------------------------------------------------------------</span>
+<span class="c1"># Make sure you have already completed Activity 0: Preparation</span>
+<span class="c1">#-----------------------------------------------------------------------</span>
+...
+$<span class="w"> </span>git<span class="w"> </span>add<span class="w"> </span>searx.py<span class="w">                                    </span><span class="c1"># Mark changes for commit</span>
+$<span class="w"> </span>git<span class="w"> </span>commit<span class="w"> </span>-m<span class="w"> </span><span class="s2">&quot;Homework 05: searx.py&quot;</span><span class="w">               </span><span class="c1"># Record changes</span>
+...
+$<span class="w"> </span>git<span class="w"> </span>add<span class="w"> </span>hulk.py<span class="w">                                     </span><span class="c1"># Mark changes for commit</span>
+$<span class="w"> </span>git<span class="w"> </span>commit<span class="w"> </span>-m<span class="w"> </span><span class="s2">&quot;Homework 05: hulk.py&quot;</span><span class="w">                </span><span class="c1"># Record changes</span>
+...
+$<span class="w"> </span>git<span class="w"> </span>add<span class="w"> </span>answers.json<span class="w">                                </span><span class="c1"># Mark changes for commit</span>
+$<span class="w"> </span>git<span class="w"> </span>commit<span class="w"> </span>-m<span class="w"> </span><span class="s2">&quot;Homework 05: Quiz&quot;</span><span class="w">                   </span><span class="c1"># Record changes</span>
+...
+$<span class="w"> </span>git<span class="w"> </span>push<span class="w"> </span>-u<span class="w"> </span>origin<span class="w"> </span>homework05<span class="w">                       </span><span class="c1"># Push branch to GitHub</span>
+</code></pre></div>
+
+<div class="alert warning-bg">
+<h3 id="lifebuoy-embed_icon-acknowledgments"><i class="icon icon-medium"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><title>lifebuoy</title><path d="M19.79,15.41C20.74,13.24 20.74,10.75 19.79,8.59L17.05,9.83C17.65,11.21 17.65,12.78 17.06,14.17L19.79,15.41M15.42,4.21C13.25,3.26 10.76,3.26 8.59,4.21L9.83,6.94C11.22,6.35 12.79,6.35 14.18,6.95L15.42,4.21M4.21,8.58C3.26,10.76 3.26,13.24 4.21,15.42L6.95,14.17C6.35,12.79 6.35,11.21 6.95,9.82L4.21,8.58M8.59,19.79C10.76,20.74 13.25,20.74 15.42,19.78L14.18,17.05C12.8,17.65 11.22,17.65 9.84,17.06L8.59,19.79M12,2A10,10 0 0,1 22,12A10,10 0 0,1 12,22A10,10 0 0,1 2,12A10,10 0 0,1 12,2M12,8A4,4 0 0,0 8,12A4,4 0 0,0 12,16A4,4 0 0,0 16,12A4,4 0 0,0 12,8Z" /></svg>
+</i> Acknowledgments<a class="headerlink" href="#lifebuoy-embed_icon-acknowledgments" title="Permanent link">&para;</a></h3>
+<p>If you collaborated with any other students, or received help from TAs or AI
+tools on this assignment, please record this support in the <code>README.md</code> in
+the <code>homework05</code> folder and include it with your <strong>Pull Request</strong>.</p>
+</div>
+<div class="alert success-bg">
+<h3 id="account-question-embed_icon-graders"><i class="icon icon-medium"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><title>account-question</title><path d="M13,8A4,4 0 0,1 9,12A4,4 0 0,1 5,8A4,4 0 0,1 9,4A4,4 0 0,1 13,8M17,18V20H1V18C1,15.79 4.58,14 9,14C13.42,14 17,15.79 17,18M20.5,14.5V16H19V14.5H20.5M18.5,9.5H17V9A3,3 0 0,1 20,6A3,3 0 0,1 23,9C23,9.97 22.5,10.88 21.71,11.41L21.41,11.6C20.84,12 20.5,12.61 20.5,13.3V13.5H19V13.3C19,12.11 19.6,11 20.59,10.35L20.88,10.16C21.27,9.9 21.5,9.47 21.5,9A1.5,1.5 0 0,0 20,7.5A1.5,1.5 0 0,0 18.5,9V9.5Z" /></svg>
+</i> Graders<a class="headerlink" href="#account-question-embed_icon-graders" title="Permanent link">&para;</a></h3>
+<p>Once you have committed your work and pushed it to <a href="https://github.com">GitHub</a>, remember to
+create a <strong>pull request</strong> and assign it to the appropriate <strong>teaching
+assistant</strong> from the <a href="reading05_tas.html">Reading 05 TA List</a>.</p>
+<p><strong>Note</strong>: this list changes each week, so be sure to consult the appropriate
+list for each assignment.</p>
+</div>
+</main>
+<footer>
+Built using <a href="https://python.org">Python</a>
+and <a href="https://jinja.palletsprojects.com">Jinja</a>
+with colors from <a href="https://nordtheme.com">Nord Theme</a>
+and icons from <a href="https://pictogrammers.com/library/mdi/">Material Design Icons</a>.</footer>
+</body>
+</html>
