@@ -1,0 +1,1004 @@
+title:      "Homework 05: SearX, Hulk"
+body:       |
+
+  The first goal of this homework assignment is to allow you to practice using
+  [Python] to create scripts that require sophisticated parsing of data and
+  manipulation of [data structures]. In the first program, you will process
+  data in [JSON] format and then present the information to the user in the
+  terminal.
+
+  The second goal of this homework assignment is to allow you to practice using
+  [functional programming] to process data in [Python].  In this assignment,
+  you will write a script that [brute-force] attacks a large collection of
+  passwords using **multiple processes**.  That is, we will use [functional
+  programming] to construct a concurrent application, and then exploit this
+  [concurrency] by using multiple CPU cores to execute the program in
+  [parallel].
+
+  For this assignment, record your scripts and any responses to the following
+  activities in the `homework05` folder of your **assignments** [GitHub]
+  repository and push your work by **noon Saturday, March 1**.
+
+  [Python]: https://www.python.org/
+  [data structures]: https://en.wikipedia.org/wiki/Data_structure
+  [list]: https://docs.python.org/3/tutorial/datastructures.html#more-on-lists
+  [lists]: https://docs.python.org/3/tutorial/datastructures.html#more-on-lists
+  [dicts]: https://docs.python.org/3/tutorial/datastructures.html#dictionaries
+  [dict]: https://docs.python.org/3/tutorial/datastructures.html#dictionaries
+  [CSV]: https://en.wikipedia.org/wiki/Comma-separated_values
+  [JSON]: http://www.json.org/
+  [functional programming]: https://en.wikipedia.org/wiki/Functional_programming
+  [brute-force]: https://en.wikipedia.org/wiki/Brute-force_attack
+  [concurrency]: https://en.wikipedia.org/wiki/Concurrency_(computer_science)
+  [parallel]: https://en.wikipedia.org/wiki/Parallel_computing
+  [tuple]: https://docs.python.org/3/tutorial/datastructures.html#tuples-and-sequences
+
+  ## Activity 0: Preparation
+
+  Before starting this homework assignment, you should first perform a `git
+  pull` to retrieve any changes in your remote [GitHub] repository:
+
+      :::bash
+      $ cd path/to/repository                   # Go to assignments repository
+
+      $ git switch master                       # Make sure we are in master branch
+
+      $ git pull --rebase                       # Get any remote changes not present locally
+
+  Next, create a new branch for this assignment:
+
+      :::bash
+      $ git switch -c homework05                # Create homework05 branch and check it out
+
+  ### Task 1: Skeleton Code
+
+  To help you get started, the instructor has provided you with the following **skeleton code**:
+
+      ::bash
+      # Go to homework05 folder
+      $ cd homework05
+
+      # Download Makefile
+      $ curl -LO https://pnutz.h4x0r.space/courses/cse.20289.sp26/static/txt/homework05/Makefile
+
+      # Download Python skeleton code
+      $ curl -LO https://pnutz.h4x0r.space/courses/cse.20289.sp26/static/txt/homework05/searx.py
+      $ curl -LO https://pnutz.h4x0r.space/courses/cse.20289.sp26/static/txt/homework05/hulk.py
+
+  Once downloaded, you should see the following files in your `homework05` directory:
+
+      :::bash
+      homework05
+          \_ Makefile       # This is the Makefile building all the assignment artifacts
+          \_ hulk.py        # This is the Python script for the hulk script
+          \_ searx.py       # This is the Python script for the searx script
+
+  <div class="alert warning-bg" markdown="1">
+
+  ### <i class="icon icon-medium">{{ "alert" | embed_icon }}</i> DocTests
+
+  You may notice that in addition to the usual comments and `TODOs`, the
+  [docstrings] of each method also contains a few [doctests].
+
+  You are **not** to modify these [doctests] and must keep them in-place. They
+  are used to verify the correctness of your code.
+
+  Your code goes **below** the [docstrings], where the `TODO` and `pass`
+  commands are (you may remove the pass once you complete the method).
+
+  </div>
+
+  [docstrings]: https://peps.python.org/pep-0257/
+  [doctests]: https://docs.python.org/3/library/doctest.html
+  [unit test]: https://en.wikipedia.org/wiki/Unit_testing
+  [unit tests]: https://en.wikipedia.org/wiki/Unit_testing
+
+  ### Task 2: Initial Import
+
+  Now that the files are downloaded into the `homework05` folder, you can
+  **commit** them to your [git] repository:
+
+      :::bash
+      $ git add Makefile                            # Mark changes for commit
+      $ git add *.py
+      $ git commit -m "Homework 05: Initial Import" # Record changes
+
+  ### Task 3: Unit Tests
+
+  After downloading these files, you can run the `make` command to run the
+  tests.
+
+      :::bash
+      # Run all tests (will trigger automatic download)
+      $ make
+
+  You will notice that the Makefile downloads these additional test data and scripts:
+
+      :::bash
+      homework05
+          \_ hulk.hashes          # This is the list of SHA1 hashes for the hulk script
+          \_ hulk.test            # This is the Python test for the hulk script
+          \_ searx.test           # This is the Python test for the searx script
+
+  In addition to the embedded [doctests] in the **skeleton code**, you will be
+  using these [unit tests] to verify the correctness and behavior of your code.
+
+  <div class="alert info-bg" markdown="1">
+
+  ### <i class="icon icon-medium">{{ "download" | embed_icon }}</i> Automatic Download
+
+  The `test` scripts are automatically downloaded by the `Makefile`, so any
+  modifications you do to them will be lost when you run `make` again. Likewise,
+  because they are automatically downloaded, you do not need to `add` or `commit`
+  them to your [git] repository.
+
+  </div>
+
+  The details on what you need to implement for this assignment are described
+  in the following sections.
+
+  <div class="alert success-bg" markdown="1">
+
+  ### <i class="icon icon-medium">{{ "help" | embed_icon }}</i> Frequently Asked Questions
+
+  <div class="text-center">
+    <iframe src="https://docs.google.com/presentation/d/e/2PACX-1vTAxPLHtFEH74cOeMxoIjeUYYN9-k0hp3yPUTOwJ7da04-kJ3bNA8dfnzmHflgP8rNPiI2PJWi3GbXi/pubembed?start=false&loop=false&delayms=3000" frameborder="0" width="960" height="749" allowfullscreen="true" mozallowfullscreen="true" webkitallowfullscreen="true"></iframe>
+  </div>
+
+  </div>
+
+  ## Activity 1: SearX (*0.4 Points*)
+
+  For the second activity, you are to write a script called `searx.py`, which
+  fetches search results from [searx.ndlug.org](https://searx.ndlug.org), a
+  website running [SearXNG]:
+
+  > [SearXNG] is a metasearch engine, aggregating the results of other search
+  engines while not storing information about its users.
+
+  With this script, you can search the Internet right from your terminal!
+
+      :::bash
+      # Display usage
+      $ ./searx.py
+      Usage: searx.py [-u URL -n LIMIT -o ORDERBY] QUERY
+
+      Fetch SearX results for QUERY and print them out.
+
+          -u URL      Use URL as the SearX instance (default is: https://searx.ndlug.org/search)
+          -n LIMIT    Only display up to LIMIT results (default is: 5)
+          -o ORDERBY  Sort the search results by ORDERBY (default is: score)
+
+      If ORDERBY is score, the results are shown in descending order.  Otherwise,
+      results are shown in ascending order.
+
+      # Search for notre dame
+      $ ./searx.py notre dame
+         1.   University of Notre Dame - Wikipedia [2.24]
+              https://en.wikipedia.org/wiki/University_of_Notre_Dame
+
+         2.   Notre Dame Athletics | The Fighting Irish [1.33]
+              https://fightingirish.com/
+
+         3.   Notre Dame [1.00]
+              https://en.wikipedia.org/wiki/Notre_Dame
+
+         4.   University of Notre Dame [1.00]
+              https://www.nd.edu
+
+         5.   University of Notre Dame [1.00]
+              https://www.nd.edu/
+
+      # Search for notre dame, limit to one result, order by title
+      $ ./searx.py -n 1 -o title notre dame
+         1.   About - University of Notre Dame [0.11]
+              https://www.nd.edu/about/
+
+  The `searx.py` script takes the following possible arguments:
+
+    - `-u`: This allows the user to set the `URL` of the [SearXNG] instance to
+      search.  By default, this is
+      [https://searx.ndlug.org/search](https://searx.ndlug.org/search).
+
+    - `-n`: This allows the user to limit the number of search results to print
+      out.  By default, this is `5`.
+
+    - `-o`: This allows the user to specify how to sort the results.  By
+      default, it will sort by `score` in descending order.  Otherwise, it will
+      sort either the `title` or `url` in ascending order.
+
+    - `-h`: This prints the usage message and exits with success.
+
+  After the flags, the remaining arguments is the `QUERY` to search.
+
+  <div class="alert danger-bg" markdown="1">
+
+  If an unsupported flag is specified, or if no `QUERY` is given, then
+  `searx.py` should print out the **usage** message and exit with failure.
+
+  </div>
+
+  [SearXNG]: https://docs.searxng.org/
+
+  ### Task 1: `searx.py`
+
+  To implement the `searx.py` [Python] script, you will need to complete the
+  following functions:
+
+  1.  <div class="flex-col" markdown="1">
+
+      `searx_query(query: str, url: str=URL) -> list[dict]`
+
+      > This function makes a [HTTP] request to the [SearXNG] instance
+      specified by `url` and returns the search results corresponding to
+      `query`.
+
+      <div class="alert success-bg" markdown="1">
+
+      **Hints**: To fetch the results from [SearXNG], you will need to specify
+      the following **parameters** when making a [HTTP] request:
+
+          :::python
+          {'q': query, 'format': 'json'}
+
+      To do so, you can use [requests.get]:
+
+          :::python
+          requests.get(url, params=...)
+
+      Remember that you want to return just the [list] of results inside the
+      [JSON] data, and not the whole response.
+
+      </div>
+
+  2.  <div class="flex-col" markdown="1">
+
+      `print_results(results: list[dict], limit: int=LIMIT, orderby: str=ORDERBY) -> None`
+
+      > This function prints up to `limit` search `results` sorted by
+      `orderby`.
+
+      <div class="alert success-bg" markdown="1">
+
+      **Hints**: Each search result should be printed out in the following
+      format:
+
+          :::python
+          '{index:>4}.\t{title} [{score:0.2f}]'
+          '\t{url}'
+
+      **Note**: There should be a **blank line** between each search result,
+        but not before the first result or after the last result.
+
+      You should **sort** the results using [sorted] before **slicing** it up
+      to the `limit`.  Remember that you can control how each element is compared
+      in [sorted] by specifying a `key` function:
+
+          :::python
+          sorted(results, key=lambda r: r['score'], reverse=True)
+
+      The code above would return a sequence of results ordered by `score`
+      in **descending** order.
+
+      </div>
+
+  3.  <div class="flex-col" markdown="1">
+
+      `main(arguments=sys.argv[1:]) -> None`
+
+      > This function processes the command line `arguments`, fetches the
+      search results for `QUERY`, and then prints out the results.
+
+      <div class="alert success-bg" markdown="1">
+
+      **Hints**: You may wish to use [str.join] to combine the remaining
+        arguments into a single `query`.
+
+      </div>
+
+  [HTTP]: https://en.wikipedia.org/wiki/HTTP
+  [requests.get]: https://requests.readthedocs.io/en/latest/user/quickstart/#passing-parameters-in-urls
+  [sorted]: https://docs.python.org/3/library/functions.html#sorted
+
+  ### Task 2: Testing
+
+  As you implement `searx.py`, you can use the provided [doctests] to verify the
+  correctness of your code:
+
+      :::bash
+      # Run doctests
+      $ python3 -m doctest searx.py -v
+      ...
+      2 items had no tests:
+          searx
+          searx.usage
+      3 items passed all tests:
+         1 tests in searx.main
+         1 tests in searx.print_results
+         1 tests in searx.searx_query
+      3 tests in 5 items.
+      3 passed and 0 failed.
+      Test passed.
+
+  You can also use `make` to run both the [doctests] and the [unit tests]:
+
+      :::bash
+      # Run unit tests (and doctests)
+      $ make test-searx
+      Testing SearX ...
+      test_00_doctest (__main__.SearxTest.test_00_doctest) ... ok
+      test_01_mypy (__main__.SearxTest.test_01_mypy) ... ok
+      test_02_searx_query_python (__main__.SearxTest.test_02_searx_query_python) ... ok
+      test_03_searx_query_peter_bui (__main__.SearxTest.test_03_searx_query_peter_bui) ... ok
+      test_04_searx_query_ndlug (__main__.SearxTest.test_04_searx_query_ndlug) ... ok
+      test_05_searx_query_url (__main__.SearxTest.test_05_searx_query_url) ... ok
+      test_06_print_results (__main__.SearxTest.test_06_print_results) ... ok
+      test_07_print_results_limit_1 (__main__.SearxTest.test_07_print_results_limit_1) ... ok
+      test_08_print_results_orderby_title (__main__.SearxTest.test_08_print_results_orderby_title) ... ok
+      test_09_print_results_limit_3_orderby_url (__main__.SearxTest.test_09_print_results_limit_3_orderby_url) ... ok
+      test_10_main_usage (__main__.SearxTest.test_10_main_usage) ... ok
+      test_11_main_python (__main__.SearxTest.test_11_main_python) ... ok
+      test_12_main_peter_bui (__main__.SearxTest.test_12_main_peter_bui) ... ok
+      test_13_main_ndlug (__main__.SearxTest.test_13_main_ndlug) ... ok
+      test_14_main_url_python (__main__.SearxTest.test_14_main_url_python) ... ok
+      test_15_main_limit_1_url_python (__main__.SearxTest.test_15_main_limit_1_url_python) ... ok
+      test_16_main_url_orderby_title_python (__main__.SearxTest.test_16_main_url_orderby_title_python) ... ok
+      test_17_main_url_orderby_url_limit_3_python (__main__.SearxTest.test_17_main_url_orderby_url_limit_3_python) ... ok
+
+         Score 18.00 / 18.00
+         Grade 1.00 / 1.00
+        Status Success
+
+      ----------------------------------------------------------------------
+      Ran 18 tests in 6.124s
+
+      OK
+
+  To just run the [unit tests], you can do the following:
+
+      :::bash
+      # Run unit tests
+      $ ./searx.test -v
+      ...
+
+  To run a specific [unit test], you can specify the **method name**:
+
+      :::bash
+      # Run only mypy unit test
+      $ ./searx.test -v SearxTest.test_01_mypy
+      ...
+
+  To manually check your types, you can use [mypy]:
+
+      :::bash
+      # Run mypy to check types
+      $ mypy searx.py
+
+
+  ## Activity 3: Hulk (*0.4 Points*)
+
+  <div class="flex-row" markdown="1">
+
+  <div class="flex-col" markdown="1">
+
+  With various [password
+  leaks](https://www.wired.com/story/collection-leak-usernames-passwords-billions/)
+  being announced on a [weekly
+  basis](https://www.reuters.com/business/healthcare-pharmaceuticals/unitedhealth-confirms-190-million-americans-affected-by-hack-tech-unit-2025-01-24/)
+  there has been a lot of discussion on [password
+  hygiene](https://lifehacker.com/how-to-create-a-strong-password-1797681069)
+  and [password
+  strength](https://www.fbi.gov/contact-us/field-offices/portland/news/press-releases/oregon-fbi-tech-tuesday-building-a-digital-defense-with-passwords).
+  There is even a website to check [have i been
+  pwned](https://haveibeenpwned.com/).
+
+  In all decent password accounting systems, the raw password is rarely stored.
+  Instead a [cryptographic hash] such as [MD5] or [SHA1] is used to record a
+  user's password digest or checksum and it is these hashes that are leaked to
+  outsiders in these all too frequent breaches.  Because these [cryptographic
+  hash] functions are generally considered [one-way functions], attackers
+  cannot directly obtain the original input password even though they know the
+  output of the [cryptographic hash].
+
+  </div>
+
+  <div class="flex-col-25" markdown="1">
+    <img src="static/img/homework05-hulk.png">
+  </div>
+
+  </div>
+
+  For instance, the [SHA1] digest of `goirish` is:
+
+      :::bash
+      $ printf goirish | sha1sum
+      d546785e887d9aaae85102c28769becfb86dde7d  -
+
+  As you can see, the string `d546785e887d9aaae85102c28769becfb86dde7d` does
+  not provide an attacker any clues about the original password `goirish`.  To
+  obtain the original text, attackers often employ [various
+  techniques](https://arstechnica.com/security/2013/05/how-crackers-make-minced-meat-out-of-your-passwords/)
+  such as [brute-force cracking].
+
+  [cryptographic hash]: https://en.wikipedia.org/wiki/Cryptographic_hash_function
+  [one-way functions]: https://en.wikipedia.org/wiki/One-way_function
+
+  For this activity, you are to create `hulk.py`, which is a script that uses
+  [brute-force] to **smash** a set of [SHA1] hashes:
+
+      :::text
+      $ ./hulk.py -h
+      Usage: hulk.py [-a alphabet -c CORES -l LENGTH -p PREFIX -s HASHES]
+          -a ALPHABET Alphabet to use in permutations
+          -c CORES    CPU Cores to use
+          -l LENGTH   Length of permutations
+          -p PREFIX   Prefix for all permutations
+          -s HASHES   Path of hashes file
+
+  The `hulk.py` script takes the following possible arguments:
+
+    - `-a`: This allows the user to set the `ALPHABET` to use when generating
+      all possible permutations. By default, this is
+      `abcdefghijklmnopqrstuvwxyz0123456789`.
+
+    - `-c`: This allows the user to set the number of CPU `CORES` (ie.
+      [processes]) to use concurrently.  By default, this is `1`.
+
+    - `-l`: This allows the user to set the `LENGTH` of the permutations to
+      consider.  By default, this is `1`.
+
+    - `-p`: This allows the user to set the `PREFIX` to be added in front of
+      each permutation to consider.  By default, this is an empty string.
+
+    - `-s`: This allows the user to set the path to the file containing [SHA1]
+      `HASHES` to checked against.  By default, this is `hulk.hashes`.
+
+    - `-h`: This prints the usage message and exits with success.
+
+  Given an `ALPHABET` (default is `abcdefghijklmnopqrstuvwxyz0123456789`),
+  `hulk.py` will compute the [SHA1] hash of every [permutation] of the
+  `ALPHABET` for the specified `LENGTH` and check if it is in the [set] of
+  `HASHES` (default is `hulk.hashes`).  If a `PREFIX` is specified, then this
+  should be inserted before each candidate [permutation].
+
+  <div class="alert warning-bg" markdown="1">
+  #### <i class="fa fa-warning"></i> Chegg Passwords
+
+  Many of the passwords in the `hulk.hashes` password collection were pulled
+  from a [Chegg password leak].
+
+  </div>
+
+  [Chegg password leak]: https://ndsmcobserver.com/2019/10/saint-marys-email-addresses-appear-in-credential-dump-following-chegg-data-breach/
+
+  #### Examples
+
+  For instance, suppose we had a `sample.hashes` file that contained the
+  following [SHA1] checksums:
+
+      :::text
+      86f7e437faa5a7fce15d1ddcb9eaeaea377667b8
+      e9d71f5ee7c92d6dc9e92ffdad17b8bd49418f98
+      84a516841ba77a5b4648de2cd0dfcb30ea46dbb4
+      da23614e02469a0d7c7bd1bdab5c9c474b1904dc
+      a9993e364706816aba3e25717850c26c9cd0d89d
+
+  If we executed `hulk.py` with a `LENGTH` of `1`, we should get the following
+  result:
+
+      :::text
+      $ ./hulk.py -l 1 -s sample.hashes
+      a
+      b
+      c
+
+  That is, `hulk.py` determined that three of the hashes correspond to the
+  passwords `a`, `b`, and `c`.
+
+  If we executed `hulk.py` with a `LENGTH` of `2` and a `PREFIX` of `a`, we
+  should get the following result:
+
+      :::text
+      $ ./hulk.py -l 2 -s sample.hashes -p a
+      abc
+
+  That is, `hulk.py` determined that 1 of the hashes corresponds to the
+  password `abc`.  Note, we could have achieved the same results by executing:
+
+      :::text
+      $ ./hulk.py -l 3 -s sample.hashes
+      abc
+
+  The difference is the former searches each [permutation] in the form `aXX`
+  where `X` is a letter from the `ALPHABET` due to the `PREFIX` of `a`, while
+  the latter searches each [permutation] in the form `XXX`.
+
+  Finally, if `CORES` is greater than `1` and the `LENGTH` is greater than `1`,
+  the script will use the [concurrent.futures] module to [brute-force] passwords
+  in parallel with the specified number of `CORES`:
+
+      :::text
+      $ ./hulk.py -l 1 -c 2 -s sample.hashes
+      a
+      b
+      c
+
+  ### Task 1: `hulk.py`
+
+  To implement the `hulk.py` [Python] script, you will need to complete the
+  following functions:
+
+  1.  <div class="flex-col" markdown="1">
+
+      `sha1sum(s: str) -> str`
+
+      > This function computes the [SHA1] checksum of the given string `s` and
+      returns the corresponding **hex digest**.
+
+      <div class="alert success-bg" markdown="1">
+
+      **Hints**: Consider using the [hashlib] library and the [str.encode]
+        method of the string object to convert [unicode] into [bytes].
+
+      </div>
+
+
+  2.  <div class="flex-col" markdown="1">
+
+      `permutations(length: int, alphabet: str=ALPHABET) -> Iterator[str]`
+
+      > This function uses a [recursive] algorithm to implement a [generator]
+      using the [yield] statement to produce all the permutations of the given
+      `length` with the corresponding `alphabet`.
+
+      <div class="alert success-bg" markdown="1">
+
+      **Hints**: Consider the following approach.
+
+      - For the **base** case, you will want to consider what permutations (if
+        any) should be `yielded` with a `length` of `0`.
+
+      - For the **recursive** case, how you can combine the `alphabet` with the
+        results of `permutations` of `length - 1` to `yield` each
+        **permutation** of the specified `length`.
+
+      The structure of the `permutations` function should look something like this:
+
+          :::python
+          if length == 0:   # Base case
+              yield base case
+          else:             # Recursive case
+              yield the combination of each letter with each permutation of length - 1
+
+      </div>
+
+      <div class="alert danger-bg" markdown="1">
+
+      Note, you **may not** use any of the utilities in the [itertools] module
+      for this function.
+
+      </div>
+
+
+  3.  <div class="flex-col" markdown="1">
+
+      `flatten(sequence: Iterable[Iterable[str]]) -> Iterator[str]`
+
+      > This function flattens a sequence of iterables into a single sequence
+      of values from the nested data.
+
+      The idea with this function is that given a nested sequence of iterables
+      such as `[[A, B, C], [D, E, F]]`, you `yield` each item from the
+      subsequences: `A, B, C, D, E, F`.
+
+      <div class="alert success-bg" markdown="1">
+
+      **Hints**: Consider using `yield from` on the subsequences.
+
+      </div>
+
+  4.  <div class="flex-col" markdown="1">
+
+      `crack(hashes: set[str], length: int, alphabet: str=ALPHABET, prefix: str='') -> list[str]`
+
+      > This function returns all password permutations of specified `length`,
+      `alphabet`, and `prefix` that are in `hashes` set by trying
+      all possible permutations sequentially.
+
+      <div class="alert success-bg" markdown="1">
+
+      **Hints**: Consider using [list comprehensions] or [generator
+        expressions] to implement this function.
+
+      Pay careful attention to **not** use **too much memory** in this
+      function, particularly when producing all possible `permutations`.
+
+      </div>
+
+  5.  <div class="flex-col" markdown="1">
+
+      `whack(arguments: tuple[set[str], int, str, str]) -> list[str]`
+
+      > This function calls `crack` with the given [tuple] of `arguments`.
+
+      This function exists because `map` can only pass a single argument to the
+      function it applies.  To workaround this limitation, we create the
+      `whack` helper function which takes a [tuple] of arguments which can then
+      unpack to call `crack`.  That is, `whack` takes a [tuple] of **four**
+      items which correspond to the parameters to `crack` and we simply need to
+      call `crack` with these items:
+
+          :::python
+          # Calling whack should result in calling crack with the arguments
+          # tuple unpacked as parameters.
+          whack((hashes, length, alphabet, prefix)) -> crack(hashes, length, alphabet, prefix)
+
+      <div class="alert success-bg" markdown="1">
+
+      **Hints**: Consider using `*` to [unpack an argument list](https://docs.python.org/3/tutorial/controlflow.html#tut-unpacking-arguments).
+
+      </div>
+
+  6.  <div class="flex-col" markdown="1">
+
+      `smash(hashes: set[str], length: int, alphabet: str=ALPHABET, prefix: str='', cores: int=1) -> Iterator[str]`
+
+      > This function returns all password permutations of specified `length`,
+      `alphabet`, and `prefix` that are in `hashes` set by trying all possible
+      permutations concurrently with the specified number of `cores`.
+
+      To allow for parallel execution, you will need to do **divide up the
+      work** normally done by one process. The easiest way to accomplish this
+      is by taking advantage of the `prefix` feature of `crack`.
+
+      For instance, if the specified `LENGTH` is `4`, you can `crack` passwords
+      of length `3` with prefixes of `[a, b, ..., 9]` to achieve the same result:
+
+          :::text
+          Passwords of length 4     Prefixes + Passwords of length 3
+
+          aaaa                      a + aaa -> aaaa
+          aaab                      a + aab -> aaab
+          ....                      ....
+          baaa                      b + aaa -> baaa
+          baab                      b + aab -> baab
+          ....                      ....
+
+
+      <div class="alert success-bg" markdown="1">
+
+      **Hints**: Consider using the `map` method of the [ProcessPoolExecutor]
+        from the [concurrent.futures] module in order to take advantage of
+        multiple CPU `cores`.
+
+      In `smash`, you will need to create an `arguments` sequence that consists
+      of the argument tuples to pass to `whack`.  As explained above, each tuple
+      consists of the arguments to `crack`: `hashes`, `length`, `alphabet`,
+      `prefix`.  Based on the previous description, only the `length` and
+      `prefix` arguments need to be modified in the arguments sequence:
+
+          :::python
+          (original hashes, new length, original alphabet, new prefix)
+
+      For simplicity, we suggest that you use each letter in the `alphabet` as
+      part of the `prefix` in the arguments tuple, while keeping in mind that
+      you still need to account for the `prefix` passed to `smash` itself.
+
+      Because we are now using the `prefix` feature of `crack`, you will also
+      need to update the `length` argument in the `tuple`.
+
+      Your code should look something like this:
+
+          :::python
+          # Generator expression representing a sequence of arguments to pass
+          # to `whack` (hashes, length, alphabet remain constant, but prefix
+          # should change for each argument tuple).
+          arguments = ((...) for ... in ...)
+
+          # Create a ProcessPoolExecutor and then apply whack to the
+          # arguments
+          with concurrent.futures.ProcessPoolExecutor(cores) as executor:
+              ... executor.map(...)
+
+      Because the `executor.map` will return a sequence of sequences, you will
+      want to use the `flatten` function you wrote to convert the result into a
+      single sequence.
+      </div>
+
+  7.  <div class="flex-col" markdown="1">
+
+      `main(arguments: list[str]=sys.argv[1:]) -> None`
+
+      > This function smashes the given hashes to determine the original
+      passwords with specified alphabet, length, and prefix using multiple
+      cores (ie. processes).
+
+      <div class="alert success-bg" markdown="1">
+
+      **Hints**: Considering parsing command line options using the `while` loop
+        we have used in the past or investigate using [argparse] or [getopt].
+
+        For the best performance, consider using a [set] to store the collection
+        of [SHA1] hashes.
+
+      </div>
+
+  [itertools]: https://docs.python.org/3/library/itertools.html
+  [MD5]: https://en.wikipedia.org/wiki/MD5
+  [SHA1]: https://en.wikipedia.org/wiki/SHA1
+  [permutation]: https://en.wikipedia.org/wiki/Permutation
+  [dict]: https://docs.python.org/3/library/stdtypes.html#dict
+  [set]: https://docs.python.org/3/library/stdtypes.html#set
+  [recursive]: https://en.wikipedia.org/wiki/Recursion_(computer_science)
+  [hashlib]: https://docs.python.org/3/library/hashlib.html
+  [concurrent.futures]: https://docs.python.org/3/library/concurrent.futures.html
+  [argparse]: https://docs.python.org/3/library/argparse.html#module-argparse
+  [getopt]: https://docs.python.org/3/library/getopt.html
+  [ProcessPoolExecutor]: https://docs.python.org/3/library/concurrent.futures.html#concurrent.futures.ProcessPoolExecutor
+  [generator expressions]: https://www.python.org/dev/peps/pep-0289/
+  [unicode]: https://docs.python.org/3/howto/unicode.html#converting-to-bytes
+  [bytes]: https://docs.python.org/3/library/stdtypes.html#binary-sequence-types-bytes-bytearray-memoryview
+  [str.encode]: https://docs.python.org/3/library/stdtypes.html#str.encode
+  [generator]: https://docs.python.org/3/howto/functional.html#generators
+  [yield]: https://docs.python.org/3/reference/simple_stmts.html#yield
+  [list comprehensions]: https://docs.python.org/3/tutorial/datastructures.html#list-comprehensions
+
+  ### Task 2: Testing
+
+  As you implement `hulk.py`, you can use the provided [doctests] to verify the
+  correctness of your code:
+
+      :::bash
+      # Run doctests
+      $ python3 -m doctest hulk.py -v
+      ...
+      2 items had no tests:
+          hulk
+          hulk.usage
+      7 items passed all tests:
+         1 tests in hulk.crack
+         1 tests in hulk.flatten
+         1 tests in hulk.main
+         1 tests in hulk.permutations
+         1 tests in hulk.sha1sum
+         1 tests in hulk.smash
+         1 tests in hulk.whack
+      7 tests in 9 items.
+      7 passed and 0 failed.
+      Test passed.
+
+  You can also use `make` to run both the [doctests] and the [unit tests]:
+
+      :::bash
+      # Run unit tests (and doctests)
+      $ make test-hulk
+      Testing Hulk ...
+      test_00_doctest (__main__.HulkTest.test_00_doctest) ... ok
+      test_01_mypy (__main__.HulkTest.test_01_mypy) ... ok
+      test_02_sha1sum (__main__.HulkTest.test_02_sha1sum) ... ok
+      test_03_permutations (__main__.HulkTest.test_03_permutations) ... ok
+      test_04_flatten (__main__.HulkTest.test_04_flatten) ... ok
+      test_05_crack (__main__.HulkTest.test_05_crack) ... ok
+      test_06_whack (__main__.HulkTest.test_06_whack) ... ok
+      test_07_smash (__main__.HulkTest.test_07_smash) ... ok
+      test_08_main_usage (__main__.HulkTest.test_08_main_usage) ... ok
+      test_09_main_no_arguments (__main__.HulkTest.test_09_main_no_arguments) ... ok
+      test_10_main_length_1 (__main__.HulkTest.test_10_main_length_1) ... ok
+      test_11_main_length_1_alphabet_abc (__main__.HulkTest.test_11_main_length_1_alphabet_abc) ... ok
+      test_12_main_length_1_prefix_a (__main__.HulkTest.test_12_main_length_1_prefix_a) ... ok
+      test_13_main_length_1_cores_1 (__main__.HulkTest.test_13_main_length_1_cores_1) ... ok
+      test_14_main_length_1_prefix_a_cores_1 (__main__.HulkTest.test_14_main_length_1_prefix_a_cores_1) ... ok
+      test_15_main_length_2 (__main__.HulkTest.test_15_main_length_2) ... ok
+      test_16_main_length_2_alphabet_abc (__main__.HulkTest.test_16_main_length_2_alphabet_abc) ... ok
+      test_17_main_length_2_prefix_a (__main__.HulkTest.test_17_main_length_2_prefix_a) ... ok
+      test_18_main_length_2_cores_2 (__main__.HulkTest.test_18_main_length_2_cores_2) ... ok
+      test_19_main_length_2_prefix_a_cores_2 (__main__.HulkTest.test_19_main_length_2_prefix_a_cores_2) ... ok
+      test_20_main_length_3 (__main__.HulkTest.test_20_main_length_3) ... ok
+      test_21_main_length_3_alphabet_abc (__main__.HulkTest.test_21_main_length_3_alphabet_abc) ... ok
+      test_22_main_length_3_prefix_a (__main__.HulkTest.test_22_main_length_3_prefix_a) ... ok
+      test_23_main_length_3_cores_3 (__main__.HulkTest.test_23_main_length_3_cores_3) ... ok
+      test_24_main_length_3_prefix_a_cores_3 (__main__.HulkTest.test_24_main_length_3_prefix_a_cores_3) ... ok
+      test_25_script_length_4_cores_4 (__main__.HulkTest.test_25_script_length_4_cores_4) ... ok
+
+         Score 26.00 / 26.00
+         Grade 1.00 / 1.00
+        Status Success
+
+      ----------------------------------------------------------------------
+      Ran 26 tests in 2.163s
+
+      OK
+
+  To just run the [unit tests], you can do the following:
+
+      :::bash
+      # Run unit tests
+      $ ./hulk.test -v
+      ...
+
+  To run a specific [unit test], you can specify the **method name**:
+
+      :::bash
+      # Run only mypy unit test
+      $ ./hulk.test -v HulkTest.test_01_mypy
+      ...
+
+  To manually check your types, you can use [mypy]:
+
+      :::bash
+      # Run mypy to check types
+      $ mypy hulk.py
+
+  ### Task 3: Deadpool (*Optional*)
+
+  Just for fun, once you are confident that your program is correct, you can
+  use `hulk.py` to [brute-force] crack set of `12050` password hashes found in
+  `hulk.hashes`.
+
+  <div class="alert warning-bg" markdown="1">
+  This is an **optional** activity and you can skip it if you wish.
+  </div>
+
+  To keep track of who has cracked the most passwords, you can submit your set
+  of discovered passwords to the [deadpool]:
+
+      :::bash
+      $ cat PASSWORDS | curl --data-binary @- http://xavier.h4x0r.space:9111/NETID
+
+  Replace `PASSWORDS` with the name of the file with your passwords and `NETID`
+  with your Notre Dame NetID:
+
+      :::bash
+      # Generate passwords of length 1 and store them in passwords.txt
+      $ ./hulk.py -l 1 | tee -a passwords.txt
+      ...
+
+      # Upload passwords.txt
+      $ cat passwords.txt | curl --data-binary @- http://xavier.h4x0r.space:9111/pbui
+      {"timestamp": 1488333215.967784, "passwords": 36}
+
+  Each password is no more than `8` characters long and only consists of
+  lowercase letters and numeric digits.
+
+  <div class="alert info-bg" markdown="1">
+
+  ### <i class="icon icon-medium">{{ "cpu-64-bit" | embed_icon }}</i> Multiple Cores
+
+  To speed up your computations, consider using different values for
+  `CORES`:
+
+      :::bash
+      $ ./hulk.py -l 6 -c 8  # Use 8 processes
+
+  To find out how many cores a Linux machine has, you can do:
+
+      :::bash
+      $ lscpu
+
+  </div>
+
+  <div class="alert danger-bg" markdown="1">
+
+  ### <i class="icon icon-medium">{{ "handshake-outline" | embed_icon }}</i> Shared Resources
+
+  Remember that you need to **share** the **student** machines with all the
+  other students in class.
+
+  **Therefore, do not run `hulk.py` on lengths larger than `6`...  otherwise
+  you will take up significant CPU resources away from other students for long
+  periods of time.**
+
+  If you want to crack passwords of length greater than `6`, you will need to
+  run [hashcat] on your own machines.
+
+  </div>
+
+  [hashcat]: https://hashcat.net/hashcat/
+
+  ## Activity 3: Quiz (*0.2 Points*)
+
+  Once you have completed all the activities above, you are to complete the
+  following **reflection quiz**:
+
+  <div id="quiz-questions"></div>
+
+  <div id="quiz-responses"></div>
+
+  <script src="static/js/dredd-quiz.js"></script>
+  <script>
+  loadQuiz('static/json/homework05.json');
+  </script>
+
+  <pre style="display: none;" id="dr-container" class="codehilite"><code id="dredd-response"></code></pre>
+
+  As with [Reading 01], you will need to store your answers in a
+  `homework05/answers.json` file.  You can use the form above to generate the
+  contents of this file, or you can write the [JSON] by hand.
+
+  To test your quiz, you can use the `check.py` script:
+
+      :::bash
+      $ ../.scripts/check.py
+      Checking homework05 quiz ...
+           Q01  5.00 /  5.00
+           Q02  5.00 /  5.00
+           Q03  3.00 /  3.00
+           Q04  2.00 /  2.00
+        --------------------
+         Score 15.00 / 15.00
+         Grade  1.00 /  1.00
+        Status Success
+
+  ## Submission (*1 Points*)
+
+  To submit your assignment, please commit your work to the `homework05` folder
+  of your `homework05` branch in your **assignments** [GitHub] repository.
+  Your <tt>homework05</tt> folder should **only** contain the following files:
+
+  - <tt>Makefile</tt>
+  - <tt>answers.json</tt>
+  - <tt>hulk.py</tt>
+  - <tt>searx.py</tt>
+
+  <div class="alert info-bg" markdown="1">
+  **Note**: You do not need to commit the test scripts because the `Makefile`
+  automatically downloads them.
+  </div>
+
+      :::bash
+      #-----------------------------------------------------------------------
+      # Make sure you have already completed Activity 0: Preparation
+      #-----------------------------------------------------------------------
+      ...
+      $ git add searx.py                                    # Mark changes for commit
+      $ git commit -m "Homework 05: searx.py"               # Record changes
+      ...
+      $ git add hulk.py                                     # Mark changes for commit
+      $ git commit -m "Homework 05: hulk.py"                # Record changes
+      ...
+      $ git add answers.json                                # Mark changes for commit
+      $ git commit -m "Homework 05: Quiz"                   # Record changes
+      ...
+      $ git push -u origin homework05                       # Push branch to GitHub
+
+  <div class="alert warning-bg" markdown="1">
+
+  ### <i class="icon icon-medium">{{ "lifebuoy" | embed_icon }}</i> Acknowledgments
+
+  If you collaborated with any other students, or received help from TAs or AI
+  tools on this assignment, please record this support in the `README.md` in
+  the `homework05` folder and include it with your **Pull Request**.
+
+  </div>
+
+  <div class="alert success-bg" markdown="1">
+
+  ### <i class="icon icon-medium">{{ "account-question" | embed_icon }}</i> Graders
+
+  Once you have committed your work and pushed it to [GitHub], remember to
+  create a **pull request** and assign it to the appropriate **teaching
+  assistant** from the [Reading 05 TA List].
+
+  **Note**: this list changes each week, so be sure to consult the appropriate
+  list for each assignment.
+
+  </div>
+
+  [Markdown]: https://daringfireball.net/projects/markdown/
+  [git]: https://git-scm.com/
+  [clone]: https://git-scm.com/docs/git-clone
+  [commit]: https://git-scm.com/docs/git-commit
+  [push]: https://git-scm.com/docs/git-push
+  [branching]: https://git-scm.com/docs/git-branch
+  [code review]: https://en.wikipedia.org/wiki/Code_review
+  [GitHub]: https://github.com
+  [Linux]: https://kernel.org
+  [branch]: https://git-scm.com/docs/git-branch
+  [add]: https://git-scm.com/docs/git-add
+  [Reading 01]: reading01.html
+  [Reading 05 TA List]: reading05_tas.html
+  [curl]: http://man7.org/linux/man-pages/man1/curl.1.html
+  [wget]: http://man7.org/linux/man-pages/man1/wget.1.html
+  [JSON]: https://json.org/
+  [ESC]: https://esc.nd.edu/
+  [mypy]: https://mypy-lang.org/
