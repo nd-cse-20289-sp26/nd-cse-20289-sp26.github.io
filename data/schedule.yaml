@@ -181,6 +181,8 @@
         items:
           - name:       Slides 12
             link:       https://docs.google.com/presentation/d/1i-gPwLEqp_GzIqG0Y_6bL4aZtkzgxSjMPZJdM8sxWtE/edit?usp=sharing
+          - name:       Panopto
+            link:       https://notredame.hosted.panopto.com/Panopto/Pages/Viewer.aspx?id=33c72bca-00e1-472d-acee-b3f70139b7da
 
       - date:           Sat 02/21
         topics:         '<i class="muted">Cut, WC</i>'
