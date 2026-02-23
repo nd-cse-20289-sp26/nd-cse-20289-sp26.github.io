@@ -299,6 +299,7 @@ body:       |
   [HTTP]: https://en.wikipedia.org/wiki/HTTP
   [requests.get]: https://requests.readthedocs.io/en/latest/user/quickstart/#passing-parameters-in-urls
   [sorted]: https://docs.python.org/3/library/functions.html#sorted
+  [str.join]: https://docs.python.org/3/library/stdtypes.html#str.join
 
   ### Task 2: Testing
 
