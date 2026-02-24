@@ -1,0 +1,387 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<!-- Favicon -->
+<link rel="icon" type="image/png" sizes="32x32" href="static/ico/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="static/ico/favicon-16x16.png">
+<link rel="manifest" href="static/ico/site.webmanifest">
+<!-- Stylesheets -->
+<link rel="stylesheet" href="static/css/pnutzh4x0r.css">
+<title>Checklist 02</title>
+</head>
+<body>
+<header>
+<a class="logo" href="checklist02.html">
+    <h1>Checklist 02</h1>
+</a>
+<nav>
+    <ul>
+        <li><a href="index.html"><h4>Home</h4></a></li>
+        </ul>
+</nav></header>
+<main>
+<p>Here is a general outline of the <strong>key</strong> concepts (<em>arranged by topic</em>)
+that you should know for <strong>Exam 02</strong>.</p>
+<p>The exam will have the following format:</p>
+<ol>
+<li>
+<p><a href="https://www.python.org/">Python</a> Scripting (<em>multiple-choice</em>, <em>fill-in-the-blank</em>)</p>
+</li>
+<li>
+<p><strong>Data Processing</strong> (<em>multiple-choice</em>, <em>fill-in-the-blank</em>)</p>
+</li>
+<li>
+<p><a href="https://en.wikipedia.org/wiki/Functional_programming">Functional</a> Programming (<em>multiple-choice</em>, <em>fill-in-the-blank</em>)</p>
+</li>
+<li>
+<p><a href="https://docs.python.org/3/tutorial/datastructures.html#list-comprehensions">List Comprehensions</a> (<em>multiple-choice</em>, <em>fill-in-the-blank</em>)</p>
+</li>
+<li>
+<p><a href="https://www.python.org/dev/peps/pep-0255/">Generators</a> (<em>multiple-choice</em>, <em>fill-in-the-blank</em>)</p>
+</li>
+<li>
+<p><a href="https://en.wikipedia.org/wiki/Concurrency_(computer_science)">Concurrency</a> and <a href="https://en.wikipedia.org/wiki/Parallel_computing">Parallelism</a> (<em>multiple-choice</em>, <em>fill-in-the-blank</em>)</p>
+</li>
+<li>
+<p><strong>Translations</strong>: Convert <a href="https://en.wikipedia.org/wiki/Pipeline_(Unix)">Unix pipelines</a> to <a href="https://www.python.org/">Python</a> code (<em>coding on
+  the computer</em>)</p>
+</li>
+</ol>
+<p>Parts <strong>1</strong> through <strong>6</strong> are to be done first on <strong>paper</strong>. Once that
+portion is completed and submitted, you will do part <strong>7</strong> on your own
+computer and submit code to your <strong>assignments</strong> repository.</p>
+<div class="alert warning-bg">
+<h3 id="check-all-embed_icon-representative-but-not-exhaustive"><i class="icon icon-medium"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><title>check-all</title><path d="M0.41,13.41L6,19L7.41,17.58L1.83,12M22.24,5.58L11.66,16.17L7.5,12L6.07,13.41L11.66,19L23.66,7M18,7L16.59,5.58L10.24,11.93L11.66,13.34L18,7Z" /></svg>
+</i> Representative, But Not Exhaustive<a class="headerlink" href="#check-all-embed_icon-representative-but-not-exhaustive" title="Permanent link">&para;</a></h3>
+<p>This check list is meant to be representative, rather than exhaustive (ie.
+there may be questions that show up on the exam that are not shown below).</p>
+</div>
+<hr>
+
+<h2 id="logistics">Logistics<a class="headerlink" href="#logistics" title="Permanent link">&para;</a></h2>
+<p><strong>Exam 02</strong> will take place during our normal lecture session on
+<strong>Wednesday, March 4</strong> from <strong>12:50 PM - 1:40 PM</strong> in <strong>155 DeBartolo
+Hall</strong>.</p>
+<p>As noted above, the first portion of the exam with be on <strong>paper</strong>, while
+the remaining component with require <strong>coding</strong> and submitting work to your
+<strong>assignments</strong> <a href="https://github.com">GitHub</a> repository.</p>
+<p>During the <strong>paper</strong> portion of the exam, students will only be allowed to
+use <strong>one cheatsheet</strong>.  This <strong>paper</strong> component of the exam must be
+submitted before students can access the <strong>coding</strong> section.</p>
+<p>For the <strong>coding</strong> portion, students will use their own computer, and thus
+are permitted access to any material in their textbooks, notes,
+assignments, and the Internet.</p>
+<div class="alert danger-bg">
+<h3 id="alert-embed_icon-honor-code-violations"><i class="icon icon-medium"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><title>alert</title><path d="M13 14H11V9H13M13 18H11V16H13M1 21H23L12 2L1 21Z" /></svg>
+</i> Honor Code Violations<a class="headerlink" href="#alert-embed_icon-honor-code-violations" title="Permanent link">&para;</a></h3>
+<p>Although students are allowed to use their computers and the Internet
+during the <strong>coding</strong> portion of the exam, students <strong>may not communicate
+with others</strong> or <strong>solicit answers from others</strong>.  <strong>Nor may they use AI
+tools</strong> such as <strong>ChatGPT</strong> or <strong>Co-Pilot</strong> during the exam.  Students
+caught sharing solutions or violating any portion of the honor code will
+<strong>receive a zero on the exam</strong>.</p>
+<p>Furthermore, students are not allowed to consult, copy, or share material
+from previous sections of this course.</p>
+</div>
+<hr>
+
+<h2 id="python-scripting-data-processing">Python Scripting / Data Processing<a class="headerlink" href="#python-scripting-data-processing" title="Permanent link">&para;</a></h2>
+<h3 id="concepts">Concepts<a class="headerlink" href="#concepts" title="Permanent link">&para;</a></h3>
+<ol>
+<li>
+<div class="flex-col" markdown="1">
+<p>How is <a href="https://www.python.org/">Python</a> different from the <a href="https://en.wikipedia.org/wiki/Bourne_shell">Bourne shell</a>? How is it similar?</p>
+</li>
+<li>
+<div class="flex-col" markdown="1">
+<p>How do we manage control flow in <a href="https://www.python.org/">Python</a>? How do we utilize these
+constructs?</p>
+<ul>
+<li>
+<p>Conditionals</p>
+</li>
+<li>
+<p>Loops</p>
+</li>
+<li>
+<p>Exceptions</p>
+</li>
+<li>
+<p>Functions</p>
+</li>
+</ul>
+</li>
+<li>
+<div class="flex-col" markdown="1">
+<p>What <a href="https://en.wikipedia.org/wiki/Data_structure">data structures</a> do we have in <a href="https://www.python.org/">Python</a>? What are their basic
+operations?  When would we want to use each type of data structure?</p>
+<ul>
+<li>
+<p>Lists / Tuples</p>
+</li>
+<li>
+<p>Dictionaries / Sets</p>
+</li>
+</ul>
+</li>
+<li>
+<div class="flex-col" markdown="1">
+<p>How do we do the following in <a href="https://www.python.org/">Python</a>?</p>
+<ul>
+<li>
+<p>Process command-line arguments</p>
+</li>
+<li>
+<p>Read <a href="https://en.wikipedia.org/wiki/Standard_streams#Standard_input_.28stdin.29">standard input</a> (line-by-line)</p>
+</li>
+<li>
+<p>Read input from files</p>
+</li>
+<li>
+<p>Access environment variables</p>
+</li>
+<li>
+<p>Change the case of a string</p>
+</li>
+<li>
+<p>Split a string, combine a list of strings</p>
+</li>
+<li>
+<p>Slice a list</p>
+</li>
+<li>
+<p>Execute an external command</p>
+</li>
+<li>
+<p>Process <a href="http://www.json.org/">JSON</a> data from the web</p>
+</li>
+<li>
+<p>Count with dictionaries</p>
+</li>
+<li>
+<p>Sort lists and dictionaries</p>
+</li>
+</ul>
+</li>
+<li>
+<div class="flex-col" markdown="1">
+<p>How do we test a <a href="https://www.python.org/">Python</a> script?</p>
+<ul>
+<li>Using <a href="https://docs.python.org/3/library/doctest.html">doctest</a></li>
+<li>Using <a href="https://mypy.readthedocs.io/en/stable/">mypy</a></li>
+<li>Using <a href="https://docs.python.org/3/library/unittest.html">unittest</a></li>
+</ul>
+</li>
+</ol>
+<div class="alert success-bg">
+<h3 id="help-embed_icon-sample-questions"><i class="icon icon-medium"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><title>help</title><path d="M10,19H13V22H10V19M12,2C17.35,2.22 19.68,7.62 16.5,11.67C15.67,12.67 14.33,13.33 13.67,14.17C13,15 13,16 13,17H10C10,15.33 10,13.92 10.67,12.92C11.33,11.92 12.67,11.33 13.5,10.67C15.92,8.43 15.32,5.26 12,5A3,3 0 0,0 9,8H6A6,6 0 0,1 12,2Z" /></svg>
+</i> Sample Questions<a class="headerlink" href="#help-embed_icon-sample-questions" title="Permanent link">&para;</a></h3>
+<h4 id="code-snippets">Code Snippets<a class="headerlink" href="#code-snippets" title="Permanent link">&para;</a></h4>
+<p>Write Python code snippets to perform the following tasks (don't worry
+about she-bangs or imports):</p>
+<ol>
+<li>
+<p>Print out each element of a list (one element per line).</p>
+</li>
+<li>
+<p>Print the contents of <code>stdin</code> (line-by-line).</p>
+</li>
+<li>
+<p>Print the first 10 items of a list.</p>
+</li>
+<li>
+<p>Print the length of a list.</p>
+</li>
+<li>
+<p>Print the largest and smallest elements of a list.</p>
+</li>
+<li>
+<p>Print the first and last words in the string "Let this promise in me
+start, Like an anthem in my heart".</p>
+</li>
+<li>
+<p>Print the results of the <code>ps aux</code> command.</p>
+</li>
+<li>
+<p>Print the contents of a specific webpage.</p>
+</li>
+</ol>
+<h4 id="code-evaluation">Code Evaluation<a class="headerlink" href="#code-evaluation" title="Permanent link">&para;</a></h4>
+<p>Given the following data:</p>
+<div class="codehilite"><pre><span></span><code><span class="n">comics</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">&quot;marvel&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;deadpool&quot;</span><span class="p">,</span> <span class="s2">&quot;spider-man&quot;</span><span class="p">,</span> <span class="s2">&quot;wolverine&quot;</span><span class="p">],</span>
+    <span class="s2">&quot;dc&quot;</span>    <span class="p">:</span> <span class="p">[</span><span class="s2">&quot;batman&quot;</span><span class="p">,</span> <span class="s2">&quot;superman&quot;</span><span class="p">]</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<p>For each of the following expressions, state the output value:</p>
+<ol>
+<li>
+<p><code>len(comics)</code></p>
+</li>
+<li>
+<p><code>list(comics.keys())[0]</code></p>
+</li>
+<li>
+<p><code>list(comics.values())[-1]</code></p>
+</li>
+<li>
+<p><code>comics['marvel'][1]</code></p>
+</li>
+<li>
+<p><code>comics['dc'][-1][-3:]</code></p>
+</li>
+</ol>
+<h4 id="translation">Translation<a class="headerlink" href="#translation" title="Permanent link">&para;</a></h4>
+<p>Given the following <a href="https://en.wikipedia.org/wiki/Pipeline_(Unix)">Unix pipelines</a>, write <a href="https://www.python.org/">Python</a> code that accomplishes
+the same task.</p>
+<div class="alert warning-bg">
+<p><strong>Note</strong>: <em>No credit will be given for simply calling <code>os.system</code> on the
+given pipeline.</em>  You may use <code>os.popen</code> to read the output of one command,
+but you may not use a pipeline.</p>
+</div>
+<ol>
+<li>
+<p><code>cat /etc/passwd | cut -d : -f 1 | grep d$ | wc -l</code></p>
+</li>
+<li>
+<p><code>cat /etc/passwd | cut -d : -f 3 | grep -E '^[0-9]{2}$' | sort | uniq</code></p>
+</li>
+<li>
+<p><code>curl -sL http://yld.me/raw/lmz | cut -d , -f 1 | grep -Eo '^[^jfs].*'</code></p>
+</li>
+<li>
+<p><code>curl -sL http://yld.me/raw/lmz | cut -d , -f 2 | grep -Eo '^B.*' | sort</code></p>
+</li>
+<li>
+<p><code>who | sed -rn 's|.*\((.*)\).*|\1|p' | sort | uniq</code></p>
+</li>
+<li>
+<p><code>ls -l /etc | awk '{print $2}' | sort | uniq -c</code></p>
+</li>
+</ol>
+</div>
+<h2 id="functional-programming">Functional Programming<a class="headerlink" href="#functional-programming" title="Permanent link">&para;</a></h2>
+<h3 id="concepts_1">Concepts<a class="headerlink" href="#concepts_1" title="Permanent link">&para;</a></h3>
+<ol>
+<li>
+<div class="flex-col" markdown="1">
+<p>What is the difference between <a href="https://en.wikipedia.org/wiki/Imperative_programming">imperative</a> and <a href="https://en.wikipedia.org/wiki/Functional_programming">functional</a>
+programming?</p>
+<ul>
+<li>
+<p>What are some benefits of <a href="https://en.wikipedia.org/wiki/Functional_programming">functional</a> programming?</p>
+</li>
+<li>
+<p>How is <a href="https://en.wikipedia.org/wiki/Functional_programming">functional</a> programming related to the <a href="https://en.wikipedia.org/wiki/Unix_philosophy">Unix Philosophy</a>?</p>
+</li>
+</ul>
+</li>
+<li>
+<div class="flex-col" markdown="1">
+<p>How do we use <a href="https://docs.python.org/3/library/functions.html#map">map</a>, <a href="https://docs.python.org/3/library/functions.html#filter">filter</a>, and <a href="https://docs.python.org/3/tutorial/controlflow.html#lambda-expressions">lambda</a> to do <a href="https://en.wikipedia.org/wiki/Functional_programming">functional</a>
+programming in <a href="https://www.python.org/">Python</a>?</p>
+</li>
+</ol>
+<h2 id="list-comprehensions">List Comprehensions<a class="headerlink" href="#list-comprehensions" title="Permanent link">&para;</a></h2>
+<h3 id="concepts_2">Concepts<a class="headerlink" href="#concepts_2" title="Permanent link">&para;</a></h3>
+<ol>
+<li>
+<div class="flex-col" markdown="1">
+<p>How do we use <a href="https://docs.python.org/3/tutorial/datastructures.html#list-comprehensions">list comprehensions</a> in <a href="https://www.python.org/">Python</a>?</p>
+</li>
+</ol>
+<h2 id="generators">Generators<a class="headerlink" href="#generators" title="Permanent link">&para;</a></h2>
+<h3 id="concepts_3">Concepts<a class="headerlink" href="#concepts_3" title="Permanent link">&para;</a></h3>
+<ol>
+<li>
+<div class="flex-col" markdown="1">
+<p>What is an <a href="https://docs.python.org/3/glossary.html#term-iterator">iterator</a> and how is it different from a <a href="https://docs.python.org/3/tutorial/datastructures.html#more-on-lists">list</a>?</p>
+</li>
+<li>
+<div class="flex-col" markdown="1">
+<p>What is a <a href="https://www.python.org/dev/peps/pep-0255/">generator</a> and how it is different from a <a href="https://docs.python.org/3/tutorial/datastructures.html#more-on-lists">list</a>?</p>
+<ul>
+<li>
+<p>What does the <a href="https://docs.python.org/3/reference/simple_stmts.html#the-yield-statement">yield</a> command do?</p>
+</li>
+<li>
+<p>Why would we use a <a href="https://www.python.org/dev/peps/pep-0255/">generator</a> over a <a href="https://docs.python.org/3/tutorial/datastructures.html#more-on-lists">list</a> (and vice versa)?</p>
+</li>
+<li>
+<p>How do we convert a <a href="https://docs.python.org/3/tutorial/datastructures.html#list-comprehensions">list comprehension</a> to a <a href="https://www.python.org/dev/peps/pep-0255/">generator</a> expression?</p>
+</li>
+</ul>
+</li>
+<li>
+<div class="flex-col" markdown="1">
+<p>How do we use common <a href="https://docs.python.org/3/glossary.html#term-iterator">iterator</a>s and <a href="https://www.python.org/dev/peps/pep-0255/">generator</a>s such as:</p>
+<ul>
+<li><a href="https://docs.python.org/3/library/functions.html#sorted">sorted</a></li>
+<li><a href="https://docs.python.org/3/library/functions.html#reversed">reversed</a></li>
+<li><a href="https://docs.python.org/3/library/functions.html#func-range">range</a></li>
+<li><a href="https://docs.python.org/3/library/functions.html#enumerate">enumerate</a></li>
+</ul>
+</li>
+</ol>
+<div class="alert success-bg">
+<h3 id="help-embed_icon-sample-questions_1"><i class="icon icon-medium"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><title>help</title><path d="M10,19H13V22H10V19M12,2C17.35,2.22 19.68,7.62 16.5,11.67C15.67,12.67 14.33,13.33 13.67,14.17C13,15 13,16 13,17H10C10,15.33 10,13.92 10.67,12.92C11.33,11.92 12.67,11.33 13.5,10.67C15.92,8.43 15.32,5.26 12,5A3,3 0 0,0 9,8H6A6,6 0 0,1 12,2Z" /></svg>
+</i> Sample Questions<a class="headerlink" href="#help-embed_icon-sample-questions_1" title="Permanent link">&para;</a></h3>
+<p>Translate the following <a href="https://en.wikipedia.org/wiki/Imperative_programming">imperative</a> code:</p>
+<div class="codehilite"><pre><span></span><code><span class="k">def</span> <span class="nf">find_squares</span><span class="p">(</span><span class="n">start</span><span class="p">,</span> <span class="n">end</span><span class="p">):</span>
+    <span class="n">squares</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">number</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">start</span><span class="p">,</span> <span class="n">end</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">math</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">number</span><span class="p">)</span> <span class="o">==</span> <span class="nb">int</span><span class="p">(</span><span class="n">math</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">number</span><span class="p">)):</span>
+            <span class="n">squares</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">number</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">squares</span>
+</code></pre></div>
+
+<ol>
+<li>To using <a href="https://docs.python.org/3/library/functions.html#map">map</a>, <a href="https://docs.python.org/3/library/functions.html#filter">filter</a>, and <a href="https://docs.python.org/3/tutorial/controlflow.html#lambda-expressions">lambda</a>.</li>
+<li>To using a <a href="https://docs.python.org/3/tutorial/datastructures.html#list-comprehensions">list comprehension</a>.</li>
+<li>To using a <a href="https://www.python.org/dev/peps/pep-0255/">generator</a> with <a href="https://docs.python.org/3/reference/simple_stmts.html#the-yield-statement">yield</a>.</li>
+<li>To using a <a href="https://www.python.org/dev/peps/pep-0255/">generator</a> expression.</li>
+</ol>
+</div>
+<h2 id="concurrency-and-parallelism">Concurrency and Parallelism<a class="headerlink" href="#concurrency-and-parallelism" title="Permanent link">&para;</a></h2>
+<h3 id="concepts_4">Concepts<a class="headerlink" href="#concepts_4" title="Permanent link">&para;</a></h3>
+<ol>
+<li>
+<div class="flex-col" markdown="1">
+<p>What is the difference between <a href="https://en.wikipedia.org/wiki/Concurrency_(computer_science)">concurrency</a> and <a href="https://en.wikipedia.org/wiki/Parallel_computing">parallelism</a>?</p>
+<ul>
+<li>
+<p>What are some problems with <a href="https://en.wikipedia.org/wiki/Concurrency_(computer_science)">concurrency</a>?</p>
+</li>
+<li>
+<p>How does <a href="https://en.wikipedia.org/wiki/Functional_programming">functional</a> programming help enable <a href="https://en.wikipedia.org/wiki/Concurrency_(computer_science)">concurrency</a> and avoid
+  these problems?</p>
+</li>
+<li>
+<p>What does it mean for a problem to be <a href="https://en.wikipedia.org/wiki/Task_parallelism">task parallel</a>, <a href="https://en.wikipedia.org/wiki/Data_parallelism">data
+  parallel</a>, or <a href="https://en.wikipedia.org/wiki/Embarrassingly_parallel">embarrassingly parallel</a>? Examples?</p>
+</li>
+</ul>
+</li>
+</ol>
+<div class="alert success-bg">
+<h3 id="help-embed_icon-sample-questions_2"><i class="icon icon-medium"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><title>help</title><path d="M10,19H13V22H10V19M12,2C17.35,2.22 19.68,7.62 16.5,11.67C15.67,12.67 14.33,13.33 13.67,14.17C13,15 13,16 13,17H10C10,15.33 10,13.92 10.67,12.92C11.33,11.92 12.67,11.33 13.5,10.67C15.92,8.43 15.32,5.26 12,5A3,3 0 0,0 9,8H6A6,6 0 0,1 12,2Z" /></svg>
+</i> Sample Questions<a class="headerlink" href="#help-embed_icon-sample-questions_2" title="Permanent link">&para;</a></h3>
+<p>Identify whether the statements below are <strong>True</strong> or <strong>False</strong> and explain
+why.</p>
+<ol>
+<li>The <a href="https://github.com/nd-cse-20289-sp26/examples/blob/master/lecture15/slurp.py">slurp.py</a> class example exhibits <strong>data parallelism</strong>.</li>
+<li>The <a href="https://github.com/nd-cse-20289-sp26/examples/blob/master/lecture15/slurp.py">slurp.py</a> class example exhibits <strong>task parallelism</strong>.</li>
+<li>The <a href="https://github.com/nd-cse-20289-sp26/examples/blob/master/lecture15/slurp.py">slurp.py</a> class example is <strong>embarrassingly parallel</strong>.</li>
+</ol>
+</div>
+</main>
+<footer>
+Built using <a href="https://python.org">Python</a>
+and <a href="https://jinja.palletsprojects.com">Jinja</a>
+with colors from <a href="https://nordtheme.com">Nord Theme</a>
+and icons from <a href="https://pictogrammers.com/library/mdi/">Material Design Icons</a>.</footer>
+</body>
+</html>
