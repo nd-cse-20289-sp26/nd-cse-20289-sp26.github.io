@@ -224,6 +224,7 @@
         topics:         ''
         items:
           - name:       Checklist 02
+            link:       checklist02.html
 
       - date:           Wed 03/04
         topics:         ''
