@@ -134,7 +134,7 @@ body:       |
 
     5. <div class="flex-col" markdown="1">
 
-        How do we test [Python]?
+        How do we test a [Python] script?
 
         - Using [doctest]
         - Using [mypy]
