@@ -1,0 +1,188 @@
+title:      Interview 02
+body:       |
+
+    Next week, you will have the opportunity to demonstrate your mastery of the
+    skills and concepts discussed in **Unit 02: Python** to the instructor or a
+    teaching assistant in a `15` minute in-person **coding interview**.
+
+    This interview will evaluate your proficiency in the following areas:
+
+    1. **Using Data Structures**: [list], [dict]
+
+    2. **Processing Data**: [requests], [csv]
+
+    3. **Functional Programming**: [map], [list comprehensions]
+
+    4. **Parsing Arguments**: [sys.argv], [match]
+
+    5. **Testing**: [doctest], [mypy]
+
+    More details of what you need to know about these particular areas can be
+    found in [Checklist 02].
+
+    [list]: https://docs.python.org/3/tutorial/datastructures.html#more-on-lists
+    [dict]: https://docs.python.org/3/tutorial/datastructures.html#dictionaries
+    [requests]: https://requests.readthedocs.io/en/latest/
+    [csv]: https://docs.python.org/3/library/csv.html
+    [map]: https://docs.python.org/3/library/functions.html#map
+    [list comprehension]: https://docs.python.org/3/tutorial/datastructures.html#list-comprehensions
+    [list comprehensions]: https://docs.python.org/3/tutorial/datastructures.html#list-comprehensions
+    [sys.argv]: https://docs.python.org/3/library/sys.html#sys.argv
+    [match]: https://docs.python.org/3/tutorial/controlflow.html#match-statements
+    [doctest]: https://docs.python.org/3/library/doctest.html
+
+    ## Scheduling
+
+    To schedule a **coding interview** appointment, put your **netid** (ie.
+    `pbui`) in an open cell in a timeslot with an interviewer in the following:
+
+    <div class="centered">
+      <a class="badge warning-btn" href="https://docs.google.com/spreadsheets/d/15uQsj4Y2V6e0wk_emouQM-rVrJcMqqM2PdOqvgleZRk/edit?usp=sharing" target="_new" style="font-size: 150%;">Interview 02 Spreadsheet</a>
+    </div>
+
+    The location of the interviewer can be found in the **Locations** tab of
+    the [Interview 02 Spreadsheet].
+
+    <div class="alert warning-bg" markdown="1">
+
+    ### <i class="icon icon-medium">{{ "calendar-clock" | embed_icon }}</i> Scheduling Deadline
+
+    For planning purposes, please schedule your **Interview 01** appointment by
+    **midnight, Friday, February 27**.
+
+    You may only signup for **one** appointment timeslot.
+
+    </div>
+
+    [Interview 02 Spreadsheet]: https://docs.google.com/spreadsheets/d/15uQsj4Y2V6e0wk_emouQM-rVrJcMqqM2PdOqvgleZRk/edit?usp=sharing
+
+    ## Sample Interview
+
+    Here is an example of the types of tasks the interviewer mask ask you to
+    perform:
+
+    -   <div class="flex-col" markdown="1">
+
+        [ ] Download the following [Python] script template: [https://yld.me/raw/tEny](https://yld.me/raw/tEny) to `practice02.py`.
+
+        <div class="alert info-bg" markdown="1">
+
+        ### <i class="icon icon-medium">{{ "forum-outline" | embed_icon }}</i> Discussion
+
+        - How would you **execute** this script?
+        - Does the **extension** matter?
+
+        </div>
+        </div>
+
+    -   <div class="flex-col" markdown="1">
+
+        [ ] Implement the `fetch_csv_data` function using [map] and a [list comprehension].
+
+        <div class="alert info-bg" markdown="1">
+
+        ### <i class="icon icon-medium">{{ "forum-outline" | embed_icon }}</i> Discussion
+
+        - How would you **test** this code?
+        - How would you print the **last** value?
+        - How would you print the data in *ascending* order?
+        - How would you print the **median** value?
+
+        </div>
+        </div>
+
+    -   <div class="flex-col" markdown="1">
+
+        [ ] Implement the `count_grounds` function using a [dict].
+
+        <div class="alert info-bg" markdown="1">
+
+        ### <i class="icon icon-medium">{{ "forum-outline" | embed_icon }}</i> Discussion
+
+        - How would you **test** this code?
+        - How did you handle possible `KeyError`s?
+        - How could you use a `while` loop instead of a `for` loop?
+        - How would you print all the key, value pairs in the [dict]?
+
+        </div>
+        </div>
+
+    -   <div class="flex-col" markdown="1">
+
+        [ ] Implement the `main` function.
+
+        <div class="alert info-bg" markdown="1">
+
+        ### <i class="icon icon-medium">{{ "forum-outline" | embed_icon }}</i> Discussion
+
+        - How would you **test** this code?
+        - How would you handle no **arguments**?
+        - How would you handle invalid **arguments**?
+        - How did you handle **formatting** the output?
+
+        </div>
+        </div>
+
+    <div class="alert success-bg" markdown="1">
+
+    ### <i class="icon icon-medium">{{ "lightbulb-outline" | embed_icon }}</i> Hints
+
+    - You should be familiar with using [git] to create a branch, record a
+      commit, and upload changes to [GitHub].
+
+    - You should be familiar with downloading files using [curl] or [wget].
+
+    - You should be familiar with [sum].
+
+    - You should be familiar running [doctest] and [mypy].
+
+    </div>
+
+    [Python]: https://python.org
+    [sum]: https://docs.python.org/3/library/functions.html#sum
+    [mypy]: https://mypy-lang.org/
+
+    <div class="alert warning-bg" markdown="1">
+
+    ### <i class="icon icon-medium">{{ "alert" | embed_icon }}</i> Consulting Resources
+
+    As with your **Reading** and **Homework** assignments, you are allowed to
+    consult the course texts, slides, notes, the Internet, and even **AI
+    tools**.  However, you cannot communicate with anyone else nor can you ask
+    an **AI tool** to generate a solution.
+
+    Be mindful that the interviewer is assessing your **proficiency** and how
+    much you have **internalized**.  Over reliance on any external resource
+    will be viewed **negatively** in regards to your **mastery** of the material.
+
+    </div>
+
+    [Checklist 02]: checklist02.html
+    [git]: https://git-scm.com/
+    [GitHub]: https://github.com/
+    [curl]: https://curl.haxx.se/docs/manpage.html
+    [wget]: http://man7.org/linux/man-pages/man1/wget.1.html
+
+    ## Extra Credit (*`0.5` Points*)
+
+    For **extra credit**, you may create an **original**
+    [meme](https://en.wikipedia.org/wiki/Meme) related to the **course**,
+    **computer science**, **computer engineering**, **programming**, **Notre
+    Dame**, or **technology** in general and post it to the `#csememes` channel
+    on **Slack**. Here are some examples from the past:
+
+    <div class="centered">
+      <img src="static/img/extracredit02-csememes.jpg" class="responsive">
+    </div>
+
+    <div class="centered">
+      <img src="static/img/extracredit02-virginvschad.jpg" class="responsive">
+    </div>
+
+    <div class="alert danger-bg" markdown="1">
+    **Note**: The memes should be **dank**, but they should not be
+    **mean-spirited** or **inappropriate**.
+    </div>
+
+    To receive credit, show or share the post on **Slack** to a **TA** by
+    **Friday, March 6, 2026**.
