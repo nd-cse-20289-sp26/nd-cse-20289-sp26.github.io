@@ -11,7 +11,7 @@ body:       |
 
     2. **Processing Data**: [requests], [csv]
 
-    3. **Functional Programming**: [map], [list comprehensions]
+    3. **Functional Programming**: [map], [list comprehensions], [generators]
 
     4. **Parsing Arguments**: [sys.argv], [match]
 
@@ -27,6 +27,9 @@ body:       |
     [map]: https://docs.python.org/3/library/functions.html#map
     [list comprehension]: https://docs.python.org/3/tutorial/datastructures.html#list-comprehensions
     [list comprehensions]: https://docs.python.org/3/tutorial/datastructures.html#list-comprehensions
+    [generators]: https://www.python.org/dev/peps/pep-0255/
+    [generator expression]: https://docs.python.org/3/reference/expressions.html#generator-expressions
+    [generator expressions]: https://docs.python.org/3/reference/expressions.html#generator-expressions
     [sys.argv]: https://docs.python.org/3/library/sys.html#sys.argv
     [match]: https://docs.python.org/3/tutorial/controlflow.html#match-statements
     [doctest]: https://docs.python.org/3/library/doctest.html
@@ -131,6 +134,8 @@ body:       |
       commit, and upload changes to [GitHub].
 
     - You should be familiar with downloading files using [curl] or [wget].
+    
+    - You should be familiar with [generator expressions].
 
     - You should be familiar with [sum].
 
