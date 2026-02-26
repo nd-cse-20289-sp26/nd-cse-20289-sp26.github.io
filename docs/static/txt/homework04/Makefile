@@ -43,8 +43,8 @@ def run_and_extract(cmd):
         print(line, end='')
     return float(grade), status == 'Success'
 
-cut_grade , cut_status  = run_and_extract('./cut.test -v')
-wc_grade  , wc_status   = run_and_extract('./wc.test -v')
+cut_grade , cut_status  = run_and_extract('make test-cut')
+wc_grade  , wc_status   = run_and_extract('make test-wc')
 quiz_grade, quiz_status = run_and_extract('../.scripts/check.py')
 
 print('Grade Summary ...')
@@ -55,8 +55,10 @@ print('  Total   {:4.2f} /  1.00'.format(
     0.4*cut_grade + 0.4*wc_grade + 0.2*quiz_grade
 ))
 print('  Status {}'.format(
-    'Success' if all([cut_grade, wc_grade, quiz_status]) else 'Failure'
+    'Success' if all([cut_status, wc_status, quiz_status]) else 'Failure'
 ))
+
+exit(0 if all([cut_status, wc_status, quiz_status]) else 1)
 endef
 
 export SUMMARIZE_GRADE_PY
