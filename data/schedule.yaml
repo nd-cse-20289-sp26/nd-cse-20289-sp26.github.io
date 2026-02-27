@@ -214,6 +214,8 @@
         items:
           - name:       Slides 15
             link:       https://docs.google.com/presentation/d/1DZ_Humdv_DS06q4PZ2K2oObJlpmekLst-Ox6clDK9uo/edit?usp=sharing
+          - name:       Panopto
+            link:       https://notredame.hosted.panopto.com/Panopto/Pages/Viewer.aspx?id=8cd13897-b99b-488d-8c41-b3fe013cc300
 
       - date:           Sat 02/28
         topics:         '<i class="muted">SearX, Hulk</i>'
