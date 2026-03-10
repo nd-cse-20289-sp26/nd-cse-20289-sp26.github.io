@@ -214,8 +214,8 @@ body:       |
     of the **three** `11` point exams will be replaced with the **average** of
     the remaining **two** `11` point exams.
 
-    For instance, if a student scores `[6, 7, 9]`, then the adjust exams scores
-    would be `[8, 7, 9]`.
+    For instance, if a student scores `[6, 7, 9]`, then the adjusted exams
+    scores would be `[8, 7, 9]`.
 
     The final is worth `15` points and is not included in this adjustment.
 
