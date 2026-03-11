@@ -1,0 +1,475 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<!-- Favicon -->
+<link rel="icon" type="image/png" sizes="32x32" href="static/ico/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="static/ico/favicon-16x16.png">
+<link rel="manifest" href="static/ico/site.webmanifest">
+<!-- Stylesheets -->
+<link rel="stylesheet" href="static/css/pnutzh4x0r.css">
+<title>Reading 06: Pointers, Arrays, Strings</title>
+</head>
+<body>
+<header>
+<a class="logo" href="reading06.html">
+    <h1>Reading 06: Pointers, Arrays, Strings</h1>
+</a>
+<nav>
+    <ul>
+        <li><a href="index.html"><h4>Home</h4></a></li>
+        </ul>
+</nav></header>
+<main>
+<div class="flex-row">
+<div class="flex-col">
+<p><strong>Everyone</strong>:</p>
+<p>Next week, we will transition from high-level scripting languages such as
+<a href="https://en.wikipedia.org/wiki/Bourne_shell">Bourne Shell</a> and <a href="https://www.python.org/">Python</a> to the ubiquitious <a href="https://en.wikipedia.org/wiki/C_(programming_language)">C</a> systems programming
+language.  We shall descend down the <em>software stack</em>, away from user
+applications, and towards the lower level <a href="https://en.wikipedia.org/wiki/System_call">system calls</a> that power our
+programs.</p>
+<p>That is, rather than focusing on how to use or compose tools such as <a href="http://man7.org/linux/man-pages/man1/cat.1.html">cat</a>,
+<a href="http://man7.org/linux/man-pages/man1/grep.1.html">grep</a>, or <a href="http://man7.org/linux/man-pages/man1/sort.1.html">sort</a>, we will instead learn how to build these basic components,
+while adhering to the <a href="https://en.wikipedia.org/wiki/Unix_philosophy">Unix philosophy</a>.</p>
+</div>
+<div class="flex-col-33">
+<div class="centered">
+  <img src="static/img/house.png" class="responsive">
+</div>
+</div>
+</div>
+<div class="alert info-bg">
+<h3 id="book-embed_icon-tldr"><i class="icon icon-medium"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><title>book</title><path d="M18,22A2,2 0 0,0 20,20V4C20,2.89 19.1,2 18,2H12V9L9.5,7.5L7,9V2H6A2,2 0 0,0 4,4V20A2,2 0 0,0 6,22H18Z" /></svg>
+</i> TL;DR<a class="headerlink" href="#book-embed_icon-tldr" title="Permanent link">&para;</a></h3>
+<p>The focus of this reading is to introduce you to programming the <a href="https://en.wikipedia.org/wiki/C_(programming_language)">C</a>
+programming language.  In particular, you should become familiar with
+<a href="https://en.wikipedia.org/wiki/C_(programming_language)#Pointers">pointers</a>, <a href="https://en.wikipedia.org/wiki/C_(programming_language)#Arrays">arrays</a>, and <a href="https://en.wikipedia.org/wiki/C_string_handling">strings</a>.</p>
+</div>
+<h2 id="readings">Readings<a class="headerlink" href="#readings" title="Permanent link">&para;</a></h2>
+<div class="flex-row">
+<div class="flex-col">
+<p>The readings for this week are:</p>
+<ol>
+<li>
+<div class="flex-col" markdown="1">
+<p><a href="https://diveintosystems.org/">Dive Into Systems</a></p>
+<ul>
+<li>
+<div class="flex-col" markdown="1">
+<p><a href="https://diveintosystems.org/singlepage/#_by_the_c_by_the_c_by_the_beautiful_c">By the C, by the C, by the Beautiful C</a></p>
+<p>This should be review from <strong>Fundamentals of Computing</strong>, so <strong>skim</strong>
+this chapter and make sure you recognize most of this material.</p>
+</li>
+<li>
+<div class="flex-col" markdown="1">
+<p><a href="https://diveintosystems.org/singlepage/#_a_deeper_dive_into_c_programming">A Deeper Dive into C Programming</a></p>
+<p>For this week, focus on sections <strong>2.2</strong>, <strong>2.3</strong>, <strong>2.5</strong>, <strong>2.8</strong>,
+and <strong>2.9</strong> (ie. <a href="https://en.wikipedia.org/wiki/C_(programming_language)#Pointers">pointers</a>, <a href="https://en.wikipedia.org/wiki/C_(programming_language)#Arrays">arrays</a>, <a href="https://en.wikipedia.org/wiki/C_string_handling">strings</a>, I/O).</p>
+</li>
+<li>
+<div class="flex-col" markdown="1">
+<p><a href="https://diveintosystems.org/singlepage/#_c_debugging_tools">C Debugging Tools</a></p>
+<p>For this week, focus on sections <strong>3.1</strong>, <strong>3.2</strong>, and <strong>3.3</strong> (ie.
+<a href="https://www.gnu.org/software/gdb/">gdb</a> and <a href="http://valgrind.org/">valgrind</a>).</p>
+</li>
+</ul>
+</li>
+<li>
+<div class="flex-col" markdown="1">
+<p><a href="http://gromnitsky.users.sourceforge.net/articles/notes-for-new-make-users/">Notes for new Make users</a></p>
+<p>Again, most of this should be review from <strong>Fundamentals of Computing</strong>
+and <strong>Data Structures</strong>, so <em>skim</em> this document and make sure you
+understand how to write and use a Makefile.</p>
+</li>
+</ol>
+</div>
+<div class="flex-col">
+<div class="centered">
+  <img src="static/img/diveintosystems.jpg">
+</div>
+</div>
+</div>
+<h3 id="optional-references">Optional References<a class="headerlink" href="#optional-references" title="Permanent link">&para;</a></h3>
+<p>Here are some additional resources:</p>
+<div class="flex-row">
+<div class="flex-col">
+<h4 id="motivation">Motivation<a class="headerlink" href="#motivation" title="Permanent link">&para;</a></h4>
+<ul>
+<li>
+<p><a href="https://blog.bradfieldcs.com/the-cost-of-forsaking-c-113986438784">The cost of forsaking
+  C</a></p>
+</li>
+<li>
+<p><a href="https://blog.regehr.org/archives/1393">Teaching C</a></p>
+</li>
+</ul>
+<h4 id="c-language">C Language<a class="headerlink" href="#c-language" title="Permanent link">&para;</a></h4>
+<ul>
+<li>
+<p><a href="https://beej.us/guide/bgc/html/index-wide.html">Beej's Guide to C Programming</a></p>
+</li>
+<li>
+<p><a href="https://en.wikibooks.org/wiki/A_Little_C_Primer">A Little C Primer</a></p>
+</li>
+</ul>
+</div>
+<div class="flex-col">
+<h4 id="pointers-and-arrays">Pointers and Arrays<a class="headerlink" href="#pointers-and-arrays" title="Permanent link">&para;</a></h4>
+<ul>
+<li>
+<p><a href="http://denniskubes.com/2017/01/24/the-5-minute-guide-to-c-pointers/">The 5 Minute Guide to C Pointers</a></p>
+</li>
+<li>
+<p><a href="http://denniskubes.com/2012/08/19/pointers-and-arrays-in-c/">Basics of Pointers and Arrays in C</a></p>
+</li>
+</ul>
+<h4 id="makefiles">Makefiles<a class="headerlink" href="#makefiles" title="Permanent link">&para;</a></h4>
+<ul>
+<li>
+<p><a href="https://www.gnu.org/software/make/manual/make.html">GNU Make</a></p>
+</li>
+<li>
+<p><a href="https://fabianstumpf.de/articles/makefiles.htm">Make files not war</a></p>
+</li>
+</ul>
+</div>
+</div>
+<div class="alert warning-bg">
+<h3 id="flag-embed_icon-compiler-flags"><i class="icon icon-medium"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><title>flag</title><path d="M14.4,6L14,4H5V21H7V14H12.6L13,16H20V6H14.4Z" /></svg>
+</i> Compiler Flags<a class="headerlink" href="#flag-embed_icon-compiler-flags" title="Permanent link">&para;</a></h3>
+<p>We will be using <a href="https://en.wikipedia.org/wiki/C_(programming_language)#C99">C99</a> version of the <a href="https://en.wikipedia.org/wiki/C_(programming_language)">C</a> programming language. This means that
+when you compile your programs with <a href="https://gcc.gnu.org/">gcc</a>, you should include the <code>-std=gnu99</code>
+compiler flag:</p>
+<div class="codehilite"><pre><span></span><code>$<span class="w"> </span>gcc<span class="w"> </span>-Wall<span class="w"> </span>-g<span class="w"> </span>-std<span class="o">=</span>gnu99<span class="w"> </span>-o<span class="w"> </span>program<span class="w"> </span>source.c
+</code></pre></div>
+
+<p><strong>Note</strong>: The <code>-Wall</code> flags enable most warnings while the <code>-g</code> flags
+enable debugging symbols, which will come in handy when we need to use tools
+such as <a href="https://www.gnu.org/software/gdb/">gdb</a> and <a href="http://valgrind.org/">valgrind</a>.</p>
+</div>
+<h2 id="quiz">Quiz<a class="headerlink" href="#quiz" title="Permanent link">&para;</a></h2>
+<p>This week, the reading is split into two sections: the first part is a
+<a href="https://dredd.h4x0r.space">dredd</a> quiz, while the second part involves two <a href="https://en.wikipedia.org/wiki/C_(programming_language)">C</a> programs: <code>sort.c</code> and
+<code>grep.c</code>.</p>
+<p>To test the <a href="https://en.wikipedia.org/wiki/C_(programming_language)">C</a> program, you will need to download the <a href="https://pnutz.h4x0r.space/courses/cse.20289.sp26/static/txt/reading06/Makefile">Makefile</a> and test
+scripts:</p>
+<div class="codehilite"><pre><span></span><code>$<span class="w"> </span>git<span class="w"> </span>switch<span class="w"> </span>master<span class="w">                   </span><span class="c1"># Make sure we are in master branch</span>
+$<span class="w"> </span>git<span class="w"> </span>pull<span class="w"> </span>--rebase<span class="w">                   </span><span class="c1"># Make sure we are up-to-date with GitHub</span>
+
+$<span class="w"> </span>git<span class="w"> </span>switch<span class="w"> </span>-c<span class="w"> </span>reading06<span class="w">             </span><span class="c1"># Create reading06 branch and check it out</span>
+
+$<span class="w"> </span><span class="nb">cd</span><span class="w"> </span>reading06<span class="w">                        </span><span class="c1"># Go into reading06 folder</span>
+
+<span class="c1"># Download Reading 06 Makefile</span>
+$<span class="w"> </span>curl<span class="w"> </span>-LO<span class="w"> </span>https://pnutz.h4x0r.space/courses/cse.20289.sp26/static/txt/reading06/Makefile
+
+<span class="c1"># Download, build, and execute tests</span>
+$<span class="w"> </span>make<span class="w"> </span><span class="nb">test</span>
+</code></pre></div>
+
+<h3 id="questions">Questions<a class="headerlink" href="#questions" title="Permanent link">&para;</a></h3>
+<p>Given the following <a href="https://en.wikipedia.org/wiki/C_(programming_language)">C</a> program, <a href="https://pnutz.h4x0r.space/courses/cse.20289.sp26/static/txt/reading06/sum.c">sum.c</a>, which computes the sum of all the
+integers read from <a href="https://en.wikipedia.org/wiki/Standard_streams#Standard_input_(stdin)">standard input</a>:</p>
+<div class="codehilite"><pre><span></span><code><span class="cm">/* sum.c */</span>
+
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;stdio.h&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;stdlib.h&gt;</span>
+
+<span class="cm">/* Constants */</span>
+
+<span class="cp">#define MAX_NUMBERS (1&lt;&lt;10)</span>
+
+<span class="cm">/* Functions */</span>
+
+<span class="kt">size_t</span><span class="w"> </span><span class="nf">read_numbers</span><span class="p">(</span><span class="kt">FILE</span><span class="w"> </span><span class="o">*</span><span class="n">stream</span><span class="p">,</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">numbers</span><span class="p">[],</span><span class="w"> </span><span class="kt">size_t</span><span class="w"> </span><span class="n">n</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kt">size_t</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+
+<span class="w">    </span><span class="k">while</span><span class="w"> </span><span class="p">(</span><span class="n">i</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">n</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="n">scanf</span><span class="p">(</span><span class="s">&quot;%d&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">numbers</span><span class="p">[</span><span class="n">i</span><span class="p">])</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="n">EOF</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">i</span><span class="o">++</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">i</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="kt">int</span><span class="w"> </span><span class="nf">sum_numbers</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">numbers</span><span class="p">[])</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">total</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">size_t</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="k">sizeof</span><span class="p">(</span><span class="n">numbers</span><span class="p">);</span><span class="w"> </span><span class="n">i</span><span class="o">++</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">total</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="n">numbers</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">total</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="cm">/* Main Execution */</span>
+
+<span class="kt">int</span><span class="w"> </span><span class="nf">main</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">argc</span><span class="p">,</span><span class="w"> </span><span class="kt">char</span><span class="w"> </span><span class="o">*</span><span class="n">argv</span><span class="p">[])</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">numbers</span><span class="p">[</span><span class="n">MAX_NUMBERS</span><span class="p">];</span>
+<span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">total</span><span class="p">;</span>
+<span class="w">    </span><span class="kt">size_t</span><span class="w"> </span><span class="n">nsize</span><span class="p">;</span>
+
+<span class="w">    </span><span class="n">nsize</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">read_numbers</span><span class="p">(</span><span class="n">stdin</span><span class="p">,</span><span class="w"> </span><span class="n">numbers</span><span class="p">,</span><span class="w"> </span><span class="n">MAX_NUMBERS</span><span class="p">);</span>
+<span class="w">    </span><span class="n">total</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">sum_numbers</span><span class="p">(</span><span class="n">numbers</span><span class="p">);</span>
+<span class="w">    </span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;{}</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">total</span><span class="p">);</span>
+
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">EXIT_SUCCESS</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<p>And the following <a href="https://en.wikipedia.org/wiki/C_(programming_language)">C</a> program, <a href="https://pnutz.h4x0r.space/courses/cse.20289.sp26/static/txt/reading06/cat.c">cat.c</a>, which implements the <a href="http://man7.org/linux/man-pages/man1/cat.1.html">cat</a> command:</p>
+<div class="codehilite"><pre><span></span><code><span class="cm">/* cat.c */</span>
+
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;errno.h&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;stdbool.h&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;stdio.h&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;stdlib.h&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;string.h&gt;</span>
+
+<span class="cm">/* Globals */</span>
+
+<span class="kt">char</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">PROGRAM_NAME</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">NULL</span><span class="p">;</span>
+
+<span class="cm">/* Functions */</span>
+
+<span class="kt">void</span><span class="w"> </span><span class="nf">usage</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">status</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">____</span><span class="p">(</span><span class="n">stderr</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;Usage: %s</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">PROGRAM_NAME</span><span class="p">);</span><span class="w">                                    </span><span class="cm">/* 1 */</span>
+<span class="w">    </span><span class="n">____</span><span class="p">(</span><span class="n">status</span><span class="p">);</span><span class="w">                                                                 </span><span class="cm">/* 2 */</span>
+<span class="p">}</span>
+
+<span class="kt">bool</span><span class="w"> </span><span class="nf">cat_stream</span><span class="p">(</span><span class="kt">FILE</span><span class="w"> </span><span class="o">*</span><span class="n">stream</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kt">char</span><span class="w"> </span><span class="n">buffer</span><span class="p">[</span><span class="n">BUFSIZ</span><span class="p">];</span>
+
+<span class="w">    </span><span class="k">while</span><span class="w"> </span><span class="p">(</span><span class="n">____</span><span class="p">(</span><span class="n">buffer</span><span class="p">,</span><span class="w"> </span><span class="n">BUFSIZ</span><span class="p">,</span><span class="w"> </span><span class="n">stream</span><span class="p">))</span><span class="w"> </span><span class="p">{</span><span class="w">                                        </span><span class="cm">/* 3 */</span>
+<span class="w">        </span><span class="n">____</span><span class="p">(</span><span class="n">buffer</span><span class="p">,</span><span class="w"> </span><span class="n">stdout</span><span class="p">);</span><span class="w">                                                     </span><span class="cm">/* 4 */</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="nb">true</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="cm">/* Main Execution */</span>
+
+<span class="kt">int</span><span class="w"> </span><span class="nf">main</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">argc</span><span class="p">,</span><span class="w"> </span><span class="kt">char</span><span class="w"> </span><span class="o">*</span><span class="n">argv</span><span class="p">[])</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">argind</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
+
+<span class="w">    </span><span class="cm">/* Parse command line arguments */</span>
+<span class="w">    </span><span class="n">PROGRAM_NAME</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">____</span><span class="p">;</span><span class="w">                                                          </span><span class="cm">/* 5 */</span>
+<span class="w">    </span><span class="k">while</span><span class="w"> </span><span class="p">(</span><span class="n">argind</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">argc</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="n">____</span><span class="p">(</span><span class="n">argv</span><span class="p">[</span><span class="n">argind</span><span class="p">])</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="n">argv</span><span class="p">[</span><span class="n">argind</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="sc">&#39;-&#39;</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w">   </span><span class="cm">/* 6 */</span>
+<span class="w">        </span><span class="kt">char</span><span class="w"> </span><span class="o">*</span><span class="n">arg</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">argv</span><span class="p">[</span><span class="n">argind</span><span class="o">++</span><span class="p">];</span>
+<span class="w">        </span><span class="k">switch</span><span class="w"> </span><span class="p">(</span><span class="n">arg</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="k">case</span><span class="w"> </span><span class="sc">&#39;h&#39;</span><span class="p">:</span>
+<span class="w">                </span><span class="n">usage</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
+<span class="w">                </span><span class="k">break</span><span class="p">;</span>
+<span class="w">            </span><span class="k">default</span><span class="o">:</span>
+<span class="w">                </span><span class="n">usage</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span>
+<span class="w">                </span><span class="k">break</span><span class="p">;</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="cm">/* Process each file */</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="o">!</span><span class="n">cat_stream</span><span class="p">(</span><span class="n">stdin</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="cm">/* vim: set sts=4 sw=4 ts=8 expandtab ft=c: */</span>
+</code></pre></div>
+
+<div class="alert success-bg">
+<h3 id="code-tags-embed_icon-code-is-not-literature"><i class="icon icon-medium"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><title>code-tags</title><path d="M14.6,16.6L19.2,12L14.6,7.4L16,6L22,12L16,18L14.6,16.6M9.4,16.6L4.8,12L9.4,7.4L8,6L2,12L8,18L9.4,16.6Z" /></svg>
+</i> Code is not Literature<a class="headerlink" href="#code-tags-embed_icon-code-is-not-literature" title="Permanent link">&para;</a></h3>
+<p>For these types of questions, your first <strong>instinct</strong> should be to <strong>play</strong>
+with the code. As a <strong>computer scientist</strong>, your approach to any new body of
+code is to study and investigate it by <strong>taking it apart</strong>, <strong>modifying it</strong>,
+<strong>breaking it</strong>, and <strong>putting it back together</strong>.</p>
+<p>As <a href="http://www.gigamonkeys.com/">Peter Seibel</a> writes, <a href="http://www.gigamonkeys.com/code-reading/">code is not literature</a>:</p>
+<blockquote>
+<p>We don’t read code, we decode it. We examine it. A piece of code is not
+literature; it is a specimen ... and we are naturalists.</p>
+</blockquote>
+<p>If you truly want to <strong>understand</strong> something, simply looking up an answer on
+<a href="https://www.google.com/">Google</a> or <a href="https://chatgpt.com/">StackOverflow</a> or [ChatGPT] is <strong>insufficient</strong>. For true
+<strong>mastery</strong>, you need to apply the principle of the <a href="https://en.wikipedia.org/wiki/Hacker_ethic#Hands-On_Imperative">Hands-On Imperative</a>:</p>
+<blockquote>
+<p>Hackers believe that essential lessons can be learned about the
+systems—about the world—from taking things apart, seeing how they work, and
+using this knowledge to create new and more interesting things.</p>
+</blockquote>
+<p><strong>TL;DR</strong>: <strong>Download</strong> the code. <strong>Compile</strong> it. <strong>Break</strong> it. <strong>Fix</strong> it.
+<strong>Happy Hacking</strong>.</p>
+</div>
+<p>Record the answers to the following <a href="static/json/reading06.json">Reading 06 Quiz</a> questions in your
+<code>reading06</code> branch:</p>
+<div id="quiz-questions"></div>
+
+<div id="quiz-responses"></div>
+
+<script src="static/js/dredd-quiz.js"></script>
+
+<script>
+loadQuiz('static/json/reading06.json');
+</script>
+
+<pre style="display: none;" id="dr-container" class="codehilite"><code id="dredd-response"></code></pre>
+
+<h3 id="programs">Programs<a class="headerlink" href="#programs" title="Permanent link">&para;</a></h3>
+<p>You are to write two simple <a href="https://en.wikipedia.org/wiki/C_(programming_language)">C</a> programs based on the examples above.</p>
+<h4 id="sortc"><code>sort.c</code><a class="headerlink" href="#sortc" title="Permanent link">&para;</a></h4>
+<p>Use <code>sum.c</code> as the basis for a <a href="https://en.wikipedia.org/wiki/C_(programming_language)">C</a> program called <code>sort.c</code>, which uses
+<a href="http://man7.org/linux/man-pages/man3/qsort.3.html">qsort</a> to implement a basic version of <a href="http://man7.org/linux/man-pages/man1/sort.1.html">sort</a>:</p>
+<div class="codehilite"><pre><span></span><code>$<span class="w"> </span>shuf<span class="w"> </span>-i<span class="w"> </span><span class="m">1</span>-10<span class="w"> </span><span class="p">|</span><span class="w"> </span>./sort
+<span class="m">1</span>
+<span class="m">2</span>
+<span class="m">3</span>
+<span class="m">4</span>
+<span class="m">5</span>
+<span class="m">6</span>
+<span class="m">7</span>
+<span class="m">8</span>
+<span class="m">9</span>
+<span class="m">10</span>
+</code></pre></div>
+
+<div class="alert warning-bg">
+<p><strong>Note</strong>: You should use the provided <code>read_numbers</code> function and simply call
+<a href="http://man7.org/linux/man-pages/man3/qsort.3.html">qsort</a> of <code>numbers</code> and print out each element in the array.</p>
+</div>
+<div class="alert success-bg">
+<p><strong>Hint</strong>: Since you will be sorting <code>int</code>s, you will need a <strong>custom
+comparison function</strong>.  To save you the trouble of searching
+<strong>StackOverflow</strong>, you can use the following:</p>
+<div class="codehilite"><pre><span></span><code><span class="kt">int</span><span class="w"> </span><span class="nf">compare_ints</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="o">*</span><span class="n">a</span><span class="p">,</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="o">*</span><span class="n">b</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">ia</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">*</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="o">*</span><span class="p">)</span><span class="n">a</span><span class="p">;</span>
+<span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">ib</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">*</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="o">*</span><span class="p">)</span><span class="n">b</span><span class="p">;</span>
+
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">ia</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">ib</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<p>This should be the last argument to <a href="http://man7.org/linux/man-pages/man3/qsort.3.html">qsort</a>.  You can also refer to the
+<a href="https://beej.us/guide/bgc/html/index-wide.html#man-qsort">example</a> in
+<a href="https://beej.us/guide/bgc/html/index-wide.html">Beej's Guide to C Programming</a>.</p>
+</div>
+<h4 id="grepc"><code>grep.c</code><a class="headerlink" href="#grepc" title="Permanent link">&para;</a></h4>
+<p>Use <code>cat.c</code> as the basis for a <a href="https://en.wikipedia.org/wiki/C_(programming_language)">C</a> program called <code>grep.c</code>, which uses
+<a href="http://man7.org/linux/man-pages/man3/strstr.3.html">strstr</a> to implement a basic version of <a href="http://man7.org/linux/man-pages/man1/grep.1.html">grep</a>:</p>
+<div class="codehilite"><pre><span></span><code>$<span class="w"> </span>./grep<span class="w"> </span>-h<span class="w">                                   </span><span class="c1"># Display Usage</span>
+Usage:<span class="w"> </span>./grep<span class="w"> </span>PATTERN
+
+$<span class="w"> </span>ls<span class="w"> </span><span class="p">|</span><span class="w"> </span>./grep<span class="w"> </span>ep<span class="w">                              </span><span class="c1"># Search stdin</span>
+grep
+grep.c
+test_grep.c
+
+$<span class="w"> </span>ls<span class="w"> </span><span class="p">|</span><span class="w"> </span>./grep<span class="w"> </span>NOPE<span class="w"> </span><span class="p">;</span><span class="w"> </span><span class="nb">echo</span><span class="w"> </span><span class="nv">$?</span><span class="w">                  </span><span class="c1"># Exit code on failure</span>
+<span class="m">1</span>
+</code></pre></div>
+
+<div class="alert warning-bg">
+<p><strong>Note</strong>: Use the <a href="http://man7.org/linux/man-pages/man3/strstr.3.html">strstr</a> function to search for strings (you do not need to
+support <a href="https://en.wikipedia.org/wiki/Regular_expression">regular expressions</a>).</p>
+</div>
+<div class="alert danger-bg">
+<p><strong>Note</strong>: Make sure you return with an <strong>non-zero</strong> exit code if the
+<code>PATTERN</code> is not found in the input stream.</p>
+</div>
+<h4 id="makefile"><code>Makefile</code><a class="headerlink" href="#makefile" title="Permanent link">&para;</a></h4>
+<p>To build your programs, you need to update the provided <a href="https://pnutz.h4x0r.space/courses/cse.20289.sp26/static/txt/reading06/Makefile">Makefile</a> to include
+<a href="https://www.gnu.org/software/make/manual/html_node/Rule-Example.html#Rule-Example">rules</a> or <strong>recipes</strong> for the <code>sort</code> and <code>grep</code> targets.  Be sure to use the
+<code>CC</code> and <code>CFLAGS</code> variables in your <a href="https://www.gnu.org/software/make/manual/html_node/Rule-Example.html#Rule-Example">rules</a>.</p>
+<p>Once you have a working <a href="https://pnutz.h4x0r.space/courses/cse.20289.sp26/static/txt/reading06/Makefile">Makefile</a>, you should be able to use the <a href="http://man7.org/linux/man-pages/man1/make.1.html">make</a>
+command to run your <strong>recipes</strong>:</p>
+<div class="codehilite"><pre><span></span><code>$<span class="w"> </span>make<span class="w"> </span>clean<span class="w">                                  </span><span class="c1"># Remove targets</span>
+rm<span class="w"> </span>-f<span class="w"> </span>sort<span class="w"> </span>grep
+
+$<span class="w"> </span>make<span class="w">                                        </span><span class="c1"># Build targets</span>
+gcc<span class="w"> </span>-Wall<span class="w"> </span>-g<span class="w"> </span>-std<span class="o">=</span>gnu99<span class="w"> </span>-o<span class="w"> </span>sort<span class="w"> </span>sort.c
+gcc<span class="w"> </span>-Wall<span class="w"> </span>-g<span class="w"> </span>-std<span class="o">=</span>gnu99<span class="w"> </span>-o<span class="w"> </span>grep<span class="w"> </span>grep.c
+
+$<span class="w"> </span>make<span class="w"> </span><span class="nb">test</span><span class="w">                                   </span><span class="c1"># Test programs</span>
+Checking<span class="w"> </span>reading06<span class="w"> </span>sort<span class="w"> </span>...
+<span class="w">  </span>sort<span class="w"> </span><span class="m">1</span><span class="w"> </span><span class="m">1</span><span class="w">                                 </span>...<span class="w"> </span>Success
+<span class="w">  </span>sort<span class="w"> </span><span class="m">1</span><span class="w"> </span><span class="m">10</span><span class="w">                                </span>...<span class="w"> </span>Success
+<span class="w">  </span>sort<span class="w"> </span><span class="m">1</span><span class="w"> </span><span class="m">100</span><span class="w">                               </span>...<span class="w"> </span>Success
+<span class="w">  </span>sort<span class="w"> </span><span class="m">1</span><span class="w"> </span><span class="m">1000</span><span class="w">                              </span>...<span class="w"> </span>Success
+<span class="w">  </span>--------------------
+<span class="w">   </span>Score<span class="w"> </span><span class="m">4</span>.00<span class="w"> </span>/<span class="w"> </span><span class="m">4</span>.00
+<span class="w">   </span>Grade<span class="w"> </span><span class="m">1</span>.00<span class="w"> </span>/<span class="w"> </span><span class="m">1</span>.00
+<span class="w">  </span>Status<span class="w"> </span>Success
+
+Checking<span class="w"> </span>reading06<span class="w"> </span>grep<span class="w"> </span>...
+<span class="w">  </span>grep<span class="w">                                     </span>...<span class="w"> </span>Succes
+<span class="w">  </span>grep<span class="w"> </span>-h<span class="w">                                  </span>...<span class="w"> </span>Succes
+<span class="w">  </span>grep<span class="w"> </span>root<span class="w"> </span>/etc/passwd<span class="w">                    </span>...<span class="w"> </span>Succes
+<span class="w">  </span>grep<span class="w"> </span>login<span class="w"> </span>/etc/passwd<span class="w">                   </span>...<span class="w"> </span>Succes
+<span class="w">  </span>grep<span class="w"> </span>asdf<span class="w"> </span>/etc/passwd<span class="w">                    </span>...<span class="w"> </span>Succes
+<span class="w">  </span>--------------------
+<span class="w">   </span>Score<span class="w"> </span><span class="m">5</span>.00<span class="w"> </span>/<span class="w"> </span><span class="m">5</span>.00
+<span class="w">   </span>Grade<span class="w"> </span><span class="m">1</span>.00<span class="w"> </span>/<span class="w"> </span><span class="m">1</span>.00
+<span class="w">  </span>Status<span class="w"> </span>Success
+</code></pre></div>
+
+<h2 id="submission">Submission<a class="headerlink" href="#submission" title="Permanent link">&para;</a></h2>
+<p>To submit you work, follow the same process outlined in <a href="reading01.html">Reading 01</a>:</p>
+<div class="codehilite"><pre><span></span><code><span class="c1">#--------------------------------------------------</span>
+<span class="c1"># BE SURE TO DO THE PREPARATION STEPS ABOVE</span>
+<span class="c1">#--------------------------------------------------</span>
+
+$<span class="w"> </span><span class="nb">cd</span><span class="w"> </span>reading06<span class="w">                        </span><span class="c1"># Go into reading06 folder</span>
+
+$<span class="w"> </span><span class="nv">$EDITOR</span><span class="w"> </span>answers.json<span class="w">                </span><span class="c1"># Edit your answers.json file</span>
+
+$<span class="w"> </span>../.scripts/check.py<span class="w">                </span><span class="c1"># Check reading06 quiz</span>
+Checking<span class="w"> </span>reading06<span class="w"> </span>quiz<span class="w"> </span>...
+<span class="w">     </span>Q01<span class="w">  </span><span class="m">0</span>.10<span class="w"> </span>/<span class="w">  </span><span class="m">0</span>.10
+<span class="w">     </span>Q02<span class="w">  </span><span class="m">0</span>.10<span class="w"> </span>/<span class="w">  </span><span class="m">0</span>.10
+<span class="w">     </span>Q03<span class="w">  </span><span class="m">0</span>.10<span class="w"> </span>/<span class="w">  </span><span class="m">0</span>.10
+<span class="w">     </span>Q04<span class="w">  </span><span class="m">0</span>.10<span class="w"> </span>/<span class="w">  </span><span class="m">0</span>.10
+<span class="w">     </span>Q05<span class="w">  </span><span class="m">0</span>.30<span class="w"> </span>/<span class="w">  </span><span class="m">0</span>.30
+<span class="w">     </span>Q06<span class="w">  </span><span class="m">0</span>.10<span class="w"> </span>/<span class="w">  </span><span class="m">0</span>.10
+<span class="w">     </span>Q07<span class="w">  </span><span class="m">0</span>.20<span class="w"> </span>/<span class="w">  </span><span class="m">0</span>.20
+<span class="w">  </span>--------------------
+<span class="w">   </span>Score<span class="w"> </span><span class="m">14</span>.00<span class="w"> </span>/<span class="w"> </span><span class="m">14</span>.00
+<span class="w">   </span>Grade<span class="w">  </span><span class="m">1</span>.00<span class="w"> </span>/<span class="w">  </span><span class="m">1</span>.00
+<span class="w">  </span>Status<span class="w"> </span>Success
+
+$<span class="w"> </span>git<span class="w"> </span>add<span class="w"> </span>answers.json<span class="w">                </span><span class="c1"># Add answers.json to staging area</span>
+$<span class="w"> </span>git<span class="w"> </span>commit<span class="w"> </span>-m<span class="w"> </span><span class="s2">&quot;Reading 06: Quiz&quot;</span><span class="w">    </span><span class="c1"># Commit work</span>
+
+$<span class="w"> </span><span class="nv">$EDITOR</span><span class="w"> </span>Makefile<span class="w">                    </span><span class="c1"># Edit source code</span>
+$<span class="w"> </span><span class="nv">$EDITOR</span><span class="w"> </span>sort.c<span class="w">                      </span><span class="c1"># Edit source code</span>
+$<span class="w"> </span><span class="nv">$EDITOR</span><span class="w"> </span>grep.c<span class="w">                      </span><span class="c1"># Edit source code</span>
+
+$<span class="w"> </span>make<span class="w">                                </span><span class="c1"># Build programs</span>
+
+$<span class="w"> </span>make<span class="w"> </span><span class="nb">test</span><span class="w">                           </span><span class="c1"># Run tests</span>
+
+$<span class="w"> </span>git<span class="w"> </span>add<span class="w"> </span>Makefile<span class="w">                    </span><span class="c1"># Add Makefile to staging area</span>
+$<span class="w"> </span>git<span class="w"> </span>add<span class="w"> </span>sort.c<span class="w"> </span>grep.c<span class="w">               </span><span class="c1"># Add source code to staging area</span>
+$<span class="w"> </span>git<span class="w"> </span>commit<span class="w"> </span>-m<span class="w"> </span><span class="s2">&quot;Reading 06: Code&quot;</span><span class="w">    </span><span class="c1"># Commit work</span>
+
+$<span class="w"> </span>git<span class="w"> </span>push<span class="w"> </span>-u<span class="w"> </span>origin<span class="w"> </span>reading06<span class="w">        </span><span class="c1"># Push branch to GitHub</span>
+</code></pre></div>
+
+<div class="alert warning-bg">
+<h3 id="lifebuoy-embed_icon-acknowledgments"><i class="icon icon-medium"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><title>lifebuoy</title><path d="M19.79,15.41C20.74,13.24 20.74,10.75 19.79,8.59L17.05,9.83C17.65,11.21 17.65,12.78 17.06,14.17L19.79,15.41M15.42,4.21C13.25,3.26 10.76,3.26 8.59,4.21L9.83,6.94C11.22,6.35 12.79,6.35 14.18,6.95L15.42,4.21M4.21,8.58C3.26,10.76 3.26,13.24 4.21,15.42L6.95,14.17C6.35,12.79 6.35,11.21 6.95,9.82L4.21,8.58M8.59,19.79C10.76,20.74 13.25,20.74 15.42,19.78L14.18,17.05C12.8,17.65 11.22,17.65 9.84,17.06L8.59,19.79M12,2A10,10 0 0,1 22,12A10,10 0 0,1 12,22A10,10 0 0,1 2,12A10,10 0 0,1 12,2M12,8A4,4 0 0,0 8,12A4,4 0 0,0 12,16A4,4 0 0,0 16,12A4,4 0 0,0 12,8Z" /></svg>
+</i> Acknowledgments<a class="headerlink" href="#lifebuoy-embed_icon-acknowledgments" title="Permanent link">&para;</a></h3>
+<p>If you collaborated with any other students, or received help from TAs or AI
+tools on this assignment, please record this support in the <code>README.md</code> in
+the <code>reading06</code> folder and include it with your <strong>Pull Request</strong>.</p>
+</div>
+<div class="alert success-bg">
+<h3 id="account-question-embed_icon-graders"><i class="icon icon-medium"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><title>account-question</title><path d="M13,8A4,4 0 0,1 9,12A4,4 0 0,1 5,8A4,4 0 0,1 9,4A4,4 0 0,1 13,8M17,18V20H1V18C1,15.79 4.58,14 9,14C13.42,14 17,15.79 17,18M20.5,14.5V16H19V14.5H20.5M18.5,9.5H17V9A3,3 0 0,1 20,6A3,3 0 0,1 23,9C23,9.97 22.5,10.88 21.71,11.41L21.41,11.6C20.84,12 20.5,12.61 20.5,13.3V13.5H19V13.3C19,12.11 19.6,11 20.59,10.35L20.88,10.16C21.27,9.9 21.5,9.47 21.5,9A1.5,1.5 0 0,0 20,7.5A1.5,1.5 0 0,0 18.5,9V9.5Z" /></svg>
+</i> Graders<a class="headerlink" href="#account-question-embed_icon-graders" title="Permanent link">&para;</a></h3>
+<p>Once you have committed your work and pushed it to <a href="https://github.com">GitHub</a>, remember to
+create a <strong>pull request</strong> and assign it to the appropriate <strong>teaching
+assistant</strong> from the <a href="reading06_tas.html">Reading 06 TA List</a>.</p>
+<p><strong>Note</strong>: this list changes each week, so be sure to consult the appropriate
+list for each assignment.</p>
+</div>
+</main>
+<footer>
+Built using <a href="https://python.org">Python</a>
+and <a href="https://jinja.palletsprojects.com">Jinja</a>
+with colors from <a href="https://nordtheme.com">Nord Theme</a>
+and icons from <a href="https://pictogrammers.com/library/mdi/">Material Design Icons</a>.</footer>
+</body>
+</html>
