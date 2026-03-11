@@ -1,0 +1,70 @@
+{
+    "q01": {
+        "type": "single",
+        "question": "\n<p>Inside the <code>read_numbers</code> function of <code>sum.c</code>, there is an\nerror on the following line of code:</p>\n\n<pre>\nwhile (i < n && scanf(\"%d\", numbers[i]) != EOF)\n</pre>\n\n<p>Which of the following options fixes the problem with this line of\ncode?</p>\n",
+        "responses": {
+            "a": "<code>while (i < n && scanf(\"%d\", numbers[i]) == EOF)</code>",
+            "b": "<code>while (i <= n && scanf(\"%d\", numbers[i]) != EOF)</code>",
+            "c": "<code>while (i < n || scanf(\"%d\", numbers[i]) != EOF)</code>",
+            "d": "<code>while (i < n && scanf(\"%d\", &numbers[i]) != EOF)</code>",
+            "e": "<code>while (i < n && scanf(\"%d\", (int *)numbers[i]) != EOF)</code>",
+            "f": "<code>while (i < n && scanf(\"%d\", *numbers[i]) != EOF)</code>"
+        }
+    },
+    "q02": {
+        "type": "single",
+        "question": "\n<p>The <code>sum_numbers</code> function in <code>sum.c</code> contains a common\nerror regarding <b>arrays</b> and <b>pointers</b>. Which of the following\noptions explains this error and fixes it?</p>\n",
+        "responses": {
+            "a": "You can't pass a statically allocated array to a function; dynamically allocate it first using <code>malloc</code>.",
+            "b": "You can't declare an array argument using <code>int numbers[]</code>; instead you should declare it as <code>int *numbers</code>.",
+            "c": "To use <code>sizeof</code> on an array, you must deference it first; so do <code>sizeof(*numbers)</code>.",
+            "d": "To use <code>sizeof</code> on an array, you must deference it first; so do <code>sizeof(&numbers)</code>.",
+            "e": "You shouldn't use <code>sizeof</code> to get the size of an array; pass the size of the array in as an additional argument.",
+            "f": "You shouldn't use <code>sizeof</code> to get the size of an array; use <code>len(array)</code> instead."
+        }
+    },
+    "q03": {
+        "type": "single",
+        "question": "\n<p>Inside the <code>main</code> function of <code>sum.c</code>, there is an error\non the following line of code:</p>\n\n<pre>\nprintf(\"{}\\n\", total);\n</pre>\n\n<p>Which of the following options fixes the problem with this line of\n",
+        "responses": {
+            "a": "<code>printf(total + \"\\n\");</code>",
+            "b": "<code>printf(\"{}\\n\", &total);</code>",
+            "c": "<code>printf(\"{}\\n\", (char *)total);</code>",
+            "d": "<code>printf(\"%s\\n\", total);</code>",
+            "e": "<code>printf(\"%d\\n\", total);</code>",
+            "f": "<code>printf(\"%s\\n\", (char *)total);</code>"
+        }
+    },
+    "q04": {
+        "type": "single",
+        "question": "\n<p>After fixing the errors above in <code>sum.c</code>, suppose we modify the\n<code>MAX_NUMBERS</code> constant to be the value <code>1<<30</code>.  Which of the\nfollowing most accurately explains what is displayed when we run the\nprogram with <code>seq 1 10 | ./sum</code>?</p>\n",
+        "responses": {
+            "a": "<code>55</code>, which is the sum of <code>1 - 10</code>",
+            "b": "Nothing is printed because no command line arguments are passed the the program.",
+            "c": "Segmentation fault because we didn't read the input from the pipe.",
+            "d": "Segmentation fault because the computer does not have enough memory.",
+            "e": "Segmentation fault because our array is declared on the stack and is too big.",
+            "f": "Segmentation fault because our array is declared on the heap and is too big."
+        }
+    },
+    "q05": {
+        "type": "order",
+        "question": "\n<p>Fill in the blanks for <code>cat.c</code> by ordering the following\nfunctions:</p>\n",
+        "responses": {
+            "fprintf": "<code>fprintf</code>",
+            "argv": "<code>argv[0]</code>",
+            "fputs": "<code>fputs</code>",
+            "strlen": "<code>strlen</code>",
+            "fgets": "<code>fgets</code>",
+            "exit": "<code>exit</code>"
+        }
+    },
+    "q06": {
+        "type": "blank",
+        "question": "\n<p>In <code>sum.c</code> and <code>cat.c</code>, we read the input from\n<code>stdin</code>.  If we wanted to read data from a file on the file system,\nwe would first need to call ____ to get a file handle or stream.  We can\nthen use the same functions we used to read <code>stdin</code> and write to\n<code>stdout</code> (or even <code>stderr</code>) on the newly created file handle.\nOnce we are all done with the stream, we need to call <code>____</code>.\n"
+    },
+    "q07": {
+        "type": "blank",
+        "question": "\n<p>Instead of using a <code>switch</code> statement to check command line\narguments (as shown in <code>cat.c</code>), we can use a series of <code>if</code>,\n<code>else if</code> statements:</p>\n\n<pre>\nwhile (argind < argc && strlen(argv[argind]) > 1 && argv[argind][0] == '-') {\n    char *arg = argv[argind++];\n    if (____(arg, \"-h\") == ____) {\n        usage(0);\n    } else {\n        usage(1);\n    }\n}\n</pre>\n"
+    }
+}

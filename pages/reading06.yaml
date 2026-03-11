@@ -1,0 +1,554 @@
+title:      "Reading 06: Pointers, Arrays, Strings"
+body:       |
+
+  <div class="flex-row" markdown="1">
+
+  <div class="flex-col" markdown="1">
+
+  **Everyone**:
+
+  Next week, we will transition from high-level scripting languages such as
+  [Bourne Shell] and [Python] to the ubiquitious [C] systems programming
+  language.  We shall descend down the *software stack*, away from user
+  applications, and towards the lower level [system calls] that power our
+  programs.
+
+  That is, rather than focusing on how to use or compose tools such as [cat],
+  [grep], or [sort], we will instead learn how to build these basic components,
+  while adhering to the [Unix philosophy].
+
+  </div>
+
+  <div class="flex-col-33">
+
+  <div class="centered">
+    <img src="static/img/house.png" class="responsive">
+  </div>
+
+  </div>
+
+  </div>
+
+  <div class="alert info-bg" markdown="1">
+
+  ### <i class="icon icon-medium">{{ "book" | embed_icon }}</i> TL;DR
+
+  The focus of this reading is to introduce you to programming the [C]
+  programming language.  In particular, you should become familiar with
+  [pointers], [arrays], and [strings].
+
+  </div>
+
+  ## Readings
+
+  <div class="flex-row" markdown="1">
+
+  <div class="flex-col" markdown="1">
+
+  The readings for this week are:
+
+  1.  <div class="flex-col" markdown="1">
+
+      [Dive Into Systems]
+
+      -   <div class="flex-col" markdown="1">
+
+          [By the C, by the C, by the Beautiful C](https://diveintosystems.org/singlepage/#_by_the_c_by_the_c_by_the_beautiful_c)
+
+          This should be review from **Fundamentals of Computing**, so **skim**
+          this chapter and make sure you recognize most of this material.
+
+      -   <div class="flex-col" markdown="1">
+
+          [A Deeper Dive into C Programming](https://diveintosystems.org/singlepage/#_a_deeper_dive_into_c_programming)
+
+          For this week, focus on sections **2.2**, **2.3**, **2.5**, **2.8**,
+          and **2.9** (ie. [pointers], [arrays], [strings], I/O).
+
+      -   <div class="flex-col" markdown="1">
+
+          [C Debugging Tools](https://diveintosystems.org/singlepage/#_c_debugging_tools)
+
+          For this week, focus on sections **3.1**, **3.2**, and **3.3** (ie.
+          [gdb] and [valgrind]).
+
+  2.  <div class="flex-col" markdown="1">
+
+      [Notes for new Make users]
+
+      Again, most of this should be review from **Fundamentals of Computing**
+      and **Data Structures**, so *skim* this document and make sure you
+      understand how to write and use a Makefile.
+
+  </div>
+
+  <div class="flex-col" markdown="1">
+
+  <div class="centered">
+    <img src="static/img/diveintosystems.jpg">
+  </div>
+
+  </div>
+
+  </div>
+
+  ### Optional References
+
+  Here are some additional resources:
+
+  <div class="flex-row" markdown="1">
+
+  <div class="flex-col" markdown="1">
+
+  #### Motivation
+
+  - [The cost of forsaking
+    C](https://blog.bradfieldcs.com/the-cost-of-forsaking-c-113986438784)
+
+  - [Teaching C](https://blog.regehr.org/archives/1393)
+
+  #### C Language
+
+  - [Beej's Guide to C Programming](https://beej.us/guide/bgc/html/index-wide.html)
+
+  - [A Little C Primer](https://en.wikibooks.org/wiki/A_Little_C_Primer)
+
+  </div>
+
+  <div class="flex-col" markdown="1">
+
+  #### Pointers and Arrays
+
+  - [The 5 Minute Guide to C Pointers](http://denniskubes.com/2017/01/24/the-5-minute-guide-to-c-pointers/)
+
+  - [Basics of Pointers and Arrays in C](http://denniskubes.com/2012/08/19/pointers-and-arrays-in-c/)
+
+  #### Makefiles
+
+  - [GNU Make](https://www.gnu.org/software/make/manual/make.html)
+
+  - [Make files not war](https://fabianstumpf.de/articles/makefiles.htm)
+
+  </div>
+
+  </div>
+
+  <div class="alert warning-bg" markdown="1">
+
+  ### <i class="icon icon-medium">{{ "flag" | embed_icon }}</i> Compiler Flags
+
+  We will be using [C99] version of the [C] programming language. This means that
+  when you compile your programs with [gcc], you should include the `-std=gnu99`
+  compiler flag:
+
+      :::bash
+      $ gcc -Wall -g -std=gnu99 -o program source.c
+
+  **Note**: The `-Wall` flags enable most warnings while the `-g` flags
+  enable debugging symbols, which will come in handy when we need to use tools
+  such as [gdb] and [valgrind].
+  </div>
+
+  [Unix]:           https://en.wikipedia.org/wiki/Unix
+  [Bourne Shell]:   https://en.wikipedia.org/wiki/Bourne_shell
+  [Python]:         https://www.python.org/
+  [C]:              https://en.wikipedia.org/wiki/C_(programming_language)
+  [arrays]:         https://en.wikipedia.org/wiki/C_(programming_language)#Arrays
+  [pointers]:       https://en.wikipedia.org/wiki/C_(programming_language)#Pointers
+  [strings]:        https://en.wikipedia.org/wiki/C_string_handling
+  [unix philosophy]: https://en.wikipedia.org/wiki/Unix_philosophy
+  [system calls]:   https://en.wikipedia.org/wiki/System_call
+  [cat]:            http://man7.org/linux/man-pages/man1/cat.1.html
+  [grep]:           http://man7.org/linux/man-pages/man1/grep.1.html
+  [sort]:           http://man7.org/linux/man-pages/man1/sort.1.html
+  [gdb]:            https://www.gnu.org/software/gdb/
+  [valgrind]:       http://valgrind.org/
+  [C99]:            https://en.wikipedia.org/wiki/C_(programming_language)#C99
+  [gcc]:            https://gcc.gnu.org/
+
+  [Dive Into Systems]: https://diveintosystems.org/
+  [Beej's Guide to C Programming]: https://beej.us/guide/bgc/html/index-wide.html
+  [Notes for new Make users]: http://gromnitsky.users.sourceforge.net/articles/notes-for-new-make-users/
+
+  ## Quiz
+
+  This week, the reading is split into two sections: the first part is a
+  [dredd] quiz, while the second part involves two [C] programs: `sort.c` and
+  `grep.c`.
+
+  To test the [C] program, you will need to download the [Makefile] and test
+  scripts:
+
+      :::bash
+      $ git switch master                   # Make sure we are in master branch
+      $ git pull --rebase                   # Make sure we are up-to-date with GitHub
+
+      $ git switch -c reading06             # Create reading06 branch and check it out
+
+      $ cd reading06                        # Go into reading06 folder
+
+      # Download Reading 06 Makefile
+      $ curl -LO https://pnutz.h4x0r.space/courses/cse.20289.sp26/static/txt/reading06/Makefile
+
+      # Download, build, and execute tests
+      $ make test
+
+  [Makefile]: https://pnutz.h4x0r.space/courses/cse.20289.sp26/static/txt/reading06/Makefile
+
+  ### Questions
+
+  Given the following [C] program, [sum.c], which computes the sum of all the
+  integers read from [standard input]:
+
+      :::c
+      /* sum.c */
+
+      #include <stdio.h>
+      #include <stdlib.h>
+
+      /* Constants */
+
+      #define MAX_NUMBERS (1<<10)
+
+      /* Functions */
+
+      size_t read_numbers(FILE *stream, int numbers[], size_t n) {
+          size_t i = 0;
+
+          while (i < n && scanf("%d", numbers[i]) != EOF) {
+              i++;
+          }
+
+          return i;
+      }
+
+      int sum_numbers(int numbers[]) {
+          int total = 0;
+          for (size_t i = 0; i < sizeof(numbers); i++) {
+              total += numbers[i];
+          }
+
+          return total;
+      }
+
+      /* Main Execution */
+
+      int main(int argc, char *argv[]) {
+          int numbers[MAX_NUMBERS];
+          int total;
+          size_t nsize;
+
+          nsize = read_numbers(stdin, numbers, MAX_NUMBERS);
+          total = sum_numbers(numbers);
+          printf("{}\n", total);
+
+          return EXIT_SUCCESS;
+      }
+
+  And the following [C] program, [cat.c], which implements the [cat] command:
+
+      :::c
+      /* cat.c */
+
+      #include <errno.h>
+      #include <stdbool.h>
+      #include <stdio.h>
+      #include <stdlib.h>
+      #include <string.h>
+
+      /* Globals */
+
+      char * PROGRAM_NAME = NULL;
+
+      /* Functions */
+
+      void usage(int status) {
+          ____(stderr, "Usage: %s\n", PROGRAM_NAME);                                    /* 1 */
+          ____(status);                                                                 /* 2 */
+      }
+
+      bool cat_stream(FILE *stream) {
+          char buffer[BUFSIZ];
+
+          while (____(buffer, BUFSIZ, stream)) {                                        /* 3 */
+              ____(buffer, stdout);                                                     /* 4 */
+          }
+
+          return true;
+      }
+
+      /* Main Execution */
+
+      int main(int argc, char *argv[]) {
+          int argind = 1;
+
+          /* Parse command line arguments */
+          PROGRAM_NAME = ____;                                                          /* 5 */
+          while (argind < argc && ____(argv[argind]) > 1 && argv[argind][0] == '-') {   /* 6 */
+              char *arg = argv[argind++];
+              switch (arg[1]) {
+                  case 'h':
+                      usage(0);
+                      break;
+                  default:
+                      usage(1);
+                      break;
+              }
+          }
+
+          /* Process each file */
+          return !cat_stream(stdin);
+      }
+
+      /* vim: set sts=4 sw=4 ts=8 expandtab ft=c: */
+
+  <div class="alert success-bg" markdown="1">
+
+  ### <i class="icon icon-medium">{{ "code-tags" | embed_icon }}</i> Code is not Literature
+
+  For these types of questions, your first **instinct** should be to **play**
+  with the code. As a **computer scientist**, your approach to any new body of
+  code is to study and investigate it by **taking it apart**, **modifying it**,
+  **breaking it**, and **putting it back together**.
+
+  As [Peter Seibel] writes, [code is not literature]:
+
+  > We don’t read code, we decode it. We examine it. A piece of code is not
+  literature; it is a specimen ... and we are naturalists.
+
+  If you truly want to **understand** something, simply looking up an answer on
+  [Google] or [StackOverflow] or [ChatGPT] is **insufficient**. For true
+  **mastery**, you need to apply the principle of the [Hands-On Imperative]:
+
+  > Hackers believe that essential lessons can be learned about the
+  systems—about the world—from taking things apart, seeing how they work, and
+  using this knowledge to create new and more interesting things.
+
+  **TL;DR**: **Download** the code. **Compile** it. **Break** it. **Fix** it.
+  **Happy Hacking**.
+  </div>
+
+  [Peter Seibel]: http://www.gigamonkeys.com/
+  [code is not literature]: http://www.gigamonkeys.com/code-reading/
+  [Google]: https://www.google.com/
+  [StackOverflow]: https://stackoverflow.com/
+  [StackOverflow]: https://chatgpt.com/
+  [Hands-On Imperative]: https://en.wikipedia.org/wiki/Hacker_ethic#Hands-On_Imperative
+  [sum.c]: https://pnutz.h4x0r.space/courses/cse.20289.sp26/static/txt/reading06/sum.c
+  [cat.c]: https://pnutz.h4x0r.space/courses/cse.20289.sp26/static/txt/reading06/cat.c
+
+  Record the answers to the following [Reading 06 Quiz] questions in your
+  `reading06` branch:
+
+  <div id="quiz-questions"></div>
+
+  <div id="quiz-responses"></div>
+
+  <script src="static/js/dredd-quiz.js"></script>
+
+  <script>
+  loadQuiz('static/json/reading06.json');
+  </script>
+
+  <pre style="display: none;" id="dr-container" class="codehilite"><code id="dredd-response"></code></pre>
+
+  [standard input]: https://en.wikipedia.org/wiki/Standard_streams#Standard_input_(stdin)
+
+  ### Programs
+
+  You are to write two simple [C] programs based on the examples above.
+
+  #### `sort.c`
+
+  Use `sum.c` as the basis for a [C] program called `sort.c`, which uses
+  [qsort] to implement a basic version of [sort]:
+
+      :::bash
+      $ shuf -i 1-10 | ./sort
+      1
+      2
+      3
+      4
+      5
+      6
+      7
+      8
+      9
+      10
+
+  <div class="alert warning-bg" markdown="1">
+  **Note**: You should use the provided `read_numbers` function and simply call
+  [qsort] of `numbers` and print out each element in the array.
+  </div>
+
+  <div class="alert success-bg" markdown="1">
+
+  **Hint**: Since you will be sorting `int`s, you will need a **custom
+  comparison function**.  To save you the trouble of searching
+  **StackOverflow**, you can use the following:
+
+      :::c
+      int compare_ints(const void *a, const void *b) {
+          int ia = *(const int *)a;
+          int ib = *(const int *)b;
+
+          return ia - ib;
+      }
+
+  This should be the last argument to [qsort].  You can also refer to the
+  [example](https://beej.us/guide/bgc/html/index-wide.html#man-qsort) in
+  [Beej's Guide to C Programming].
+
+  </div>
+
+  [qsort]: http://man7.org/linux/man-pages/man3/qsort.3.html
+
+  #### `grep.c`
+
+  Use `cat.c` as the basis for a [C] program called `grep.c`, which uses
+  [strstr] to implement a basic version of [grep]:
+
+      :::bash
+      $ ./grep -h                                   # Display Usage
+      Usage: ./grep PATTERN
+
+      $ ls | ./grep ep                              # Search stdin
+      grep
+      grep.c
+      test_grep.c
+
+      $ ls | ./grep NOPE ; echo $?                  # Exit code on failure
+      1
+
+  <div class="alert warning-bg" markdown="1">
+  **Note**: Use the [strstr] function to search for strings (you do not need to
+  support [regular expressions]).
+  </div>
+
+  <div class="alert danger-bg" markdown="1">
+  **Note**: Make sure you return with an **non-zero** exit code if the
+  `PATTERN` is not found in the input stream.
+  </div>
+
+  [strstr]: http://man7.org/linux/man-pages/man3/strstr.3.html
+  [regular expressions]: https://en.wikipedia.org/wiki/Regular_expression
+
+  #### `Makefile`
+
+  To build your programs, you need to update the provided [Makefile] to include
+  [rules] or **recipes** for the `sort` and `grep` targets.  Be sure to use the
+  `CC` and `CFLAGS` variables in your [rules].
+
+  Once you have a working [Makefile], you should be able to use the [make]
+  command to run your **recipes**:
+
+      :::bash
+      $ make clean                                  # Remove targets
+      rm -f sort grep
+
+      $ make                                        # Build targets
+      gcc -Wall -g -std=gnu99 -o sort sort.c
+      gcc -Wall -g -std=gnu99 -o grep grep.c
+
+      $ make test                                   # Test programs
+      Checking reading06 sort ...
+        sort 1 1                                 ... Success
+        sort 1 10                                ... Success
+        sort 1 100                               ... Success
+        sort 1 1000                              ... Success
+        --------------------
+         Score 4.00 / 4.00
+         Grade 1.00 / 1.00
+        Status Success
+
+      Checking reading06 grep ...
+        grep                                     ... Succes
+        grep -h                                  ... Succes
+        grep root /etc/passwd                    ... Succes
+        grep login /etc/passwd                   ... Succes
+        grep asdf /etc/passwd                    ... Succes
+        --------------------
+         Score 5.00 / 5.00
+         Grade 1.00 / 1.00
+        Status Success
+
+  [rules]:  https://www.gnu.org/software/make/manual/html_node/Rule-Example.html#Rule-Example
+  [make]:   http://man7.org/linux/man-pages/man1/make.1.html
+
+  ## Submission
+
+  To submit you work, follow the same process outlined in [Reading 01]:
+
+      :::bash
+      #--------------------------------------------------
+      # BE SURE TO DO THE PREPARATION STEPS ABOVE
+      #--------------------------------------------------
+
+      $ cd reading06                        # Go into reading06 folder
+
+      $ $EDITOR answers.json                # Edit your answers.json file
+
+      $ ../.scripts/check.py                # Check reading06 quiz
+      Checking reading06 quiz ...
+           Q01  0.10 /  0.10
+           Q02  0.10 /  0.10
+           Q03  0.10 /  0.10
+           Q04  0.10 /  0.10
+           Q05  0.30 /  0.30
+           Q06  0.10 /  0.10
+           Q07  0.20 /  0.20
+        --------------------
+         Score 14.00 / 14.00
+         Grade  1.00 /  1.00
+        Status Success
+
+      $ git add answers.json                # Add answers.json to staging area
+      $ git commit -m "Reading 06: Quiz"    # Commit work
+
+      $ $EDITOR Makefile                    # Edit source code
+      $ $EDITOR sort.c                      # Edit source code
+      $ $EDITOR grep.c                      # Edit source code
+
+      $ make                                # Build programs
+
+      $ make test                           # Run tests
+
+      $ git add Makefile                    # Add Makefile to staging area
+      $ git add sort.c grep.c               # Add source code to staging area
+      $ git commit -m "Reading 06: Code"    # Commit work
+
+      $ git push -u origin reading06        # Push branch to GitHub
+
+  <div class="alert warning-bg" markdown="1">
+
+  ### <i class="icon icon-medium">{{ "lifebuoy" | embed_icon }}</i> Acknowledgments
+
+  If you collaborated with any other students, or received help from TAs or AI
+  tools on this assignment, please record this support in the `README.md` in
+  the `reading06` folder and include it with your **Pull Request**.
+
+  </div>
+
+  <div class="alert success-bg" markdown="1">
+
+  ### <i class="icon icon-medium">{{ "account-question" | embed_icon }}</i> Graders
+
+  Once you have committed your work and pushed it to [GitHub], remember to
+  create a **pull request** and assign it to the appropriate **teaching
+  assistant** from the [Reading 06 TA List].
+
+  **Note**: this list changes each week, so be sure to consult the appropriate
+  list for each assignment.
+
+  </div>
+
+  [Markdown]:           https://daringfireball.net/projects/markdown/
+  [git]:                https://git-scm.com/
+  [clone]:              https://git-scm.com/docs/git-clone
+  [commit]:             https://git-scm.com/docs/git-commit
+  [push]:               https://git-scm.com/docs/git-push
+  [GitHub]:             https://github.com
+  [Reading 01]:         reading01.html
+  [Reading 06 TA List]: reading06_tas.html
+  [dredd]:              https://dredd.h4x0r.space
+  [Reading 06 Quiz]:    static/json/reading06.json
