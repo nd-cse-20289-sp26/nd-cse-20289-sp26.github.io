@@ -257,12 +257,21 @@
         topics:         Libraries, Pointers
         assignments:
           - Reading 06
+        items:
+          - name:       Slides 17
+            link:       https://docs.google.com/presentation/d/1ctMSU8gvwAZsAETmzj-fekItIZ_Ot_9oJEn55GmeMMY/edit?usp=sharing
 
       - date:           Wed 03/18
         topics:         Arrays, Strings, Debugging (GDB)
+        items:
+          - name:       Slides 18
+            link:       https://docs.google.com/presentation/d/11ePDMLAB51ioWxLZ3HmaVM6PJPI0qeiVfjk8iNRJrjU/edit?usp=sharing
 
       - date:           Fri 03/20
         topics:         Valgrind, Memory Allocation
+        items:
+          - name:       Slides 19
+            link:       https://docs.google.com/presentation/d/19KYfU-qqfrsn9ONu0ZwqXfEY04GvGSopDEiVk0rOyfk/edit?usp=sharing
 
       - date:           Sat 03/21
         topics:         '<i class="muted">TranslateIt</i>'
