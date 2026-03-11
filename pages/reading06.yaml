@@ -74,7 +74,7 @@ body:       |
 
   2.  <div class="flex-col" markdown="1">
 
-      [Notes for new Make users]
+      [Makefile Tutorial by Example](https://makefiletutorial.com/)
 
       Again, most of this should be review from **Fundamentals of Computing**
       and **Data Structures**, so *skim* this document and make sure you
