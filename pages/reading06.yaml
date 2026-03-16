@@ -384,8 +384,8 @@ body:       |
   <div class="alert success-bg" markdown="1">
 
   **Hint**: Since you will be sorting `int`s, you will need a **custom
-  comparison function**.  To save you the trouble of searching
-  **StackOverflow**, you can use the following:
+  comparison function**.  To save you the trouble of searching [StackOverflow]
+  or asking [ChatGPT], you can use the following:
 
       :::c
       int compare_ints(const void *a, const void *b) {
