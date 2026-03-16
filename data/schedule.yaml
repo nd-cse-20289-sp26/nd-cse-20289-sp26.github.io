@@ -246,6 +246,8 @@
         items:
           - name:       Slides 16
             link:       https://docs.google.com/presentation/d/17QgFnoRU_VHGk8OCABkk80vNpe9IatLz-msACMUfhrc/edit?usp=sharing
+          - name:       Panopto
+            link:       https://notredame.hosted.panopto.com/Panopto/Pages/Viewer.aspx?id=73880095-0fdf-44a2-922a-b40501387bde
 
 - name:   "Spring Break"
 
@@ -260,6 +262,8 @@
         items:
           - name:       Slides 17
             link:       https://docs.google.com/presentation/d/1ctMSU8gvwAZsAETmzj-fekItIZ_Ot_9oJEn55GmeMMY/edit?usp=sharing
+          - name:       Panopto
+            link:       https://notredame.hosted.panopto.com/Panopto/Pages/Viewer.aspx?id=a37af534-5db4-4fe0-b60e-b40f012a6a83
 
       - date:           Wed 03/18
         topics:         Arrays, Strings, Debugging (GDB)
