@@ -270,6 +270,8 @@
         items:
           - name:       Slides 18
             link:       https://docs.google.com/presentation/d/11ePDMLAB51ioWxLZ3HmaVM6PJPI0qeiVfjk8iNRJrjU/edit?usp=sharing
+          - name:       Panopto
+            link:       https://notredame.hosted.panopto.com/Panopto/Pages/Viewer.aspx?id=66f69697-9b7b-43b3-a76f-b411012d586f
 
       - date:           Fri 03/20
         topics:         Valgrind, Memory Allocation
