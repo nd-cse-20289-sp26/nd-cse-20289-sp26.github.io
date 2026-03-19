@@ -290,12 +290,21 @@
         topics:         Structs, Unions
         assignments:
           - Reading 07
+        items:
+          - name:       Slides 20
+            link:       https://docs.google.com/presentation/d/1ZYYejVhVUn54Ee_QCVPoUBj-gFkvKshsYO6xeuqyLek/edit?usp=sharing
 
       - date:           Wed 03/25
         topics:         Bitsets, Linked Lists
+        items:
+          - name:       Slides 21
+            link:       https://docs.google.com/presentation/d/1z_RGcJVOXh5krZAAj3J4IMbMEBxSRwqDuIOkEHJWe4E/edit?usp=sharing
 
       - date:           Fri 03/27
         topics:         Data Representation
+        items:
+          - name:       Slides 22
+            link:       https://docs.google.com/presentation/d/1RSOXRf4bwgd7yhoOdtaNiTt-K5QOj5LGtnWz1manxIc/edit?usp=sharing
 
       - date:           Sat 03/28
         topics:         '<i class="muted">SeqIt, TailIt</i>'
