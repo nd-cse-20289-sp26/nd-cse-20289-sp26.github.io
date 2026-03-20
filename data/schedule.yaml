@@ -278,6 +278,8 @@
         items:
           - name:       Slides 19
             link:       https://docs.google.com/presentation/d/19KYfU-qqfrsn9ONu0ZwqXfEY04GvGSopDEiVk0rOyfk/edit?usp=sharing
+          - name:       Panopto
+            link:       https://notredame.hosted.panopto.com/Panopto/Pages/Viewer.aspx?id=77b41b95-1daa-4f0a-9a6a-b41301279a08
 
       - date:           Sat 03/21
         topics:         '<i class="muted">TranslateIt</i>'
