@@ -1,0 +1,944 @@
+title:      "Homework 07: Seqit, Tailit"
+body:       |
+
+  The goal of this homework assignment is to allow you to practice [memory
+  management] in [C] by building a [linked list].  The first activities involve
+  implementing a [doubly linked list] with a [sentinel node], while the last
+  two activities requires you to use this [data structure] to implement your
+  own versions of [seq] and [tail].
+
+  For this assignment, you are to do your work in the `homework07` folder of
+  your **assignments** [GitHub] repository and push your work by **noon
+  Saturday, March 28**.
+
+  [GitHub]: https://github.com
+  [data structure]: https://en.wikipedia.org/wiki/Data_structure
+  [linked list]: https://en.wikipedia.org/wiki/Linked_list
+  [doubly linked list]: https://en.wikipedia.org/wiki/Doubly_linked_list
+  [Unix]: https://en.wikipedia.org/wiki/Unix
+  [seq]: https://www.mankier.com/1/seq
+  [tail]: https://www.mankier.com/1/tail
+  [sentinel node]: https://en.wikipedia.org/wiki/Sentinel_node
+  [memory management]: https://en.wikipedia.org/wiki/Memory_management
+  [C]: https://en.wikipedia.org/wiki/C_(programming_language)
+
+  <div class="alert info-bg" markdown="1">
+
+  ### <i class="icon icon-medium">{{ "help" | embed_icon }}</i> Frequently Asked Questions
+
+  <div class="centered">
+    <iframe src="https://docs.google.com/presentation/d/e/2PACX-1vTzatYXE7jCxQbq7UYWztVrqlGZmoTRJVizwvuF5kXzR7fL4Bh7MEHGPinuVF8xz6nrIHwyD8zomd2G/pubembed?start=false&loop=false&delayms=3000" frameborder="0" width="960" height="749" allowfullscreen="true" mozallowfullscreen="true" webkitallowfullscreen="true"></iframe>
+  </div>
+
+  </div>
+
+  ## Activity 0: Preparation
+
+  Before starting this homework assignment, you should first perform a `git
+  pull` to retrieve any changes in your remote [GitHub] repository:
+
+      :::bash
+      $ cd path/to/repository                   # Go to assignments repository
+
+      $ git switch master                       # Make sure we are in master branch
+
+      $ git pull --rebase                       # Get any remote changes not present locally
+
+  Next, create a new branch for this assignment:
+
+      :::bash
+      $ git switch -c homework07                # Create homework07 branch and check it out
+
+  ### Task 1: Skeleton Code
+
+  To help you get started, the instructor has provided you with the following
+  **skeleton code**:
+
+      :::bash
+      # Go to homework07 folder
+      $ cd homework07
+
+      # Download Makefile
+      $ curl -LO https://pnutz.h4x0r.space/courses/cse.20289.sp26/static/txt/homework07/Makefile
+
+      # Download C skeleton code
+      $ curl -LO https://pnutz.h4x0r.space/courses/cse.20289.sp26/static/txt/homework07/list.c
+      $ curl -LO https://pnutz.h4x0r.space/courses/cse.20289.sp26/static/txt/homework07/list.h
+      $ curl -LO https://pnutz.h4x0r.space/courses/cse.20289.sp26/static/txt/homework07/list.unit.c
+      $ curl -LO https://pnutz.h4x0r.space/courses/cse.20289.sp26/static/txt/homework07/node.c
+      $ curl -LO https://pnutz.h4x0r.space/courses/cse.20289.sp26/static/txt/homework07/node.unit.c
+      $ curl -LO https://pnutz.h4x0r.space/courses/cse.20289.sp26/static/txt/homework07/seqit.c
+      $ curl -LO https://pnutz.h4x0r.space/courses/cse.20289.sp26/static/txt/homework07/tailit.c
+
+  Once downloaded and extracted, you should see the following files in your
+  `homework07` directory:
+
+      :::bash
+      homework07
+          \_ Makefile     # This is the Makefile for building all the assignment artifacts
+          \_ list.c       # This is the List structure C source file
+          \_ list.h       # This is the List library C header file
+          \_ list.unit.c  # This is the List structure C unit test source file
+          \_ node.c       # This is the Node structure C source file
+          \_ node.unit.c  # This is the Node structure C unit test source file
+          \_ seqit.c      # This is the seqit utility C source file
+          \_ list.c       # This is the tailit utility C source file
+
+  ### Task 2: Initial Import
+
+  Now that the files are downloaded into the `homework07` folder, you can
+  **commit** them to your [git] repository:
+
+      :::bash
+      $ git add Makefile                            # Mark changes for commit
+      $ git add *.c *.h                             # Mark changes for commit
+      $ git commit -m "Homework 07: Initial Import" # Record changes
+
+  ### Task 3: Unit Tests
+
+  After downloading these files, you can run `make test` to run the tests.
+
+      :::bash
+      # Run all tests (will trigger automatic download)
+      $ make test
+
+  You will notice that the `Makefile` downloads these additional test files and scripts:
+
+      :::bash
+      homework07
+          \_ list.unit.sh   # This is the List structure unit test shell script
+          \_ node.unit.sh   # This is the Node structure unit test shell script
+          \_ seqit.test.sh  # This is the seqit utility test shell script
+          \_ tailit.test.sh # This is the tailit utility test shell script
+
+  You will be using these [unit tests] to verify the correctness and behavior
+  of your code.
+
+  <div class="alert info-bg" markdown="1">
+
+  ### <i class="icon icon-medium">{{ "download" | embed_icon }}</i> Automatic Download
+
+  The `test` scripts are automatically downloaded by the `Makefile`, so any
+  modifications you do to them will be lost when you run `make` again. Likewise,
+  because they are automatically downloaded, you do not need to `add` or `commit`
+  them to your [git] repository.
+
+  </div>
+
+  The details on what you need to implement for this assignment are described
+  in the following sections.
+
+  ### Task 4: `Makefile`
+
+  The Makefile contains all the rules or recipes for building the project
+  artifacts (e.g. `node.unit`, `list.unit`, `seqit`, `tailit`, etc.):
+
+      :::make
+      CC=       gcc
+      CFLAGS=   -Wall -g -std=gnu99
+      LD=       gcc
+      LDFLAGS=  -L.
+      TARGETS=  seqit tailit
+
+      all:      $(TARGETS)
+
+      #-------------------------------------------------------------------------------
+      # TODO: Add rules for node.o, list.o, seqit.o, tailit.o, seqit, tailit
+      #-------------------------------------------------------------------------------
+
+      node.o:
+
+      list.o:
+
+      seqit.o:
+
+      tailit.o:
+
+      seqit:
+
+      tailit:
+
+      #-------------------------------------------------------------------------------
+      # DO NOT MODIFY BELOW
+      #-------------------------------------------------------------------------------
+
+      ...
+
+  For this task, you will need to add [rules] for building the programs `seqit`
+  and `tailit`. Be sure to have a **recipe** for any *intermediate* [object]
+  files that programs require as shown in the [DAG] below:
+
+  <div class="thumbnail">
+    <img src="static/img/homework07-makefile.png" class="responsive">
+  </div>
+
+  <div class="alert info-bg" markdown="1">
+
+  ### <i class="icon icon-medium">{{ "cogs" | embed_icon }}</i> Makefile Variables
+
+  You **must** use the `CC`, `CFLAGS`, `LD`, and `LDFLAGS` variables when
+  appropriate in your rules. You **should** also consider using [automatic
+  variables] such as `$@` and `$<` as well.
+
+  </div>
+
+  Once you have a working `Makefile`, you should be able to run the following
+  commands:
+
+      :::bash
+      # Build all TARGETS
+      $ make
+      gcc -Wall -std=gnu99 -g -c -o seqit.o seqit.c
+      gcc -Wall -std=gnu99 -g -c -o node.o node.c
+      gcc -Wall -std=gnu99 -g -c -o list.o list.c
+      gcc -L. -o seqit seqit.o node.o list.o
+      gcc -Wall -std=gnu99 -g -c -o tailit.o tailit.c
+      gcc -L. -o tailit tailit.o node.o list.o
+
+      # Run all tests
+      $ make test
+      Testing node ...
+      ...
+
+      # Remove generated artifacts
+      $ make clean
+
+  <div class="alert danger-bg" markdown="1">
+
+  **Note**: The tests will **fail** if you haven't implemented `Node` or `List`
+  structures, or the `seqit` or `tailit` programs.
+
+  </div>
+
+  <div class="alert warning-bg" markdown="1">
+
+  ### <i class="icon icon-medium">{{ "alert" | embed_icon }}</i> Compiler Warnings
+
+  You must include the `-Wall` flag in your `CFLAGS` when you compile. This
+  also means that your code must **compile without any warnings**, otherwise
+  points will be deducted.
+
+  </div>
+
+  [rules]: https://www.gnu.org/software/make/manual/html_node/Rule-Example.html#Rule-Example
+  [static library]: https://en.wikipedia.org/wiki/Static_library#Creating_static_libraries_in_C.2FC.2B.2B
+  [unit test]: https://en.wikipedia.org/wiki/Unit_testing
+  [object]: https://en.wikipedia.org/wiki/Object_file
+  [DAG]: https://en.wikipedia.org/wiki/Directed_acyclic_graph
+
+  [automatic variables]: https://www.gnu.org/software/make/manual/html_node/Automatic-Variables.html
+
+  ### Task 5: `list.h`
+
+  The `list.h` file is the [header] file for the [doubly linked list] library, which
+  contains the following [structs] and function [prototypes]:
+
+      :::c
+      /* list.h: Doubly Linked List Library */
+
+      #pragma once
+
+      #include <stdbool.h>
+      #include <stdint.h>
+      #include <stdlib.h>
+
+      /* Value Union */
+
+      typedef union {
+          int64_t number;     // Value as number
+          char   *string;     // Value as string
+      } Value;
+
+      /* Node Structure */
+
+      typedef struct Node Node;
+      struct Node {
+          Value   value;      // Value
+          Node   *next;       // Pointer to next Node
+          Node   *prev;       // Pointer to previous Node
+      };
+
+      Node *  node_create(Value v, Node *next, Node *prev);
+      void    node_delete(Node *n, bool release);
+
+      /* List Structure */
+
+      typedef struct {
+          Node    sentinel;   // Sentinel Node at head and tail of List
+          size_t  size;       // Number of Nodes in List
+      } List;
+
+      List *  list_create();
+      void    list_delete(List *l, bool release);
+
+      void    list_append(List *l, Value v);
+      Value   list_pop(List *l, size_t index);
+
+  Other programs will `#include` this file in order to use the functions we
+  will be implementing in this library.
+
+  ### Value Union
+
+  The `Value` [union] is used by the `Node` structure to store either an
+  [integer] or a [string]:
+
+      :::c
+      // Declare a Value union with an integer
+      Value v = (Value)10L;
+
+      // Alternatively
+      Value v = {.number = 10};
+
+      // Access number
+      printf("%ld\n", v.number);
+
+      // Declare a Value union with a string
+      Value v = (Value)"reasonable";
+
+      // Alternatively
+      Value v = {.string = "reasonable"};
+
+      // Access string
+      puts(v.string);
+
+  [integer]: https://en.wikipedia.org/wiki/Integer_(computer_science)
+
+  The details of the `Node` structure and `List` structure, and what you need
+  to implement are provided in the following sections.
+
+  <div class="alert info-bg" markdown="1">
+
+  **Note**: For this task, you **do not** need to modify this file. Instead,
+  you should review it and ensure you understand the provided code.
+
+  </div>
+
+  [header]: https://en.wikipedia.org/wiki/Include_directive#C.2FC.2B.2B
+  [prototypes]: https://en.wikipedia.org/wiki/Function_prototype
+  [struct]: https://en.wikipedia.org/wiki/Struct_(C_programming_language)
+  [structs]: https://en.wikipedia.org/wiki/Struct_(C_programming_language)
+
+  ## Activity 1: Node Structure (*0.10 Points*)
+
+  For the first activity, you are to implement a `Node` **structure** to be
+  used in a [doubly linked list].  Each `Node` **structure** will have the
+  following **attributes**:
+
+  1. `value`: This is a [union] that can either be a number (ie. `int64_t`) or
+    a [string] (ie. `char *`).
+
+  2. `next`: This is a pointer to the next `Node` [struct] in the sequence.
+
+  3. `prev`: This is a pointer to the previous `Node` [struct] in the sequence.
+
+  <div class="centered">
+    <img src="static/img/homework07-node.png" class="responsive">
+  </div>
+
+  [string]: https://en.wikipedia.org/wiki/C_string_handling
+  [heap]: https://en.wikipedia.org/wiki/Memory_management#HEAP
+  [union]: https://en.wikipedia.org/wiki/Union_type
+
+  ### Task 1: `node.c`
+
+  The `node.c` file contains the [C] implementation for the `Node`
+  **structure** described above.  For this task, you will need to implement the
+  following functions:
+
+  1.  <div class="flex-col" markdown="1">
+
+      `Node * node_create(Value v, Node *next, Node *prev)`
+
+      > This function allocates a new `Node` [struct] and initializes its
+      attributes: `value`, `next`, `prev` as described above.
+
+      <div class="alert success-bg" markdown="1">
+
+      **Hint**: Use [malloc] or [calloc] to allocate data on the [heap].
+
+      </div>
+
+  2.  <div class="flex-col" markdown="1">
+
+      `void node_delete(Node *n, bool release)`
+
+      > This function deallocates the given `Node` [struct] along with its
+      internal `value` as a [string] if `release` is `true`.
+
+      <div class="alert success-bg" markdown="1">
+
+      **Hint**: Use [free] to release data allocated on the [heap].
+
+      </div>
+
+  [malloc]: https://www.mankier.com/3/malloc
+  [calloc]: https://www.mankier.com/3/malloc
+  [free]:   https://www.mankier.com/3/malloc
+  [strdup]: https://www.mankier.com/3/strdup
+
+  ### Task 2: Testing
+
+  As you implement the functions in `node.c`, you should use the `node.unit`
+  executable with the `node.unit.sh` script to test each of your functions:
+
+      :::bash
+      # Build test artifacts and run test scripts
+      $ make test-node
+      Testing node ...
+      Testing node ...
+        node_create                              ... Success
+        node_delete                              ... Success
+        --------------------
+         Score 2.00 / 2.00
+         Grade 1.00 / 1.00
+        Status Success
+
+  You can also run the testing script manually:
+
+      :::bash
+      # Run Shell unit test script manually
+      $ ./node.unit.sh
+      ...
+
+  To debug your `Node` functions, you can use [gdb] on the `node.unit` executable:
+
+      :::bash
+      # Start gdb on node.unit
+      $ gdb ./node.unit
+      (gdb) run 0     # Run node.unit with the "0" command line argument (ie. node_create)
+      ...
+
+  You can also use [valgrind] to check for memory errors:
+
+      :::bash
+      # Check for memory errors on node_create test case
+      $ valgrind --leak-check=full ./node.unit 0
+
+  <div class="alert success-bg" markdown="1">
+
+  ### <i class="icon icon-medium">{{ "repeat" | embed_icon }}</i> Iterative Development
+
+  You should practice [iterative development]. That is, rather than writing a
+  bunch of code and then debugging it all at once, you should concentrate on
+  one function at a time and then test that **one thing at a time**. The provided
+  [unit tests] allow you to check on the correctness of the individual functions
+  without implementing everything at once. Take advantage of this and build one
+  thing at a time.
+
+  </div>
+
+  [iterative development]: https://en.wikipedia.org/wiki/Iterative_and_incremental_development
+  [unit tests]: https://en.wikipedia.org/wiki/Unit_testing
+  [gdb]: https://www.gnu.org/software/gdb/
+  [Valgrind]: http://valgrind.org/
+
+  ## Activity 2: List Structure (*0.20 Points*)
+
+  In high-level languages such as [Python], we have built-in implementations of
+  [lists] which support a variety of methods:
+
+      :::python
+      # Declare a list
+      >>> data = [5, 7, 4]
+
+      # Add a new value to the back of list
+      >>> data.append(0)
+      >>> data
+      [5, 7, 4, 0]
+
+      # Remove value from front of list
+      >>> data.pop(0)
+      5
+      >>> data
+      [7, 4, 0]
+
+      # Remove value from middle of list
+      >>> data.pop(1)
+      4
+      >>> data
+      [7, 0]
+
+  As you already know, [lists] in [Python] provide an `append` method to add
+  values to the back of the [list] and a `pop` method to remove a value at a
+  specified index from the [list].
+
+  For the second activity, you are to use the `Node` **structure** from the
+  previous activity to construct a `List` **structure** that implements a
+  [doubly linked list] with a [sentinel node] to mimic the functionality of
+  [lists] in [Python].
+
+  <div class="centered">
+    <img src="static/img/homework07-list.png" class="responsive">
+  </div>
+
+  The `List` [struct] you are to implement has the following attributes:
+
+  1. `sentinel`: This is a **sentinel** `Node` [struct] embedded inside the
+    `List` [struct].  It is used to simplify our internal `List` methods by
+    ensuring that there will always be an allocated  `Node` in the [doubly
+    linked list].
+
+  2. `size`: This is the number of values in the `List` **structure**.
+
+  <div class="alert success-bg" markdown="1">
+
+  **Note**: The [sentinel node] is not considered part of the actual [list].
+    It does not store any `value` nor does it contribute to the `size` of the
+    `List`.
+
+  Instead, it is there so that its `next` pointer is the **head** of the
+  [doubly linked list] and its `prev` pointer is the **tail** of the [doubly
+  linked list].
+
+  </div>
+
+  With this `List` [struct] in mind, you are to complete the [doubly linked
+  list] library, which contains functions such as `list_append` and `list_pop`
+  that implement some of the functionality present in [Python] but missing in
+  [C].
+
+  [Python]: https://www.python.org/
+  [list]: https://en.wikipedia.org/wiki/List_(abstract_data_type)
+  [lists]: https://en.wikipedia.org/wiki/List_(abstract_data_type)
+
+  ### Task 1: `list.c`
+
+  The `list.c` file contains the [C] implementation for the `List`
+  **structure** described above.  For this task, you will need to implement the
+  following functions:
+
+  <div class="centered">
+    <img src="static/img/homework07-list-push.png" class="responsive">
+  </div>
+
+  For this task, you will need to implement the following functions:
+
+  1.  <div class="flex-col" markdown="1">
+
+      `List* list_create()`
+
+      > This function allocates a new `List` [struct] and initializes its
+      attributes: `sentinel` and `size` as described above.
+
+      <div class="alert success-bg" markdown="1">
+
+      **Hint**: Use [malloc] or [calloc] to allocate data on the [heap].  Be
+        sure to initialize the `next` and `prev` pointers of `sentinel`.
+
+      </div>
+
+  2.  <div class="flex-col" markdown="1">
+
+      `void list_delete(List *l, bool release)`
+
+      > This function deallocates the given `List` [struct] along with its
+      internal `Node` [struct]s.
+
+      <div class="alert success-bg" markdown="1">
+
+      **Hint**: Use `node_delete` to delete the internal `Node` [struct]s.
+
+        To loop through the internal `Node` **structures**, you will want to
+        start with the first `Node` the `sentinel` points to and then stop once
+        you return to the `sentinel`.
+
+      </div>
+
+  3.  <div class="flex-col" markdown="1">
+
+      `void list_append(List *l, Value v)`
+
+      > This function creates a new `Node` [struct] with the given `Value` `v`
+      and adds it to the back of the internal [doubly linked list] (e.g.
+      `l.append(s)` in [Python]).
+
+      <div class="alert success-bg" markdown="1">
+
+      **Hint**: Use `node_create` and take advantage of the `sentinel` in the
+        `List` [struct].
+
+      </div>
+
+  4.  <div class="flex-col" markdown="1">
+
+      `Value list_pop(List *l, size_t index)`
+
+      > This function removes the `Node` [struct] at the specified `index` from the internal
+      [doubly linked list] and returns the associated `Value` from the
+      `Node` [struct] (e.g. `l.pop(index)` in [Python]).
+
+      <div class="alert success-bg" markdown="1">
+
+      **Hint**: Use `node_delete` and take advantage of the `sentinel` in the
+        `List` [struct].
+
+      If the `index` is beyond the bounds of the `List`, then return `-1L` as
+      the `Value`.
+
+      </div>
+
+  [strdup]: https://www.mankier.com/3/strdup
+
+  ### Task 2: Testing
+
+  As you implement the functions in `list.c`, you should use the `list.unit`
+  executable with the `list.unit.sh` script to test each of your functions:
+
+      :::bash
+      # Build test artifacts and run test scripts
+      $ make test-list
+      Testing list ...
+        list_create                              ... Success
+        list_delete                              ... Success
+        list_append                              ... Success
+        list_pop                                 ... Success
+        --------------------
+         Score 4.00 / 4.00
+         Grade 1.00 / 1.00
+        Status Success
+
+  You can also run the testing script manually:
+
+      :::bash
+      # Run Shell unit test script manually
+      $ ./list.unit.sh
+      ...
+
+  To debug your `list` functions, you can use [gdb] on the `list.unit` executable:
+
+      :::bash
+      # Start gdb on list.unit
+      $ gdb ./list.unit
+      (gdb) run 0     # Run list.unit with the "0" command line argument (ie. list_create)
+      ...
+
+  You can also use [valgrind] to check for memory errors:
+
+      :::bash
+      # Check for memory errors on list_create test case
+      $ valgrind --leak-check=full ./list.unit 0
+
+  ## Activity 3: Seqit (*0.20 Points*)
+
+  Once you have implemented both [doubly linked list] library, you are to
+  complete the `seqit.c` program, which is a simplified version of the [seq]
+  utility:
+
+      :::bash
+      # Show usage
+      $ ./seqit
+      Usage: seqit LAST
+             seqit FIRST LAST
+             seqit FIRST INCREMENT LAST
+
+      # Show sequence of numbers start from 1 through 10
+      $ ./seqit 10
+      1
+      2
+      3
+      4
+      5
+      6
+      7
+      8
+      9
+      10
+
+      # Show sequence of numbers start from 5 through 10
+      $ ./seqit 5 10
+      5
+      6
+      7
+      8
+      9
+      10
+
+      # Show sequence of odd numbers start from 5 through 10
+      $ ./seqit 5 2 10
+      5
+      7
+      9
+
+  As can be seen, the `seqit` program emits a sequence of numbers (one number
+  per line) based on the specified `FIRST`, `INCREMENT`, and `LAST` arguments.
+  By default, `FIRST` is `1` and `INCREMENT` is `1`.
+
+  ### Task 1: `seqit.c`
+
+  The `seqit.c` file contains the [C] implementation of the `seqit` program
+  described above.  You will need to implement the following functions:
+
+  1.  <div class="flex-col" markdown="1">
+
+      `List *generate_sequence(ssize_t first, ssize_t increment, ssize_t last)`
+
+      > This function generates a sequence of numbers going from `first` to
+      `last` using the specified `increment` by building a `List` with these
+      numbers and returning it.
+
+      <div class="alert success-bg" markdown="1">
+
+      **Hint**: Take advantage of the `list_create` and `list_append` functions
+        you wrote above.
+
+      Think carefully how you should handle negative `increment` parameters.
+
+      </div>
+
+  2.  <div class="flex-col" markdown="1">
+
+      `int main(int argc, char *argv[])`
+
+      > This function parses command line arguments for `FIRST`, `INCREMENT`, or
+      `LAST`, generates a sequence of numbers, and then prints out that sequence
+      (one number per line).
+
+      <div class="alert success-bg" markdown="1">
+
+      **Hint**: Take advantage of the `list_create`, `list_pop`, `list_delete`
+        functions you wrote above.
+
+      </div>
+
+  [Homework 02]: homework02.html
+
+  ### Task 2: Testing
+
+  As you implement `seqit.c`, you can test it by running the `test-seqit`
+  target:
+
+      :::bash
+      # Build artifact and run test
+      $ make test-seqit
+      Testing seqit ...
+        seqit 1                                  ... Success
+        seqit 10                                 ... Success
+        seqit 100                                ... Success
+        seqit 1 100                              ... Success
+        seqit 1 2 100                            ... Success
+        seqit 100 -3 1                           ... Success
+        seqit 1 2 3 4                            ... Success
+        --------------------
+         Score 7.00 / 7.00
+         Grade 1.00 / 1.00
+        Status Success
+
+  ## Activity 4: Tailit (*0.20 Points*)
+
+  Once you have implemented both [doubly linked list] library, you are to
+  complete the `tailit.c` program, which is a simplified version of the [tail]
+  utility:
+
+      :::bash
+      # Show usage
+      $ ./tailit -h
+      Usage: tailit [-n NUMBER]
+
+          -n NUMBER  Output the last NUMBER of lines (default is 10)
+
+      # Show last 10 lines
+      $ ./seqit 100 | ./tailit
+      91
+      92
+      93
+      94
+      95
+      96
+      97
+      98
+      99
+      100
+
+      # Show last 5 lines
+      $ ./seqit 100 | ./tailit -n 5
+      96
+      97
+      98
+      99
+      100
+
+  As can be seen, the `tailit` program reads [standard input] line by line and
+  only emits the last `10` lines by default.  If the user specifies another
+  limit via the `-n` flag, then only that number of lines is shown.
+
+  ### Task 1: `tailit.c`
+
+  The `tailit.c` file contains the [C] implementation of the `tailit` program
+  described above.  You will need to implement the following functions:
+
+  1.  <div class="flex-col" markdown="1">
+
+      `List *tail_stream(FILE *stream, size_t limit)`
+
+      > This function reads the `stream` line by line and returns a `List`
+      containing the last `limit` number of lines from the `stream`.
+
+      <div class="alert success-bg" markdown="1">
+
+      **Hint**: Take advantage of the `list_create`, `list_append`, and
+        `list_pop` functions you wrote above.
+
+      Think carefully how you should handle storing only the `limit` number of
+      lines in your `List`.
+
+      Consider using [strdup] to ensure the [strings] you read with [fgets]
+      persist between function calls.
+
+      </div>
+
+  2.  <div class="flex-col" markdown="1">
+
+      `int main(int argc, char *argv[])`
+
+      > This function parses the command line arguments, creates a list of the
+      last `NUMBER` of lines, and then prints out the items in the list.
+
+      <div class="alert success-bg" markdown="1">
+
+      **Hint**: Take advantage of the `list_create`, `list_pop`, `list_delete`
+        functions you wrote above.
+
+      </div>
+
+  [strings]: https://en.wikipedia.org/wiki/C_string_handling
+  [fgets]: https://man7.org/linux/man-pages/man3/fgets.3.html
+
+  ### Task 2: Testing
+
+  As you implement `tailit.c`, you can test it by running the `test-tailit`
+  target:
+
+      :::bash
+      # Build artifact and run test
+      $ make test-tailit
+        tailit -h                                ... Success
+        tailit -p                                ... Success
+        tailit                                   ... Success
+        tailit -n 1                              ... Success
+        tailit -n 5                              ... Success
+        tailit -n 10                             ... Success
+        tailit -n 25                             ... Success
+        tailit -n 100                            ... Success
+        --------------------
+         Score 8.00 / 8.00
+         Grade 1.00 / 1.00
+        Status Success
+
+  ## Activity 5: Quiz (*0.30 Points*)
+
+  Once you have completed all the activities above, you are to complete the
+  following **reflection quiz**:
+
+  <div id="quiz-questions"></div>
+
+  <div id="quiz-responses"></div>
+
+  <script src="static/js/dredd-quiz.js"></script>
+  <script>
+  loadQuiz('static/json/homework07.json');
+  </script>
+
+  <pre style="display: none;" id="dr-container" class="codehilite"><code id="dredd-response"></code></pre>
+
+  As with [Reading 01], you will need to store your answers in a
+  `homework07/answers.json` file.  You can use the form above to generate the
+  contents of this file, or you can write the [JSON] by hand.
+
+  To check your quiz directly, you can use the `check.py` script:
+
+      :::bash
+      $ ../.scripts/check.py
+      Checking homework07 quiz ...
+           Q01  2.00 /  2.00
+           Q02  1.00 /  1.00
+           Q03 12.00 / 12.00
+           Q04  4.00 /  4.00
+           Q05  1.00 /  1.00
+           Q06  1.00 /  1.00
+        --------------------
+         Score 21.00 / 21.00
+         Grade  1.00 /  1.00
+        Status Success
+
+  [JSON]: https://json.org
+
+  ## Submission
+
+  To submit your assignment, please commit your work to the `homework07` folder
+  of your `homework07` branch in your **assignments** [GitHub] repository.
+  Your `homework07` folder should only contain the following files:
+
+  - `Makefile`
+  - `answers.json`
+  - `list.c`
+  - `list.h`
+  - `list.unit.c`
+  - `node.c`
+  - `node.unit.c`
+  - `seqit.c`
+  - `tailit.c`
+
+  <div class="alert warning-bg" markdown="1">
+
+  **Note**: You do not need to commit the test scripts because the `Makefile`
+  automatically downloads them.
+
+  </div>
+
+      :::bash
+      #-----------------------------------------------------------------------
+      # Make sure you have already completed Activity 0: Preparation
+      #-----------------------------------------------------------------------
+      ...
+      $ git add Makefile                            # Mark changes for commit
+      $ git commit -m "Homework 07: Makefile"       # Record changes
+      ...
+      $ git add node.c                              # Mark changes for commit
+      $ git commit -m "Homework 07: node.c"         # Record changes
+      ...
+      $ git add list.c                              # Mark changes for commit
+      $ git commit -m "Homework 07: list.c"         # Record changes
+      ...
+      $ git add seqit.c                             # Mark changes for commit
+      $ git commit -m "Homework 07: seqit.c"        # Record changes
+      ...
+      $ git add tailit.c                            # Mark changes for commit
+      $ git commit -m "Homework 07: tailit"         # Record changes
+      ...
+      $ git add answers.json                        # Mark changes for commit
+      $ git commit -m "Homework 07: Quiz"           # Record changes
+      ...
+      $ git push -u origin homework07               # Push branch to GitHub
+
+  <div class="alert warning-bg" markdown="1">
+
+  ### <i class="icon icon-medium">{{ "lifebuoy" | embed_icon }}</i> Acknowledgments
+
+  If you collaborated with any other students, or received help from TAs or AI
+  tools on this assignment, please record this support in the `README.md` in
+  the `homework07` folder and include it with your **Pull Request**.
+
+  </div>
+
+  <div class="alert success-bg" markdown="1">
+
+  ### <i class="icon icon-medium">{{ "account-question" | embed_icon }}</i> Graders
+
+  Once you have committed your work and pushed it to [GitHub], remember to
+  create a **pull request** and assign it to the appropriate **teaching
+  assistant** from the [Reading 07 TA List].
+
+  **Note**: this list changes each week, so be sure to consult the appropriate
+  list for each assignment.
+
+  </div>
+
+  [git]:    https://git-scm.com/
+  [clone]:  https://git-scm.com/docs/git-clone
+  [commit]: https://git-scm.com/docs/git-commit
+  [push]:   https://git-scm.com/docs/git-push
+  [branching]:   https://git-scm.com/docs/git-branch
+  [code review]: https://en.wikipedia.org/wiki/Code_review
+  [GitHub]: https://github.com
+  [Reading 01]: reading01.html
+  [Reading 07 TA List]: reading07_tas.html
