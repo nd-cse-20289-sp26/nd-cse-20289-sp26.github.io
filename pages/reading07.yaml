@@ -1,0 +1,421 @@
+title:      "Reading 07: Memory Management"
+body:       |
+
+  **Everyone**:
+
+  Next week, we will delve deeper into [memory management], [data structures],
+  and [binary numbers] in [C].  In particular, we will discuss how a typical
+  [address space] is laid out, how to dynamically allocate memory using
+  [malloc] (and how to release it with [free]), and how to create [data
+  structures] with [structs] and [unions].
+
+  <div class="alert info-bg" markdown="1">
+
+  ### <i class="icon icon-medium">{{ "book" | embed_icon }}</i> TL;DR
+
+  The focus of this reading is to explore [memory management], [data
+  structures], and [binary numbers] in [C] and learn how to use [valgrind] and
+  [gdb].
+
+  </div>
+
+  ## Readings
+
+  <div class="flex-row" markdown="1">
+
+  <div class="flex-col" markdown="1">
+
+  The readings for this week are:
+
+  1.  <div class="flex-col" markdown="1">
+
+      [Dive Into Systems]
+
+      -   <div class="flex-col" markdown="1">
+
+          [A Deeper Dive into C Programming](https://diveintosystems.org/singlepage/#_a_deeper_dive_into_c_programming)
+
+          For this week, focus on sections **2.1**, **2.4**, and **2.7**.
+
+      -   <div class="flex-col" markdown="1">
+
+          [C Debugging Tools](https://diveintosystems.org/singlepage/#_c_debugging_tools)
+
+          For this week, review secions **3.1**, **3.2**, and **3.3** (ie. [gdb] and [valgrind]).
+
+      -   <div class="flex-col" markdown="1">
+
+          [Binary and Data Representation](https://diveintosystems.org/singlepage/#_binary_and_data_representation)
+
+          This should be review from **Fundamentals of Computing** and **Logic
+          Design**, so skim this chapter and make sure you recognize most of
+          this material.
+
+  2.  <div class="flex-col" markdown="1">
+
+      [Operating Systems: Three Easy Pieces](http://pages.cs.wisc.edu/~remzi/OSTEP/)
+
+      - [Memory API](http://pages.cs.wisc.edu/~remzi/OSTEP/vm-api.pdf)
+
+  </div>
+
+  <div class="flex-col" markdown="1">
+
+  <div class="centered">
+    <img src="static/img/diveintosystems.jpg">
+  </div>
+
+  </div>
+
+  </div>
+
+  ### Optional References
+
+  <div class="flex-row" markdown="1">
+
+  <div class="flex-col" markdown="1">
+
+  -   <div class="flex-col" markdown="1">
+
+      [Beej's Guide to C Programming]
+
+      - [Chapter 8. Structs](https://beej.us/guide/bgc/html/index-wide.html#structs)
+      - [Chapter 10. typedef](https://beej.us/guide/bgc/html/index-wide.html#typedef-making-new-types)
+      - [Chapter 12. Manual Memory Allocation](https://beej.us/guide/bgc/html/index-wide.html#manual-memory-allocation)
+      - [Section 20.9 Unions](https://beej.us/guide/bgc/html/index-wide.html#unions)
+
+  </div>
+
+  <div class="flex-col" markdown="1">
+
+  - [Beej's Quick Guide to GDB](https://beej.us/guide/bggdb/)
+
+  - [Valgrind Quick Start Guide](http://valgrind.org/docs/manual/quick-start.html)
+
+  </div>
+
+  </div>
+
+  -   <div class="flex-col" markdown="1">
+
+      [Julia Evans](https://jvns.ca/)
+
+      <div class="flex-row" markdown="1">
+
+      <div class="flex-col" markdown="1">
+        <a href="https://wizardzines.com/comics/the-stack/">
+        <img src="https://wizardzines.com/images/uploads/stack.png" class="responsive">
+        </a>
+      </div>
+
+      <div class="flex-col" markdown="1">
+        <a href="https://wizardzines.com/comics/memory-allocation/">
+        <img src="https://wizardzines.com/images/uploads/memory-allocation.png" class="responsive">
+      </a>
+      </div>
+
+      </div>
+
+      <div class="flex-row" markdown="1">
+
+      <div class="flex-col" markdown="1">
+        <a href="https://wizardzines.com/comics/bitwise-operations">
+        <img src="https://wizardzines.com/images/uploads/bitwise-operations.png" class="responsive">
+        </a>
+      </div>
+
+      <div class="flex-col" markdown="1">
+        <a href="https://wizardzines.com/comics/integers">
+        <img src="https://wizardzines.com/images/uploads/integers.png" class="responsive">
+        </a>
+      </div>
+
+      </div>
+
+      <div class="flex-row" markdown="1">
+
+      <div class="flex-col" markdown="1">
+        <a href="https://wizardzines.com/comics/signed-integers">
+        <img src="https://wizardzines.com/images/uploads/signed-integers.png" class="responsive">
+        </a>
+      </div>
+
+      <div class="flex-col" markdown="1">
+        <a href="https://wizardzines.com/comics/little-big-endian">
+        <img src="https://wizardzines.com/images/uploads/little-big-endian.png" class="responsive">
+        </a>
+      </div>
+
+      </div>
+  </div>
+
+  [Unix]:           https://en.wikipedia.org/wiki/Unix
+  [Bourne Shell]:   https://en.wikipedia.org/wiki/Bourne_shell
+  [Python]:         https://www.python.org/
+  [C]:              https://en.wikipedia.org/wiki/C_(programming_language)
+  [arrays]:         https://en.wikipedia.org/wiki/C_(programming_language)#Arrays
+  [pointers]:       https://en.wikipedia.org/wiki/C_(programming_language)#Pointers
+  [strings]:        https://en.wikipedia.org/wiki/C_string_handling
+  [unix philosophy]: https://en.wikipedia.org/wiki/Unix_philosophy
+  [system calls]:   https://en.wikipedia.org/wiki/System_call
+  [gdb]:            https://www.gnu.org/software/gdb/
+  [valgrind]:       http://valgrind.org/
+  [C99]:            https://en.wikipedia.org/wiki/C_(programming_language)#C99
+  [gcc]:            https://gcc.gnu.org/
+  [memory management]: https://en.wikipedia.org/wiki/Memory_management
+  [data structures]: https://en.wikipedia.org/wiki/Data_structure
+  [structs]:        https://en.wikipedia.org/wiki/Record_(computer_science)
+  [malloc]:         http://man7.org/linux/man-pages/man3/malloc.3.html
+  [free]:           http://man7.org/linux/man-pages/man3/malloc.3.html
+  [address space]:  https://en.wikipedia.org/wiki/Address_space
+  [unions]:         https://en.wikipedia.org/wiki/Union_type
+  [dive into systems]: https://diveintosystems.org/
+  [binary numbers]: https://en.wikipedia.org/wiki/Binary_number
+
+  [Beej's Guide to C Programming]: https://beej.us/guide/bgc/html/index-wide.html
+
+  ## Quiz
+
+  This week, the reading is split into two sections: the first part is a
+  [dredd] quiz, while the second part involves one [C] program: [str_rev.c].
+
+  To test the [C] program, you will need to download the [Makefile] and test
+  scripts:
+
+      :::bash
+      $ git switch master                   # Make sure we are in master branch
+      $ git pull --rebase                   # Make sure we are up-to-date with GitHub
+
+      $ git switch -c reading07             # Create reading07 branch and check it out
+
+      $ cd reading07                        # Go into reading07 folder
+
+      # Download Reading 07 Makefile
+      $ curl -LO https://pnutz.h4x0r.space/courses/cse.20289.sp26/static/txt/reading07/Makefile
+
+      # Download, build, and execute tests
+      $ make test
+
+  [Makefile]: https://pnutz.h4x0r.space/courses/cse.20289.sp26/static/txt/reading07/Makefile
+
+  ### Questions
+
+  Given the following [C] program, [allocations.c], which simply declares a
+  series of variables:
+
+      :::c
+      /* allocations.c */
+
+      #include <stdio.h>
+      #include <stdlib.h>
+
+      typedef struct {
+          double x;
+          double y;
+      } Point;
+
+      typedef union {
+          char   c;
+          int    i;
+          float  f;
+          double d;
+      } Block;
+
+      double GD = 3.14;
+
+      int main(int argc, char *argv[]) {
+          int    a[]	= {5, 7, 4};
+          char  *sp   = "Video Games";
+          char   sa[]	= "Runescape";
+          Block  b    = {0};
+
+          Point   p0	= {0, 0};
+          Point  *p1	= NULL;
+          Point  *p2	= malloc(sizeof(Point));
+          Point  *p3	= malloc(5*sizeof(Point));
+          Point **p4	= malloc(5*sizeof(Point *));
+
+          return 0;
+      }
+
+  And the following [C] program, [str_rev.c], which reverses the characters of
+  each command-line argument:
+
+      :::c
+      /* str_rev: Reverse all characters in string */
+
+      #include <ctype.h>
+      #include <stdio.h>
+      #include <stdlib.h>
+      #include <string.h>
+
+      char *str_rev(const char *s) {
+          char *t = malloc(strlen(s));
+          strncpy(t, s, strlen(s));
+
+          const char *r = s + strlen(s) - 1;
+          char *w = t;
+          while (r >= s) {
+              *w++ = *r--;
+          }
+          return t;
+      }
+
+      int main(int argc, char *argv[]) {
+          for (int i = 1; i <= argc; i++) {
+              char *t = str_rev(argv[i]);
+              puts(t);
+          }
+          return 0;
+      }
+
+  Record the answers to the following [Reading 07 Quiz] questions in your
+  `reading07` branch:
+
+  <div id="quiz-questions"></div>
+
+  <div id="quiz-responses"></div>
+
+  <script src="static/js/dredd-quiz.js"></script>
+
+  <script>
+  loadQuiz('static/json/reading07.json');
+  </script>
+
+  <pre style="display: none;" id="dr-container" class="codehilite"><code id="dredd-response"></code></pre>
+
+  ### Programs
+
+  Given the provided [str_rev.c] and [Makefile], you are to do the following:
+
+  1.  <div class="flex-col" markdown="1">
+
+      Modify [Makefile] to include a [rule] for the `str_rev` program.  Be sure
+      to use the `CC` and `CFLAGS` variables in your [rule].
+
+      <div class="alert success-bg" markdown="1">
+
+      **Note**: Consider the use of [automatic variables].
+
+      </div>
+
+  2.  <div class="flex-col" markdown="1">
+
+      Modify [str_rev.c] so that it no longer has any uninitialized memory
+      accesses, memory leaks, invalid memory acceses, or logical errors.
+
+      <div class="alert success-bg" markdown="1">
+
+      **Note**: The `str_rev` must not modify the original string (hence the
+      `const char *`).  Consider the use of [strdup].
+
+      </div>
+
+  <div class="alert warning-bg" markdown="1">
+
+  ### <i class="icon icon-medium">{{ "bug-outline" | embed_icon }}</i> Debugging
+
+  Use this as an opportunity to utilize [valgrind] and [gdb] to debug [str_rev.c].
+  </div>
+
+  Once you have a working [Makefile], you should be able to use the [make]
+  command to run your **recipes**:
+
+      :::bash
+      $ make clean                                  # Remove targets
+      rm -f str_rev
+
+      $ make                                        # Build targets
+      gcc -Wall -g -std=gnu99 -o str_rev str_rev.c
+
+      $ ./str_rev old school                        # Test manually
+      dlo
+      loohcs
+
+      $ make test                                   # Test scripts
+
+  [rule]:   https://www.gnu.org/software/make/manual/html_node/Rule-Example.html#Rule-Example
+  [make]:   http://man7.org/linux/man-pages/man1/make.1.html
+  [DAG]:    https://en.wikipedia.org/wiki/Directed_acyclic_graph
+  [allocations.c]: https://pnutz.h4x0r.space/courses/cse.20289.sp26/static/txt/reading07/allocations.c
+  [str_rev.c]: https://pnutz.h4x0r.space/courses/cse.20289.sp26/static/txt/reading07/str_rev.c
+  [strdup]: http://man7.org/linux/man-pages/man3/strdup.3.html
+  [automatic variables]: https://www.gnu.org/software/make/manual/html_node/Automatic-Variables.html
+
+  ## Submission
+
+  To submit you work, follow the same process outlined in [Reading 01]:
+
+      :::bash
+      #--------------------------------------------------
+      # BE SURE TO DO THE PREPARATION STEPS ABOVE
+      #--------------------------------------------------
+
+      $ cd reading07                        # Go into reading07 folder
+
+      $ $EDITOR answers.json                # Edit your answers.json file
+
+      $ ../.scripts/check.py                # Check reading07 quiz
+      Checking reading07 quiz ...
+            Q1 11.00 / 11.00
+            Q2  3.00 /  3.00
+            Q3  3.00 /  3.00
+            Q4  6.00 /  6.00
+        --------------------
+         Score 23.00 / 23.00
+         Grade  1.00 /  1.00
+        Status Success
+
+      $ git add answers.json                # Add answers.json to staging area
+      $ git commit -m "Reading 07: Quiz"    # Commit work
+
+      $ $EDITOR str_rev.c                   # Edit source code
+
+      $ make test                           # Build and Run tests
+      Checking reading07 str_rev ...
+        str_rev                                  ... Success
+        str_rev runescape                        ... Success
+        str_rev old school                       ... Success
+        --------------------
+         Score 3.00 / 3.00
+         Grade 1.00 / 1.00
+        Status Success
+
+      $ git add Makefile                    # Add Makefile to staging area
+      $ git add str_rev.c                   # Add source code to staging area
+      $ git commit -m "Reading 07: Code"    # Commit work
+
+      $ git push -u origin reading07        # Push branch to GitHub
+
+  <div class="alert warning-bg" markdown="1">
+
+  ### <i class="icon icon-medium">{{ "lifebuoy" | embed_icon }}</i> Acknowledgments
+
+  If you collaborated with any other students, or received help from TAs or AI
+  tools on this assignment, please record this support in the `README.md` in
+  the `reading07` folder and include it with your **Pull Request**.
+
+  </div>
+
+  <div class="alert success-bg" markdown="1">
+
+  ### <i class="icon icon-medium">{{ "account-question" | embed_icon }}</i> Graders
+
+  Once you have committed your work and pushed it to [GitHub], remember to
+  create a **pull request** and assign it to the appropriate **teaching
+  assistant** from the [Reading 07 TA List].
+
+  **Note**: this list changes each week, so be sure to consult the appropriate
+  list for each assignment.
+
+  </div>
+
+  [git]:                https://git-scm.com/
+  [clone]:              https://git-scm.com/docs/git-clone
+  [commit]:             https://git-scm.com/docs/git-commit
+  [push]:               https://git-scm.com/docs/git-push
+  [GitHub]:             https://github.com
+  [Reading 01]:         reading01.html
+  [Reading 07 TA List]: reading07_tas.html
+  [dredd]:              https://dredd.h4x0r.space
+  [Reading 07 Quiz]:    static/json/reading07.json
