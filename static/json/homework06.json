@@ -1,0 +1,50 @@
+{
+    "q01": {
+        "type": "multiple",
+        "question": "\n<p>Which of the following statements regarding <code>Makefiles</code> are true\n(<i>choose all that apply</i>)?</p>\n",
+        "responses": {
+            "graph": "<code>Makefile</code> rules specify the nodes in a directed acyclic graph.",
+            "clean": "A <code>clean</code> target is automatically provided by <code>make</code>.",
+            "cflags": "The <code>CFLAGS</code> variable is typically used during compilation.",
+            "ldflags": "The <code>LDFLAGS</code> variable is typically used during linking.",
+            "at": "The <code>$@</code> variable refers to the target.",
+            "less": "The <code>$<</code> variable refers to all of the sources."
+        }
+    },
+    "q02": {
+        "type": "multiple",
+        "question": "\n<p>Which of the following statements regarding the <b>shared library</b>\n(<code>libstr.so</code>) and the <b>static library</b> (<code>libstr.a</code>) is\ntrue (<i>choose all that apply</i>)?</p>\n",
+        "responses": {
+            "objects_same": "The <b>shared</b> and <b>static</b> libraries had the same object files.",
+            "objects_diff": "The <b>shared</b> and <b>static</b> libraries had different object files.",
+            "shared_smaller": "The <b>shared</b> library was smaller than <b>static</b> library.",
+            "static_smaller": "The <b>static</b> library was smaller than <b>shared</b> library.",
+            "linker_same": "The <b>shared</b> and <b>static</b> libraries used the same linker.",
+            "linker_diff": "The <b>shared</b> and <b>static</b> libraries used different linkers."
+        }
+    },
+    "q03": {
+        "type": "multiple",
+        "question": "\n<p>Which of the following statements regarding the <b>dynamic\nexecutable</b> (<code>trit.dynamic</code>) and the <b>static executable</b>\n(<code>trit.static</code>) is true (<i>choose all that apply</i>)?</p>\n",
+        "responses": {
+            "dyn_link_shared": "The <b>dynamic</b> executable requires the <b>shared</b> library during linking.",
+            "sta_link_shared": "The <b>static</b> executable requires the <b>shared</b> library during linking.",
+            "dyn_link_static": "The <b>dynamic</b> executable requires the <b>static</b> library during linking.",
+            "sta_link_static": "The <b>static</b> executable requires the <b>static</b> library during linking.",
+            "dyn_run_shared": "The <b>dynamic</b> executable requires the <b>shared</b> library at run-time.",
+            "sta_run_shared": "The <b>static</b> executable requires the <b>shared</b> library at run-time.",
+            "dyn_run_static": "The <b>dynamic</b> executable requires the <b>static</b> library at run-time.",
+            "sta_run_static": "The <b>static</b> executable requires the <b>static</b> library at run-time.",
+            "dyn_larger": "The <b>dynamic</b> executable is larger than <b>static</b> executable.",
+            "sta_larger": "The <b>static</b> executable is larger than <b>dynamic</b> executable."
+        }
+    },
+    "q04": {
+        "type": "blank",
+        "question": "\n<p>To execute the <b>dynamic executable</b> (<code>trit.dynamic</code>), we\nneed to set the ____ environmental variable to include the folder that\ncontains the ____ library.</p>\n"
+    },
+    "q05": {
+        "type": "blank",
+        "question": "\n<p>In <code>C</code>, a ____ is a variable that holds the location or address\nof data stored in memory. To get the value referenced by this variable, we\nuse ____ in front of the variable name.</p>\n\n<p>In <code>C</code>, an ____ is a fixed-size block of contiguous memory used\nto store data of the same type. The index operator <code>[]</code> for this\ntype is just <i>syntactic sugar</i> for a pointer ____ operation.</p>\n\n<p>In <code>C</code>, a <b>string</b> is an array of ____ terminated by the ____\ncharacter.  As such we often pass the name of the <b>string</b> as a ____\nto functions, since the name <i>decays</i> to this type.</p>\n"
+    }
+}
