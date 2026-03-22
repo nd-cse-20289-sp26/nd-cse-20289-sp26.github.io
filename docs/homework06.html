@@ -1,0 +1,811 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<!-- Favicon -->
+<link rel="icon" type="image/png" sizes="32x32" href="static/ico/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="static/ico/favicon-16x16.png">
+<link rel="manifest" href="static/ico/site.webmanifest">
+<!-- Stylesheets -->
+<link rel="stylesheet" href="static/css/pnutzh4x0r.css">
+<title>Homework 06: Trit</title>
+</head>
+<body>
+<header>
+<a class="logo" href="homework06.html">
+    <h1>Homework 06: Trit</h1>
+</a>
+<nav>
+    <ul>
+        <li><a href="index.html"><h4>Home</h4></a></li>
+        </ul>
+</nav></header>
+<main>
+<p>The goal of this homework assignment is to allow you to practice using
+<a href="https://en.wikipedia.org/wiki/C_(programming_language)#Pointers">pointers</a>, <a href="https://en.wikipedia.org/wiki/C_(programming_language)#Arrays">arrays</a>, and <a href="https://en.wikipedia.org/wiki/String_(computer_science)">strings</a> in <a href="https://en.wikipedia.org/wiki/C_(programming_language)">C</a>.  The first activity involves
+building a <strong>string library</strong>, while the second activity requires you to use
+this library to build a translation utility similar to <a href="http://man7.org/linux/man-pages/man1/tr.1.html">tr</a> named <code>trit</code>.</p>
+<p>For this assignment, record your source code and any responses to the
+following activities in the <code>homework06</code> folder of your <strong>assignments</strong>
+<a href="https://github.com">GitHub</a> repository and push your work by <strong>noon, Saturday, March 21</strong>.</p>
+<h2 id="activity-0-preparation">Activity 0: Preparation<a class="headerlink" href="#activity-0-preparation" title="Permanent link">&para;</a></h2>
+<p>Before starting this homework assignment, you should first perform a <code>git
+pull</code> to retrieve any changes in your remote <a href="https://github.com">GitHub</a> repository:</p>
+<div class="codehilite"><pre><span></span><code>$<span class="w"> </span><span class="nb">cd</span><span class="w"> </span>path/to/repository<span class="w">                   </span><span class="c1"># Go to assignments repository</span>
+
+$<span class="w"> </span>git<span class="w"> </span>switch<span class="w"> </span>master<span class="w">                       </span><span class="c1"># Make sure we are in master branch</span>
+
+$<span class="w"> </span>git<span class="w"> </span>pull<span class="w"> </span>--rebase<span class="w">                       </span><span class="c1"># Get any remote changes not present locally</span>
+</code></pre></div>
+
+<p>Next, create a new branch for this assignment:</p>
+<div class="codehilite"><pre><span></span><code>$<span class="w"> </span>git<span class="w"> </span>switch<span class="w"> </span>-c<span class="w"> </span>homework06<span class="w">                </span><span class="c1"># Create homework06 branch and check it out</span>
+</code></pre></div>
+
+<h3 id="task-1-skeleton-code">Task 1: Skeleton Code<a class="headerlink" href="#task-1-skeleton-code" title="Permanent link">&para;</a></h3>
+<p>To help you get started, the instructor has provided you with the following
+<strong>skeleton code</strong>:</p>
+<div class="codehilite"><pre><span></span><code><span class="c1"># Go to homework06 folder</span>
+$<span class="w"> </span><span class="nb">cd</span><span class="w"> </span>homework06
+
+<span class="c1"># Download Makefile</span>
+$<span class="w"> </span>curl<span class="w"> </span>-LO<span class="w"> </span>https://pnutz.h4x0r.space/courses/cse.20289.sp26/static/txt/homework06/Makefile
+
+<span class="c1"># Download C skeleton code</span>
+$<span class="w"> </span>curl<span class="w"> </span>-LO<span class="w"> </span>https://pnutz.h4x0r.space/courses/cse.20289.sp26/static/txt/homework06/str.c
+$<span class="w"> </span>curl<span class="w"> </span>-LO<span class="w"> </span>https://pnutz.h4x0r.space/courses/cse.20289.sp26/static/txt/homework06/str.h
+$<span class="w"> </span>curl<span class="w"> </span>-LO<span class="w"> </span>https://pnutz.h4x0r.space/courses/cse.20289.sp26/static/txt/homework06/str.unit.c
+$<span class="w"> </span>curl<span class="w"> </span>-LO<span class="w"> </span>https://pnutz.h4x0r.space/courses/cse.20289.sp26/static/txt/homework06/trit.c
+</code></pre></div>
+
+<p>Once downloaded, you should see the following files in your <code>homework06</code> directory:</p>
+<div class="codehilite"><pre><span></span><code>homework06
+<span class="w">    </span><span class="se">\_</span><span class="w"> </span>Makefile<span class="w">     </span><span class="c1"># This is the Makefile for building all the assignment artifacts</span>
+<span class="w">    </span><span class="se">\_</span><span class="w"> </span>str.c<span class="w">        </span><span class="c1"># This is the string library C source file</span>
+<span class="w">    </span><span class="se">\_</span><span class="w"> </span>str.h<span class="w">        </span><span class="c1"># This is the string library C header file</span>
+<span class="w">    </span><span class="se">\_</span><span class="w"> </span>str.unit.c<span class="w">   </span><span class="c1"># This is the string library C unit test source file</span>
+<span class="w">    </span><span class="se">\_</span><span class="w"> </span>trit.c<span class="w">       </span><span class="c1"># This is the translation utility C source file</span>
+</code></pre></div>
+
+<h3 id="task-2-initial-import">Task 2: Initial Import<a class="headerlink" href="#task-2-initial-import" title="Permanent link">&para;</a></h3>
+<p>Now that the files are downloaded into the <code>homework06</code> folder, you can
+<strong>commit</strong> them to your <a href="https://git-scm.com/">git</a> repository:</p>
+<div class="codehilite"><pre><span></span><code>$<span class="w"> </span>git<span class="w"> </span>add<span class="w"> </span>Makefile<span class="w">                            </span><span class="c1"># Mark changes for commit</span>
+$<span class="w"> </span>git<span class="w"> </span>add<span class="w"> </span>*.c<span class="w"> </span>*.h<span class="w">                             </span><span class="c1"># Mark changes for commit</span>
+$<span class="w"> </span>git<span class="w"> </span>commit<span class="w"> </span>-m<span class="w"> </span><span class="s2">&quot;Homework 06: Initial Import&quot;</span><span class="w"> </span><span class="c1"># Record changes</span>
+</code></pre></div>
+
+<h3 id="task-3-unit-tests">Task 3: Unit Tests<a class="headerlink" href="#task-3-unit-tests" title="Permanent link">&para;</a></h3>
+<p>After downloading these files, you can run <code>make test</code> to run the tests.</p>
+<div class="codehilite"><pre><span></span><code><span class="c1"># Run all tests (will trigger automatic download)</span>
+$<span class="w"> </span>make<span class="w"> </span><span class="nb">test</span>
+</code></pre></div>
+
+<p>You will notice that the Makefile downloads these additional test data and scripts:</p>
+<div class="codehilite"><pre><span></span><code>homework06
+<span class="w">    </span><span class="se">\_</span><span class="w"> </span>str.test.py<span class="w">  </span><span class="c1"># This is the string library unit test Python script</span>
+<span class="w">    </span><span class="se">\_</span><span class="w"> </span>str.unit.sh<span class="w">  </span><span class="c1"># This is the string library unit test shell script</span>
+<span class="w">    </span><span class="se">\_</span><span class="w"> </span>trit.test.sh<span class="w"> </span><span class="c1"># This is the translation utility test shell script</span>
+</code></pre></div>
+
+<p>You will be using these <a href="https://en.wikipedia.org/wiki/Unit_testing">unit tests</a> to verify the correctness and behavior
+of your code.</p>
+<div class="alert info-bg">
+<h3 id="download-embed_icon-automatic-download"><i class="icon icon-medium"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><title>download</title><path d="M5,20H19V18H5M19,9H15V3H9V9H5L12,16L19,9Z" /></svg>
+</i> Automatic Download<a class="headerlink" href="#download-embed_icon-automatic-download" title="Permanent link">&para;</a></h3>
+<p>The <code>test</code> scripts are automatically downloaded by the <code>Makefile</code>, so any
+modifications you do to them will be lost when you run <code>make</code> again. Likewise,
+because they are automatically downloaded, you do not need to <code>add</code> or <code>commit</code>
+them to your <a href="https://git-scm.com/">git</a> repository.</p>
+</div>
+<p>The details on what you need to implement for this assignment are described
+in the following sections.</p>
+<div class="alert info-bg">
+<h3 id="help-embed_icon-frequently-asked-questions"><i class="icon icon-medium"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><title>help</title><path d="M10,19H13V22H10V19M12,2C17.35,2.22 19.68,7.62 16.5,11.67C15.67,12.67 14.33,13.33 13.67,14.17C13,15 13,16 13,17H10C10,15.33 10,13.92 10.67,12.92C11.33,11.92 12.67,11.33 13.5,10.67C15.92,8.43 15.32,5.26 12,5A3,3 0 0,0 9,8H6A6,6 0 0,1 12,2Z" /></svg>
+</i> Frequently Asked Questions<a class="headerlink" href="#help-embed_icon-frequently-asked-questions" title="Permanent link">&para;</a></h3>
+<div class="centered">
+<iframe allowfullscreen="true" frameborder="0" height="749" mozallowfullscreen="true" src="https://docs.google.com/presentation/d/e/2PACX-1vS--wXPwuKXkz9p8C-yaSh_rsLpFjd1-oe_OI4iPUYFBG-hl5hpjcUO-8ycdC1ehjKD2U9oZusYFc2A/pubembed?start=false&amp;loop=false&amp;delayms=3000" webkitallowfullscreen="true" width="960"></iframe>
+</div>
+</div>
+<h2 id="activity-1-string-library-05-points">Activity 1: String Library (<em>0.5 Points</em>)<a class="headerlink" href="#activity-1-string-library-05-points" title="Permanent link">&para;</a></h2>
+<p>In <a href="https://www.python.org/">Python</a>, we had the luxury of <a href="https://en.wikipedia.org/wiki/String_(computer_science)">strings</a> being first-class objects with
+all sorts of useful methods such as <a href="https://docs.python.org/3/library/stdtypes.html#str.lower">str.lower</a> or <a href="https://docs.python.org/3/library/stdtypes.html#str.rstrip">str.rstrip</a>.
+Unfortunately, <a href="https://en.wikipedia.org/wiki/String_(computer_science)">strings</a> in <a href="https://en.wikipedia.org/wiki/C_(programming_language)">C</a> are just <a href="https://en.wikipedia.org/wiki/C_(programming_language)#Arrays">arrays</a> that utilize the <a href="https://en.wikipedia.org/wiki/Sentinel_value">sentinel
+pattern</a> for denoting the end of the <a href="https://en.wikipedia.org/wiki/String_(computer_science)">strings</a> and the <a href="https://en.wikipedia.org/wiki/C_standard_library">standard library</a> is
+a bit bare when it comes to manipulating <a href="https://en.wikipedia.org/wiki/String_(computer_science)">strings</a>.</p>
+<p>To rectify this situation, for the first activity you are to create a string
+library, <code>libstr</code>, which contains functions such as <code>str_lower</code> and
+<code>str_rstrip</code> which implement some of the functionality present in <a href="https://www.python.org/">Python</a>
+but lacking in <a href="https://en.wikipedia.org/wiki/C_(programming_language)">C</a>.</p>
+<h3 id="task-0-strh">Task 0: <code>str.h</code><a class="headerlink" href="#task-0-strh" title="Permanent link">&para;</a></h3>
+<p>The <code>str.h</code> file is the <a href="https://en.wikipedia.org/wiki/Include_directive#C.2FC.2B.2B">header</a> file for the string utilities library, which
+means it contains the function <a href="https://en.wikipedia.org/wiki/Function_prototype">prototypes</a>:</p>
+<div class="codehilite"><pre><span></span><code><span class="cm">/* str.h: string library */</span>
+
+<span class="cp">#pragma once</span>
+
+<span class="kt">void</span><span class="w">    </span><span class="nf">str_lower</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="kt">char</span><span class="w"> </span><span class="o">*</span><span class="n">s</span><span class="p">,</span><span class="w"> </span><span class="kt">char</span><span class="w"> </span><span class="o">*</span><span class="n">w</span><span class="p">);</span>
+<span class="kt">void</span><span class="w">    </span><span class="nf">str_upper</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="kt">char</span><span class="w"> </span><span class="o">*</span><span class="n">s</span><span class="p">,</span><span class="w"> </span><span class="kt">char</span><span class="w"> </span><span class="o">*</span><span class="n">w</span><span class="p">);</span>
+<span class="kt">void</span><span class="w">    </span><span class="nf">str_title</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="kt">char</span><span class="w"> </span><span class="o">*</span><span class="n">s</span><span class="p">,</span><span class="w"> </span><span class="kt">char</span><span class="w"> </span><span class="o">*</span><span class="n">w</span><span class="p">);</span>
+<span class="kt">void</span><span class="w">    </span><span class="nf">str_rstrip</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="kt">char</span><span class="w"> </span><span class="o">*</span><span class="n">s</span><span class="p">,</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="kt">char</span><span class="w"> </span><span class="o">*</span><span class="n">chars</span><span class="p">,</span><span class="w"> </span><span class="kt">char</span><span class="w"> </span><span class="o">*</span><span class="n">w</span><span class="p">);</span>
+<span class="kt">void</span><span class="w">    </span><span class="nf">str_delete</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="kt">char</span><span class="w"> </span><span class="o">*</span><span class="n">s</span><span class="p">,</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="kt">char</span><span class="w"> </span><span class="o">*</span><span class="n">chars</span><span class="p">,</span><span class="w"> </span><span class="kt">char</span><span class="w"> </span><span class="o">*</span><span class="n">w</span><span class="p">);</span>
+<span class="kt">void</span><span class="w">    </span><span class="nf">str_translate</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="kt">char</span><span class="w"> </span><span class="o">*</span><span class="n">s</span><span class="p">,</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="kt">char</span><span class="w"> </span><span class="o">*</span><span class="n">from</span><span class="p">,</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="kt">char</span><span class="w"> </span><span class="o">*</span><span class="n">to</span><span class="p">,</span><span class="w"> </span><span class="kt">char</span><span class="w"> </span><span class="o">*</span><span class="n">w</span><span class="p">);</span>
+</code></pre></div>
+
+<p>Other programs will <code>#include</code> this file in order to use the functions we
+will be implementing in this library.</p>
+<div class="alert info-bg">
+<p><strong>Note</strong>: For this task, you <strong>do not</strong> need to modify this file.  Instead,
+you should review it and ensure you understand the provided code.</p>
+</div>
+<h3 id="task-1-makefile">Task 1: <code>Makefile</code><a class="headerlink" href="#task-1-makefile" title="Permanent link">&para;</a></h3>
+<p>The <code>Makefile</code> contains all the <strong>rules</strong> or <strong>recipes</strong> for building the
+project artifacts (e.g. <code>libstr.a</code>, <code>libstr.so</code>, etc.):</p>
+<div class="codehilite"><pre><span></span><code><span class="nv">CC</span><span class="o">=</span><span class="w">       </span>gcc
+<span class="nv">CFLAGS</span><span class="o">=</span><span class="w">   </span>-Wall<span class="w"> </span>-g<span class="w"> </span>-std<span class="o">=</span>gnu99<span class="w"> </span>-fPIC
+<span class="nv">LD</span><span class="o">=</span><span class="w">       </span>gcc
+<span class="nv">LDFLAGS</span><span class="o">=</span><span class="w">  </span>-L.
+<span class="nv">LIBS</span><span class="o">=</span><span class="w">     </span>-lstr
+<span class="nv">AR</span><span class="o">=</span><span class="w">       </span>ar
+<span class="nv">ARFLAGS</span><span class="o">=</span><span class="w">  </span>rcs
+<span class="nv">TARGETS</span><span class="o">=</span><span class="w">  </span>libstr.so<span class="w"> </span>libstr.a<span class="w"> </span>trit.dynamic<span class="w"> </span>trit.static
+
+<span class="nf">all</span><span class="o">:</span><span class="w">    </span><span class="k">$(</span><span class="nv">TARGETS</span><span class="k">)</span>
+
+<span class="c">#-------------------------------------------------------------------------------</span>
+<span class="c"># TODO: Add rules for libstr.a libstr.so</span>
+<span class="c">#-------------------------------------------------------------------------------</span>
+
+<span class="nf">str.o</span><span class="o">:</span>
+
+<span class="nf">libstr.so</span><span class="o">:</span>
+
+<span class="nf">libstr.a</span><span class="o">:</span>
+
+<span class="c">#-------------------------------------------------------------------------------</span>
+<span class="c"># TODO: Add rules for trit.dynamic trit.static</span>
+<span class="c">#-------------------------------------------------------------------------------</span>
+
+<span class="nf">trit.o</span><span class="o">:</span>
+
+<span class="nf">trit.dynamic</span><span class="o">:</span>
+
+<span class="nf">trit.static</span><span class="o">:</span>
+
+<span class="c">#-------------------------------------------------------------------------------</span>
+<span class="c"># DO NOT MODIFY BELOW</span>
+<span class="c">#-------------------------------------------------------------------------------</span>
+
+<span class="err">...</span>
+</code></pre></div>
+
+<p>For this task, you will need to add <a href="https://www.gnu.org/software/make/manual/html_node/Rule-Example.html#Rule-Example">rules</a> for building the <a href="https://en.wikipedia.org/wiki/Static_library#Creating_static_libraries_in_C.2FC.2B.2B">static library</a>
+<code>libstr.a</code> and the <a href="https://en.wikipedia.org/wiki/Library_(computing)#Shared_libraries">shared library</a> <code>libstr.so</code>.  Be sure to have a <strong>recipe</strong>
+for any <em>intermediate</em> <a href="https://en.wikipedia.org/wiki/Object_file">object</a> files that both libraries require as shown in
+the <a href="https://en.wikipedia.org/wiki/Directed_acyclic_graph">DAG</a> below:</p>
+<div class="centered">
+  <img src="static/img/homework06-makefile.png" class="responsive">
+</div>
+
+<div class="alert info-bg">
+<h3 id="cogs-embed_icon-makefile-variables"><i class="icon icon-medium"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><title>cogs</title><path d="M15.9,18.45C17.25,18.45 18.35,17.35 18.35,16C18.35,14.65 17.25,13.55 15.9,13.55C14.54,13.55 13.45,14.65 13.45,16C13.45,17.35 14.54,18.45 15.9,18.45M21.1,16.68L22.58,17.84C22.71,17.95 22.75,18.13 22.66,18.29L21.26,20.71C21.17,20.86 21,20.92 20.83,20.86L19.09,20.16C18.73,20.44 18.33,20.67 17.91,20.85L17.64,22.7C17.62,22.87 17.47,23 17.3,23H14.5C14.32,23 14.18,22.87 14.15,22.7L13.89,20.85C13.46,20.67 13.07,20.44 12.71,20.16L10.96,20.86C10.81,20.92 10.62,20.86 10.54,20.71L9.14,18.29C9.05,18.13 9.09,17.95 9.22,17.84L10.7,16.68L10.65,16L10.7,15.31L9.22,14.16C9.09,14.05 9.05,13.86 9.14,13.71L10.54,11.29C10.62,11.13 10.81,11.07 10.96,11.13L12.71,11.84C13.07,11.56 13.46,11.32 13.89,11.15L14.15,9.29C14.18,9.13 14.32,9 14.5,9H17.3C17.47,9 17.62,9.13 17.64,9.29L17.91,11.15C18.33,11.32 18.73,11.56 19.09,11.84L20.83,11.13C21,11.07 21.17,11.13 21.26,11.29L22.66,13.71C22.75,13.86 22.71,14.05 22.58,14.16L21.1,15.31L21.15,16L21.1,16.68M6.69,8.07C7.56,8.07 8.26,7.37 8.26,6.5C8.26,5.63 7.56,4.92 6.69,4.92A1.58,1.58 0 0,0 5.11,6.5C5.11,7.37 5.82,8.07 6.69,8.07M10.03,6.94L11,7.68C11.07,7.75 11.09,7.87 11.03,7.97L10.13,9.53C10.08,9.63 9.96,9.67 9.86,9.63L8.74,9.18L8,9.62L7.81,10.81C7.79,10.92 7.7,11 7.59,11H5.79C5.67,11 5.58,10.92 5.56,10.81L5.4,9.62L4.64,9.18L3.5,9.63C3.41,9.67 3.3,9.63 3.24,9.53L2.34,7.97C2.28,7.87 2.31,7.75 2.39,7.68L3.34,6.94L3.31,6.5L3.34,6.06L2.39,5.32C2.31,5.25 2.28,5.13 2.34,5.03L3.24,3.47C3.3,3.37 3.41,3.33 3.5,3.37L4.63,3.82L5.4,3.38L5.56,2.19C5.58,2.08 5.67,2 5.79,2H7.59C7.7,2 7.79,2.08 7.81,2.19L8,3.38L8.74,3.82L9.86,3.37C9.96,3.33 10.08,3.37 10.13,3.47L11.03,5.03C11.09,5.13 11.07,5.25 11,5.32L10.03,6.06L10.06,6.5L10.03,6.94Z" /></svg>
+</i> Makefile Variables<a class="headerlink" href="#cogs-embed_icon-makefile-variables" title="Permanent link">&para;</a></h3>
+<p>You <strong>must</strong> use the <code>CC</code>, <code>CFLAGS</code>, <code>LD</code>, <code>LDFLAGS</code>, <code>AR</code>, and <code>ARFLAGS</code>
+variables when appropriate in your <a href="https://www.gnu.org/software/make/manual/html_node/Rule-Example.html#Rule-Example">rules</a>.  You <strong>should</strong> also consider
+using <a href="https://www.gnu.org/software/make/manual/html_node/Automatic-Variables.html">automatic variables</a> such as <code>$@</code> and <code>$&lt;</code> as well.</p>
+</div>
+<p>Once you have a working <code>Makefile</code>, you should be able to run the following commands:</p>
+<div class="codehilite"><pre><span></span><code><span class="c1"># Build all TARGETS</span>
+$<span class="w"> </span>make
+gcc<span class="w"> </span>-Wall<span class="w"> </span>-g<span class="w"> </span>-std<span class="o">=</span>gnu99<span class="w"> </span>-fPIC<span class="w"> </span>-c<span class="w"> </span>-o<span class="w"> </span>str.o<span class="w"> </span>str.c
+gcc<span class="w"> </span>-L.<span class="w"> </span>-shared<span class="w"> </span>-o<span class="w"> </span>libstr.so<span class="w"> </span>str.o
+ar<span class="w"> </span>rcs<span class="w"> </span>libstr.a<span class="w"> </span>str.o
+
+<span class="c1"># Run str library tests</span>
+$<span class="w"> </span>make<span class="w"> </span>test-libstr
+Testing<span class="w"> </span>libstr.so<span class="w"> </span>...
+test_00_str_lower<span class="w"> </span><span class="o">(</span>__main__.StrTestCase.test_00_str_lower<span class="o">)</span><span class="w"> </span>...<span class="w"> </span>FAIL
+test_01_str_upper<span class="w"> </span><span class="o">(</span>__main__.StrTestCase.test_01_str_upper<span class="o">)</span><span class="w"> </span>...<span class="w"> </span>FAIL
+test_02_str_title<span class="w"> </span><span class="o">(</span>__main__.StrTestCase.test_02_str_title<span class="o">)</span><span class="w"> </span>...<span class="w"> </span>FAIL
+test_03_str_rstrip<span class="w"> </span><span class="o">(</span>__main__.StrTestCase.test_03_str_rstrip<span class="o">)</span><span class="w"> </span>...<span class="w"> </span>FAIL
+test_04_str_delete<span class="w"> </span><span class="o">(</span>__main__.StrTestCase.test_04_str_delete<span class="o">)</span><span class="w"> </span>...<span class="w"> </span>FAIL
+test_05_str_translate<span class="w"> </span><span class="o">(</span>__main__.StrTestCase.test_05_str_translate<span class="o">)</span><span class="w"> </span>...<span class="w"> </span>FAIL
+
+<span class="w">   </span>Score<span class="w"> </span><span class="m">1</span>.11<span class="w"> </span>/<span class="w"> </span><span class="m">6</span>.00
+<span class="w">   </span>Grade<span class="w"> </span><span class="m">0</span>.18<span class="w"> </span>/<span class="w"> </span><span class="m">1</span>.00
+<span class="w">  </span>Status<span class="w"> </span>Failure
+...
+
+<span class="c1"># Remove generated artifacts</span>
+$<span class="w"> </span>make<span class="w"> </span>clean
+</code></pre></div>
+
+<div class="alert danger-bg">
+<p><strong>Note</strong>: The tests will <strong>fail</strong> if you haven't implemented the string library.</p>
+</div>
+<div class="alert warning-bg">
+<h3 id="alert-embed_icon-compiler-warnings"><i class="icon icon-medium"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><title>alert</title><path d="M13 14H11V9H13M13 18H11V16H13M1 21H23L12 2L1 21Z" /></svg>
+</i> Compiler Warnings<a class="headerlink" href="#alert-embed_icon-compiler-warnings" title="Permanent link">&para;</a></h3>
+<p>You must include the <code>-Wall</code> flag in your <code>CFLAGS</code> when you compile.  This
+also means that your code must <strong>compile without any warnings</strong>, otherwise
+points will be deducted.</p>
+</div>
+<h3 id="task-2-strc">Task 2: <code>str.c</code><a class="headerlink" href="#task-2-strc" title="Permanent link">&para;</a></h3>
+<p>The <code>str.c</code> file contains the <a href="https://en.wikipedia.org/wiki/C_(programming_language)">C</a> implementation for the string library.</p>
+<p>For this task, you will need to implement the following functions:</p>
+<ol>
+<li>
+<div class="flex-col" markdown="1">
+<p><code>void    str_lower(const char *s, char *w)</code></p>
+<blockquote>
+<p>This function converts all the letters in <code>s</code> to lowercase (e.g.
+<code>s.lower()</code> in <a href="https://www.python.org/">Python</a>) and stores the result in <code>w</code>.</p>
+</blockquote>
+<div class="alert success-bg" markdown="1">
+<p><strong>Hint</strong>: Use <a href="http://man7.org/linux/man-pages/man3/toupper.3.html">tolower</a> to convert a <code>char</code> to lowercase.</p>
+</div>
+</li>
+<li>
+<div class="flex-col" markdown="1">
+<p><code>void    str_upper(const char *s, char *w)</code></p>
+<blockquote>
+<p>This function converts all the letters in <code>s</code> to uppercase (e.g.
+<code>s.upper()</code> in <a href="https://www.python.org/">Python</a>) and stores the result in <code>w</code>.</p>
+</blockquote>
+<div class="alert success-bg" markdown="1">
+<p><strong>Hint</strong>: Use <a href="http://man7.org/linux/man-pages/man3/toupper.3.html">toupper</a> to convert a <code>char</code> to uppercase.</p>
+</div>
+</li>
+<li>
+<div class="flex-col" markdown="1">
+<p><code>void    str_title(const char *s, char *w)</code></p>
+<blockquote>
+<p>This function converts all the letters in <code>s</code> to titlecase (e.g.
+<code>s.title()</code> in <a href="https://www.python.org/">Python</a>) and stores the result in <code>w</code>.</p>
+</blockquote>
+<div class="alert success-bg" markdown="1">
+<p><strong>Hint</strong>: Anything that is not a letter (ie. <a href="http://man7.org/linux/man-pages/man3/isalpha.3.html">isalpha</a>) is a word
+boundary.</p>
+</div>
+</li>
+<li>
+<div class="flex-col" markdown="1">
+<p><code>void    str_rstrip(const char *s, const char *chars, char *w)</code></p>
+<blockquote>
+<p>This function strips any of the specified <code>chars</code> from the back of <code>s</code>
+(e.g. <code>s.rstrip(chars)</code> in <a href="https://www.python.org/">Python</a>) and stores the result in <code>w</code>.  If
+<code>chars</code> is <code>NULL</code>, then all trailing whitespace is stripped.</p>
+</blockquote>
+<div class="alert success-bg" markdown="1">
+<p><strong>Hint</strong>: After copying the string <code>s</code> to <code>w</code>, work backwards until you
+  reach a character that should not be stripped.  Construct and use a
+  <strong>lookup</strong> table to efficiently determine if a character should be
+  stripped.</p>
+</div>
+</li>
+<li>
+<div class="flex-col" markdown="1">
+<p><code>void    str_delete(const char *s, const char *chars, char *w)</code></p>
+<blockquote>
+<p>This function deletes all the letters in <code>chars</code> from <code>s</code> (e.g.
+<code>s.translate({c: None for c in chars})</code> in <a href="https://www.python.org/">Python</a>) and stores the result in
+<code>w</code>.</p>
+</blockquote>
+<div class="alert success-bg" markdown="1">
+<p><strong>Hint</strong>: Construct and use a <strong>lookup</strong> table to efficiently determine
+  if a character should be copied from <code>s</code> to <code>w</code>.</p>
+</div>
+</li>
+<li>
+<div class="flex-col" markdown="1">
+<p><code>void    str_translate(const char *s, const char *from, const char *to, char *w)</code></p>
+<blockquote>
+<p>This function translates the letters in <code>s</code> using the mapping provided
+by <code>from</code> and <code>to</code> (e.g. <code>s.translate(string.maketrans(from, to))</code> in
+<a href="https://www.python.org/">Python</a>).</p>
+</blockquote>
+<div class="alert success-bg" markdown="1">
+<p><strong>Hint</strong>: Construct and use a <strong>lookup</strong> table to efficiently determine
+  if a character should substituted for another character while copying
+  from <code>s</code> to <code>w</code>.</p>
+</div>
+</li>
+</ol>
+<div class="alert danger-bg">
+<h3 id="check-all-embed_icon-requirements"><i class="icon icon-medium"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><title>check-all</title><path d="M0.41,13.41L6,19L7.41,17.58L1.83,12M22.24,5.58L11.66,16.17L7.5,12L6.07,13.41L11.66,19L23.66,7M18,7L16.59,5.58L10.24,11.93L11.66,13.34L18,7Z" /></svg>
+</i> Requirements<a class="headerlink" href="#check-all-embed_icon-requirements" title="Permanent link">&para;</a></h3>
+<ol>
+<li>
+<p>The functions above <strong>must</strong> not modify the original string <code>s</code> and must
+store the result in the provided <code>w</code> buffer.</p>
+</li>
+<li>
+<p>You are not allowed to <strong>allocate</strong> any additional temporary <a href="https://en.wikipedia.org/wiki/String_(computer_science)">strings</a> as
+scratch space.  Moreover, you cannot use the <a href="https://en.wikipedia.org/wiki/Heap_(programming)">heap</a> or <a href="https://en.wikipedia.org/wiki/C_dynamic_memory_allocation">dynamic memory
+allocation</a>.</p>
+</li>
+<li>
+<p>The functions above <strong>must</strong> run in <code>O(n)</code> (ie. <strong>linear</strong>) time and use
+<code>O(1)</code> (ie. <strong>constant</strong>) space.</p>
+</li>
+<li>
+<div class="flex-col" markdown="1">
+<p>The functions above <strong>must</strong> only use <a href="https://en.wikipedia.org/wiki/C_(programming_language)#Pointers">pointers</a> when iterating through a
+<a href="https://en.wikipedia.org/wiki/String_(computer_science)">string</a> or accessing individual characters in a <a href="https://en.wikipedia.org/wiki/String_(computer_science)">string</a>.  That is, you
+cannot <strong>index</strong> into a <a href="https://en.wikipedia.org/wiki/String_(computer_science)">string</a>:</p>
+<div class="codehilite"><pre><span></span><code><span class="cm">/* Allowed: Iterate through string using pointers */</span>
+<span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">char</span><span class="w"> </span><span class="o">*</span><span class="n">c</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">s</span><span class="p">;</span><span class="w"> </span><span class="o">*</span><span class="n">c</span><span class="p">;</span><span class="w"> </span><span class="n">c</span><span class="o">++</span><span class="p">)</span>
+<span class="w">    </span><span class="n">putc</span><span class="p">(</span><span class="o">*</span><span class="n">c</span><span class="p">,</span><span class="w"> </span><span class="n">stdout</span><span class="p">);</span>
+
+<span class="cm">/* Forbidden: Iterate through string using array index */</span>
+<span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">size_t</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">strlen</span><span class="p">(</span><span class="n">s</span><span class="p">);</span><span class="w"> </span><span class="n">i</span><span class="o">++</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">putc</span><span class="p">(</span><span class="n">s</span><span class="p">[</span><span class="n">i</span><span class="p">],</span><span class="w"> </span><span class="n">stdout</span><span class="p">);</span><span class="w">       </span><span class="c1">// Not allowed</span>
+<span class="w">    </span><span class="n">putc</span><span class="p">(</span><span class="o">*</span><span class="p">(</span><span class="n">s</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">i</span><span class="p">),</span><span class="w"> </span><span class="n">stdout</span><span class="p">);</span><span class="w">   </span><span class="c1">// Also not allowed</span>
+<span class="p">}</span>
+</code></pre></div>
+
+</li>
+<li>
+<p>You cannot use any functions provided by <code>string.h</code>, including <code>strlen</code>,
+<code>strchr</code>, or <code>strcpy</code>.  You must perform all operations manually using
+<a href="https://en.wikipedia.org/wiki/C_(programming_language)#Pointers">pointers</a>.</p>
+</li>
+</ol>
+</div>
+<h3 id="task-3-testing">Task 3: Testing<a class="headerlink" href="#task-3-testing" title="Permanent link">&para;</a></h3>
+<p>As you implement the functions in <code>str.c</code>, you should use the <code>str.test.py</code>
+and <code>str.unit.sh</code> scripts to test each function:</p>
+<div class="codehilite"><pre><span></span><code><span class="c1"># Build test artificats and run test scripts</span>
+$<span class="w"> </span>make<span class="w"> </span>test-libstr
+...
+</code></pre></div>
+
+<p>This will run two different test scripts:</p>
+<ol>
+<li>
+<p><code>str.test.py</code>: This is a <a href="https://www.python.org/">Python</a> unit test script that uses your
+  <code>libstr.so</code>.</p>
+</li>
+<li>
+<p><code>str.unit.sh</code>: This is a shell unit test script that uses your <code>libstr.a</code>
+  with <code>str.unit</code>.</p>
+</li>
+</ol>
+<p>You can run each manually:</p>
+<div class="codehilite"><pre><span></span><code><span class="c1"># Run Python unit test script manually</span>
+$<span class="w"> </span>./str.test.py<span class="w"> </span>-v
+Testing<span class="w"> </span>libstr.so<span class="w"> </span>...
+test_00_str_lower<span class="w"> </span><span class="o">(</span>__main__.StrTestCase.test_00_str_lower<span class="o">)</span><span class="w"> </span>...<span class="w"> </span>ok
+test_01_str_upper<span class="w"> </span><span class="o">(</span>__main__.StrTestCase.test_01_str_upper<span class="o">)</span><span class="w"> </span>...<span class="w"> </span>ok
+test_02_str_title<span class="w"> </span><span class="o">(</span>__main__.StrTestCase.test_02_str_title<span class="o">)</span><span class="w"> </span>...<span class="w"> </span>ok
+test_03_str_rstrip<span class="w"> </span><span class="o">(</span>__main__.StrTestCase.test_03_str_rstrip<span class="o">)</span><span class="w"> </span>...<span class="w"> </span>ok
+test_04_str_delete<span class="w"> </span><span class="o">(</span>__main__.StrTestCase.test_04_str_delete<span class="o">)</span><span class="w"> </span>...<span class="w"> </span>ok
+test_05_str_translate<span class="w"> </span><span class="o">(</span>__main__.StrTestCase.test_05_str_translate<span class="o">)</span><span class="w"> </span>...<span class="w"> </span>ok
+
+<span class="w">   </span>Score<span class="w"> </span><span class="m">6</span>.00<span class="w"> </span>/<span class="w"> </span><span class="m">6</span>.00
+<span class="w">   </span>Grade<span class="w"> </span><span class="m">1</span>.00<span class="w"> </span>/<span class="w"> </span><span class="m">1</span>.00
+<span class="w">  </span>Status<span class="w"> </span>Success
+
+
+----------------------------------------------------------------------
+Ran<span class="w"> </span><span class="m">6</span><span class="w"> </span>tests<span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="m">0</span>.001s
+
+OK
+
+<span class="c1"># Run Shell unit test script manually</span>
+$<span class="w"> </span>./str.unit.sh
+Testing<span class="w"> </span>libstr.a<span class="w"> </span>...
+<span class="w">  </span>str_lower<span class="w">                                </span>...<span class="w"> </span>Success
+<span class="w">  </span>str_upper<span class="w">                                </span>...<span class="w"> </span>Success
+<span class="w">  </span>str_title<span class="w">                                </span>...<span class="w"> </span>Success
+<span class="w">  </span>str_rstrip<span class="w">                               </span>...<span class="w"> </span>Success
+<span class="w">  </span>str_delete<span class="w">                               </span>...<span class="w"> </span>Success
+<span class="w">  </span>str_translate<span class="w">                            </span>...<span class="w"> </span>Success
+<span class="w">  </span>--------------------
+<span class="w">   </span>Score<span class="w"> </span><span class="m">6</span>.00<span class="w"> </span>/<span class="w"> </span><span class="m">6</span>.00
+<span class="w">   </span>Grade<span class="w"> </span><span class="m">1</span>.00<span class="w"> </span>/<span class="w"> </span><span class="m">1</span>.00
+<span class="w">  </span>Status<span class="w"> </span>Success
+</code></pre></div>
+
+<p>To use <a href="https://www.python.org/">Python</a> to interactively test a function, you can do something like
+the following:</p>
+<div class="codehilite"><pre><span></span><code><span class="c1"># Import ctypes package</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="kn">import</span> <span class="nn">ctypes</span>
+
+<span class="c1"># Load string utilies shared library</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">libstr</span> <span class="o">=</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">CDLL</span><span class="p">(</span><span class="s1">&#39;./libstr.so&#39;</span><span class="p">)</span>
+
+<span class="c1"># Create string buffers</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">s</span> <span class="o">=</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">create_string_buffer</span><span class="p">(</span><span class="sa">b</span><span class="s1">&#39;Hello, World!&#39;</span><span class="p">)</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">w</span> <span class="o">=</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">create_string_buffer</span><span class="p">(</span><span class="mi">1</span><span class="o">&lt;&lt;</span><span class="mi">10</span><span class="p">)</span>
+
+<span class="c1"># Call str_lowercase function</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">libstr</span><span class="o">.</span><span class="n">str_lower</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">w</span><span class="p">)</span>
+
+<span class="c1"># View resulting value</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">w</span><span class="o">.</span><span class="n">value</span>
+<span class="sa">b</span><span class="s1">&#39;hello, world!&#39;</span>
+</code></pre></div>
+
+<p>To <strong>debug</strong> your string library in <a href="https://en.wikipedia.org/wiki/C_(programming_language)">C</a>, you can use [gdb] on <code>str.unit</code></p>
+<div class="codehilite"><pre><span></span><code><span class="c1"># Start gdb on str.unit</span>
+$<span class="w"> </span>gdb<span class="w"> </span>./str.unit
+<span class="o">(</span>gdb<span class="o">)</span><span class="w"> </span>run<span class="w"> </span><span class="m">0</span><span class="w">     </span><span class="c1"># Run str.unit with the &quot;0&quot; command line argument (ie. str_lower)</span>
+...
+</code></pre></div>
+
+<p>You can also use <a href="http://valgrind.org/">valgrind</a> to check for memory errors:</p>
+<div class="codehilite"><pre><span></span><code><span class="c1"># Check for memory errors on str_lower test case</span>
+$<span class="w"> </span>valgrind<span class="w"> </span>--leak-check<span class="o">=</span>full<span class="w"> </span>./str.unit<span class="w"> </span><span class="m">0</span>
+</code></pre></div>
+
+<div class="alert success-bg">
+<h3 id="repeat-embed_icon-iterative-development"><i class="icon icon-medium"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><title>repeat</title><path d="M17,17H7V14L3,18L7,22V19H19V13H17M7,7H17V10L21,6L17,2V5H5V11H7V7Z" /></svg>
+</i> Iterative Development<a class="headerlink" href="#repeat-embed_icon-iterative-development" title="Permanent link">&para;</a></h3>
+<p>You should practice <a href="https://en.wikipedia.org/wiki/Iterative_and_incremental_development">iterative development</a>.  That is, rather than writing a
+bunch of code and then debugging it all at once, you should concentrate on
+one function at a time and then test that <strong>one thing at a time</strong>.  The
+provided <a href="https://en.wikipedia.org/wiki/Unit_testing">unit tests</a> allow you to check on the correctness of the individual
+functions without implementing everything at once.  Take advantage of this
+and build one thing at a time.</p>
+</div>
+<h2 id="activity-2-trit-03-points">Activity 2: Trit (<em>0.3 Points</em>)<a class="headerlink" href="#activity-2-trit-03-points" title="Permanent link">&para;</a></h2>
+<p>Once you have a working string library, you are to complete the <code>trit</code>
+translation utility:</p>
+<div class="codehilite"><pre><span></span><code>$<span class="w"> </span>./trit.static<span class="w"> </span>-h<span class="w">                                            </span><span class="c1"># Display usage</span>
+Usage:<span class="w"> </span>./trit<span class="w"> </span>SET1<span class="w"> </span>SET2
+
+Post<span class="w"> </span>Translation<span class="w"> </span>filters:
+
+<span class="w">   </span>-l<span class="w">      </span>Convert<span class="w"> </span>to<span class="w"> </span>lowercase
+<span class="w">   </span>-u<span class="w">      </span>Convert<span class="w"> </span>to<span class="w"> </span>uppercase
+<span class="w">   </span>-t<span class="w">      </span>Convert<span class="w"> </span>to<span class="w"> </span>titlecase
+<span class="w">   </span>-s<span class="w">      </span>Strip<span class="w"> </span>trailing<span class="w"> </span>whitespace
+<span class="w">   </span>-d<span class="w">      </span>Delete<span class="w"> </span>letters<span class="w"> </span><span class="k">in</span><span class="w"> </span>SOURCE
+
+$<span class="w"> </span><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;   Hello world &quot;</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>./trit.static<span class="w">                      </span><span class="c1"># Just echo input</span>
+<span class="w">   </span>Hello<span class="w"> </span>world
+
+$<span class="w"> </span><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;   Hello world &quot;</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>./trit.static<span class="w"> </span>-l<span class="w">                   </span><span class="c1"># Lowercase</span>
+<span class="w">   </span>hello<span class="w"> </span>world
+
+$<span class="w"> </span><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;   Hello world &quot;</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>./trit.static<span class="w"> </span>-u<span class="w">                   </span><span class="c1"># Uppercase</span>
+<span class="w">   </span>HELLO<span class="w"> </span>WORLD
+
+$<span class="w"> </span><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;   Hello world &quot;</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>./trit.static<span class="w"> </span>-t<span class="w">                   </span><span class="c1"># Titlecase</span>
+<span class="w">   </span>Hello<span class="w"> </span>World
+
+$<span class="w"> </span><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;   Hello world &quot;</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>./trit.static<span class="w"> </span>-s<span class="w">                   </span><span class="c1"># Strip traling whitespace</span>
+<span class="w">   </span>Hello<span class="w"> </span>world
+
+$<span class="w"> </span><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;   Hello world &quot;</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>./trit.static<span class="w"> </span>-d<span class="w"> </span>aeio<span class="w">              </span><span class="c1"># Delete</span>
+<span class="w">   </span>Hll<span class="w"> </span>wrld
+
+$<span class="w"> </span><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;   Hello world &quot;</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>./trit.static<span class="w"> </span>aeio<span class="w"> </span><span class="m">4310</span><span class="w">            </span><span class="c1"># Translate</span>
+<span class="w">   </span>H3ll0<span class="w"> </span>w0rld
+
+$<span class="w"> </span><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;   Hello world &quot;</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>./trit.static<span class="w"> </span>-s<span class="w"> </span>-l<span class="w"> </span>aeio<span class="w"> </span><span class="m">4310</span><span class="w">      </span><span class="c1"># Translate, strip, and lowercase</span>
+<span class="w">   </span>h3ll0<span class="w"> </span>w0rld
+</code></pre></div>
+
+<p>The <code>trit</code> utility <strong>must</strong> use the corresponding functions from the string
+utilities library you created above to translate and filter the input text.</p>
+<h3 id="task-1-makefile_1">Task 1: <code>Makefile</code><a class="headerlink" href="#task-1-makefile_1" title="Permanent link">&para;</a></h3>
+<p>The first task is to modify the <code>Makefile</code> to include additional <a href="https://www.gnu.org/software/make/manual/html_node/Rule-Example.html#Rule-Example">rules</a> for
+the following targets:</p>
+<ol>
+<li>
+<p><code>trit.static</code>: This is a <a href="https://en.wikipedia.org/wiki/Static_library">static executable</a> of <code>trit.c</code>.</p>
+</li>
+<li>
+<p><code>trit.dynamic</code>: This is a <a href="https://en.wikipedia.org/wiki/Dynamic_linker">dynamic executable</a> of <code>trit.c</code>.</p>
+</li>
+</ol>
+<p>Be sure to add any <a href="https://www.gnu.org/software/make/manual/html_node/Rule-Example.html#Rule-Example">rules</a> for any <em>intermediate</em> <a href="https://en.wikipedia.org/wiki/Object_file">object</a> files.</p>
+<p>Once you have a working <code>Makefile</code>, you should be able to run the following commands:</p>
+<div class="codehilite"><pre><span></span><code><span class="c1"># Build all TARGETS</span>
+$<span class="w"> </span>make
+gcc<span class="w"> </span>-Wall<span class="w"> </span>-g<span class="w"> </span>-std<span class="o">=</span>gnu99<span class="w"> </span>-fPIC<span class="w"> </span>-c<span class="w"> </span>-o<span class="w"> </span>str.o<span class="w"> </span>str.c
+gcc<span class="w"> </span>-L.<span class="w"> </span>-shared<span class="w"> </span>-o<span class="w"> </span>libstr.so<span class="w"> </span>str.o
+ar<span class="w"> </span>rcs<span class="w"> </span>libstr.a<span class="w"> </span>str.o
+gcc<span class="w"> </span>-Wall<span class="w"> </span>-g<span class="w"> </span>-std<span class="o">=</span>gnu99<span class="w"> </span>-fPIC<span class="w"> </span>-c<span class="w"> </span>-o<span class="w"> </span>trit.o<span class="w"> </span>trit.c
+gcc<span class="w"> </span>-L.<span class="w"> </span>-o<span class="w"> </span>trit.dynamic<span class="w"> </span>trit.o<span class="w"> </span>-lstr
+gcc<span class="w"> </span>-L.<span class="w"> </span>-static<span class="w"> </span>-o<span class="w"> </span>trit.static<span class="w"> </span>trit.o<span class="w"> </span>-lstr
+
+<span class="c1"># Run all tests</span>
+$<span class="w"> </span>make<span class="w"> </span><span class="nb">test</span>
+test_00_str_lower<span class="w"> </span><span class="o">(</span>__main__.StrTestCase.test_00_str_lower<span class="o">)</span><span class="w"> </span>...<span class="w"> </span>ok
+test_01_str_upper<span class="w"> </span><span class="o">(</span>__main__.StrTestCase.test_01_str_upper<span class="o">)</span><span class="w"> </span>...<span class="w"> </span>ok
+test_02_str_title<span class="w"> </span><span class="o">(</span>__main__.StrTestCase.test_02_str_title<span class="o">)</span><span class="w"> </span>...<span class="w"> </span>ok
+test_03_str_rstrip<span class="w"> </span><span class="o">(</span>__main__.StrTestCase.test_03_str_rstrip<span class="o">)</span><span class="w"> </span>...<span class="w"> </span>ok
+test_04_str_delete<span class="w"> </span><span class="o">(</span>__main__.StrTestCase.test_04_str_delete<span class="o">)</span><span class="w"> </span>...<span class="w"> </span>ok
+test_05_str_translate<span class="w"> </span><span class="o">(</span>__main__.StrTestCase.test_05_str_translate<span class="o">)</span><span class="w"> </span>...<span class="w"> </span>ok
+
+----------------------------------------------------------------------
+Ran<span class="w"> </span><span class="m">6</span><span class="w"> </span>tests<span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="m">0</span>.000s
+
+OK
+Testing<span class="w"> </span>libstr.so<span class="w"> </span>...
+
+<span class="w">   </span>Score<span class="w"> </span><span class="m">6</span>.00<span class="w"> </span>/<span class="w"> </span><span class="m">6</span>.00
+<span class="w">   </span>Grade<span class="w"> </span><span class="m">1</span>.00<span class="w"> </span>/<span class="w"> </span><span class="m">1</span>.00
+<span class="w">  </span>Status<span class="w"> </span>Success
+
+Testing<span class="w"> </span>libstr.a<span class="w"> </span>...
+<span class="w">  </span>str_lower<span class="w">                                </span>...<span class="w"> </span>Success
+<span class="w">  </span>str_upper<span class="w">                                </span>...<span class="w"> </span>Success
+<span class="w">  </span>str_title<span class="w">                                </span>...<span class="w"> </span>Success
+<span class="w">  </span>str_rstrip<span class="w">                               </span>...<span class="w"> </span>Success
+<span class="w">  </span>str_delete<span class="w">                               </span>...<span class="w"> </span>Success
+<span class="w">  </span>str_translate<span class="w">                            </span>...<span class="w"> </span>Success
+<span class="w">  </span>--------------------
+<span class="w">   </span>Score<span class="w"> </span><span class="m">6</span>.00<span class="w"> </span>/<span class="w"> </span><span class="m">6</span>.00
+<span class="w">   </span>Grade<span class="w"> </span><span class="m">1</span>.00<span class="w"> </span>/<span class="w"> </span><span class="m">1</span>.00
+<span class="w">  </span>Status<span class="w"> </span>Success
+
+Testing<span class="w"> </span>trit<span class="w"> </span>utility...
+<span class="w">  </span>trit<span class="w"> </span>-h<span class="w">                                  </span>...<span class="w"> </span>Success
+<span class="w">  </span>trit<span class="w">                                     </span>...<span class="w"> </span>Success
+<span class="w">  </span>trit<span class="w"> </span>aeio<span class="w"> </span><span class="m">4310</span><span class="w">                           </span>...<span class="w"> </span>Success
+<span class="w">  </span>trit<span class="w"> </span>blue<span class="w"> </span>gold<span class="w">                           </span>...<span class="w"> </span>Success
+<span class="w">  </span>trit<span class="w"> </span>-l<span class="w"> </span>aeio<span class="w"> </span><span class="m">4310</span><span class="w">                        </span>...<span class="w"> </span>Success
+<span class="w">  </span>trit<span class="w"> </span>-u<span class="w"> </span>blue<span class="w"> </span>gold<span class="w">                        </span>...<span class="w"> </span>Success
+<span class="w">  </span>trit<span class="w"> </span>-t<span class="w">                                  </span>...<span class="w"> </span>Success
+<span class="w">  </span>trit<span class="w"> </span>-s<span class="w"> </span>swift<span class="w"> </span>snake<span class="w">                      </span>...<span class="w"> </span>Success
+<span class="w">  </span>trit<span class="w"> </span>-d<span class="w"> </span>aeio<span class="w">                             </span>...<span class="w"> </span>Success
+<span class="w">  </span>trit<span class="w"> </span>-l<span class="w"> </span>-u<span class="w"> </span>aeio<span class="w"> </span><span class="m">4310</span><span class="w">                     </span>...<span class="w"> </span>Success
+<span class="w">  </span>trit<span class="w"> </span>-l<span class="w"> </span>-s<span class="w"> </span>aeio<span class="w"> </span><span class="m">4310</span><span class="w">                     </span>...<span class="w"> </span>Success
+<span class="w">  </span>trit<span class="w"> </span>-l<span class="w"> </span>-d<span class="w"> </span>gdbye<span class="w">                         </span>...<span class="w"> </span>Success
+<span class="w">  </span>trit<span class="w"> </span>-s<span class="w"> </span>-t<span class="w"> </span>aeio<span class="w"> </span><span class="m">4310</span><span class="w">                     </span>...<span class="w"> </span>Success
+<span class="w">  </span>trit<span class="w"> </span>-u<span class="w"> </span>-d<span class="w"> </span>antm<span class="w">                          </span>...<span class="w"> </span>Success
+<span class="w">  </span>--------------------
+<span class="w">   </span>Score<span class="w"> </span><span class="m">14</span>.00<span class="w"> </span>/<span class="w"> </span><span class="m">14</span>.00
+<span class="w">   </span>Grade<span class="w"> </span><span class="m">1</span>.00<span class="w">  </span>/<span class="w"> </span><span class="m">1</span>.00
+<span class="w">  </span>Status<span class="w"> </span>Success
+
+...
+
+<span class="c1"># Remove generated artifacts</span>
+$<span class="w"> </span>make<span class="w"> </span>clean
+</code></pre></div>
+
+<h3 id="task-2-tritc">Task 2: <code>trit.c</code><a class="headerlink" href="#task-2-tritc" title="Permanent link">&para;</a></h3>
+<p>The <code>trit.c</code> file is contains the <a href="https://en.wikipedia.org/wiki/C_(programming_language)">C</a> implementation of the translation
+utility described above:</p>
+<div class="codehilite"><pre><span></span><code><span class="cm">/* trit.c: translation utility */</span>
+
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;str.h&quot;</span>
+
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;stdio.h&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;stdlib.h&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;string.h&gt;</span>
+
+<span class="cm">/* Constants */</span>
+
+<span class="k">enum</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">LOWER</span><span class="w">   </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="o">&lt;&lt;</span><span class="mi">1</span><span class="p">,</span>
+<span class="w">    </span><span class="n">UPPER</span><span class="w">   </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">    </span><span class="c1">// TODO: Modify</span>
+<span class="w">    </span><span class="n">TITLE</span><span class="w">   </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">    </span><span class="c1">// TODO: Modify</span>
+<span class="w">    </span><span class="n">STRIP</span><span class="w">   </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">    </span><span class="c1">// TODO: Modify</span>
+<span class="w">    </span><span class="n">DELETE</span><span class="w">  </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">    </span><span class="c1">// TODO: Modify</span>
+<span class="p">};</span>
+
+<span class="cm">/* Functions */</span>
+
+<span class="kt">void</span><span class="w"> </span><span class="nf">usage</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">status</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">fprintf</span><span class="p">(</span><span class="n">stderr</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;Usage: trit SET1 SET2</span><span class="se">\n\n</span><span class="s">&quot;</span><span class="p">);</span>
+<span class="w">    </span><span class="n">fprintf</span><span class="p">(</span><span class="n">stderr</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;Post Translation filters:</span><span class="se">\n\n</span><span class="s">&quot;</span><span class="p">);</span>
+<span class="w">    </span><span class="n">fprintf</span><span class="p">(</span><span class="n">stderr</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;   -l      Convert to lowercase</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">);</span>
+<span class="w">    </span><span class="n">fprintf</span><span class="p">(</span><span class="n">stderr</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;   -u      Convert to uppercase</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">);</span>
+<span class="w">    </span><span class="n">fprintf</span><span class="p">(</span><span class="n">stderr</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;   -t      Convert to titlecase</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">);</span>
+<span class="w">    </span><span class="n">fprintf</span><span class="p">(</span><span class="n">stderr</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;   -s      Strip trailing whitespace</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">);</span>
+<span class="w">    </span><span class="n">fprintf</span><span class="p">(</span><span class="n">stderr</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;   -d      Delete letters in SET1</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">);</span>
+<span class="w">    </span><span class="n">exit</span><span class="p">(</span><span class="n">status</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="kt">void</span><span class="w"> </span><span class="nf">translate_stream</span><span class="p">(</span><span class="kt">FILE</span><span class="w"> </span><span class="o">*</span><span class="n">stream</span><span class="p">,</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="kt">char</span><span class="w"> </span><span class="o">*</span><span class="n">set1</span><span class="p">,</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="kt">char</span><span class="w"> </span><span class="o">*</span><span class="n">set2</span><span class="p">,</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">flags</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="c1">// TODO</span>
+<span class="p">}</span>
+
+<span class="cm">/* Main Execution */</span>
+
+<span class="kt">int</span><span class="w"> </span><span class="nf">main</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">argc</span><span class="p">,</span><span class="w"> </span><span class="kt">char</span><span class="w"> </span><span class="o">*</span><span class="n">argv</span><span class="p">[])</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="c1">// TODO: Parse command line arguments</span>
+
+<span class="w">    </span><span class="c1">// TODO: Translate standard input</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">EXIT_SUCCESS</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<p>In addition to implementing command line parsing in the <code>main</code> function and
+you will need to implement the <code>translate_stream</code> function:</p>
+<ol>
+<li>
+<div class="flex-col" markdown="1">
+<p><code>void translate_stream(FILE *stream, const char *set1, const char *set2, int flags)</code></p>
+<blockquote>
+<p>This function reads one line at a time from the <code>stream</code> and performs
+either string deletion or string translation based on the values in
+<code>set1</code> and <code>set2</code>.  Any post processing is controlled by <code>flags</code>, which
+is a <a href="https://en.wikipedia.org/wiki/Mask_(computing)">bitmask</a> that specifies which filters to apply (ie. <em>lower</em>,
+<em>upper</em>, <em>title</em>, <em>strip</em>).</p>
+</blockquote>
+</li>
+</ol>
+<div class="alert warning-bg">
+<p><strong>Note</strong>: You should apply the filters in the order specified above.
+Overall, the flow for each line of input should be: <strong>delete</strong> or
+<strong>translate</strong>, apply <strong>filters</strong>, and then <strong>print</strong> result.</p>
+</div>
+<div class="alert success-bg">
+<p><strong>Hint</strong>: To handle the <code>flags</code> <a href="https://en.wikipedia.org/wiki/Mask_(computing)">bitmask</a>, you should have an <a href="https://en.wikipedia.org/wiki/Enumerated_type#C">enumerate</a> for
+each filter, where each filter corresponds to a particular <a href="https://en.wikipedia.org/wiki/Bit_field">bit field</a>:</p>
+<div class="codehilite"><pre><span></span><code><span class="k">enum</span><span class="w"> </span><span class="p">{</span><span class="w">                        </span><span class="cm">/* Define Flags */</span>
+<span class="w">    </span><span class="n">LOWER</span><span class="w">   </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="o">&lt;&lt;</span><span class="mi">1</span><span class="p">,</span>
+<span class="w">    </span><span class="p">...</span>
+<span class="p">};</span>
+
+<span class="n">flags</span><span class="w"> </span><span class="o">|=</span><span class="w"> </span><span class="n">LOWER</span><span class="p">;</span><span class="w">               </span><span class="cm">/* Set a Flag */</span>
+
+<span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">flags</span><span class="w"> </span><span class="o">&amp;</span><span class="w"> </span><span class="n">LOWER</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w">          </span><span class="cm">/* Check a Flag */</span>
+<span class="w">    </span><span class="p">...</span>
+<span class="p">}</span>
+</code></pre></div>
+
+</div>
+<p>If you need a review of <code>enum</code>, checkout <a href="https://diveintosystems.org/book/C2-C_depth/advanced_switch.html#_enumerated_types">Enumerated Types</a> from <a href="https://diveintosystems.org/">Dive Into Systems</a>.</p>
+<h3 id="task-3-testing_1">Task 3: Testing<a class="headerlink" href="#task-3-testing_1" title="Permanent link">&para;</a></h3>
+<p>To test your <code>trit</code> utility, you can use the provided <code>trit.test.sh</code> script:</p>
+<div class="codehilite"><pre><span></span><code><span class="c1"># Build artifacts</span>
+$<span class="w"> </span>make<span class="w"> </span>test-trit
+Testing<span class="w"> </span>trit<span class="w"> </span>utility...
+<span class="w">  </span>trit<span class="w"> </span>-h<span class="w">                                  </span>...<span class="w"> </span>Success
+<span class="w">  </span>trit<span class="w">                                     </span>...<span class="w"> </span>Success
+<span class="w">  </span>trit<span class="w"> </span>aeio<span class="w"> </span><span class="m">4310</span><span class="w">                           </span>...<span class="w"> </span>Success
+<span class="w">  </span>trit<span class="w"> </span>blue<span class="w"> </span>gold<span class="w">                           </span>...<span class="w"> </span>Success
+<span class="w">  </span>trit<span class="w"> </span>-l<span class="w"> </span>aeio<span class="w"> </span><span class="m">4310</span><span class="w">                        </span>...<span class="w"> </span>Success
+<span class="w">  </span>trit<span class="w"> </span>-u<span class="w"> </span>blue<span class="w"> </span>gold<span class="w">                        </span>...<span class="w"> </span>Success
+<span class="w">  </span>trit<span class="w"> </span>-t<span class="w">                                  </span>...<span class="w"> </span>Success
+<span class="w">  </span>trit<span class="w"> </span>-s<span class="w"> </span>swift<span class="w"> </span>snake<span class="w">                      </span>...<span class="w"> </span>Success
+<span class="w">  </span>trit<span class="w"> </span>-d<span class="w"> </span>aeio<span class="w">                             </span>...<span class="w"> </span>Success
+<span class="w">  </span>trit<span class="w"> </span>-l<span class="w"> </span>-u<span class="w"> </span>aeio<span class="w"> </span><span class="m">4310</span><span class="w">                     </span>...<span class="w"> </span>Success
+<span class="w">  </span>trit<span class="w"> </span>-l<span class="w"> </span>-s<span class="w"> </span>aeio<span class="w"> </span><span class="m">4310</span><span class="w">                     </span>...<span class="w"> </span>Success
+<span class="w">  </span>trit<span class="w"> </span>-l<span class="w"> </span>-d<span class="w"> </span>gdbye<span class="w">                         </span>...<span class="w"> </span>Success
+<span class="w">  </span>trit<span class="w"> </span>-s<span class="w"> </span>-t<span class="w"> </span>aeio<span class="w"> </span><span class="m">4310</span><span class="w">                     </span>...<span class="w"> </span>Success
+<span class="w">  </span>trit<span class="w"> </span>-u<span class="w"> </span>-d<span class="w"> </span>antm<span class="w">                          </span>...<span class="w"> </span>Success
+<span class="w">  </span>--------------------
+<span class="w">   </span>Score<span class="w"> </span><span class="m">14</span>.00<span class="w"> </span>/<span class="w"> </span><span class="m">14</span>.00
+<span class="w">   </span>Grade<span class="w"> </span><span class="m">1</span>.00<span class="w">  </span>/<span class="w"> </span><span class="m">1</span>.00
+<span class="w">  </span>Status<span class="w"> </span>Success
+
+<span class="c1"># Run test script manually</span>
+$<span class="w"> </span>./trit.test.sh
+Testing<span class="w"> </span>trit<span class="w"> </span>utility...
+</code></pre></div>
+
+<p>Alternatively, you can both build the artifacts and run the test script by
+doing the following:</p>
+<div class="codehilite"><pre><span></span><code><span class="c1"># Build and run test scripts</span>
+$<span class="w"> </span>make<span class="w"> </span>test-trit
+...
+</code></pre></div>
+
+<div class="alert danger-bg">
+<h3 id="checkbox-marked-outline-embed_icon-valgrind"><i class="icon icon-medium"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><title>checkbox-marked-outline</title><path d="M19,19H5V5H15V3H5C3.89,3 3,3.89 3,5V19A2,2 0 0,0 5,21H19A2,2 0 0,0 21,19V11H19M7.91,10.08L6.5,11.5L11,16L21,6L19.59,4.58L11,13.17L7.91,10.08Z" /></svg>
+</i> Valgrind<a class="headerlink" href="#checkbox-marked-outline-embed_icon-valgrind" title="Permanent link">&para;</a></h3>
+<p>The <code>trit.test.sh</code> <a href="https://en.wikipedia.org/wiki/Unix_shell">shell</a> script will use the <a href="http://valgrind.org/">valgrind</a> tool to verify that
+your program does not contain any memory errors such as <a href="https://en.wikipedia.org/wiki/Memory_leak">memory leaks</a>,
+<a href="http://valgrind.org/docs/manual/mc-manual.html#mc-manual.uninitvals">uninitialized values</a>, or <a href="http://valgrind.org/docs/manual/mc-manual.html#mc-manual.badrw">invalid accesses</a>.</p>
+<p>You can run <a href="http://valgrind.org/">valgrind</a> manually by doing:</p>
+<div class="codehilite"><pre><span></span><code>$<span class="w"> </span><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;   Hello World&quot;</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>valgrind<span class="w"> </span>--leak-check<span class="o">=</span>full<span class="w"> </span>./trit.dynamic
+<span class="o">==</span><span class="nv">28627</span><span class="o">==</span><span class="w"> </span>Memcheck,<span class="w"> </span>a<span class="w"> </span>memory<span class="w"> </span>error<span class="w"> </span><span class="nv">detector</span>
+<span class="o">==</span><span class="nv">28627</span><span class="o">==</span><span class="w"> </span>Copyright<span class="w"> </span><span class="o">(</span>C<span class="o">)</span><span class="w"> </span><span class="m">2002</span>-2015,<span class="w"> </span>and<span class="w"> </span>GNU<span class="w"> </span>GPL<span class="err">&#39;</span>d,<span class="w"> </span>by<span class="w"> </span>Julian<span class="w"> </span>Seward<span class="w"> </span>et<span class="w"> </span>al.
+<span class="o">==</span><span class="nv">28627</span><span class="o">==</span><span class="w"> </span>Using<span class="w"> </span>Valgrind-3.12.0<span class="w"> </span>and<span class="w"> </span>LibVEX<span class="p">;</span><span class="w"> </span>rerun<span class="w"> </span>with<span class="w"> </span>-h<span class="w"> </span><span class="k">for</span><span class="w"> </span>copyright<span class="w"> </span><span class="nv">info</span>
+<span class="o">==</span><span class="nv">28627</span><span class="o">==</span><span class="w"> </span>Command:<span class="w"> </span>./str-dynamic
+<span class="o">==</span><span class="nv">28627</span><span class="o">==</span>
+<span class="w">  </span>Hello<span class="w"> </span><span class="nv">World</span>
+<span class="o">==</span><span class="nv">28627</span><span class="o">==</span>
+<span class="o">==</span><span class="nv">28627</span><span class="o">==</span><span class="w"> </span>HEAP<span class="w"> </span>SUMMARY:
+<span class="o">==</span><span class="nv">28627</span><span class="o">==</span><span class="w">     </span><span class="k">in</span><span class="w"> </span>use<span class="w"> </span>at<span class="w"> </span>exit:<span class="w"> </span><span class="m">0</span><span class="w"> </span>bytes<span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="m">0</span><span class="w"> </span><span class="nv">blocks</span>
+<span class="o">==</span><span class="nv">28627</span><span class="o">==</span><span class="w">   </span>total<span class="w"> </span>heap<span class="w"> </span>usage:<span class="w"> </span><span class="m">2</span><span class="w"> </span>allocs,<span class="w"> </span><span class="m">2</span><span class="w"> </span>frees,<span class="w"> </span><span class="m">5</span>,120<span class="w"> </span>bytes<span class="w"> </span><span class="nv">allocated</span>
+<span class="o">==</span><span class="nv">28627</span><span class="o">==</span>
+<span class="o">==</span><span class="nv">28627</span><span class="o">==</span><span class="w"> </span>All<span class="w"> </span>heap<span class="w"> </span>blocks<span class="w"> </span>were<span class="w"> </span>freed<span class="w"> </span>--<span class="w"> </span>no<span class="w"> </span>leaks<span class="w"> </span>are<span class="w"> </span><span class="nv">possible</span>
+<span class="o">==</span><span class="nv">28627</span><span class="o">==</span>
+<span class="o">==</span><span class="nv">28627</span><span class="o">==</span><span class="w"> </span>For<span class="w"> </span>counts<span class="w"> </span>of<span class="w"> </span>detected<span class="w"> </span>and<span class="w"> </span>suppressed<span class="w"> </span>errors,<span class="w"> </span>rerun<span class="w"> </span>with:<span class="w"> </span>-v
+<span class="o">==</span><span class="nv">28627</span><span class="o">==</span><span class="w"> </span>ERROR<span class="w"> </span>SUMMARY:<span class="w"> </span><span class="m">0</span><span class="w"> </span>errors<span class="w"> </span>from<span class="w"> </span><span class="m">0</span><span class="w"> </span>contexts<span class="w"> </span><span class="o">(</span>suppressed:<span class="w"> </span><span class="m">0</span><span class="w"> </span>from<span class="w"> </span><span class="m">0</span><span class="o">)</span>
+</code></pre></div>
+
+<p><strong>Note</strong>: You should run <a href="http://valgrind.org/">valgrind</a> on the <a href="https://en.wikipedia.org/wiki/Dynamic_linker">dynamic executable</a> rather than
+the <a href="https://en.wikipedia.org/wiki/Static_library">static executable</a>.  Likewise, <a href="http://valgrind.org/">valgrind</a> may behave differently on
+<a href="https://www.apple.com/macos/">macOS</a> than it does on <a href="https://kernel.org">Linux</a>, so beware of spurious errors on the former.</p>
+</div>
+<h2 id="activity-3-quiz-02-points">Activity 3: Quiz (<em>0.2 Points</em>)<a class="headerlink" href="#activity-3-quiz-02-points" title="Permanent link">&para;</a></h2>
+<p>Once you have completed all the activities above, you are to complete the
+following <strong>reflection quiz</strong>:</p>
+<div id="quiz-questions"></div>
+
+<div id="quiz-responses"></div>
+
+<script src="static/js/dredd-quiz.js"></script>
+<script>
+loadQuiz('static/json/homework06.json');
+</script>
+
+<pre style="display: none;" id="dr-container" class="codehilite"><code id="dredd-response"></code></pre>
+
+<p>As with <a href="reading01.html">Reading 01</a>, you will need to store your answers in a
+<code>homework06/answers.json</code> file.  You can use the form above to generate the
+contents of this file, or you can write the <a href="https://json.org">JSON</a> by hand.</p>
+<p>To test your quiz, you can use the <code>check.py</code> script:</p>
+<div class="codehilite"><pre><span></span><code>$<span class="w"> </span>../.scripts/check.py
+Checking<span class="w"> </span>homework06<span class="w"> </span>quiz<span class="w"> </span>...
+<span class="w">     </span>Q01<span class="w">  </span><span class="m">4</span>.00<span class="w"> </span>/<span class="w">  </span><span class="m">4</span>.00
+<span class="w">     </span>Q02<span class="w">  </span><span class="m">3</span>.00<span class="w"> </span>/<span class="w">  </span><span class="m">3</span>.00
+<span class="w">     </span>Q03<span class="w">  </span><span class="m">4</span>.00<span class="w"> </span>/<span class="w">  </span><span class="m">4</span>.00
+<span class="w">     </span>Q04<span class="w">  </span><span class="m">2</span>.00<span class="w"> </span>/<span class="w">  </span><span class="m">2</span>.00
+<span class="w">     </span>Q05<span class="w">  </span><span class="m">7</span>.00<span class="w"> </span>/<span class="w">  </span><span class="m">7</span>.00
+<span class="w">  </span>--------------------
+<span class="w">   </span>Score<span class="w"> </span><span class="m">20</span>.00<span class="w"> </span>/<span class="w"> </span><span class="m">20</span>.00
+<span class="w">   </span>Grade<span class="w">  </span><span class="m">1</span>.00<span class="w"> </span>/<span class="w">  </span><span class="m">1</span>.00
+<span class="w">  </span>Status<span class="w"> </span>Success
+</code></pre></div>
+
+<h2 id="submission">Submission<a class="headerlink" href="#submission" title="Permanent link">&para;</a></h2>
+<p>To submit your assignment, please commit your work to the <code>homework06</code> folder
+of your <code>homework06</code> branch in your <strong>assignments</strong> <a href="https://github.com">GitHub</a> repository.
+Your <code>homework06</code> folder should <strong>only</strong> contain the following files:</p>
+<ul>
+<li><code>Makefile</code></li>
+<li><code>answers.json</code></li>
+<li><code>str.c</code></li>
+<li><code>str.h</code></li>
+<li><code>str.unit.c</code></li>
+<li><code>trit.c</code></li>
+</ul>
+<div class="alert warning-bg">
+<p><strong>Note</strong>: You do not need to commit the test scripts because the <code>Makefile</code>
+automatically downloads them.</p>
+</div>
+<div class="codehilite"><pre><span></span><code><span class="c1">#-----------------------------------------------------------------------</span>
+<span class="c1"># Make sure you have already completed Activity 0: Preparation</span>
+<span class="c1">#-----------------------------------------------------------------------</span>
+...
+$<span class="w"> </span>git<span class="w"> </span>add<span class="w"> </span>Makefile<span class="w">                        </span><span class="c1"># Mark changes for commit</span>
+$<span class="w"> </span>git<span class="w"> </span>add<span class="w"> </span>str.c<span class="w">                           </span><span class="c1"># Mark changes for commit</span>
+$<span class="w"> </span>git<span class="w"> </span>add<span class="w"> </span>str.h<span class="w">                           </span><span class="c1"># Mark changes for commit</span>
+$<span class="w"> </span>git<span class="w"> </span>commit<span class="w"> </span>-m<span class="w"> </span><span class="s2">&quot;Homework 06: str&quot;</span><span class="w">        </span><span class="c1"># Record changes</span>
+...
+$<span class="w"> </span>git<span class="w"> </span>add<span class="w"> </span>Makefile<span class="w">                        </span><span class="c1"># Mark changes for commit</span>
+$<span class="w"> </span>git<span class="w"> </span>add<span class="w"> </span>trit.c<span class="w">                          </span><span class="c1"># Mark changes for commit</span>
+$<span class="w"> </span>git<span class="w"> </span>commit<span class="w"> </span>-m<span class="w"> </span><span class="s2">&quot;Homework 06: trit&quot;</span><span class="w">       </span><span class="c1"># Record changes</span>
+...
+$<span class="w"> </span>git<span class="w"> </span>add<span class="w"> </span>answers.json<span class="w">                    </span><span class="c1"># Mark changes for commit</span>
+$<span class="w"> </span>git<span class="w"> </span>commit<span class="w"> </span>-m<span class="w"> </span><span class="s2">&quot;Homework 06: Quiz&quot;</span><span class="w">       </span><span class="c1"># Record changes</span>
+$<span class="w"> </span>git<span class="w"> </span>push<span class="w"> </span>-u<span class="w"> </span>origin<span class="w"> </span>homework06<span class="w">           </span><span class="c1"># Push branch to GitHub</span>
+</code></pre></div>
+
+<div class="alert warning-bg">
+<h3 id="lifebuoy-embed_icon-acknowledgments"><i class="icon icon-medium"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><title>lifebuoy</title><path d="M19.79,15.41C20.74,13.24 20.74,10.75 19.79,8.59L17.05,9.83C17.65,11.21 17.65,12.78 17.06,14.17L19.79,15.41M15.42,4.21C13.25,3.26 10.76,3.26 8.59,4.21L9.83,6.94C11.22,6.35 12.79,6.35 14.18,6.95L15.42,4.21M4.21,8.58C3.26,10.76 3.26,13.24 4.21,15.42L6.95,14.17C6.35,12.79 6.35,11.21 6.95,9.82L4.21,8.58M8.59,19.79C10.76,20.74 13.25,20.74 15.42,19.78L14.18,17.05C12.8,17.65 11.22,17.65 9.84,17.06L8.59,19.79M12,2A10,10 0 0,1 22,12A10,10 0 0,1 12,22A10,10 0 0,1 2,12A10,10 0 0,1 12,2M12,8A4,4 0 0,0 8,12A4,4 0 0,0 12,16A4,4 0 0,0 16,12A4,4 0 0,0 12,8Z" /></svg>
+</i> Acknowledgments<a class="headerlink" href="#lifebuoy-embed_icon-acknowledgments" title="Permanent link">&para;</a></h3>
+<p>If you collaborated with any other students, or received help from TAs or AI
+tools on this assignment, please record this support in the <code>README.md</code> in
+the <code>homework06</code> folder and include it with your <strong>Pull Request</strong>.</p>
+</div>
+<div class="alert success-bg">
+<h3 id="account-question-embed_icon-graders"><i class="icon icon-medium"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><title>account-question</title><path d="M13,8A4,4 0 0,1 9,12A4,4 0 0,1 5,8A4,4 0 0,1 9,4A4,4 0 0,1 13,8M17,18V20H1V18C1,15.79 4.58,14 9,14C13.42,14 17,15.79 17,18M20.5,14.5V16H19V14.5H20.5M18.5,9.5H17V9A3,3 0 0,1 20,6A3,3 0 0,1 23,9C23,9.97 22.5,10.88 21.71,11.41L21.41,11.6C20.84,12 20.5,12.61 20.5,13.3V13.5H19V13.3C19,12.11 19.6,11 20.59,10.35L20.88,10.16C21.27,9.9 21.5,9.47 21.5,9A1.5,1.5 0 0,0 20,7.5A1.5,1.5 0 0,0 18.5,9V9.5Z" /></svg>
+</i> Graders<a class="headerlink" href="#account-question-embed_icon-graders" title="Permanent link">&para;</a></h3>
+<p>Once you have committed your work and pushed it to <a href="https://github.com">GitHub</a>, remember to
+create a <strong>pull request</strong> and assign it to the appropriate <strong>teaching
+assistant</strong> from the <a href="reading06_tas.html">Reading 06 TA List</a>.</p>
+<p><strong>Note</strong>: this list changes each week, so be sure to consult the appropriate
+list for each assignment.</p>
+</div>
+</main>
+<footer>
+Built using <a href="https://python.org">Python</a>
+and <a href="https://jinja.palletsprojects.com">Jinja</a>
+with colors from <a href="https://nordtheme.com">Nord Theme</a>
+and icons from <a href="https://pictogrammers.com/library/mdi/">Material Design Icons</a>.</footer>
+</body>
+</html>

@@ -1,0 +1,32 @@
+{
+    "q01": {
+        "type": "multiple",
+        "question": "\n<p>In <code>tailit.c</code>, you could have (<i>really, should have</i>) used\n<code>strdup</code> when adding lines to your <code>List</code>.  Which of the\nfollowing statements regarding <code>strdup</code> is true (<i>choose all that\napply</i>)?</p>\n",
+        "responses": {
+            "stack": "<code>strdup</code> <b>allocates</b> a new string on the <b>stack</b>.",
+            "heap": "<code>strdup</code> <b>allocates</b> a new string on the <b>heap</b>.",
+            "copy": "<code>strdup</code> <b>copies</b> the specified string into the allocated space.",
+            "clear": "<code>strdup</code> <b>clears</b> the specified string from the allocated space."
+        }
+    },
+    "q02": {
+        "type": "blank",
+        "question": "\n<p>When compiling the following line of code:</p>\n\n<pre>\nlist_append(l, 42);\n</pre>\n\n<p>You get the following compiler error:</p>\n\n<pre>\nexample.c: In function \u2018main\u2019:\nexample.c:23:21: error: incompatible type for argument 2 of \u2018list_append\u2019\n  list_append(l, 42);\n                 ^~\nIn file included from example.c:3:\nlist.h:38:33: note: expected \u2018Value\u2019 {aka \u2018union <anonymous>\u2019} but argument is of type \u2018int\u2019\n  void list_append(List *l, Value v);\n</pre>\n\n<p>Re-write this line of code in the most concise way possible to resolve\nthis error: ____.</p>\n"
+    },
+    "q03": {
+        "type": "blank",
+        "question": "\n<p>Given the following statements (inside a <code>main</code> function), fill\nin the table below to identify how much memory (in bytes) is allocated in\neach memory segment (ie. <b>stack</b>, <b>heap</b>, <b>data</b>) for the\ncorresponding variable declaration:</p>\n\n<table class=\"bordered\">\n  <thead>\n    <th>Code</th>\n    <th>Data</th>\n    <th>Heap</th>\n    <th>Stack</th>\n  </thead>\n  <tbody>\n    <tr>\n      <td><code>char *s = \"memory\";</code></td>\n      <td class=\"centered\">____ ( 1)</td>\n      <td class=\"centered\">____ ( 2)</td>\n      <td class=\"centered\">____ ( 3)</td>\n    </tr>\n    <tr>\n      <td><code>Value v = {.string = s};</code></td>\n      <td class=\"centered\">____ ( 4)</td>\n      <td class=\"centered\">____ ( 5)</td>\n      <td class=\"centered\">____ ( 6)</td>\n    </tr>\n    <tr>\n      <td><code>Node *n = node_create(v, NULL, NULL);</code></td>\n      <td class=\"centered\">____ ( 7)</td>\n      <td class=\"centered\">____ ( 8)</td>\n      <td class=\"centered\">____ ( 9)</td>\n    </tr>\n    <tr>\n      <td><code>List *l = list_create();</code></td>\n      <td class=\"centered\">____ (10)</td>\n      <td class=\"centered\">____ (11)</td>\n      <td class=\"centered\">____ (12)</td>\n    </tr>\n  </tbody>\n</table>\n\n<p>Assume this program is compiled on a 64-bit Linux machine (ie. the\n<b>student</b> machines).</p>\n"
+    },
+    "q04": {
+        "type": "blank",
+        "question": "\n<p>Given the following code:</p>\n\n<pre>\nList *l = list_create();\n\nlist_append(l, \"reasonable\");\nlist_append(l, \"obscure\");\nlist_append(l, \"exam\");\n</pre>\n\n<ol>\n    <li>How would you access the <b>first value</b> in <code>l</code>? ____</li>\n    <li>What is the <b>first value</b> in <code>l</code>? ____</li>\n    <li>How would you access the <b>last value</b> in <code>l</code>? ____</li>\n    <li>What is the <b>last value</b> in <code>l</code>? ____</li>\n</ol>\n"
+    },
+    "q05": {
+        "type": "blank",
+        "question": "\n<p>Assuming a <b>little endian</b> machine, complete the following code\nsuch that the output is \"JOSHUA\":</p>\n\n<pre>\ntypedef union {\n    int64_t number;\n    char    string[sizeof(int64_t)];\n} Data;\n\nint main(int argc, char *argv[]) {\n    Data d = {.number = ____};  // Use hexadecimal representation\n    puts(d.string);\n    return EXIT_SUCCESS;\n}\n</pre>\n\n<div class=\"alert success-bg\">\n\n<p><b>Hint:</b> Reverse engineer the solution by setting the <code>.string</code>\nattribute and printing out the <code>.number</code> attribute in\n<b>hexadecimal</b>.</p>\n\n</div>\n"
+    },
+    "q06": {
+        "type": "blank",
+        "question": "\n<p>Assuming a <b>big endian</b> machine, complete the following code\nsuch that the output is \"JOSHUA\":</p>\n\n<pre>\ntypedef union {\n    int64_t number;\n    char    string[sizeof(int64_t)];\n} Data;\n\nint main(int argc, char *argv[]) {\n    Data d = {.number = ____};  // Use hexadecimal representation\n    puts(d.string);\n    return EXIT_SUCCESS;\n}\n</pre>\n\n<div class=\"alert success-bg\">\n\n<p><b>Hint:</b> Use <code>htobe64</code> on the previous <b>hexadecimal</b> number\nto convert it from <b>little endian</b> to <b>big endian</b>.</p>\n\n</div>\n"
+    }
+}

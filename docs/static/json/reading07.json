@@ -1,0 +1,40 @@
+{
+    "q1": {
+        "type": "blank",
+        "question": "\n<p>Given <code>allocations.c</code>, fill in the table below to identify how\nmuch memory (in bytes) is allocated in each memory segment (ie.\n<b>stack</b>, <b>heap</b>, <b>data</b>) for the corresponding variable\ndeclaration:</p>\n\n<table class=\"bordered\">\n  <thead>\n    <th>Code</th>\n    <th>Data</th>\n    <th>Heap</th>\n    <th>Stack</th>\n  </thead>\n  <tbody>\n    <tr>\n      <td><code>double GD = 3.14;</code></td>\n      <td class=\"centered\"><code>____ ( 1)</code></td>\n      <td class=\"centered\"><code>____ ( 2)</code></td>\n      <td class=\"centered\"><code>____ ( 3)</code></td>\n    </tr>\n    <tr>\n      <td><code>int a[] = {5, 7, 4};</code></td>\n      <td class=\"centered\"><code>____ ( 4)</code></td>\n      <td class=\"centered\"><code>____ ( 5)</code></td>\n      <td class=\"centered\"><code>____ ( 6)</code></td>\n    </tr>\n\n    <tr>\n      <td><code>char *sp = \"Video Games\";</code></td>\n      <td class=\"centered\"><code>____ ( 7)</code></td>\n      <td class=\"centered\"><code>____ ( 8)</code></td>\n      <td class=\"centered\"><code>____ ( 9)</code></td>\n    </tr>\n\n    <tr>\n      <td><code>char sa[] = \"Runescape\";</code></td>\n      <td class=\"centered\"><code>____ (10)</code></td>\n      <td class=\"centered\"><code>____ (11)</code></td>\n      <td class=\"centered\"><code>____ (12)</code></td>\n    </tr>\n\n    <tr>\n      <td><code>Block b = {0};</code></td>\n      <td class=\"centered\"><code>____ (13)</code></td>\n      <td class=\"centered\"><code>____ (14)</code></td>\n      <td class=\"centered\"><code>____ (15)</code></td>\n    </tr>\n\n    <tr>\n      <td><code>Point p0 = {0, 0};</code></td>\n      <td class=\"centered\"><code>____ (16)</code></td>\n      <td class=\"centered\"><code>____ (17)</code></td>\n      <td class=\"centered\"><code>____ (18)</code></td>\n    </tr>\n\n    <tr>\n      <td><code>Point *p1 = NULL;</code></td>\n      <td class=\"centered\"><code>____ (19)</code></td>\n      <td class=\"centered\"><code>____ (20)</code></td>\n      <td class=\"centered\"><code>____ (21)</code></td>\n    </tr>\n\n    <tr>\n      <td><code>Point *p2 = malloc(sizeof(Point));</code></td>\n      <td class=\"centered\"><code>____ (22)</code></td>\n      <td class=\"centered\"><code>____ (23)</code></td>\n      <td class=\"centered\"><code>____ (24)</code></td>\n    </tr>\n\n    <tr>\n      <td><code>Point *p3 = malloc(5*sizeof(Point));</code></td>\n      <td class=\"centered\"><code>____ (25)</code></td>\n      <td class=\"centered\"><code>____ (26)</code></td>\n      <td class=\"centered\"><code>____ (27)</code></td>\n    </tr>\n\n    <tr>\n      <td><code>Point **p4 = malloc(5*sizeof(Point *));</code></td>\n      <td class=\"centered\"><code>____ (28)</code></td>\n      <td class=\"centered\"><code>____ (29)</code></td>\n      <td class=\"centered\"><code>____ (30)</code></td>\n    </tr>\n\n  </tbody>\n</table>\n\n<p>Assume this program is compiled on a 64-bit Linux machine (ie. the\n<b>student</b> machines).</p>\n"
+    },
+    "q2": {
+        "type": "multiple",
+        "question": "\n<p>Build <code>str_rev.c</code> with the appropriate compiler flags and then\nrun it using <code>gdb</code>:</p>\n\n<pre>\n$ gcc -Wall -std=gnu99 -g -o str_rev str_rev.c\n\n$ gdb ./str_rev\n...\n(gdb) run old school\n...\nProgram received signal SIGSEGV, Segmentation fault.\n(gdb) bt\n...\n</pre>\n\n<p>Which of the following statements are true (select all that apply)?</p>\n",
+        "responses": {
+            "puts": "The program <b>segfaults</b> on the line <code>puts(t)</code>.",
+            "copy": "The program <b>segfaults</b> on the line <code>*w++ = *r--</code>.",
+            "strcpy": "The program <b>segfaults</b> on the line <code>strncpy(t, s, strlen(s))</code>.",
+            "strlen": "The program <b>segfaults</b> on the line <code>char *t = malloc(strlen(s))</code>.",
+            "nulls": "The program <b>segfaults</b> because <code>s</code> is <code>NULL</code>.",
+            "nullt": "The program <b>segfaults</b> because <code>t</code> is <code>NULL</code>.",
+            "longs": "The program <b>segfaults</b> because <code>s</code> is too long.",
+            "longt": "The program <b>segfaults</b> because <code>t</code> is too long.",
+            "frees": "To fix the segfault, we must call <code>free(s)</code>.",
+            "freet": "To fix the segfault, we must call <code>free(t)</code>.",
+            "inti": "To fix the segfault, we must set <code>int i = 0</code> in the <code>for</code> loop.",
+            "argc": "To fix the segfault, we must check <code>i < argc</code> in the <code>for</code> loop."
+        }
+    },
+    "q3": {
+        "type": "multiple",
+        "question": "\n<p>Fix the segmentation fault in <b>Q2</b>, rebuild the program, and then\nuse <code>valgrind</code> to run the program:</p>\n\n<pre>\n$ valgrind --leak-check=full ./str_rev old school\n</pre>\n\n<p>Which of the following statements are true (select all that apply)?</p>\n",
+        "responses": {
+            "nouninits": "There are no uninitialized memory accesses.",
+            "uninits": "There are uninitialized memory accesses.",
+            "noleaks": "There are no memory leaks.",
+            "leaks": "There is a memory leak.",
+            "noinvalids": "There are no invalid memory accesses.",
+            "invalids": "There are invalid memory accesses."
+        }
+    },
+    "q4": {
+        "type": "blank",
+        "question": "\n<p>Assuming an <code>8</code> bit representation, complete the following table\nby converting the numbers in each row into their equivalent <b>decimal</b>,\n<b>binary</b>, and <b>hexadecimal</b> representations.\n\n<table class=\"bordered\">\n  <thead>\n    <th>Decimal</th>\n    <th>Binary</th>\n    <th>Hexadecimal</th>\n  </thead>\n  <tbody>\n    <tr>\n      <td class=\"centered\"><code>25</code></td>\n      <td class=\"centered\">____ (1)</td>\n      <td class=\"centered\">____ (2)</td>\n    </tr>\n    <tr>\n      <td class=\"centered\">____ (3)</td>\n      <td class=\"centered\"><code>01100011</code></td>\n      <td class=\"centered\">____ (4)</td>\n    </tr>\n    <tr>\n      <td class=\"centered\">____ (5)</td>\n      <td class=\"centered\">____ (6)</td>\n      <td class=\"centered\"><code>0x78</code></td>\n    </tr>\n  </tbody>\n</table>\n"
+    }
+}

@@ -1,0 +1,359 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<!-- Favicon -->
+<link rel="icon" type="image/png" sizes="32x32" href="static/ico/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="static/ico/favicon-16x16.png">
+<link rel="manifest" href="static/ico/site.webmanifest">
+<!-- Stylesheets -->
+<link rel="stylesheet" href="static/css/pnutzh4x0r.css">
+<title>Reading 07: Memory Management</title>
+</head>
+<body>
+<header>
+<a class="logo" href="reading07.html">
+    <h1>Reading 07: Memory Management</h1>
+</a>
+<nav>
+    <ul>
+        <li><a href="index.html"><h4>Home</h4></a></li>
+        </ul>
+</nav></header>
+<main>
+<p><strong>Everyone</strong>:</p>
+<p>Next week, we will delve deeper into <a href="https://en.wikipedia.org/wiki/Memory_management">memory management</a>, <a href="https://en.wikipedia.org/wiki/Data_structure">data structures</a>,
+and <a href="https://en.wikipedia.org/wiki/Binary_number">binary numbers</a> in <a href="https://en.wikipedia.org/wiki/C_(programming_language)">C</a>.  In particular, we will discuss how a typical
+<a href="https://en.wikipedia.org/wiki/Address_space">address space</a> is laid out, how to dynamically allocate memory using
+<a href="http://man7.org/linux/man-pages/man3/malloc.3.html">malloc</a> (and how to release it with <a href="http://man7.org/linux/man-pages/man3/malloc.3.html">free</a>), and how to create <a href="https://en.wikipedia.org/wiki/Data_structure">data
+structures</a> with <a href="https://en.wikipedia.org/wiki/Record_(computer_science)">structs</a> and <a href="https://en.wikipedia.org/wiki/Union_type">unions</a>.</p>
+<div class="alert info-bg">
+<h3 id="book-embed_icon-tldr"><i class="icon icon-medium"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><title>book</title><path d="M18,22A2,2 0 0,0 20,20V4C20,2.89 19.1,2 18,2H12V9L9.5,7.5L7,9V2H6A2,2 0 0,0 4,4V20A2,2 0 0,0 6,22H18Z" /></svg>
+</i> TL;DR<a class="headerlink" href="#book-embed_icon-tldr" title="Permanent link">&para;</a></h3>
+<p>The focus of this reading is to explore <a href="https://en.wikipedia.org/wiki/Memory_management">memory management</a>, <a href="https://en.wikipedia.org/wiki/Data_structure">data
+structures</a>, and <a href="https://en.wikipedia.org/wiki/Binary_number">binary numbers</a> in <a href="https://en.wikipedia.org/wiki/C_(programming_language)">C</a> and learn how to use <a href="http://valgrind.org/">valgrind</a> and
+<a href="https://www.gnu.org/software/gdb/">gdb</a>.</p>
+</div>
+<h2 id="readings">Readings<a class="headerlink" href="#readings" title="Permanent link">&para;</a></h2>
+<div class="flex-row">
+<div class="flex-col">
+<p>The readings for this week are:</p>
+<ol>
+<li>
+<div class="flex-col" markdown="1">
+<p><a href="https://diveintosystems.org/">Dive Into Systems</a></p>
+<ul>
+<li>
+<div class="flex-col" markdown="1">
+<p><a href="https://diveintosystems.org/singlepage/#_a_deeper_dive_into_c_programming">A Deeper Dive into C Programming</a></p>
+<p>For this week, focus on sections <strong>2.1</strong>, <strong>2.4</strong>, and <strong>2.7</strong>.</p>
+</li>
+<li>
+<div class="flex-col" markdown="1">
+<p><a href="https://diveintosystems.org/singlepage/#_c_debugging_tools">C Debugging Tools</a></p>
+<p>For this week, review secions <strong>3.1</strong>, <strong>3.2</strong>, and <strong>3.3</strong> (ie. <a href="https://www.gnu.org/software/gdb/">gdb</a> and <a href="http://valgrind.org/">valgrind</a>).</p>
+</li>
+<li>
+<div class="flex-col" markdown="1">
+<p><a href="https://diveintosystems.org/singlepage/#_binary_and_data_representation">Binary and Data Representation</a></p>
+<p>This should be review from <strong>Fundamentals of Computing</strong> and <strong>Logic
+Design</strong>, so skim this chapter and make sure you recognize most of
+this material.</p>
+</li>
+</ul>
+</li>
+<li>
+<div class="flex-col" markdown="1">
+<p><a href="http://pages.cs.wisc.edu/~remzi/OSTEP/">Operating Systems: Three Easy Pieces</a></p>
+<ul>
+<li><a href="http://pages.cs.wisc.edu/~remzi/OSTEP/vm-api.pdf">Memory API</a></li>
+</ul>
+</li>
+</ol>
+</div>
+<div class="flex-col">
+<div class="centered">
+  <img src="static/img/diveintosystems.jpg">
+</div>
+</div>
+</div>
+<h3 id="optional-references">Optional References<a class="headerlink" href="#optional-references" title="Permanent link">&para;</a></h3>
+<div class="flex-row">
+<div class="flex-col">
+<ul>
+<li>
+<div class="flex-col" markdown="1">
+<p><a href="https://beej.us/guide/bgc/html/index-wide.html">Beej's Guide to C Programming</a></p>
+<ul>
+<li><a href="https://beej.us/guide/bgc/html/index-wide.html#structs">Chapter 8. Structs</a></li>
+<li><a href="https://beej.us/guide/bgc/html/index-wide.html#typedef-making-new-types">Chapter 10. typedef</a></li>
+<li><a href="https://beej.us/guide/bgc/html/index-wide.html#manual-memory-allocation">Chapter 12. Manual Memory Allocation</a></li>
+<li><a href="https://beej.us/guide/bgc/html/index-wide.html#unions">Section 20.9 Unions</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="flex-col">
+<ul>
+<li>
+<p><a href="https://beej.us/guide/bggdb/">Beej's Quick Guide to GDB</a></p>
+</li>
+<li>
+<p><a href="http://valgrind.org/docs/manual/quick-start.html">Valgrind Quick Start Guide</a></p>
+</li>
+</ul>
+</div>
+</div>
+<ul>
+<li>
+<div class="flex-col" markdown="1">
+<p><a href="https://jvns.ca/">Julia Evans</a></p>
+<div class="flex-row" markdown="1">
+<p><div class="flex-col" markdown="1">
+  <a href="https://wizardzines.com/comics/the-stack/">
+  <img src="https://wizardzines.com/images/uploads/stack.png" class="responsive">
+  </a>
+</div></p>
+<p><div class="flex-col" markdown="1">
+  <a href="https://wizardzines.com/comics/memory-allocation/">
+  <img src="https://wizardzines.com/images/uploads/memory-allocation.png" class="responsive">
+</a>
+</div></p>
+</div>
+<div class="flex-row" markdown="1">
+<p><div class="flex-col" markdown="1">
+  <a href="https://wizardzines.com/comics/bitwise-operations">
+  <img src="https://wizardzines.com/images/uploads/bitwise-operations.png" class="responsive">
+  </a>
+</div></p>
+<p><div class="flex-col" markdown="1">
+  <a href="https://wizardzines.com/comics/integers">
+  <img src="https://wizardzines.com/images/uploads/integers.png" class="responsive">
+  </a>
+</div></p>
+</div>
+<div class="flex-row" markdown="1">
+<p><div class="flex-col" markdown="1">
+  <a href="https://wizardzines.com/comics/signed-integers">
+  <img src="https://wizardzines.com/images/uploads/signed-integers.png" class="responsive">
+  </a>
+</div></p>
+<p><div class="flex-col" markdown="1">
+  <a href="https://wizardzines.com/comics/little-big-endian">
+  <img src="https://wizardzines.com/images/uploads/little-big-endian.png" class="responsive">
+  </a>
+</div></p>
+<p></div>
+</div></p>
+</li>
+</ul>
+<h2 id="quiz">Quiz<a class="headerlink" href="#quiz" title="Permanent link">&para;</a></h2>
+<p>This week, the reading is split into two sections: the first part is a
+<a href="https://dredd.h4x0r.space">dredd</a> quiz, while the second part involves one <a href="https://en.wikipedia.org/wiki/C_(programming_language)">C</a> program: <a href="https://pnutz.h4x0r.space/courses/cse.20289.sp26/static/txt/reading07/str_rev.c">str_rev.c</a>.</p>
+<p>To test the <a href="https://en.wikipedia.org/wiki/C_(programming_language)">C</a> program, you will need to download the <a href="https://pnutz.h4x0r.space/courses/cse.20289.sp26/static/txt/reading07/Makefile">Makefile</a> and test
+scripts:</p>
+<div class="codehilite"><pre><span></span><code>$<span class="w"> </span>git<span class="w"> </span>switch<span class="w"> </span>master<span class="w">                   </span><span class="c1"># Make sure we are in master branch</span>
+$<span class="w"> </span>git<span class="w"> </span>pull<span class="w"> </span>--rebase<span class="w">                   </span><span class="c1"># Make sure we are up-to-date with GitHub</span>
+
+$<span class="w"> </span>git<span class="w"> </span>switch<span class="w"> </span>-c<span class="w"> </span>reading07<span class="w">             </span><span class="c1"># Create reading07 branch and check it out</span>
+
+$<span class="w"> </span><span class="nb">cd</span><span class="w"> </span>reading07<span class="w">                        </span><span class="c1"># Go into reading07 folder</span>
+
+<span class="c1"># Download Reading 07 Makefile</span>
+$<span class="w"> </span>curl<span class="w"> </span>-LO<span class="w"> </span>https://pnutz.h4x0r.space/courses/cse.20289.sp26/static/txt/reading07/Makefile
+
+<span class="c1"># Download, build, and execute tests</span>
+$<span class="w"> </span>make<span class="w"> </span><span class="nb">test</span>
+</code></pre></div>
+
+<h3 id="questions">Questions<a class="headerlink" href="#questions" title="Permanent link">&para;</a></h3>
+<p>Given the following <a href="https://en.wikipedia.org/wiki/C_(programming_language)">C</a> program, <a href="https://pnutz.h4x0r.space/courses/cse.20289.sp26/static/txt/reading07/allocations.c">allocations.c</a>, which simply declares a
+series of variables:</p>
+<div class="codehilite"><pre><span></span><code><span class="cm">/* allocations.c */</span>
+
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;stdio.h&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;stdlib.h&gt;</span>
+
+<span class="k">typedef</span><span class="w"> </span><span class="k">struct</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kt">double</span><span class="w"> </span><span class="n">x</span><span class="p">;</span>
+<span class="w">    </span><span class="kt">double</span><span class="w"> </span><span class="n">y</span><span class="p">;</span>
+<span class="p">}</span><span class="w"> </span><span class="n">Point</span><span class="p">;</span>
+
+<span class="k">typedef</span><span class="w"> </span><span class="k">union</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kt">char</span><span class="w">   </span><span class="n">c</span><span class="p">;</span>
+<span class="w">    </span><span class="kt">int</span><span class="w">    </span><span class="n">i</span><span class="p">;</span>
+<span class="w">    </span><span class="kt">float</span><span class="w">  </span><span class="n">f</span><span class="p">;</span>
+<span class="w">    </span><span class="kt">double</span><span class="w"> </span><span class="n">d</span><span class="p">;</span>
+<span class="p">}</span><span class="w"> </span><span class="n">Block</span><span class="p">;</span>
+
+<span class="kt">double</span><span class="w"> </span><span class="n">GD</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">3.14</span><span class="p">;</span>
+
+<span class="kt">int</span><span class="w"> </span><span class="nf">main</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">argc</span><span class="p">,</span><span class="w"> </span><span class="kt">char</span><span class="w"> </span><span class="o">*</span><span class="n">argv</span><span class="p">[])</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kt">int</span><span class="w">    </span><span class="n">a</span><span class="p">[]</span><span class="w">  </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="mi">5</span><span class="p">,</span><span class="w"> </span><span class="mi">7</span><span class="p">,</span><span class="w"> </span><span class="mi">4</span><span class="p">};</span>
+<span class="w">    </span><span class="kt">char</span><span class="w">  </span><span class="o">*</span><span class="n">sp</span><span class="w">   </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;Video Games&quot;</span><span class="p">;</span>
+<span class="w">    </span><span class="kt">char</span><span class="w">   </span><span class="n">sa</span><span class="p">[]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;Runescape&quot;</span><span class="p">;</span>
+<span class="w">    </span><span class="n">Block</span><span class="w">  </span><span class="n">b</span><span class="w">    </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="mi">0</span><span class="p">};</span>
+
+<span class="w">    </span><span class="n">Point</span><span class="w">   </span><span class="n">p0</span><span class="w">  </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">};</span>
+<span class="w">    </span><span class="n">Point</span><span class="w">  </span><span class="o">*</span><span class="n">p1</span><span class="w">  </span><span class="o">=</span><span class="w"> </span><span class="nb">NULL</span><span class="p">;</span>
+<span class="w">    </span><span class="n">Point</span><span class="w">  </span><span class="o">*</span><span class="n">p2</span><span class="w">  </span><span class="o">=</span><span class="w"> </span><span class="n">malloc</span><span class="p">(</span><span class="k">sizeof</span><span class="p">(</span><span class="n">Point</span><span class="p">));</span>
+<span class="w">    </span><span class="n">Point</span><span class="w">  </span><span class="o">*</span><span class="n">p3</span><span class="w">  </span><span class="o">=</span><span class="w"> </span><span class="n">malloc</span><span class="p">(</span><span class="mi">5</span><span class="o">*</span><span class="k">sizeof</span><span class="p">(</span><span class="n">Point</span><span class="p">));</span>
+<span class="w">    </span><span class="n">Point</span><span class="w"> </span><span class="o">**</span><span class="n">p4</span><span class="w">  </span><span class="o">=</span><span class="w"> </span><span class="n">malloc</span><span class="p">(</span><span class="mi">5</span><span class="o">*</span><span class="k">sizeof</span><span class="p">(</span><span class="n">Point</span><span class="w"> </span><span class="o">*</span><span class="p">));</span>
+
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<p>And the following <a href="https://en.wikipedia.org/wiki/C_(programming_language)">C</a> program, <a href="https://pnutz.h4x0r.space/courses/cse.20289.sp26/static/txt/reading07/str_rev.c">str_rev.c</a>, which reverses the characters of
+each command-line argument:</p>
+<div class="codehilite"><pre><span></span><code><span class="cm">/* str_rev: Reverse all characters in string */</span>
+
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;ctype.h&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;stdio.h&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;stdlib.h&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;string.h&gt;</span>
+
+<span class="kt">char</span><span class="w"> </span><span class="o">*</span><span class="nf">str_rev</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="kt">char</span><span class="w"> </span><span class="o">*</span><span class="n">s</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kt">char</span><span class="w"> </span><span class="o">*</span><span class="n">t</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">malloc</span><span class="p">(</span><span class="n">strlen</span><span class="p">(</span><span class="n">s</span><span class="p">));</span>
+<span class="w">    </span><span class="n">strncpy</span><span class="p">(</span><span class="n">t</span><span class="p">,</span><span class="w"> </span><span class="n">s</span><span class="p">,</span><span class="w"> </span><span class="n">strlen</span><span class="p">(</span><span class="n">s</span><span class="p">));</span>
+
+<span class="w">    </span><span class="k">const</span><span class="w"> </span><span class="kt">char</span><span class="w"> </span><span class="o">*</span><span class="n">r</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">s</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">strlen</span><span class="p">(</span><span class="n">s</span><span class="p">)</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
+<span class="w">    </span><span class="kt">char</span><span class="w"> </span><span class="o">*</span><span class="n">w</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">t</span><span class="p">;</span>
+<span class="w">    </span><span class="k">while</span><span class="w"> </span><span class="p">(</span><span class="n">r</span><span class="w"> </span><span class="o">&gt;=</span><span class="w"> </span><span class="n">s</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="o">*</span><span class="n">w</span><span class="o">++</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">*</span><span class="n">r</span><span class="o">--</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">t</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="kt">int</span><span class="w"> </span><span class="nf">main</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">argc</span><span class="p">,</span><span class="w"> </span><span class="kt">char</span><span class="w"> </span><span class="o">*</span><span class="n">argv</span><span class="p">[])</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="n">argc</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="o">++</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="kt">char</span><span class="w"> </span><span class="o">*</span><span class="n">t</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">str_rev</span><span class="p">(</span><span class="n">argv</span><span class="p">[</span><span class="n">i</span><span class="p">]);</span>
+<span class="w">        </span><span class="n">puts</span><span class="p">(</span><span class="n">t</span><span class="p">);</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<p>Record the answers to the following <a href="static/json/reading07.json">Reading 07 Quiz</a> questions in your
+<code>reading07</code> branch:</p>
+<div id="quiz-questions"></div>
+
+<div id="quiz-responses"></div>
+
+<script src="static/js/dredd-quiz.js"></script>
+
+<script>
+loadQuiz('static/json/reading07.json');
+</script>
+
+<pre style="display: none;" id="dr-container" class="codehilite"><code id="dredd-response"></code></pre>
+
+<h3 id="programs">Programs<a class="headerlink" href="#programs" title="Permanent link">&para;</a></h3>
+<p>Given the provided <a href="https://pnutz.h4x0r.space/courses/cse.20289.sp26/static/txt/reading07/str_rev.c">str_rev.c</a> and <a href="https://pnutz.h4x0r.space/courses/cse.20289.sp26/static/txt/reading07/Makefile">Makefile</a>, you are to do the following:</p>
+<ol>
+<li>
+<div class="flex-col" markdown="1">
+<p>Modify <a href="https://pnutz.h4x0r.space/courses/cse.20289.sp26/static/txt/reading07/Makefile">Makefile</a> to include a <a href="https://www.gnu.org/software/make/manual/html_node/Rule-Example.html#Rule-Example">rule</a> for the <code>str_rev</code> program.  Be sure
+to use the <code>CC</code> and <code>CFLAGS</code> variables in your <a href="https://www.gnu.org/software/make/manual/html_node/Rule-Example.html#Rule-Example">rule</a>.</p>
+<div class="alert success-bg" markdown="1">
+<p><strong>Note</strong>: Consider the use of <a href="https://www.gnu.org/software/make/manual/html_node/Automatic-Variables.html">automatic variables</a>.</p>
+</div>
+</li>
+<li>
+<div class="flex-col" markdown="1">
+<p>Modify <a href="https://pnutz.h4x0r.space/courses/cse.20289.sp26/static/txt/reading07/str_rev.c">str_rev.c</a> so that it no longer has any uninitialized memory
+accesses, memory leaks, invalid memory acceses, or logical errors.</p>
+<div class="alert success-bg" markdown="1">
+<p><strong>Note</strong>: The <code>str_rev</code> must not modify the original string (hence the
+<code>const char *</code>).  Consider the use of <a href="http://man7.org/linux/man-pages/man3/strdup.3.html">strdup</a>.</p>
+</div>
+</li>
+</ol>
+<div class="alert warning-bg">
+<h3 id="bug-outline-embed_icon-debugging"><i class="icon icon-medium"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><title>bug-outline</title><path d="M20,8H17.19C16.74,7.2 16.12,6.5 15.37,6L17,4.41L15.59,3L13.42,5.17C12.96,5.06 12.5,5 12,5C11.5,5 11.05,5.06 10.59,5.17L8.41,3L7,4.41L8.62,6C7.87,6.5 7.26,7.21 6.81,8H4V10H6.09C6.03,10.33 6,10.66 6,11V12H4V14H6V15C6,15.34 6.03,15.67 6.09,16H4V18H6.81C8.47,20.87 12.14,21.84 15,20.18C15.91,19.66 16.67,18.9 17.19,18H20V16H17.91C17.97,15.67 18,15.34 18,15V14H20V12H18V11C18,10.66 17.97,10.33 17.91,10H20V8M16,15A4,4 0 0,1 12,19A4,4 0 0,1 8,15V11A4,4 0 0,1 12,7A4,4 0 0,1 16,11V15M14,10V12H10V10H14M10,14H14V16H10V14Z" /></svg>
+</i> Debugging<a class="headerlink" href="#bug-outline-embed_icon-debugging" title="Permanent link">&para;</a></h3>
+<p>Use this as an opportunity to utilize <a href="http://valgrind.org/">valgrind</a> and <a href="https://www.gnu.org/software/gdb/">gdb</a> to debug <a href="https://pnutz.h4x0r.space/courses/cse.20289.sp26/static/txt/reading07/str_rev.c">str_rev.c</a>.</p>
+</div>
+<p>Once you have a working <a href="https://pnutz.h4x0r.space/courses/cse.20289.sp26/static/txt/reading07/Makefile">Makefile</a>, you should be able to use the <a href="http://man7.org/linux/man-pages/man1/make.1.html">make</a>
+command to run your <strong>recipes</strong>:</p>
+<div class="codehilite"><pre><span></span><code>$<span class="w"> </span>make<span class="w"> </span>clean<span class="w">                                  </span><span class="c1"># Remove targets</span>
+rm<span class="w"> </span>-f<span class="w"> </span>str_rev
+
+$<span class="w"> </span>make<span class="w">                                        </span><span class="c1"># Build targets</span>
+gcc<span class="w"> </span>-Wall<span class="w"> </span>-g<span class="w"> </span>-std<span class="o">=</span>gnu99<span class="w"> </span>-o<span class="w"> </span>str_rev<span class="w"> </span>str_rev.c
+
+$<span class="w"> </span>./str_rev<span class="w"> </span>old<span class="w"> </span>school<span class="w">                        </span><span class="c1"># Test manually</span>
+dlo
+loohcs
+
+$<span class="w"> </span>make<span class="w"> </span><span class="nb">test</span><span class="w">                                   </span><span class="c1"># Test scripts</span>
+</code></pre></div>
+
+<h2 id="submission">Submission<a class="headerlink" href="#submission" title="Permanent link">&para;</a></h2>
+<p>To submit you work, follow the same process outlined in <a href="reading01.html">Reading 01</a>:</p>
+<div class="codehilite"><pre><span></span><code><span class="c1">#--------------------------------------------------</span>
+<span class="c1"># BE SURE TO DO THE PREPARATION STEPS ABOVE</span>
+<span class="c1">#--------------------------------------------------</span>
+
+$<span class="w"> </span><span class="nb">cd</span><span class="w"> </span>reading07<span class="w">                        </span><span class="c1"># Go into reading07 folder</span>
+
+$<span class="w"> </span><span class="nv">$EDITOR</span><span class="w"> </span>answers.json<span class="w">                </span><span class="c1"># Edit your answers.json file</span>
+
+$<span class="w"> </span>../.scripts/check.py<span class="w">                </span><span class="c1"># Check reading07 quiz</span>
+Checking<span class="w"> </span>reading07<span class="w"> </span>quiz<span class="w"> </span>...
+<span class="w">      </span>Q1<span class="w"> </span><span class="m">11</span>.00<span class="w"> </span>/<span class="w"> </span><span class="m">11</span>.00
+<span class="w">      </span>Q2<span class="w">  </span><span class="m">3</span>.00<span class="w"> </span>/<span class="w">  </span><span class="m">3</span>.00
+<span class="w">      </span>Q3<span class="w">  </span><span class="m">3</span>.00<span class="w"> </span>/<span class="w">  </span><span class="m">3</span>.00
+<span class="w">      </span>Q4<span class="w">  </span><span class="m">6</span>.00<span class="w"> </span>/<span class="w">  </span><span class="m">6</span>.00
+<span class="w">  </span>--------------------
+<span class="w">   </span>Score<span class="w"> </span><span class="m">23</span>.00<span class="w"> </span>/<span class="w"> </span><span class="m">23</span>.00
+<span class="w">   </span>Grade<span class="w">  </span><span class="m">1</span>.00<span class="w"> </span>/<span class="w">  </span><span class="m">1</span>.00
+<span class="w">  </span>Status<span class="w"> </span>Success
+
+$<span class="w"> </span>git<span class="w"> </span>add<span class="w"> </span>answers.json<span class="w">                </span><span class="c1"># Add answers.json to staging area</span>
+$<span class="w"> </span>git<span class="w"> </span>commit<span class="w"> </span>-m<span class="w"> </span><span class="s2">&quot;Reading 07: Quiz&quot;</span><span class="w">    </span><span class="c1"># Commit work</span>
+
+$<span class="w"> </span><span class="nv">$EDITOR</span><span class="w"> </span>str_rev.c<span class="w">                   </span><span class="c1"># Edit source code</span>
+
+$<span class="w"> </span>make<span class="w"> </span><span class="nb">test</span><span class="w">                           </span><span class="c1"># Build and Run tests</span>
+Checking<span class="w"> </span>reading07<span class="w"> </span>str_rev<span class="w"> </span>...
+<span class="w">  </span>str_rev<span class="w">                                  </span>...<span class="w"> </span>Success
+<span class="w">  </span>str_rev<span class="w"> </span>runescape<span class="w">                        </span>...<span class="w"> </span>Success
+<span class="w">  </span>str_rev<span class="w"> </span>old<span class="w"> </span>school<span class="w">                       </span>...<span class="w"> </span>Success
+<span class="w">  </span>--------------------
+<span class="w">   </span>Score<span class="w"> </span><span class="m">3</span>.00<span class="w"> </span>/<span class="w"> </span><span class="m">3</span>.00
+<span class="w">   </span>Grade<span class="w"> </span><span class="m">1</span>.00<span class="w"> </span>/<span class="w"> </span><span class="m">1</span>.00
+<span class="w">  </span>Status<span class="w"> </span>Success
+
+$<span class="w"> </span>git<span class="w"> </span>add<span class="w"> </span>Makefile<span class="w">                    </span><span class="c1"># Add Makefile to staging area</span>
+$<span class="w"> </span>git<span class="w"> </span>add<span class="w"> </span>str_rev.c<span class="w">                   </span><span class="c1"># Add source code to staging area</span>
+$<span class="w"> </span>git<span class="w"> </span>commit<span class="w"> </span>-m<span class="w"> </span><span class="s2">&quot;Reading 07: Code&quot;</span><span class="w">    </span><span class="c1"># Commit work</span>
+
+$<span class="w"> </span>git<span class="w"> </span>push<span class="w"> </span>-u<span class="w"> </span>origin<span class="w"> </span>reading07<span class="w">        </span><span class="c1"># Push branch to GitHub</span>
+</code></pre></div>
+
+<div class="alert warning-bg">
+<h3 id="lifebuoy-embed_icon-acknowledgments"><i class="icon icon-medium"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><title>lifebuoy</title><path d="M19.79,15.41C20.74,13.24 20.74,10.75 19.79,8.59L17.05,9.83C17.65,11.21 17.65,12.78 17.06,14.17L19.79,15.41M15.42,4.21C13.25,3.26 10.76,3.26 8.59,4.21L9.83,6.94C11.22,6.35 12.79,6.35 14.18,6.95L15.42,4.21M4.21,8.58C3.26,10.76 3.26,13.24 4.21,15.42L6.95,14.17C6.35,12.79 6.35,11.21 6.95,9.82L4.21,8.58M8.59,19.79C10.76,20.74 13.25,20.74 15.42,19.78L14.18,17.05C12.8,17.65 11.22,17.65 9.84,17.06L8.59,19.79M12,2A10,10 0 0,1 22,12A10,10 0 0,1 12,22A10,10 0 0,1 2,12A10,10 0 0,1 12,2M12,8A4,4 0 0,0 8,12A4,4 0 0,0 12,16A4,4 0 0,0 16,12A4,4 0 0,0 12,8Z" /></svg>
+</i> Acknowledgments<a class="headerlink" href="#lifebuoy-embed_icon-acknowledgments" title="Permanent link">&para;</a></h3>
+<p>If you collaborated with any other students, or received help from TAs or AI
+tools on this assignment, please record this support in the <code>README.md</code> in
+the <code>reading07</code> folder and include it with your <strong>Pull Request</strong>.</p>
+</div>
+<div class="alert success-bg">
+<h3 id="account-question-embed_icon-graders"><i class="icon icon-medium"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><title>account-question</title><path d="M13,8A4,4 0 0,1 9,12A4,4 0 0,1 5,8A4,4 0 0,1 9,4A4,4 0 0,1 13,8M17,18V20H1V18C1,15.79 4.58,14 9,14C13.42,14 17,15.79 17,18M20.5,14.5V16H19V14.5H20.5M18.5,9.5H17V9A3,3 0 0,1 20,6A3,3 0 0,1 23,9C23,9.97 22.5,10.88 21.71,11.41L21.41,11.6C20.84,12 20.5,12.61 20.5,13.3V13.5H19V13.3C19,12.11 19.6,11 20.59,10.35L20.88,10.16C21.27,9.9 21.5,9.47 21.5,9A1.5,1.5 0 0,0 20,7.5A1.5,1.5 0 0,0 18.5,9V9.5Z" /></svg>
+</i> Graders<a class="headerlink" href="#account-question-embed_icon-graders" title="Permanent link">&para;</a></h3>
+<p>Once you have committed your work and pushed it to <a href="https://github.com">GitHub</a>, remember to
+create a <strong>pull request</strong> and assign it to the appropriate <strong>teaching
+assistant</strong> from the <a href="reading07_tas.html">Reading 07 TA List</a>.</p>
+<p><strong>Note</strong>: this list changes each week, so be sure to consult the appropriate
+list for each assignment.</p>
+</div>
+</main>
+<footer>
+Built using <a href="https://python.org">Python</a>
+and <a href="https://jinja.palletsprojects.com">Jinja</a>
+with colors from <a href="https://nordtheme.com">Nord Theme</a>
+and icons from <a href="https://pictogrammers.com/library/mdi/">Material Design Icons</a>.</footer>
+</body>
+</html>

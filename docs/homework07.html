@@ -1,0 +1,801 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<!-- Favicon -->
+<link rel="icon" type="image/png" sizes="32x32" href="static/ico/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="static/ico/favicon-16x16.png">
+<link rel="manifest" href="static/ico/site.webmanifest">
+<!-- Stylesheets -->
+<link rel="stylesheet" href="static/css/pnutzh4x0r.css">
+<title>Homework 07: Seqit, Tailit</title>
+</head>
+<body>
+<header>
+<a class="logo" href="homework07.html">
+    <h1>Homework 07: Seqit, Tailit</h1>
+</a>
+<nav>
+    <ul>
+        <li><a href="index.html"><h4>Home</h4></a></li>
+        </ul>
+</nav></header>
+<main>
+<p>The goal of this homework assignment is to allow you to practice <a href="https://en.wikipedia.org/wiki/Memory_management">memory
+management</a> in <a href="https://en.wikipedia.org/wiki/C_(programming_language)">C</a> by building a <a href="https://en.wikipedia.org/wiki/Linked_list">linked list</a>.  The first activities involve
+implementing a <a href="https://en.wikipedia.org/wiki/Doubly_linked_list">doubly linked list</a> with a <a href="https://en.wikipedia.org/wiki/Sentinel_node">sentinel node</a>, while the last
+two activities requires you to use this <a href="https://en.wikipedia.org/wiki/Data_structure">data structure</a> to implement your
+own versions of <a href="https://www.mankier.com/1/seq">seq</a> and <a href="https://www.mankier.com/1/tail">tail</a>.</p>
+<p>For this assignment, you are to do your work in the <code>homework07</code> folder of
+your <strong>assignments</strong> <a href="https://github.com">GitHub</a> repository and push your work by <strong>noon
+Saturday, March 28</strong>.</p>
+<div class="alert info-bg">
+<h3 id="help-embed_icon-frequently-asked-questions"><i class="icon icon-medium"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><title>help</title><path d="M10,19H13V22H10V19M12,2C17.35,2.22 19.68,7.62 16.5,11.67C15.67,12.67 14.33,13.33 13.67,14.17C13,15 13,16 13,17H10C10,15.33 10,13.92 10.67,12.92C11.33,11.92 12.67,11.33 13.5,10.67C15.92,8.43 15.32,5.26 12,5A3,3 0 0,0 9,8H6A6,6 0 0,1 12,2Z" /></svg>
+</i> Frequently Asked Questions<a class="headerlink" href="#help-embed_icon-frequently-asked-questions" title="Permanent link">&para;</a></h3>
+<div class="centered">
+<iframe allowfullscreen="true" frameborder="0" height="749" mozallowfullscreen="true" src="https://docs.google.com/presentation/d/e/2PACX-1vTzatYXE7jCxQbq7UYWztVrqlGZmoTRJVizwvuF5kXzR7fL4Bh7MEHGPinuVF8xz6nrIHwyD8zomd2G/pubembed?start=false&amp;loop=false&amp;delayms=3000" webkitallowfullscreen="true" width="960"></iframe>
+</div>
+</div>
+<h2 id="activity-0-preparation">Activity 0: Preparation<a class="headerlink" href="#activity-0-preparation" title="Permanent link">&para;</a></h2>
+<p>Before starting this homework assignment, you should first perform a <code>git
+pull</code> to retrieve any changes in your remote <a href="https://github.com">GitHub</a> repository:</p>
+<div class="codehilite"><pre><span></span><code>$<span class="w"> </span><span class="nb">cd</span><span class="w"> </span>path/to/repository<span class="w">                   </span><span class="c1"># Go to assignments repository</span>
+
+$<span class="w"> </span>git<span class="w"> </span>switch<span class="w"> </span>master<span class="w">                       </span><span class="c1"># Make sure we are in master branch</span>
+
+$<span class="w"> </span>git<span class="w"> </span>pull<span class="w"> </span>--rebase<span class="w">                       </span><span class="c1"># Get any remote changes not present locally</span>
+</code></pre></div>
+
+<p>Next, create a new branch for this assignment:</p>
+<div class="codehilite"><pre><span></span><code>$<span class="w"> </span>git<span class="w"> </span>switch<span class="w"> </span>-c<span class="w"> </span>homework07<span class="w">                </span><span class="c1"># Create homework07 branch and check it out</span>
+</code></pre></div>
+
+<h3 id="task-1-skeleton-code">Task 1: Skeleton Code<a class="headerlink" href="#task-1-skeleton-code" title="Permanent link">&para;</a></h3>
+<p>To help you get started, the instructor has provided you with the following
+<strong>skeleton code</strong>:</p>
+<div class="codehilite"><pre><span></span><code><span class="c1"># Go to homework07 folder</span>
+$<span class="w"> </span><span class="nb">cd</span><span class="w"> </span>homework07
+
+<span class="c1"># Download Makefile</span>
+$<span class="w"> </span>curl<span class="w"> </span>-LO<span class="w"> </span>https://pnutz.h4x0r.space/courses/cse.20289.sp26/static/txt/homework07/Makefile
+
+<span class="c1"># Download C skeleton code</span>
+$<span class="w"> </span>curl<span class="w"> </span>-LO<span class="w"> </span>https://pnutz.h4x0r.space/courses/cse.20289.sp26/static/txt/homework07/list.c
+$<span class="w"> </span>curl<span class="w"> </span>-LO<span class="w"> </span>https://pnutz.h4x0r.space/courses/cse.20289.sp26/static/txt/homework07/list.h
+$<span class="w"> </span>curl<span class="w"> </span>-LO<span class="w"> </span>https://pnutz.h4x0r.space/courses/cse.20289.sp26/static/txt/homework07/list.unit.c
+$<span class="w"> </span>curl<span class="w"> </span>-LO<span class="w"> </span>https://pnutz.h4x0r.space/courses/cse.20289.sp26/static/txt/homework07/node.c
+$<span class="w"> </span>curl<span class="w"> </span>-LO<span class="w"> </span>https://pnutz.h4x0r.space/courses/cse.20289.sp26/static/txt/homework07/node.unit.c
+$<span class="w"> </span>curl<span class="w"> </span>-LO<span class="w"> </span>https://pnutz.h4x0r.space/courses/cse.20289.sp26/static/txt/homework07/seqit.c
+$<span class="w"> </span>curl<span class="w"> </span>-LO<span class="w"> </span>https://pnutz.h4x0r.space/courses/cse.20289.sp26/static/txt/homework07/tailit.c
+</code></pre></div>
+
+<p>Once downloaded and extracted, you should see the following files in your
+<code>homework07</code> directory:</p>
+<div class="codehilite"><pre><span></span><code>homework07
+<span class="w">    </span><span class="se">\_</span><span class="w"> </span>Makefile<span class="w">     </span><span class="c1"># This is the Makefile for building all the assignment artifacts</span>
+<span class="w">    </span><span class="se">\_</span><span class="w"> </span>list.c<span class="w">       </span><span class="c1"># This is the List structure C source file</span>
+<span class="w">    </span><span class="se">\_</span><span class="w"> </span>list.h<span class="w">       </span><span class="c1"># This is the List library C header file</span>
+<span class="w">    </span><span class="se">\_</span><span class="w"> </span>list.unit.c<span class="w">  </span><span class="c1"># This is the List structure C unit test source file</span>
+<span class="w">    </span><span class="se">\_</span><span class="w"> </span>node.c<span class="w">       </span><span class="c1"># This is the Node structure C source file</span>
+<span class="w">    </span><span class="se">\_</span><span class="w"> </span>node.unit.c<span class="w">  </span><span class="c1"># This is the Node structure C unit test source file</span>
+<span class="w">    </span><span class="se">\_</span><span class="w"> </span>seqit.c<span class="w">      </span><span class="c1"># This is the seqit utility C source file</span>
+<span class="w">    </span><span class="se">\_</span><span class="w"> </span>list.c<span class="w">       </span><span class="c1"># This is the tailit utility C source file</span>
+</code></pre></div>
+
+<h3 id="task-2-initial-import">Task 2: Initial Import<a class="headerlink" href="#task-2-initial-import" title="Permanent link">&para;</a></h3>
+<p>Now that the files are downloaded into the <code>homework07</code> folder, you can
+<strong>commit</strong> them to your <a href="https://git-scm.com/">git</a> repository:</p>
+<div class="codehilite"><pre><span></span><code>$<span class="w"> </span>git<span class="w"> </span>add<span class="w"> </span>Makefile<span class="w">                            </span><span class="c1"># Mark changes for commit</span>
+$<span class="w"> </span>git<span class="w"> </span>add<span class="w"> </span>*.c<span class="w"> </span>*.h<span class="w">                             </span><span class="c1"># Mark changes for commit</span>
+$<span class="w"> </span>git<span class="w"> </span>commit<span class="w"> </span>-m<span class="w"> </span><span class="s2">&quot;Homework 07: Initial Import&quot;</span><span class="w"> </span><span class="c1"># Record changes</span>
+</code></pre></div>
+
+<h3 id="task-3-unit-tests">Task 3: Unit Tests<a class="headerlink" href="#task-3-unit-tests" title="Permanent link">&para;</a></h3>
+<p>After downloading these files, you can run <code>make test</code> to run the tests.</p>
+<div class="codehilite"><pre><span></span><code><span class="c1"># Run all tests (will trigger automatic download)</span>
+$<span class="w"> </span>make<span class="w"> </span><span class="nb">test</span>
+</code></pre></div>
+
+<p>You will notice that the <code>Makefile</code> downloads these additional test files and scripts:</p>
+<div class="codehilite"><pre><span></span><code>homework07
+<span class="w">    </span><span class="se">\_</span><span class="w"> </span>list.unit.sh<span class="w">   </span><span class="c1"># This is the List structure unit test shell script</span>
+<span class="w">    </span><span class="se">\_</span><span class="w"> </span>node.unit.sh<span class="w">   </span><span class="c1"># This is the Node structure unit test shell script</span>
+<span class="w">    </span><span class="se">\_</span><span class="w"> </span>seqit.test.sh<span class="w">  </span><span class="c1"># This is the seqit utility test shell script</span>
+<span class="w">    </span><span class="se">\_</span><span class="w"> </span>tailit.test.sh<span class="w"> </span><span class="c1"># This is the tailit utility test shell script</span>
+</code></pre></div>
+
+<p>You will be using these <a href="https://en.wikipedia.org/wiki/Unit_testing">unit tests</a> to verify the correctness and behavior
+of your code.</p>
+<div class="alert info-bg">
+<h3 id="download-embed_icon-automatic-download"><i class="icon icon-medium"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><title>download</title><path d="M5,20H19V18H5M19,9H15V3H9V9H5L12,16L19,9Z" /></svg>
+</i> Automatic Download<a class="headerlink" href="#download-embed_icon-automatic-download" title="Permanent link">&para;</a></h3>
+<p>The <code>test</code> scripts are automatically downloaded by the <code>Makefile</code>, so any
+modifications you do to them will be lost when you run <code>make</code> again. Likewise,
+because they are automatically downloaded, you do not need to <code>add</code> or <code>commit</code>
+them to your <a href="https://git-scm.com/">git</a> repository.</p>
+</div>
+<p>The details on what you need to implement for this assignment are described
+in the following sections.</p>
+<h3 id="task-4-makefile">Task 4: <code>Makefile</code><a class="headerlink" href="#task-4-makefile" title="Permanent link">&para;</a></h3>
+<p>The Makefile contains all the rules or recipes for building the project
+artifacts (e.g. <code>node.unit</code>, <code>list.unit</code>, <code>seqit</code>, <code>tailit</code>, etc.):</p>
+<div class="codehilite"><pre><span></span><code><span class="nv">CC</span><span class="o">=</span><span class="w">       </span>gcc
+<span class="nv">CFLAGS</span><span class="o">=</span><span class="w">   </span>-Wall<span class="w"> </span>-g<span class="w"> </span>-std<span class="o">=</span>gnu99
+<span class="nv">LD</span><span class="o">=</span><span class="w">       </span>gcc
+<span class="nv">LDFLAGS</span><span class="o">=</span><span class="w">  </span>-L.
+<span class="nv">TARGETS</span><span class="o">=</span><span class="w">  </span>seqit<span class="w"> </span>tailit
+
+<span class="nf">all</span><span class="o">:</span><span class="w">      </span><span class="k">$(</span><span class="nv">TARGETS</span><span class="k">)</span>
+
+<span class="c">#-------------------------------------------------------------------------------</span>
+<span class="c"># TODO: Add rules for node.o, list.o, seqit.o, tailit.o, seqit, tailit</span>
+<span class="c">#-------------------------------------------------------------------------------</span>
+
+<span class="nf">node.o</span><span class="o">:</span>
+
+<span class="nf">list.o</span><span class="o">:</span>
+
+<span class="nf">seqit.o</span><span class="o">:</span>
+
+<span class="nf">tailit.o</span><span class="o">:</span>
+
+<span class="nf">seqit</span><span class="o">:</span>
+
+<span class="nf">tailit</span><span class="o">:</span>
+
+<span class="c">#-------------------------------------------------------------------------------</span>
+<span class="c"># DO NOT MODIFY BELOW</span>
+<span class="c">#-------------------------------------------------------------------------------</span>
+
+<span class="err">...</span>
+</code></pre></div>
+
+<p>For this task, you will need to add <a href="https://www.gnu.org/software/make/manual/html_node/Rule-Example.html#Rule-Example">rules</a> for building the programs <code>seqit</code>
+and <code>tailit</code>. Be sure to have a <strong>recipe</strong> for any <em>intermediate</em> <a href="https://en.wikipedia.org/wiki/Object_file">object</a>
+files that programs require as shown in the <a href="https://en.wikipedia.org/wiki/Directed_acyclic_graph">DAG</a> below:</p>
+<div class="thumbnail">
+  <img src="static/img/homework07-makefile.png" class="responsive">
+</div>
+
+<div class="alert info-bg">
+<h3 id="cogs-embed_icon-makefile-variables"><i class="icon icon-medium"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><title>cogs</title><path d="M15.9,18.45C17.25,18.45 18.35,17.35 18.35,16C18.35,14.65 17.25,13.55 15.9,13.55C14.54,13.55 13.45,14.65 13.45,16C13.45,17.35 14.54,18.45 15.9,18.45M21.1,16.68L22.58,17.84C22.71,17.95 22.75,18.13 22.66,18.29L21.26,20.71C21.17,20.86 21,20.92 20.83,20.86L19.09,20.16C18.73,20.44 18.33,20.67 17.91,20.85L17.64,22.7C17.62,22.87 17.47,23 17.3,23H14.5C14.32,23 14.18,22.87 14.15,22.7L13.89,20.85C13.46,20.67 13.07,20.44 12.71,20.16L10.96,20.86C10.81,20.92 10.62,20.86 10.54,20.71L9.14,18.29C9.05,18.13 9.09,17.95 9.22,17.84L10.7,16.68L10.65,16L10.7,15.31L9.22,14.16C9.09,14.05 9.05,13.86 9.14,13.71L10.54,11.29C10.62,11.13 10.81,11.07 10.96,11.13L12.71,11.84C13.07,11.56 13.46,11.32 13.89,11.15L14.15,9.29C14.18,9.13 14.32,9 14.5,9H17.3C17.47,9 17.62,9.13 17.64,9.29L17.91,11.15C18.33,11.32 18.73,11.56 19.09,11.84L20.83,11.13C21,11.07 21.17,11.13 21.26,11.29L22.66,13.71C22.75,13.86 22.71,14.05 22.58,14.16L21.1,15.31L21.15,16L21.1,16.68M6.69,8.07C7.56,8.07 8.26,7.37 8.26,6.5C8.26,5.63 7.56,4.92 6.69,4.92A1.58,1.58 0 0,0 5.11,6.5C5.11,7.37 5.82,8.07 6.69,8.07M10.03,6.94L11,7.68C11.07,7.75 11.09,7.87 11.03,7.97L10.13,9.53C10.08,9.63 9.96,9.67 9.86,9.63L8.74,9.18L8,9.62L7.81,10.81C7.79,10.92 7.7,11 7.59,11H5.79C5.67,11 5.58,10.92 5.56,10.81L5.4,9.62L4.64,9.18L3.5,9.63C3.41,9.67 3.3,9.63 3.24,9.53L2.34,7.97C2.28,7.87 2.31,7.75 2.39,7.68L3.34,6.94L3.31,6.5L3.34,6.06L2.39,5.32C2.31,5.25 2.28,5.13 2.34,5.03L3.24,3.47C3.3,3.37 3.41,3.33 3.5,3.37L4.63,3.82L5.4,3.38L5.56,2.19C5.58,2.08 5.67,2 5.79,2H7.59C7.7,2 7.79,2.08 7.81,2.19L8,3.38L8.74,3.82L9.86,3.37C9.96,3.33 10.08,3.37 10.13,3.47L11.03,5.03C11.09,5.13 11.07,5.25 11,5.32L10.03,6.06L10.06,6.5L10.03,6.94Z" /></svg>
+</i> Makefile Variables<a class="headerlink" href="#cogs-embed_icon-makefile-variables" title="Permanent link">&para;</a></h3>
+<p>You <strong>must</strong> use the <code>CC</code>, <code>CFLAGS</code>, <code>LD</code>, and <code>LDFLAGS</code> variables when
+appropriate in your rules. You <strong>should</strong> also consider using <a href="https://www.gnu.org/software/make/manual/html_node/Automatic-Variables.html">automatic
+variables</a> such as <code>$@</code> and <code>$&lt;</code> as well.</p>
+</div>
+<p>Once you have a working <code>Makefile</code>, you should be able to run the following
+commands:</p>
+<div class="codehilite"><pre><span></span><code><span class="c1"># Build all TARGETS</span>
+$<span class="w"> </span>make
+gcc<span class="w"> </span>-Wall<span class="w"> </span>-std<span class="o">=</span>gnu99<span class="w"> </span>-g<span class="w"> </span>-c<span class="w"> </span>-o<span class="w"> </span>seqit.o<span class="w"> </span>seqit.c
+gcc<span class="w"> </span>-Wall<span class="w"> </span>-std<span class="o">=</span>gnu99<span class="w"> </span>-g<span class="w"> </span>-c<span class="w"> </span>-o<span class="w"> </span>node.o<span class="w"> </span>node.c
+gcc<span class="w"> </span>-Wall<span class="w"> </span>-std<span class="o">=</span>gnu99<span class="w"> </span>-g<span class="w"> </span>-c<span class="w"> </span>-o<span class="w"> </span>list.o<span class="w"> </span>list.c
+gcc<span class="w"> </span>-L.<span class="w"> </span>-o<span class="w"> </span>seqit<span class="w"> </span>seqit.o<span class="w"> </span>node.o<span class="w"> </span>list.o
+gcc<span class="w"> </span>-Wall<span class="w"> </span>-std<span class="o">=</span>gnu99<span class="w"> </span>-g<span class="w"> </span>-c<span class="w"> </span>-o<span class="w"> </span>tailit.o<span class="w"> </span>tailit.c
+gcc<span class="w"> </span>-L.<span class="w"> </span>-o<span class="w"> </span>tailit<span class="w"> </span>tailit.o<span class="w"> </span>node.o<span class="w"> </span>list.o
+
+<span class="c1"># Run all tests</span>
+$<span class="w"> </span>make<span class="w"> </span><span class="nb">test</span>
+Testing<span class="w"> </span>node<span class="w"> </span>...
+...
+
+<span class="c1"># Remove generated artifacts</span>
+$<span class="w"> </span>make<span class="w"> </span>clean
+</code></pre></div>
+
+<div class="alert danger-bg">
+<p><strong>Note</strong>: The tests will <strong>fail</strong> if you haven't implemented <code>Node</code> or <code>List</code>
+structures, or the <code>seqit</code> or <code>tailit</code> programs.</p>
+</div>
+<div class="alert warning-bg">
+<h3 id="alert-embed_icon-compiler-warnings"><i class="icon icon-medium"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><title>alert</title><path d="M13 14H11V9H13M13 18H11V16H13M1 21H23L12 2L1 21Z" /></svg>
+</i> Compiler Warnings<a class="headerlink" href="#alert-embed_icon-compiler-warnings" title="Permanent link">&para;</a></h3>
+<p>You must include the <code>-Wall</code> flag in your <code>CFLAGS</code> when you compile. This
+also means that your code must <strong>compile without any warnings</strong>, otherwise
+points will be deducted.</p>
+</div>
+<h3 id="task-5-listh">Task 5: <code>list.h</code><a class="headerlink" href="#task-5-listh" title="Permanent link">&para;</a></h3>
+<p>The <code>list.h</code> file is the <a href="https://en.wikipedia.org/wiki/Include_directive#C.2FC.2B.2B">header</a> file for the <a href="https://en.wikipedia.org/wiki/Doubly_linked_list">doubly linked list</a> library, which
+contains the following <a href="https://en.wikipedia.org/wiki/Struct_(C_programming_language)">structs</a> and function <a href="https://en.wikipedia.org/wiki/Function_prototype">prototypes</a>:</p>
+<div class="codehilite"><pre><span></span><code><span class="cm">/* list.h: Doubly Linked List Library */</span>
+
+<span class="cp">#pragma once</span>
+
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;stdbool.h&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;stdint.h&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;stdlib.h&gt;</span>
+
+<span class="cm">/* Value Union */</span>
+
+<span class="k">typedef</span><span class="w"> </span><span class="k">union</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kt">int64_t</span><span class="w"> </span><span class="n">number</span><span class="p">;</span><span class="w">     </span><span class="c1">// Value as number</span>
+<span class="w">    </span><span class="kt">char</span><span class="w">   </span><span class="o">*</span><span class="n">string</span><span class="p">;</span><span class="w">     </span><span class="c1">// Value as string</span>
+<span class="p">}</span><span class="w"> </span><span class="n">Value</span><span class="p">;</span>
+
+<span class="cm">/* Node Structure */</span>
+
+<span class="k">typedef</span><span class="w"> </span><span class="k">struct</span><span class="w"> </span><span class="nc">Node</span><span class="w"> </span><span class="n">Node</span><span class="p">;</span>
+<span class="k">struct</span><span class="w"> </span><span class="nc">Node</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">Value</span><span class="w">   </span><span class="n">value</span><span class="p">;</span><span class="w">      </span><span class="c1">// Value</span>
+<span class="w">    </span><span class="n">Node</span><span class="w">   </span><span class="o">*</span><span class="n">next</span><span class="p">;</span><span class="w">       </span><span class="c1">// Pointer to next Node</span>
+<span class="w">    </span><span class="n">Node</span><span class="w">   </span><span class="o">*</span><span class="n">prev</span><span class="p">;</span><span class="w">       </span><span class="c1">// Pointer to previous Node</span>
+<span class="p">};</span>
+
+<span class="n">Node</span><span class="w"> </span><span class="o">*</span><span class="w">  </span><span class="nf">node_create</span><span class="p">(</span><span class="n">Value</span><span class="w"> </span><span class="n">v</span><span class="p">,</span><span class="w"> </span><span class="n">Node</span><span class="w"> </span><span class="o">*</span><span class="n">next</span><span class="p">,</span><span class="w"> </span><span class="n">Node</span><span class="w"> </span><span class="o">*</span><span class="n">prev</span><span class="p">);</span>
+<span class="kt">void</span><span class="w">    </span><span class="nf">node_delete</span><span class="p">(</span><span class="n">Node</span><span class="w"> </span><span class="o">*</span><span class="n">n</span><span class="p">,</span><span class="w"> </span><span class="kt">bool</span><span class="w"> </span><span class="n">release</span><span class="p">);</span>
+
+<span class="cm">/* List Structure */</span>
+
+<span class="k">typedef</span><span class="w"> </span><span class="k">struct</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">Node</span><span class="w">    </span><span class="n">sentinel</span><span class="p">;</span><span class="w">   </span><span class="c1">// Sentinel Node at head and tail of List</span>
+<span class="w">    </span><span class="kt">size_t</span><span class="w">  </span><span class="n">size</span><span class="p">;</span><span class="w">       </span><span class="c1">// Number of Nodes in List</span>
+<span class="p">}</span><span class="w"> </span><span class="n">List</span><span class="p">;</span>
+
+<span class="n">List</span><span class="w"> </span><span class="o">*</span><span class="w">  </span><span class="nf">list_create</span><span class="p">();</span>
+<span class="kt">void</span><span class="w">    </span><span class="nf">list_delete</span><span class="p">(</span><span class="n">List</span><span class="w"> </span><span class="o">*</span><span class="n">l</span><span class="p">,</span><span class="w"> </span><span class="kt">bool</span><span class="w"> </span><span class="n">release</span><span class="p">);</span>
+
+<span class="kt">void</span><span class="w">    </span><span class="nf">list_append</span><span class="p">(</span><span class="n">List</span><span class="w"> </span><span class="o">*</span><span class="n">l</span><span class="p">,</span><span class="w"> </span><span class="n">Value</span><span class="w"> </span><span class="n">v</span><span class="p">);</span>
+<span class="n">Value</span><span class="w">   </span><span class="nf">list_pop</span><span class="p">(</span><span class="n">List</span><span class="w"> </span><span class="o">*</span><span class="n">l</span><span class="p">,</span><span class="w"> </span><span class="kt">size_t</span><span class="w"> </span><span class="n">index</span><span class="p">);</span>
+</code></pre></div>
+
+<p>Other programs will <code>#include</code> this file in order to use the functions we
+will be implementing in this library.</p>
+<h3 id="value-union">Value Union<a class="headerlink" href="#value-union" title="Permanent link">&para;</a></h3>
+<p>The <code>Value</code> <a href="https://en.wikipedia.org/wiki/Union_type">union</a> is used by the <code>Node</code> structure to store either an
+<a href="https://en.wikipedia.org/wiki/Integer_(computer_science)">integer</a> or a <a href="https://en.wikipedia.org/wiki/C_string_handling">string</a>:</p>
+<div class="codehilite"><pre><span></span><code><span class="c1">// Declare a Value union with an integer</span>
+<span class="n">Value</span><span class="w"> </span><span class="n">v</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="n">Value</span><span class="p">)</span><span class="mf">10L</span><span class="p">;</span>
+
+<span class="c1">// Alternatively</span>
+<span class="n">Value</span><span class="w"> </span><span class="n">v</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{.</span><span class="n">number</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">10</span><span class="p">};</span>
+
+<span class="c1">// Access number</span>
+<span class="n">printf</span><span class="p">(</span><span class="s">&quot;%ld</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">v</span><span class="p">.</span><span class="n">number</span><span class="p">);</span>
+
+<span class="c1">// Declare a Value union with a string</span>
+<span class="n">Value</span><span class="w"> </span><span class="n">v</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="n">Value</span><span class="p">)</span><span class="s">&quot;reasonable&quot;</span><span class="p">;</span>
+
+<span class="c1">// Alternatively</span>
+<span class="n">Value</span><span class="w"> </span><span class="n">v</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{.</span><span class="n">string</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;reasonable&quot;</span><span class="p">};</span>
+
+<span class="c1">// Access string</span>
+<span class="n">puts</span><span class="p">(</span><span class="n">v</span><span class="p">.</span><span class="n">string</span><span class="p">);</span>
+</code></pre></div>
+
+<p>The details of the <code>Node</code> structure and <code>List</code> structure, and what you need
+to implement are provided in the following sections.</p>
+<div class="alert info-bg">
+<p><strong>Note</strong>: For this task, you <strong>do not</strong> need to modify this file. Instead,
+you should review it and ensure you understand the provided code.</p>
+</div>
+<h2 id="activity-1-node-structure-010-points">Activity 1: Node Structure (<em>0.10 Points</em>)<a class="headerlink" href="#activity-1-node-structure-010-points" title="Permanent link">&para;</a></h2>
+<p>For the first activity, you are to implement a <code>Node</code> <strong>structure</strong> to be
+used in a <a href="https://en.wikipedia.org/wiki/Doubly_linked_list">doubly linked list</a>.  Each <code>Node</code> <strong>structure</strong> will have the
+following <strong>attributes</strong>:</p>
+<ol>
+<li>
+<p><code>value</code>: This is a <a href="https://en.wikipedia.org/wiki/Union_type">union</a> that can either be a number (ie. <code>int64_t</code>) or
+  a <a href="https://en.wikipedia.org/wiki/C_string_handling">string</a> (ie. <code>char *</code>).</p>
+</li>
+<li>
+<p><code>next</code>: This is a pointer to the next <code>Node</code> <a href="https://en.wikipedia.org/wiki/Struct_(C_programming_language)">struct</a> in the sequence.</p>
+</li>
+<li>
+<p><code>prev</code>: This is a pointer to the previous <code>Node</code> <a href="https://en.wikipedia.org/wiki/Struct_(C_programming_language)">struct</a> in the sequence.</p>
+</li>
+</ol>
+<div class="centered">
+  <img src="static/img/homework07-node.png" class="responsive">
+</div>
+
+<h3 id="task-1-nodec">Task 1: <code>node.c</code><a class="headerlink" href="#task-1-nodec" title="Permanent link">&para;</a></h3>
+<p>The <code>node.c</code> file contains the <a href="https://en.wikipedia.org/wiki/C_(programming_language)">C</a> implementation for the <code>Node</code>
+<strong>structure</strong> described above.  For this task, you will need to implement the
+following functions:</p>
+<ol>
+<li>
+<div class="flex-col" markdown="1">
+<p><code>Node * node_create(Value v, Node *next, Node *prev)</code></p>
+<blockquote>
+<p>This function allocates a new <code>Node</code> <a href="https://en.wikipedia.org/wiki/Struct_(C_programming_language)">struct</a> and initializes its
+attributes: <code>value</code>, <code>next</code>, <code>prev</code> as described above.</p>
+</blockquote>
+<div class="alert success-bg" markdown="1">
+<p><strong>Hint</strong>: Use <a href="https://www.mankier.com/3/malloc">malloc</a> or <a href="https://www.mankier.com/3/malloc">calloc</a> to allocate data on the <a href="https://en.wikipedia.org/wiki/Memory_management#HEAP">heap</a>.</p>
+</div>
+</li>
+<li>
+<div class="flex-col" markdown="1">
+<p><code>void node_delete(Node *n, bool release)</code></p>
+<blockquote>
+<p>This function deallocates the given <code>Node</code> <a href="https://en.wikipedia.org/wiki/Struct_(C_programming_language)">struct</a> along with its
+internal <code>value</code> as a <a href="https://en.wikipedia.org/wiki/C_string_handling">string</a> if <code>release</code> is <code>true</code>.</p>
+</blockquote>
+<div class="alert success-bg" markdown="1">
+<p><strong>Hint</strong>: Use <a href="https://www.mankier.com/3/malloc">free</a> to release data allocated on the <a href="https://en.wikipedia.org/wiki/Memory_management#HEAP">heap</a>.</p>
+</div>
+</li>
+</ol>
+<h3 id="task-2-testing">Task 2: Testing<a class="headerlink" href="#task-2-testing" title="Permanent link">&para;</a></h3>
+<p>As you implement the functions in <code>node.c</code>, you should use the <code>node.unit</code>
+executable with the <code>node.unit.sh</code> script to test each of your functions:</p>
+<div class="codehilite"><pre><span></span><code><span class="c1"># Build test artifacts and run test scripts</span>
+$<span class="w"> </span>make<span class="w"> </span>test-node
+Testing<span class="w"> </span>node<span class="w"> </span>...
+Testing<span class="w"> </span>node<span class="w"> </span>...
+<span class="w">  </span>node_create<span class="w">                              </span>...<span class="w"> </span>Success
+<span class="w">  </span>node_delete<span class="w">                              </span>...<span class="w"> </span>Success
+<span class="w">  </span>--------------------
+<span class="w">   </span>Score<span class="w"> </span><span class="m">2</span>.00<span class="w"> </span>/<span class="w"> </span><span class="m">2</span>.00
+<span class="w">   </span>Grade<span class="w"> </span><span class="m">1</span>.00<span class="w"> </span>/<span class="w"> </span><span class="m">1</span>.00
+<span class="w">  </span>Status<span class="w"> </span>Success
+</code></pre></div>
+
+<p>You can also run the testing script manually:</p>
+<div class="codehilite"><pre><span></span><code><span class="c1"># Run Shell unit test script manually</span>
+$<span class="w"> </span>./node.unit.sh
+...
+</code></pre></div>
+
+<p>To debug your <code>Node</code> functions, you can use <a href="https://www.gnu.org/software/gdb/">gdb</a> on the <code>node.unit</code> executable:</p>
+<div class="codehilite"><pre><span></span><code><span class="c1"># Start gdb on node.unit</span>
+$<span class="w"> </span>gdb<span class="w"> </span>./node.unit
+<span class="o">(</span>gdb<span class="o">)</span><span class="w"> </span>run<span class="w"> </span><span class="m">0</span><span class="w">     </span><span class="c1"># Run node.unit with the &quot;0&quot; command line argument (ie. node_create)</span>
+...
+</code></pre></div>
+
+<p>You can also use <a href="http://valgrind.org/">valgrind</a> to check for memory errors:</p>
+<div class="codehilite"><pre><span></span><code><span class="c1"># Check for memory errors on node_create test case</span>
+$<span class="w"> </span>valgrind<span class="w"> </span>--leak-check<span class="o">=</span>full<span class="w"> </span>./node.unit<span class="w"> </span><span class="m">0</span>
+</code></pre></div>
+
+<div class="alert success-bg">
+<h3 id="repeat-embed_icon-iterative-development"><i class="icon icon-medium"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><title>repeat</title><path d="M17,17H7V14L3,18L7,22V19H19V13H17M7,7H17V10L21,6L17,2V5H5V11H7V7Z" /></svg>
+</i> Iterative Development<a class="headerlink" href="#repeat-embed_icon-iterative-development" title="Permanent link">&para;</a></h3>
+<p>You should practice <a href="https://en.wikipedia.org/wiki/Iterative_and_incremental_development">iterative development</a>. That is, rather than writing a
+bunch of code and then debugging it all at once, you should concentrate on
+one function at a time and then test that <strong>one thing at a time</strong>. The provided
+<a href="https://en.wikipedia.org/wiki/Unit_testing">unit tests</a> allow you to check on the correctness of the individual functions
+without implementing everything at once. Take advantage of this and build one
+thing at a time.</p>
+</div>
+<h2 id="activity-2-list-structure-020-points">Activity 2: List Structure (<em>0.20 Points</em>)<a class="headerlink" href="#activity-2-list-structure-020-points" title="Permanent link">&para;</a></h2>
+<p>In high-level languages such as <a href="https://www.python.org/">Python</a>, we have built-in implementations of
+<a href="https://en.wikipedia.org/wiki/List_(abstract_data_type)">lists</a> which support a variety of methods:</p>
+<div class="codehilite"><pre><span></span><code><span class="c1"># Declare a list</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">data</span> <span class="o">=</span> <span class="p">[</span><span class="mi">5</span><span class="p">,</span> <span class="mi">7</span><span class="p">,</span> <span class="mi">4</span><span class="p">]</span>
+
+<span class="c1"># Add a new value to the back of list</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">data</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">data</span>
+<span class="p">[</span><span class="mi">5</span><span class="p">,</span> <span class="mi">7</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span>
+
+<span class="c1"># Remove value from front of list</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">data</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+<span class="mi">5</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">data</span>
+<span class="p">[</span><span class="mi">7</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span>
+
+<span class="c1"># Remove value from middle of list</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">data</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+<span class="mi">4</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">data</span>
+<span class="p">[</span><span class="mi">7</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span>
+</code></pre></div>
+
+<p>As you already know, <a href="https://en.wikipedia.org/wiki/List_(abstract_data_type)">lists</a> in <a href="https://www.python.org/">Python</a> provide an <code>append</code> method to add
+values to the back of the <a href="https://en.wikipedia.org/wiki/List_(abstract_data_type)">list</a> and a <code>pop</code> method to remove a value at a
+specified index from the <a href="https://en.wikipedia.org/wiki/List_(abstract_data_type)">list</a>.</p>
+<p>For the second activity, you are to use the <code>Node</code> <strong>structure</strong> from the
+previous activity to construct a <code>List</code> <strong>structure</strong> that implements a
+<a href="https://en.wikipedia.org/wiki/Doubly_linked_list">doubly linked list</a> with a <a href="https://en.wikipedia.org/wiki/Sentinel_node">sentinel node</a> to mimic the functionality of
+<a href="https://en.wikipedia.org/wiki/List_(abstract_data_type)">lists</a> in <a href="https://www.python.org/">Python</a>.</p>
+<div class="centered">
+  <img src="static/img/homework07-list.png" class="responsive">
+</div>
+
+<p>The <code>List</code> <a href="https://en.wikipedia.org/wiki/Struct_(C_programming_language)">struct</a> you are to implement has the following attributes:</p>
+<ol>
+<li>
+<p><code>sentinel</code>: This is a <strong>sentinel</strong> <code>Node</code> <a href="https://en.wikipedia.org/wiki/Struct_(C_programming_language)">struct</a> embedded inside the
+  <code>List</code> <a href="https://en.wikipedia.org/wiki/Struct_(C_programming_language)">struct</a>.  It is used to simplify our internal <code>List</code> methods by
+  ensuring that there will always be an allocated  <code>Node</code> in the <a href="https://en.wikipedia.org/wiki/Doubly_linked_list">doubly
+  linked list</a>.</p>
+</li>
+<li>
+<p><code>size</code>: This is the number of values in the <code>List</code> <strong>structure</strong>.</p>
+</li>
+</ol>
+<div class="alert success-bg">
+<p><strong>Note</strong>: The <a href="https://en.wikipedia.org/wiki/Sentinel_node">sentinel node</a> is not considered part of the actual <a href="https://en.wikipedia.org/wiki/List_(abstract_data_type)">list</a>.
+  It does not store any <code>value</code> nor does it contribute to the <code>size</code> of the
+  <code>List</code>.</p>
+<p>Instead, it is there so that its <code>next</code> pointer is the <strong>head</strong> of the
+<a href="https://en.wikipedia.org/wiki/Doubly_linked_list">doubly linked list</a> and its <code>prev</code> pointer is the <strong>tail</strong> of the <a href="https://en.wikipedia.org/wiki/Doubly_linked_list">doubly
+linked list</a>.</p>
+</div>
+<p>With this <code>List</code> <a href="https://en.wikipedia.org/wiki/Struct_(C_programming_language)">struct</a> in mind, you are to complete the <a href="https://en.wikipedia.org/wiki/Doubly_linked_list">doubly linked
+list</a> library, which contains functions such as <code>list_append</code> and <code>list_pop</code>
+that implement some of the functionality present in <a href="https://www.python.org/">Python</a> but missing in
+<a href="https://en.wikipedia.org/wiki/C_(programming_language)">C</a>.</p>
+<h3 id="task-1-listc">Task 1: <code>list.c</code><a class="headerlink" href="#task-1-listc" title="Permanent link">&para;</a></h3>
+<p>The <code>list.c</code> file contains the <a href="https://en.wikipedia.org/wiki/C_(programming_language)">C</a> implementation for the <code>List</code>
+<strong>structure</strong> described above.  For this task, you will need to implement the
+following functions:</p>
+<div class="centered">
+  <img src="static/img/homework07-list-push.png" class="responsive">
+</div>
+
+<p>For this task, you will need to implement the following functions:</p>
+<ol>
+<li>
+<div class="flex-col" markdown="1">
+<p><code>List* list_create()</code></p>
+<blockquote>
+<p>This function allocates a new <code>List</code> <a href="https://en.wikipedia.org/wiki/Struct_(C_programming_language)">struct</a> and initializes its
+attributes: <code>sentinel</code> and <code>size</code> as described above.</p>
+</blockquote>
+<div class="alert success-bg" markdown="1">
+<p><strong>Hint</strong>: Use <a href="https://www.mankier.com/3/malloc">malloc</a> or <a href="https://www.mankier.com/3/malloc">calloc</a> to allocate data on the <a href="https://en.wikipedia.org/wiki/Memory_management#HEAP">heap</a>.  Be
+  sure to initialize the <code>next</code> and <code>prev</code> pointers of <code>sentinel</code>.</p>
+</div>
+</li>
+<li>
+<div class="flex-col" markdown="1">
+<p><code>void list_delete(List *l, bool release)</code></p>
+<blockquote>
+<p>This function deallocates the given <code>List</code> <a href="https://en.wikipedia.org/wiki/Struct_(C_programming_language)">struct</a> along with its
+internal <code>Node</code> <a href="https://en.wikipedia.org/wiki/Struct_(C_programming_language)">struct</a>s.</p>
+</blockquote>
+<div class="alert success-bg" markdown="1">
+<p><strong>Hint</strong>: Use <code>node_delete</code> to delete the internal <code>Node</code> <a href="https://en.wikipedia.org/wiki/Struct_(C_programming_language)">struct</a>s.</p>
+<p>To loop through the internal <code>Node</code> <strong>structures</strong>, you will want to
+  start with the first <code>Node</code> the <code>sentinel</code> points to and then stop once
+  you return to the <code>sentinel</code>.</p>
+</div>
+</li>
+<li>
+<div class="flex-col" markdown="1">
+<p><code>void list_append(List *l, Value v)</code></p>
+<blockquote>
+<p>This function creates a new <code>Node</code> <a href="https://en.wikipedia.org/wiki/Struct_(C_programming_language)">struct</a> with the given <code>Value</code> <code>v</code>
+and adds it to the back of the internal <a href="https://en.wikipedia.org/wiki/Doubly_linked_list">doubly linked list</a> (e.g.
+<code>l.append(s)</code> in <a href="https://www.python.org/">Python</a>).</p>
+</blockquote>
+<div class="alert success-bg" markdown="1">
+<p><strong>Hint</strong>: Use <code>node_create</code> and take advantage of the <code>sentinel</code> in the
+  <code>List</code> <a href="https://en.wikipedia.org/wiki/Struct_(C_programming_language)">struct</a>.</p>
+</div>
+</li>
+<li>
+<div class="flex-col" markdown="1">
+<p><code>Value list_pop(List *l, size_t index)</code></p>
+<blockquote>
+<p>This function removes the <code>Node</code> <a href="https://en.wikipedia.org/wiki/Struct_(C_programming_language)">struct</a> at the specified <code>index</code> from the internal
+<a href="https://en.wikipedia.org/wiki/Doubly_linked_list">doubly linked list</a> and returns the associated <code>Value</code> from the
+<code>Node</code> <a href="https://en.wikipedia.org/wiki/Struct_(C_programming_language)">struct</a> (e.g. <code>l.pop(index)</code> in <a href="https://www.python.org/">Python</a>).</p>
+</blockquote>
+<div class="alert success-bg" markdown="1">
+<p><strong>Hint</strong>: Use <code>node_delete</code> and take advantage of the <code>sentinel</code> in the
+  <code>List</code> <a href="https://en.wikipedia.org/wiki/Struct_(C_programming_language)">struct</a>.</p>
+<p>If the <code>index</code> is beyond the bounds of the <code>List</code>, then return <code>-1L</code> as
+the <code>Value</code>.</p>
+</div>
+</li>
+</ol>
+<h3 id="task-2-testing_1">Task 2: Testing<a class="headerlink" href="#task-2-testing_1" title="Permanent link">&para;</a></h3>
+<p>As you implement the functions in <code>list.c</code>, you should use the <code>list.unit</code>
+executable with the <code>list.unit.sh</code> script to test each of your functions:</p>
+<div class="codehilite"><pre><span></span><code><span class="c1"># Build test artifacts and run test scripts</span>
+$<span class="w"> </span>make<span class="w"> </span>test-list
+Testing<span class="w"> </span>list<span class="w"> </span>...
+<span class="w">  </span>list_create<span class="w">                              </span>...<span class="w"> </span>Success
+<span class="w">  </span>list_delete<span class="w">                              </span>...<span class="w"> </span>Success
+<span class="w">  </span>list_append<span class="w">                              </span>...<span class="w"> </span>Success
+<span class="w">  </span>list_pop<span class="w">                                 </span>...<span class="w"> </span>Success
+<span class="w">  </span>--------------------
+<span class="w">   </span>Score<span class="w"> </span><span class="m">4</span>.00<span class="w"> </span>/<span class="w"> </span><span class="m">4</span>.00
+<span class="w">   </span>Grade<span class="w"> </span><span class="m">1</span>.00<span class="w"> </span>/<span class="w"> </span><span class="m">1</span>.00
+<span class="w">  </span>Status<span class="w"> </span>Success
+</code></pre></div>
+
+<p>You can also run the testing script manually:</p>
+<div class="codehilite"><pre><span></span><code><span class="c1"># Run Shell unit test script manually</span>
+$<span class="w"> </span>./list.unit.sh
+...
+</code></pre></div>
+
+<p>To debug your <code>list</code> functions, you can use <a href="https://www.gnu.org/software/gdb/">gdb</a> on the <code>list.unit</code> executable:</p>
+<div class="codehilite"><pre><span></span><code><span class="c1"># Start gdb on list.unit</span>
+$<span class="w"> </span>gdb<span class="w"> </span>./list.unit
+<span class="o">(</span>gdb<span class="o">)</span><span class="w"> </span>run<span class="w"> </span><span class="m">0</span><span class="w">     </span><span class="c1"># Run list.unit with the &quot;0&quot; command line argument (ie. list_create)</span>
+...
+</code></pre></div>
+
+<p>You can also use <a href="http://valgrind.org/">valgrind</a> to check for memory errors:</p>
+<div class="codehilite"><pre><span></span><code><span class="c1"># Check for memory errors on list_create test case</span>
+$<span class="w"> </span>valgrind<span class="w"> </span>--leak-check<span class="o">=</span>full<span class="w"> </span>./list.unit<span class="w"> </span><span class="m">0</span>
+</code></pre></div>
+
+<h2 id="activity-3-seqit-020-points">Activity 3: Seqit (<em>0.20 Points</em>)<a class="headerlink" href="#activity-3-seqit-020-points" title="Permanent link">&para;</a></h2>
+<p>Once you have implemented both <a href="https://en.wikipedia.org/wiki/Doubly_linked_list">doubly linked list</a> library, you are to
+complete the <code>seqit.c</code> program, which is a simplified version of the <a href="https://www.mankier.com/1/seq">seq</a>
+utility:</p>
+<div class="codehilite"><pre><span></span><code><span class="c1"># Show usage</span>
+$<span class="w"> </span>./seqit
+Usage:<span class="w"> </span>seqit<span class="w"> </span>LAST
+<span class="w">       </span>seqit<span class="w"> </span>FIRST<span class="w"> </span>LAST
+<span class="w">       </span>seqit<span class="w"> </span>FIRST<span class="w"> </span>INCREMENT<span class="w"> </span>LAST
+
+<span class="c1"># Show sequence of numbers start from 1 through 10</span>
+$<span class="w"> </span>./seqit<span class="w"> </span><span class="m">10</span>
+<span class="m">1</span>
+<span class="m">2</span>
+<span class="m">3</span>
+<span class="m">4</span>
+<span class="m">5</span>
+<span class="m">6</span>
+<span class="m">7</span>
+<span class="m">8</span>
+<span class="m">9</span>
+<span class="m">10</span>
+
+<span class="c1"># Show sequence of numbers start from 5 through 10</span>
+$<span class="w"> </span>./seqit<span class="w"> </span><span class="m">5</span><span class="w"> </span><span class="m">10</span>
+<span class="m">5</span>
+<span class="m">6</span>
+<span class="m">7</span>
+<span class="m">8</span>
+<span class="m">9</span>
+<span class="m">10</span>
+
+<span class="c1"># Show sequence of odd numbers start from 5 through 10</span>
+$<span class="w"> </span>./seqit<span class="w"> </span><span class="m">5</span><span class="w"> </span><span class="m">2</span><span class="w"> </span><span class="m">10</span>
+<span class="m">5</span>
+<span class="m">7</span>
+<span class="m">9</span>
+</code></pre></div>
+
+<p>As can be seen, the <code>seqit</code> program emits a sequence of numbers (one number
+per line) based on the specified <code>FIRST</code>, <code>INCREMENT</code>, and <code>LAST</code> arguments.
+By default, <code>FIRST</code> is <code>1</code> and <code>INCREMENT</code> is <code>1</code>.</p>
+<h3 id="task-1-seqitc">Task 1: <code>seqit.c</code><a class="headerlink" href="#task-1-seqitc" title="Permanent link">&para;</a></h3>
+<p>The <code>seqit.c</code> file contains the <a href="https://en.wikipedia.org/wiki/C_(programming_language)">C</a> implementation of the <code>seqit</code> program
+described above.  You will need to implement the following functions:</p>
+<ol>
+<li>
+<div class="flex-col" markdown="1">
+<p><code>List *generate_sequence(ssize_t first, ssize_t increment, ssize_t last)</code></p>
+<blockquote>
+<p>This function generates a sequence of numbers going from <code>first</code> to
+<code>last</code> using the specified <code>increment</code> by building a <code>List</code> with these
+numbers and returning it.</p>
+</blockquote>
+<div class="alert success-bg" markdown="1">
+<p><strong>Hint</strong>: Take advantage of the <code>list_create</code> and <code>list_append</code> functions
+  you wrote above.</p>
+<p>Think carefully how you should handle negative <code>increment</code> parameters.</p>
+</div>
+</li>
+<li>
+<div class="flex-col" markdown="1">
+<p><code>int main(int argc, char *argv[])</code></p>
+<blockquote>
+<p>This function parses command line arguments for <code>FIRST</code>, <code>INCREMENT</code>, or
+<code>LAST</code>, generates a sequence of numbers, and then prints out that sequence
+(one number per line).</p>
+</blockquote>
+<div class="alert success-bg" markdown="1">
+<p><strong>Hint</strong>: Take advantage of the <code>list_create</code>, <code>list_pop</code>, <code>list_delete</code>
+  functions you wrote above.</p>
+</div>
+</li>
+</ol>
+<h3 id="task-2-testing_2">Task 2: Testing<a class="headerlink" href="#task-2-testing_2" title="Permanent link">&para;</a></h3>
+<p>As you implement <code>seqit.c</code>, you can test it by running the <code>test-seqit</code>
+target:</p>
+<div class="codehilite"><pre><span></span><code><span class="c1"># Build artifact and run test</span>
+$<span class="w"> </span>make<span class="w"> </span>test-seqit
+Testing<span class="w"> </span>seqit<span class="w"> </span>...
+<span class="w">  </span>seqit<span class="w"> </span><span class="m">1</span><span class="w">                                  </span>...<span class="w"> </span>Success
+<span class="w">  </span>seqit<span class="w"> </span><span class="m">10</span><span class="w">                                 </span>...<span class="w"> </span>Success
+<span class="w">  </span>seqit<span class="w"> </span><span class="m">100</span><span class="w">                                </span>...<span class="w"> </span>Success
+<span class="w">  </span>seqit<span class="w"> </span><span class="m">1</span><span class="w"> </span><span class="m">100</span><span class="w">                              </span>...<span class="w"> </span>Success
+<span class="w">  </span>seqit<span class="w"> </span><span class="m">1</span><span class="w"> </span><span class="m">2</span><span class="w"> </span><span class="m">100</span><span class="w">                            </span>...<span class="w"> </span>Success
+<span class="w">  </span>seqit<span class="w"> </span><span class="m">100</span><span class="w"> </span>-3<span class="w"> </span><span class="m">1</span><span class="w">                           </span>...<span class="w"> </span>Success
+<span class="w">  </span>seqit<span class="w"> </span><span class="m">1</span><span class="w"> </span><span class="m">2</span><span class="w"> </span><span class="m">3</span><span class="w"> </span><span class="m">4</span><span class="w">                            </span>...<span class="w"> </span>Success
+<span class="w">  </span>--------------------
+<span class="w">   </span>Score<span class="w"> </span><span class="m">7</span>.00<span class="w"> </span>/<span class="w"> </span><span class="m">7</span>.00
+<span class="w">   </span>Grade<span class="w"> </span><span class="m">1</span>.00<span class="w"> </span>/<span class="w"> </span><span class="m">1</span>.00
+<span class="w">  </span>Status<span class="w"> </span>Success
+</code></pre></div>
+
+<h2 id="activity-4-tailit-020-points">Activity 4: Tailit (<em>0.20 Points</em>)<a class="headerlink" href="#activity-4-tailit-020-points" title="Permanent link">&para;</a></h2>
+<p>Once you have implemented both <a href="https://en.wikipedia.org/wiki/Doubly_linked_list">doubly linked list</a> library, you are to
+complete the <code>tailit.c</code> program, which is a simplified version of the <a href="https://www.mankier.com/1/tail">tail</a>
+utility:</p>
+<div class="codehilite"><pre><span></span><code><span class="c1"># Show usage</span>
+$<span class="w"> </span>./tailit<span class="w"> </span>-h
+Usage:<span class="w"> </span>tailit<span class="w"> </span><span class="o">[</span>-n<span class="w"> </span>NUMBER<span class="o">]</span>
+
+<span class="w">    </span>-n<span class="w"> </span>NUMBER<span class="w">  </span>Output<span class="w"> </span>the<span class="w"> </span>last<span class="w"> </span>NUMBER<span class="w"> </span>of<span class="w"> </span>lines<span class="w"> </span><span class="o">(</span>default<span class="w"> </span>is<span class="w"> </span><span class="m">10</span><span class="o">)</span>
+
+<span class="c1"># Show last 10 lines</span>
+$<span class="w"> </span>./seqit<span class="w"> </span><span class="m">100</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>./tailit
+<span class="m">91</span>
+<span class="m">92</span>
+<span class="m">93</span>
+<span class="m">94</span>
+<span class="m">95</span>
+<span class="m">96</span>
+<span class="m">97</span>
+<span class="m">98</span>
+<span class="m">99</span>
+<span class="m">100</span>
+
+<span class="c1"># Show last 5 lines</span>
+$<span class="w"> </span>./seqit<span class="w"> </span><span class="m">100</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>./tailit<span class="w"> </span>-n<span class="w"> </span><span class="m">5</span>
+<span class="m">96</span>
+<span class="m">97</span>
+<span class="m">98</span>
+<span class="m">99</span>
+<span class="m">100</span>
+</code></pre></div>
+
+<p>As can be seen, the <code>tailit</code> program reads [standard input] line by line and
+only emits the last <code>10</code> lines by default.  If the user specifies another
+limit via the <code>-n</code> flag, then only that number of lines is shown.</p>
+<h3 id="task-1-tailitc">Task 1: <code>tailit.c</code><a class="headerlink" href="#task-1-tailitc" title="Permanent link">&para;</a></h3>
+<p>The <code>tailit.c</code> file contains the <a href="https://en.wikipedia.org/wiki/C_(programming_language)">C</a> implementation of the <code>tailit</code> program
+described above.  You will need to implement the following functions:</p>
+<ol>
+<li>
+<div class="flex-col" markdown="1">
+<p><code>List *tail_stream(FILE *stream, size_t limit)</code></p>
+<blockquote>
+<p>This function reads the <code>stream</code> line by line and returns a <code>List</code>
+containing the last <code>limit</code> number of lines from the <code>stream</code>.</p>
+</blockquote>
+<div class="alert success-bg" markdown="1">
+<p><strong>Hint</strong>: Take advantage of the <code>list_create</code>, <code>list_append</code>, and
+  <code>list_pop</code> functions you wrote above.</p>
+<p>Think carefully how you should handle storing only the <code>limit</code> number of
+lines in your <code>List</code>.</p>
+<p>Consider using <a href="https://www.mankier.com/3/strdup">strdup</a> to ensure the <a href="https://en.wikipedia.org/wiki/C_string_handling">strings</a> you read with <a href="https://man7.org/linux/man-pages/man3/fgets.3.html">fgets</a>
+persist between function calls.</p>
+</div>
+</li>
+<li>
+<div class="flex-col" markdown="1">
+<p><code>int main(int argc, char *argv[])</code></p>
+<blockquote>
+<p>This function parses the command line arguments, creates a list of the
+last <code>NUMBER</code> of lines, and then prints out the items in the list.</p>
+</blockquote>
+<div class="alert success-bg" markdown="1">
+<p><strong>Hint</strong>: Take advantage of the <code>list_create</code>, <code>list_pop</code>, <code>list_delete</code>
+  functions you wrote above.</p>
+</div>
+</li>
+</ol>
+<h3 id="task-2-testing_3">Task 2: Testing<a class="headerlink" href="#task-2-testing_3" title="Permanent link">&para;</a></h3>
+<p>As you implement <code>tailit.c</code>, you can test it by running the <code>test-tailit</code>
+target:</p>
+<div class="codehilite"><pre><span></span><code><span class="c1"># Build artifact and run test</span>
+$<span class="w"> </span>make<span class="w"> </span>test-tailit
+<span class="w">  </span>tailit<span class="w"> </span>-h<span class="w">                                </span>...<span class="w"> </span>Success
+<span class="w">  </span>tailit<span class="w"> </span>-p<span class="w">                                </span>...<span class="w"> </span>Success
+<span class="w">  </span>tailit<span class="w">                                   </span>...<span class="w"> </span>Success
+<span class="w">  </span>tailit<span class="w"> </span>-n<span class="w"> </span><span class="m">1</span><span class="w">                              </span>...<span class="w"> </span>Success
+<span class="w">  </span>tailit<span class="w"> </span>-n<span class="w"> </span><span class="m">5</span><span class="w">                              </span>...<span class="w"> </span>Success
+<span class="w">  </span>tailit<span class="w"> </span>-n<span class="w"> </span><span class="m">10</span><span class="w">                             </span>...<span class="w"> </span>Success
+<span class="w">  </span>tailit<span class="w"> </span>-n<span class="w"> </span><span class="m">25</span><span class="w">                             </span>...<span class="w"> </span>Success
+<span class="w">  </span>tailit<span class="w"> </span>-n<span class="w"> </span><span class="m">100</span><span class="w">                            </span>...<span class="w"> </span>Success
+<span class="w">  </span>--------------------
+<span class="w">   </span>Score<span class="w"> </span><span class="m">8</span>.00<span class="w"> </span>/<span class="w"> </span><span class="m">8</span>.00
+<span class="w">   </span>Grade<span class="w"> </span><span class="m">1</span>.00<span class="w"> </span>/<span class="w"> </span><span class="m">1</span>.00
+<span class="w">  </span>Status<span class="w"> </span>Success
+</code></pre></div>
+
+<h2 id="activity-5-quiz-030-points">Activity 5: Quiz (<em>0.30 Points</em>)<a class="headerlink" href="#activity-5-quiz-030-points" title="Permanent link">&para;</a></h2>
+<p>Once you have completed all the activities above, you are to complete the
+following <strong>reflection quiz</strong>:</p>
+<div id="quiz-questions"></div>
+
+<div id="quiz-responses"></div>
+
+<script src="static/js/dredd-quiz.js"></script>
+<script>
+loadQuiz('static/json/homework07.json');
+</script>
+
+<pre style="display: none;" id="dr-container" class="codehilite"><code id="dredd-response"></code></pre>
+
+<p>As with <a href="reading01.html">Reading 01</a>, you will need to store your answers in a
+<code>homework07/answers.json</code> file.  You can use the form above to generate the
+contents of this file, or you can write the <a href="https://json.org">JSON</a> by hand.</p>
+<p>To check your quiz directly, you can use the <code>check.py</code> script:</p>
+<div class="codehilite"><pre><span></span><code>$<span class="w"> </span>../.scripts/check.py
+Checking<span class="w"> </span>homework07<span class="w"> </span>quiz<span class="w"> </span>...
+<span class="w">     </span>Q01<span class="w">  </span><span class="m">2</span>.00<span class="w"> </span>/<span class="w">  </span><span class="m">2</span>.00
+<span class="w">     </span>Q02<span class="w">  </span><span class="m">1</span>.00<span class="w"> </span>/<span class="w">  </span><span class="m">1</span>.00
+<span class="w">     </span>Q03<span class="w"> </span><span class="m">12</span>.00<span class="w"> </span>/<span class="w"> </span><span class="m">12</span>.00
+<span class="w">     </span>Q04<span class="w">  </span><span class="m">4</span>.00<span class="w"> </span>/<span class="w">  </span><span class="m">4</span>.00
+<span class="w">     </span>Q05<span class="w">  </span><span class="m">1</span>.00<span class="w"> </span>/<span class="w">  </span><span class="m">1</span>.00
+<span class="w">     </span>Q06<span class="w">  </span><span class="m">1</span>.00<span class="w"> </span>/<span class="w">  </span><span class="m">1</span>.00
+<span class="w">  </span>--------------------
+<span class="w">   </span>Score<span class="w"> </span><span class="m">21</span>.00<span class="w"> </span>/<span class="w"> </span><span class="m">21</span>.00
+<span class="w">   </span>Grade<span class="w">  </span><span class="m">1</span>.00<span class="w"> </span>/<span class="w">  </span><span class="m">1</span>.00
+<span class="w">  </span>Status<span class="w"> </span>Success
+</code></pre></div>
+
+<h2 id="submission">Submission<a class="headerlink" href="#submission" title="Permanent link">&para;</a></h2>
+<p>To submit your assignment, please commit your work to the <code>homework07</code> folder
+of your <code>homework07</code> branch in your <strong>assignments</strong> <a href="https://github.com">GitHub</a> repository.
+Your <code>homework07</code> folder should only contain the following files:</p>
+<ul>
+<li><code>Makefile</code></li>
+<li><code>answers.json</code></li>
+<li><code>list.c</code></li>
+<li><code>list.h</code></li>
+<li><code>list.unit.c</code></li>
+<li><code>node.c</code></li>
+<li><code>node.unit.c</code></li>
+<li><code>seqit.c</code></li>
+<li><code>tailit.c</code></li>
+</ul>
+<div class="alert warning-bg">
+<p><strong>Note</strong>: You do not need to commit the test scripts because the <code>Makefile</code>
+automatically downloads them.</p>
+</div>
+<div class="codehilite"><pre><span></span><code><span class="c1">#-----------------------------------------------------------------------</span>
+<span class="c1"># Make sure you have already completed Activity 0: Preparation</span>
+<span class="c1">#-----------------------------------------------------------------------</span>
+...
+$<span class="w"> </span>git<span class="w"> </span>add<span class="w"> </span>Makefile<span class="w">                            </span><span class="c1"># Mark changes for commit</span>
+$<span class="w"> </span>git<span class="w"> </span>commit<span class="w"> </span>-m<span class="w"> </span><span class="s2">&quot;Homework 07: Makefile&quot;</span><span class="w">       </span><span class="c1"># Record changes</span>
+...
+$<span class="w"> </span>git<span class="w"> </span>add<span class="w"> </span>node.c<span class="w">                              </span><span class="c1"># Mark changes for commit</span>
+$<span class="w"> </span>git<span class="w"> </span>commit<span class="w"> </span>-m<span class="w"> </span><span class="s2">&quot;Homework 07: node.c&quot;</span><span class="w">         </span><span class="c1"># Record changes</span>
+...
+$<span class="w"> </span>git<span class="w"> </span>add<span class="w"> </span>list.c<span class="w">                              </span><span class="c1"># Mark changes for commit</span>
+$<span class="w"> </span>git<span class="w"> </span>commit<span class="w"> </span>-m<span class="w"> </span><span class="s2">&quot;Homework 07: list.c&quot;</span><span class="w">         </span><span class="c1"># Record changes</span>
+...
+$<span class="w"> </span>git<span class="w"> </span>add<span class="w"> </span>seqit.c<span class="w">                             </span><span class="c1"># Mark changes for commit</span>
+$<span class="w"> </span>git<span class="w"> </span>commit<span class="w"> </span>-m<span class="w"> </span><span class="s2">&quot;Homework 07: seqit.c&quot;</span><span class="w">        </span><span class="c1"># Record changes</span>
+...
+$<span class="w"> </span>git<span class="w"> </span>add<span class="w"> </span>tailit.c<span class="w">                            </span><span class="c1"># Mark changes for commit</span>
+$<span class="w"> </span>git<span class="w"> </span>commit<span class="w"> </span>-m<span class="w"> </span><span class="s2">&quot;Homework 07: tailit&quot;</span><span class="w">         </span><span class="c1"># Record changes</span>
+...
+$<span class="w"> </span>git<span class="w"> </span>add<span class="w"> </span>answers.json<span class="w">                        </span><span class="c1"># Mark changes for commit</span>
+$<span class="w"> </span>git<span class="w"> </span>commit<span class="w"> </span>-m<span class="w"> </span><span class="s2">&quot;Homework 07: Quiz&quot;</span><span class="w">           </span><span class="c1"># Record changes</span>
+...
+$<span class="w"> </span>git<span class="w"> </span>push<span class="w"> </span>-u<span class="w"> </span>origin<span class="w"> </span>homework07<span class="w">               </span><span class="c1"># Push branch to GitHub</span>
+</code></pre></div>
+
+<div class="alert warning-bg">
+<h3 id="lifebuoy-embed_icon-acknowledgments"><i class="icon icon-medium"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><title>lifebuoy</title><path d="M19.79,15.41C20.74,13.24 20.74,10.75 19.79,8.59L17.05,9.83C17.65,11.21 17.65,12.78 17.06,14.17L19.79,15.41M15.42,4.21C13.25,3.26 10.76,3.26 8.59,4.21L9.83,6.94C11.22,6.35 12.79,6.35 14.18,6.95L15.42,4.21M4.21,8.58C3.26,10.76 3.26,13.24 4.21,15.42L6.95,14.17C6.35,12.79 6.35,11.21 6.95,9.82L4.21,8.58M8.59,19.79C10.76,20.74 13.25,20.74 15.42,19.78L14.18,17.05C12.8,17.65 11.22,17.65 9.84,17.06L8.59,19.79M12,2A10,10 0 0,1 22,12A10,10 0 0,1 12,22A10,10 0 0,1 2,12A10,10 0 0,1 12,2M12,8A4,4 0 0,0 8,12A4,4 0 0,0 12,16A4,4 0 0,0 16,12A4,4 0 0,0 12,8Z" /></svg>
+</i> Acknowledgments<a class="headerlink" href="#lifebuoy-embed_icon-acknowledgments" title="Permanent link">&para;</a></h3>
+<p>If you collaborated with any other students, or received help from TAs or AI
+tools on this assignment, please record this support in the <code>README.md</code> in
+the <code>homework07</code> folder and include it with your <strong>Pull Request</strong>.</p>
+</div>
+<div class="alert success-bg">
+<h3 id="account-question-embed_icon-graders"><i class="icon icon-medium"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><title>account-question</title><path d="M13,8A4,4 0 0,1 9,12A4,4 0 0,1 5,8A4,4 0 0,1 9,4A4,4 0 0,1 13,8M17,18V20H1V18C1,15.79 4.58,14 9,14C13.42,14 17,15.79 17,18M20.5,14.5V16H19V14.5H20.5M18.5,9.5H17V9A3,3 0 0,1 20,6A3,3 0 0,1 23,9C23,9.97 22.5,10.88 21.71,11.41L21.41,11.6C20.84,12 20.5,12.61 20.5,13.3V13.5H19V13.3C19,12.11 19.6,11 20.59,10.35L20.88,10.16C21.27,9.9 21.5,9.47 21.5,9A1.5,1.5 0 0,0 20,7.5A1.5,1.5 0 0,0 18.5,9V9.5Z" /></svg>
+</i> Graders<a class="headerlink" href="#account-question-embed_icon-graders" title="Permanent link">&para;</a></h3>
+<p>Once you have committed your work and pushed it to <a href="https://github.com">GitHub</a>, remember to
+create a <strong>pull request</strong> and assign it to the appropriate <strong>teaching
+assistant</strong> from the <a href="reading07_tas.html">Reading 07 TA List</a>.</p>
+<p><strong>Note</strong>: this list changes each week, so be sure to consult the appropriate
+list for each assignment.</p>
+</div>
+</main>
+<footer>
+Built using <a href="https://python.org">Python</a>
+and <a href="https://jinja.palletsprojects.com">Jinja</a>
+with colors from <a href="https://nordtheme.com">Nord Theme</a>
+and icons from <a href="https://pictogrammers.com/library/mdi/">Material Design Icons</a>.</footer>
+</body>
+</html>
