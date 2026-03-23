@@ -295,6 +295,8 @@
         items:
           - name:       Slides 20
             link:       https://docs.google.com/presentation/d/1ZYYejVhVUn54Ee_QCVPoUBj-gFkvKshsYO6xeuqyLek/edit?usp=sharing
+          - name:       Panopto
+            link:       https://notredame.hosted.panopto.com/Panopto/Pages/Viewer.aspx?id=d4087fc9-f2b0-4005-9fc1-b416012a509f
 
       - date:           Wed 03/25
         topics:         Bitsets, Linked Lists
