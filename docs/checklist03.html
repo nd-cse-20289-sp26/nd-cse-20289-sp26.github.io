@@ -1,0 +1,389 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<!-- Favicon -->
+<link rel="icon" type="image/png" sizes="32x32" href="static/ico/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="static/ico/favicon-16x16.png">
+<link rel="manifest" href="static/ico/site.webmanifest">
+<!-- Stylesheets -->
+<link rel="stylesheet" href="static/css/pnutzh4x0r.css">
+<title>Checklist 03</title>
+</head>
+<body>
+<header>
+<a class="logo" href="checklist03.html">
+    <h1>Checklist 03</h1>
+</a>
+<nav>
+    <ul>
+        <li><a href="index.html"><h4>Home</h4></a></li>
+        </ul>
+</nav></header>
+<main>
+<p>Here is a general outline of the <strong>key</strong> concepts (<em>arranged by topic</em>) that
+you should know for <strong>Exam 03</strong>.</p>
+<p>The exam will have the following format:</p>
+<ol>
+<li>
+<p><strong>Compiling and Building</strong> (<em>multiple-choice</em>, <em>fill-in-the-blank</em>)</p>
+</li>
+<li>
+<p><strong>Pointers, Arrays, Strings</strong> (<em>multiple-choice</em>, <em>true/false</em>)</p>
+</li>
+<li>
+<p><strong>Memory Allocation</strong> (<em>fill-in-the-blank</em>)</p>
+</li>
+<li>
+<p><strong>Memory Management and Linked Lists</strong> (<em>multiple-choice</em>, <em>fill-in-the-blank</em>)</p>
+</li>
+<li>
+<p><strong>Bitsets</strong> and <strong>Data Representation</strong> (<em>fill-in-the-blank</em>)</p>
+</li>
+<li>
+<p><strong>Debugging</strong> (<em>coding on the computer</em>)</p>
+</li>
+</ol>
+<p>Parts <strong>1</strong> through <strong>5</strong> are to be done first on <strong>paper</strong>. Once that
+portion is completed and submitted, you will do part <strong>6</strong> on your own
+computer and submit code to your <strong>assignments</strong> repository.</p>
+<div class="alert warning-bg">
+<h3 id="check-all-embed_icon-representative-but-not-exhaustive"><i class="icon icon-medium"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><title>check-all</title><path d="M0.41,13.41L6,19L7.41,17.58L1.83,12M22.24,5.58L11.66,16.17L7.5,12L6.07,13.41L11.66,19L23.66,7M18,7L16.59,5.58L10.24,11.93L11.66,13.34L18,7Z" /></svg>
+</i> Representative, But Not Exhaustive<a class="headerlink" href="#check-all-embed_icon-representative-but-not-exhaustive" title="Permanent link">&para;</a></h3>
+<p>This check list is meant to be representative, rather than exhaustive (ie.
+there may be questions that show up on the exam that are not shown below).</p>
+</div>
+<h2 id="logistics">Logistics<a class="headerlink" href="#logistics" title="Permanent link">&para;</a></h2>
+<p><strong>Exam 03</strong> will take place during our normal lecture session on
+<strong>Wednesday, April 1</strong> from <strong>12:50 PM - 1:40 PM</strong> in <strong>101 DeBartolo
+Hall</strong>.</p>
+<p>As noted above, the first portion of the exam with be on <strong>paper</strong>, while
+the remaining component with require <strong>coding</strong> and submitting work to your
+<strong>assignments</strong> <a href="https://github.com">GitHub</a> repository.</p>
+<p>During the <strong>paper</strong> portion of the exam, students will only be allowed to
+use <strong>one cheatsheet</strong>.  This <strong>paper</strong> component of the exam must be
+submitted before students can access the <strong>coding</strong> section.</p>
+<p>For the <strong>coding</strong> portion, students will use their own computer, and thus
+are permitted access to any material in their textbooks, notes,
+assignments, and the Internet.</p>
+<div class="alert danger-bg">
+<h3 id="alert-embed_icon-honor-code-violations"><i class="icon icon-medium"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><title>alert</title><path d="M13 14H11V9H13M13 18H11V16H13M1 21H23L12 2L1 21Z" /></svg>
+</i> Honor Code Violations<a class="headerlink" href="#alert-embed_icon-honor-code-violations" title="Permanent link">&para;</a></h3>
+<p>Although students are allowed to use their computers and the Internet
+during the <strong>coding</strong> portion of the exam, students <strong>may not communicate
+with others</strong> or <strong>solicit answers from others</strong>.  <strong>Nor may they use AI
+tools</strong> such as <strong>ChatGPT</strong> or <strong>Co-Pilot</strong> during the exam.  Students
+caught sharing solutions or violating any portion of the honor code will
+<strong>receive a zero on the exam</strong>.</p>
+<p>Furthermore, students are not allowed to consult, copy, or share material
+from previous sections of this course.</p>
+</div>
+<h2 id="compiling-and-building">Compiling and Building<a class="headerlink" href="#compiling-and-building" title="Permanent link">&para;</a></h2>
+<ol>
+<li>
+<div class="flex-col" markdown="1">
+<p>Why study <a href="https://en.wikipedia.org/wiki/C_(programming_language)">C</a>?</p>
+<ul>
+<li>
+<p>Why not just <a href="https://www.python.org/">Python</a> or <a href="https://isocpp.org/">C++</a>?</p>
+</li>
+<li>
+<p>Why is <a href="https://en.wikipedia.org/wiki/C_(programming_language)">C</a> considered a <strong>systems programming language</strong>?</p>
+</li>
+<li>
+<p>What is <a href="https://en.wikipedia.org/wiki/C_(programming_language)">C</a>'s relationship to <a href="https://en.wikipedia.org/wiki/Unix">Unix</a>?</p>
+</li>
+</ul>
+</li>
+<li>
+<div class="flex-col" markdown="1">
+<p>What is the <a href="https://en.wikipedia.org/wiki/Compiler">compiler pipeline</a>?</p>
+<ul>
+<li>
+<p>What exactly happens when you compile a program (ie. describe the
+  <a href="https://en.wikipedia.org/wiki/Compiler">compiler pipeline</a>)?</p>
+</li>
+<li>
+<p>What is the difference between a <strong>dynamic executable</strong> and a
+  <strong>static executable</strong>?</p>
+</li>
+<li>
+<p>What is the difference between a <strong>shared library</strong> and a <strong>static
+  library</strong>?</p>
+</li>
+</ul>
+</li>
+<li>
+<div class="flex-col" markdown="1">
+<p>How do you write a <a href="https://en.wikipedia.org/wiki/Makefile">Makefile</a> that utilizes <strong>rules</strong> and <strong>variables</strong>
+for a program that consists of multiple files?</p>
+</li>
+</ol>
+<div class="alert success-bg">
+<h3 id="help-embed_icon-sample-questions"><i class="icon icon-medium"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><title>help</title><path d="M10,19H13V22H10V19M12,2C17.35,2.22 19.68,7.62 16.5,11.67C15.67,12.67 14.33,13.33 13.67,14.17C13,15 13,16 13,17H10C10,15.33 10,13.92 10.67,12.92C11.33,11.92 12.67,11.33 13.5,10.67C15.92,8.43 15.32,5.26 12,5A3,3 0 0,0 9,8H6A6,6 0 0,1 12,2Z" /></svg>
+</i> Sample Questions<a class="headerlink" href="#help-embed_icon-sample-questions" title="Permanent link">&para;</a></h3>
+<ol>
+<li>
+<p>Why is it important to specify all the dependencies of a <strong>target</strong> in a
+<code>Makefile</code> rule?</p>
+</li>
+<li>
+<p>What is the difference between <strong>compiling</strong> and <strong>linking</strong>? What are
+some common errors that can occur in each phase?</p>
+</li>
+<li>
+<p>Write a <code>Makefile</code> for a project that outputs a <a href="https://en.wikipedia.org/wiki/Library_(computing)#Shared_libraries">shared library</a>, a <a href="https://en.wikipedia.org/wiki/Static_library">static
+library</a>, a <strong>dynamic executable</strong>, and a <strong>static executable</strong>.</p>
+</li>
+</ol>
+</div>
+<h2 id="pointers-arrays-strings">Pointers, Arrays, Strings<a class="headerlink" href="#pointers-arrays-strings" title="Permanent link">&para;</a></h2>
+<ol>
+<li>
+<p>What exactly is a <a href="https://en.wikipedia.org/wiki/Pointer_(computer_programming)">pointer</a>? <a href="https://en.wikipedia.org/wiki/Array_data_type">array</a>? <a href="https://en.wikipedia.org/wiki/C_string_handling">string</a>?  How are they related?</p>
+</li>
+<li>
+<p>What does it mean to <strong>dereference</strong> a <a href="https://en.wikipedia.org/wiki/Pointer_(computer_programming)">pointer</a>?</p>
+</li>
+<li>
+<p>How do we get the <strong>address</strong> of a variable?</p>
+</li>
+<li>
+<p>What are multiple ways to access an element of an <a href="https://en.wikipedia.org/wiki/Array_data_type">array</a> or <a href="https://en.wikipedia.org/wiki/C_string_handling">string</a>?</p>
+</li>
+</ol>
+<div class="alert success-bg">
+<h3 id="help-embed_icon-sample-questions_1"><i class="icon icon-medium"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><title>help</title><path d="M10,19H13V22H10V19M12,2C17.35,2.22 19.68,7.62 16.5,11.67C15.67,12.67 14.33,13.33 13.67,14.17C13,15 13,16 13,17H10C10,15.33 10,13.92 10.67,12.92C11.33,11.92 12.67,11.33 13.5,10.67C15.92,8.43 15.32,5.26 12,5A3,3 0 0,0 9,8H6A6,6 0 0,1 12,2Z" /></svg>
+</i> Sample Questions<a class="headerlink" href="#help-embed_icon-sample-questions_1" title="Permanent link">&para;</a></h3>
+<p>Given the following code:</p>
+<div class="codehilite"><pre><span></span><code><span class="kt">int</span><span class="w"> </span><span class="nf">main</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">argc</span><span class="p">,</span><span class="w"> </span><span class="kt">char</span><span class="w"> </span><span class="o">*</span><span class="n">argv</span><span class="p">[])</span><span class="w"> </span><span class="p">{</span><span class="w">  </span><span class="c1">// | Label | Address | Value |</span>
+<span class="w">    </span><span class="kt">int</span><span class="w">  </span><span class="n">n</span><span class="w">   </span><span class="o">=</span><span class="w"> </span><span class="mi">16</span><span class="p">;</span><span class="w">                  </span><span class="c1">// |       | 0xF     | 0x00  |</span>
+<span class="w">    </span><span class="kt">int</span><span class="w">  </span><span class="n">a</span><span class="p">[]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="n">n</span><span class="p">};</span><span class="w">                 </span><span class="c1">// | n     | 0xE     | 0x10  |</span>
+<span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="o">*</span><span class="n">p</span><span class="w">   </span><span class="o">=</span><span class="w"> </span><span class="n">a</span><span class="p">;</span><span class="w">                   </span><span class="c1">// |       | 0xD     |       |</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w">                       </span><span class="c1">// |       | 0xC     |       |</span>
+<span class="p">}</span><span class="w">                                   </span><span class="c1">// |       | 0xB     |       |</span>
+<span class="w">                                    </span><span class="c1">// |       | 0xA     |       |</span>
+</code></pre></div>
+
+<p>Assuming a <strong>16-bit little endian machine</strong> where each integer is <code>2</code>
+bytes, each character is <code>1</code> byte, and each pointer is <code>2</code> bytes, fill in
+the <strong>stack frame</strong> to the right by recording the location of the variables
+above and their values at the appropriate addresses.</p>
+<p>The variable <code>n</code> is done for you; you need to add <code>p</code> and <code>a</code> to the
+<strong>stack frame</strong>.</p>
+<p>Distinguish between the character <code>0</code> and the integer <code>0</code> by using
+<strong>hexadecimal for integers</strong>.</p>
+</div>
+<h2 id="memory-allocation">Memory Allocation<a class="headerlink" href="#memory-allocation" title="Permanent link">&para;</a></h2>
+<ol>
+<li>
+<p>What is the difference between a <a href="https://en.wikipedia.org/wiki/Record_(computer_science)">struct</a> and a <a href="https://en.wikipedia.org/wiki/Union_type">union</a>?</p>
+</li>
+<li>
+<p>How much memory is allocated when we declare an <code>int</code>, <code>float</code>,
+<code>double</code>, <code>char</code>, <code>int8_t</code>, <code>int32_t</code>, <code>int64_t</code>, <code>size_t</code>, <a href="https://en.wikipedia.org/wiki/Array_data_type">array</a>,
+<a href="https://en.wikipedia.org/wiki/C_string_handling">string</a>, or <a href="https://en.wikipedia.org/wiki/Pointer_(computer_programming)">pointer</a>?</p>
+</li>
+<li>
+<p>When we declare a variable, where is the data allocated (<a href="https://en.wikipedia.org/wiki/Call_stack">stack</a>,
+<a href="https://en.wikipedia.org/wiki/Memory_management#HEAP">heap</a>, <strong>data</strong>, <strong>code</strong>)?</p>
+</li>
+</ol>
+<div class="alert success-bg">
+<h3 id="help-embed_icon-sample-questions_2"><i class="icon icon-medium"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><title>help</title><path d="M10,19H13V22H10V19M12,2C17.35,2.22 19.68,7.62 16.5,11.67C15.67,12.67 14.33,13.33 13.67,14.17C13,15 13,16 13,17H10C10,15.33 10,13.92 10.67,12.92C11.33,11.92 12.67,11.33 13.5,10.67C15.92,8.43 15.32,5.26 12,5A3,3 0 0,0 9,8H6A6,6 0 0,1 12,2Z" /></svg>
+</i> Sample Questions<a class="headerlink" href="#help-embed_icon-sample-questions_2" title="Permanent link">&para;</a></h3>
+<p>Given the following <a href="https://en.wikipedia.org/wiki/C_(programming_language)">C</a> program:</p>
+<div class="codehilite"><pre><span></span><code><span class="k">typedef</span><span class="w"> </span><span class="k">struct</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kt">char</span><span class="w"> </span><span class="n">key</span><span class="p">;</span>
+<span class="w">    </span><span class="kt">int</span><span class="w">  </span><span class="n">value</span><span class="p">;</span>
+<span class="p">}</span><span class="w"> </span><span class="n">Pair</span><span class="p">;</span>
+
+<span class="kt">int</span><span class="w"> </span><span class="nf">main</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">argc</span><span class="p">,</span><span class="w"> </span><span class="kt">char</span><span class="o">*</span><span class="w"> </span><span class="n">argv</span><span class="p">[])</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kt">char</span><span class="w">    </span><span class="n">c</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="sc">&#39;k&#39;</span><span class="p">;</span>
+<span class="w">    </span><span class="kt">int</span><span class="w">     </span><span class="n">v</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">2</span><span class="p">;</span>
+
+<span class="w">    </span><span class="n">Pair</span><span class="w">   </span><span class="n">p0</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="n">c</span><span class="p">,</span><span class="w"> </span><span class="n">v</span><span class="p">};</span>
+<span class="w">    </span><span class="n">Pair</span><span class="w">  </span><span class="o">*</span><span class="n">p1</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">malloc</span><span class="p">(</span><span class="k">sizeof</span><span class="p">(</span><span class="n">Pair</span><span class="p">));</span>
+<span class="w">    </span><span class="n">Pair</span><span class="w">  </span><span class="o">*</span><span class="n">p2</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">calloc</span><span class="p">(</span><span class="n">v</span><span class="p">,</span><span class="w"> </span><span class="k">sizeof</span><span class="p">(</span><span class="n">Pair</span><span class="p">));</span>
+<span class="w">    </span><span class="n">Pair</span><span class="w"> </span><span class="o">**</span><span class="n">p3</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">calloc</span><span class="p">(</span><span class="n">v</span><span class="p">,</span><span class="w"> </span><span class="k">sizeof</span><span class="p">(</span><span class="n">Pair</span><span class="w"> </span><span class="o">*</span><span class="p">));</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<p>How much memory was allocated on the <a href="https://en.wikipedia.org/wiki/Call_stack">stack</a>, <a href="https://en.wikipedia.org/wiki/Memory_management#HEAP">heap</a>, and <strong>data</strong> for each
+of the variables in the <code>main</code> function?</p>
+</div>
+<h2 id="memory-management-and-linked-lists">Memory Management and Linked Lists<a class="headerlink" href="#memory-management-and-linked-lists" title="Permanent link">&para;</a></h2>
+<ol>
+<li>
+<p>How do we <a href="https://en.wikipedia.org/wiki/Memory_management#Dynamic_memory_allocation">dynamically allocate</a> memory?  How do we deallocate that
+memory?</p>
+</li>
+<li>
+<p>When should we allocate on the <a href="https://en.wikipedia.org/wiki/Call_stack">stack</a>? <a href="https://en.wikipedia.org/wiki/Memory_management#HEAP">heap</a>? <strong>data</strong>?  What are the
+advantages and disadvantages of utilizing each memory segment?</p>
+</li>
+<li>
+<div class="flex-col" markdown="1">
+<p>What is <a href="https://en.wikipedia.org/wiki/Linked_list#Singly_linked_list">singly linked list</a>? <a href="https://en.wikipedia.org/wiki/Linked_list#Doubly_linked_list">doubly linked list</a>?</p>
+<ul>
+<li>
+<p>How would we <strong>insert</strong> an entry into a <a href="https://en.wikipedia.org/wiki/Linked_list">linked list</a>?</p>
+</li>
+<li>
+<p>How would we <strong>search</strong> for an entry in a <a href="https://en.wikipedia.org/wiki/Linked_list">linked list</a>?</p>
+</li>
+<li>
+<p>How would we <strong>remove</strong> an entry in a <a href="https://en.wikipedia.org/wiki/Linked_list">linked list</a>?</p>
+</li>
+</ul>
+</li>
+</ol>
+<div class="alert success-bg">
+<h3 id="help-embed_icon-sample-questions_3"><i class="icon icon-medium"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><title>help</title><path d="M10,19H13V22H10V19M12,2C17.35,2.22 19.68,7.62 16.5,11.67C15.67,12.67 14.33,13.33 13.67,14.17C13,15 13,16 13,17H10C10,15.33 10,13.92 10.67,12.92C11.33,11.92 12.67,11.33 13.5,10.67C15.92,8.43 15.32,5.26 12,5A3,3 0 0,0 9,8H6A6,6 0 0,1 12,2Z" /></svg>
+</i> Sample Questions<a class="headerlink" href="#help-embed_icon-sample-questions_3" title="Permanent link">&para;</a></h3>
+<ol>
+<li>
+<div class="flex-col" markdown="1">
+<p>Given the <a href="https://en.wikipedia.org/wiki/Linked_list#Doubly_linked_list">doubly linked list</a> in <a href="homework07.html">Homework 07</a>, implement the
+<code>list_contains</code> function:</p>
+<div class="codehilite"><pre><span></span><code><span class="cm">/**</span>
+<span class="cm"> * Returns whether or not list contains the value.</span>
+<span class="cm"> **/</span>
+<span class="kt">bool</span><span class="w"> </span><span class="nf">list_contains</span><span class="p">(</span><span class="n">List</span><span class="w"> </span><span class="o">*</span><span class="n">l</span><span class="p">,</span><span class="w"> </span><span class="n">Value</span><span class="w"> </span><span class="n">v</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">Node</span><span class="w"> </span><span class="o">*</span><span class="n">curr</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">____</span><span class="p">;</span><span class="w">    </span><span class="c1">// 1. ????</span>
+
+<span class="w">    </span><span class="k">while</span><span class="w"> </span><span class="p">(</span><span class="n">____</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w">        </span><span class="c1">// 2. ????</span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">____</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w">       </span><span class="c1">// 3. ????</span>
+<span class="w">            </span><span class="k">return</span><span class="w"> </span><span class="n">_____</span><span class="p">;</span><span class="w"> </span><span class="c1">// 4. ????</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">        </span><span class="n">curr</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">____</span><span class="p">;</span><span class="w">      </span><span class="c1">// 5. ????</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">____</span><span class="p">;</span><span class="w">          </span><span class="c1">// 6. ????</span>
+<span class="p">}</span>
+</code></pre></div>
+
+</li>
+<li>
+<div class="flex-col" markdown="1">
+<p>Given the following <a href="https://en.wikipedia.org/wiki/C_(programming_language)">C</a> code that uses the <code>list_contains</code> function above:</p>
+<div class="codehilite"><pre><span></span><code><span class="n">List</span><span class="w"> </span><span class="o">*</span><span class="n">l</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">list_create</span><span class="p">();</span>
+<span class="n">list_append</span><span class="p">(</span><span class="n">l</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;Reasonable&quot;</span><span class="p">);</span>
+<span class="n">list_append</span><span class="p">(</span><span class="n">l</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;Obscure&quot;</span><span class="p">);</span>
+<span class="n">list_append</span><span class="p">(</span><span class="n">l</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;Exam&quot;</span><span class="p">);</span>
+
+<span class="n">Value</span><span class="w"> </span><span class="n">v0</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{.</span><span class="n">string</span><span class="o">=</span><span class="s">&quot;Reasonable&quot;</span><span class="p">};</span>
+<span class="n">printf</span><span class="p">(</span><span class="s">&quot;Contains %s ? %d</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">v0</span><span class="p">.</span><span class="n">string</span><span class="p">,</span><span class="w"> </span><span class="n">list_contains</span><span class="p">(</span><span class="n">l</span><span class="p">,</span><span class="w"> </span><span class="n">v0</span><span class="p">));</span>
+<span class="n">Value</span><span class="w"> </span><span class="n">v1</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{.</span><span class="n">string</span><span class="o">=</span><span class="s">&quot;Exam&quot;</span><span class="p">};</span>
+<span class="n">printf</span><span class="p">(</span><span class="s">&quot;Contains %s ? %d</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">v1</span><span class="p">.</span><span class="n">string</span><span class="p">,</span><span class="w"> </span><span class="n">list_contains</span><span class="p">(</span><span class="n">l</span><span class="p">,</span><span class="w"> </span><span class="n">v1</span><span class="p">));</span>
+</code></pre></div>
+
+<p>What is the output of this code? Explain why the output is not what you
+might expect, and how you could fix it.</p>
+</li>
+</ol>
+</div>
+<h2 id="bitsets-and-data-representation">Bitsets and Data Representation<a class="headerlink" href="#bitsets-and-data-representation" title="Permanent link">&para;</a></h2>
+<ol>
+<li>
+<p>How do you implement a <a href="https://en.wikipedia.org/wiki/Bit_array">bitset</a> in <a href="https://en.wikipedia.org/wiki/C_(programming_language)">C</a> that support insertion, removal,
+and searching?</p>
+</li>
+<li>
+<p>How is an integer represented on a <a href="https://en.wikipedia.org/wiki/Endianness">little endian</a> machine vs a <a href="https://en.wikipedia.org/wiki/Endianness">big
+endian</a> machine?</p>
+</li>
+</ol>
+<div class="alert success-bg">
+<h3 id="help-embed_icon-sample-questions_4"><i class="icon icon-medium"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><title>help</title><path d="M10,19H13V22H10V19M12,2C17.35,2.22 19.68,7.62 16.5,11.67C15.67,12.67 14.33,13.33 13.67,14.17C13,15 13,16 13,17H10C10,15.33 10,13.92 10.67,12.92C11.33,11.92 12.67,11.33 13.5,10.67C15.92,8.43 15.32,5.26 12,5A3,3 0 0,0 9,8H6A6,6 0 0,1 12,2Z" /></svg>
+</i> Sample Questions<a class="headerlink" href="#help-embed_icon-sample-questions_4" title="Permanent link">&para;</a></h3>
+<p>Given the following array and <a href="https://en.wikipedia.org/wiki/Bit_array">bitset</a>, complete the <a href="https://en.wikipedia.org/wiki/C_(programming_language)">C</a> code to add each
+element in the array to the <a href="https://en.wikipedia.org/wiki/Bit_array">bitset</a>:</p>
+<div class="codehilite"><pre><span></span><code><span class="kt">int</span><span class="w">     </span><span class="n">numbers</span><span class="p">[]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">12</span><span class="p">,</span><span class="w"> </span><span class="mi">7</span><span class="p">,</span><span class="w"> </span><span class="mi">10</span><span class="p">,</span><span class="w"> </span><span class="mi">-1</span><span class="p">};</span>
+<span class="kt">int32_t</span><span class="w"> </span><span class="n">bitset</span><span class="w">    </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+
+<span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="o">*</span><span class="n">n</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">numbers</span><span class="p">;</span><span class="w"> </span><span class="o">*</span><span class="n">n</span><span class="w"> </span><span class="o">&gt;=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">n</span><span class="o">++</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">bitset</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">____</span><span class="p">;</span><span class="w"> </span><span class="c1">// 1. ????</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<ul>
+<li>
+<p>How would you check if the number <code>7</code> is in the <code>bitset</code>?</p>
+</li>
+<li>
+<p>What is the <strong>decimal</strong> value of the <code>bitset</code> after adding all the
+  elements in the array?</p>
+</li>
+<li>
+<p>What is the <strong>hexadecimal</strong> representation of the <code>bitset</code> after adding
+  all the elements in the array on a <a href="https://en.wikipedia.org/wiki/Endianness">little endian</a> machine?</p>
+</li>
+<li>
+<p>What is the <strong>hexadecimal</strong> representation of the <code>bitset</code> after adding
+  all the elements in the array on a <a href="https://en.wikipedia.org/wiki/Endianness">big endian</a> machine?</p>
+</li>
+</ul>
+</div>
+<h2 id="debugging">Debugging<a class="headerlink" href="#debugging" title="Permanent link">&para;</a></h2>
+<ol>
+<li>
+<p>How do you <strong>debug</strong> problems such as <a href="https://en.wikipedia.org/wiki/Segmentation_fault">segmentation faults</a> in a <a href="https://en.wikipedia.org/wiki/C_(programming_language)">C</a>
+program using <a href="https://www.gnu.org/software/gdb/">gdb</a>?</p>
+</li>
+<li>
+<p>How do you <strong>debug</strong> memory errors such as invalid reads, uninitialized
+memory, and <a href="https://en.wikipedia.org/wiki/Memory_leak">memory leaks</a> in a <a href="https://en.wikipedia.org/wiki/C_(programming_language)">C</a> program using <a href="http://valgrind.org/">valgrind</a>?</p>
+</li>
+</ol>
+<div class="alert success-bg">
+<h3 id="help-embed_icon-sample-questions_5"><i class="icon icon-medium"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><title>help</title><path d="M10,19H13V22H10V19M12,2C17.35,2.22 19.68,7.62 16.5,11.67C15.67,12.67 14.33,13.33 13.67,14.17C13,15 13,16 13,17H10C10,15.33 10,13.92 10.67,12.92C11.33,11.92 12.67,11.33 13.5,10.67C15.92,8.43 15.32,5.26 12,5A3,3 0 0,0 9,8H6A6,6 0 0,1 12,2Z" /></svg>
+</i> Sample Questions<a class="headerlink" href="#help-embed_icon-sample-questions_5" title="Permanent link">&para;</a></h3>
+<p>The following program performs the equivalent of the following <a href="https://en.wikipedia.org/wiki/Pipeline_(Unix)">unix
+pipeline</a>:</p>
+<div class="codehilite"><pre><span></span><code><span class="c1"># Show counts of each letter</span>
+$<span class="w"> </span><span class="nb">echo</span><span class="w"> </span>...<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span>-Eio<span class="w"> </span><span class="o">[</span>a-z<span class="o">]</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>sort<span class="w"> </span><span class="p">|</span><span class="w"> </span>uniq<span class="w"> </span>-c
+</code></pre></div>
+
+<p>Use <a href="https://www.gnu.org/software/gdb/">gdb</a> and <a href="http://valgrind.org/">valgrind</a> to eliminate all <strong>logical</strong> and <strong>memory</strong> errors
+in this program:</p>
+<div class="codehilite"><pre><span></span><code><span class="cm">/* str_counts.c: Count letters in string */</span>
+
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;stdio.h&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;stdlib.h&gt;</span>
+
+<span class="kt">int</span><span class="w"> </span><span class="o">*</span><span class="nf">str_counts</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="kt">char</span><span class="w"> </span><span class="o">*</span><span class="n">s</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">counts</span><span class="p">[</span><span class="mi">1</span><span class="o">&lt;&lt;</span><span class="mi">8</span><span class="p">];</span>
+
+<span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="kt">char</span><span class="w"> </span><span class="o">*</span><span class="n">c</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">s</span><span class="p">;</span><span class="w"> </span><span class="n">c</span><span class="p">;</span><span class="w"> </span><span class="n">c</span><span class="o">++</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">counts</span><span class="p">[(</span><span class="kt">int</span><span class="p">)</span><span class="o">*</span><span class="n">c</span><span class="p">]</span><span class="o">++</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">counts</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="kt">int</span><span class="w"> </span><span class="nf">main</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">argc</span><span class="p">,</span><span class="w"> </span><span class="kt">char</span><span class="w"> </span><span class="o">*</span><span class="n">argv</span><span class="p">[])</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kt">char</span><span class="w"> </span><span class="o">*</span><span class="n">buffer</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;&quot;</span><span class="p">;</span>
+
+<span class="w">    </span><span class="k">while</span><span class="w"> </span><span class="p">(</span><span class="n">fgets</span><span class="p">(</span><span class="n">buffer</span><span class="p">,</span><span class="w"> </span><span class="n">BUFSIZ</span><span class="p">,</span><span class="w"> </span><span class="n">stdin</span><span class="p">))</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="kt">int</span><span class="w"> </span><span class="o">*</span><span class="n">counts</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">str_counts</span><span class="p">(</span><span class="n">buffer</span><span class="p">);</span>
+<span class="w">        </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">c</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="sc">&#39;A&#39;</span><span class="p">;</span><span class="w"> </span><span class="n">c</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="sc">&#39;z&#39;</span><span class="p">;</span><span class="w"> </span><span class="n">c</span><span class="o">++</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">counts</span><span class="p">[</span><span class="o">*</span><span class="n">c</span><span class="p">])</span><span class="w"> </span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;%7d %c</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">counts</span><span class="p">[</span><span class="o">*</span><span class="n">c</span><span class="p">],</span><span class="w"> </span><span class="n">c</span><span class="p">);</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">EXIT_SUCCESS</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>
+
+</div>
+</main>
+<footer>
+Built using <a href="https://python.org">Python</a>
+and <a href="https://jinja.palletsprojects.com">Jinja</a>
+with colors from <a href="https://nordtheme.com">Nord Theme</a>
+and icons from <a href="https://pictogrammers.com/library/mdi/">Material Design Icons</a>.</footer>
+</body>
+</html>
