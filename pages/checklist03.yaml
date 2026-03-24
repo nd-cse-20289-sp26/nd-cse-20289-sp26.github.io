@@ -1,0 +1,378 @@
+title:      Checklist 03
+body:       |
+
+    Here is a general outline of the **key** concepts (*arranged by topic*) that
+    you should know for **Exam 03**.
+
+    The exam will have the following format:
+
+    1. **Compiling and Building** (*multiple-choice*, *fill-in-the-blank*)
+
+    2. **Pointers, Arrays, Strings** (*multiple-choice*, *true/false*)
+
+    3. **Memory Allocation** (*fill-in-the-blank*)
+
+    4. **Memory Management and Linked Lists** (*multiple-choice*, *fill-in-the-blank*)
+
+    5. **Bitsets** and **Data Representation** (*fill-in-the-blank*)
+
+    6. **Debugging** (*coding on the computer*)
+
+    Parts **1** through **5** are to be done first on **paper**. Once that
+    portion is completed and submitted, you will do part **6** on your own
+    computer and submit code to your **assignments** repository.
+
+    <div class="alert warning-bg" markdown="1">
+
+    ### <i class="icon icon-medium">{{ "check-all" | embed_icon }}</i> Representative, But Not Exhaustive
+
+    This check list is meant to be representative, rather than exhaustive (ie.
+    there may be questions that show up on the exam that are not shown below).
+
+    </div>
+
+    ## Logistics
+
+    **Exam 03** will take place during our normal lecture session on
+    **Wednesday, April 1** from **12:50 PM - 1:40 PM** in **101 DeBartolo
+    Hall**.
+
+    As noted above, the first portion of the exam with be on **paper**, while
+    the remaining component with require **coding** and submitting work to your
+    **assignments** [GitHub] repository.
+
+    During the **paper** portion of the exam, students will only be allowed to
+    use **one cheatsheet**.  This **paper** component of the exam must be
+    submitted before students can access the **coding** section.
+
+    For the **coding** portion, students will use their own computer, and thus
+    are permitted access to any material in their textbooks, notes,
+    assignments, and the Internet.
+
+    <div class="alert danger-bg" markdown="1">
+
+    ### <i class="icon icon-medium">{{ "alert" | embed_icon }}</i> Honor Code Violations
+
+    Although students are allowed to use their computers and the Internet
+    during the **coding** portion of the exam, students **may not communicate
+    with others** or **solicit answers from others**.  **Nor may they use AI
+    tools** such as **ChatGPT** or **Co-Pilot** during the exam.  Students
+    caught sharing solutions or violating any portion of the honor code will
+    **receive a zero on the exam**.
+
+    Furthermore, students are not allowed to consult, copy, or share material
+    from previous sections of this course.
+
+    </div>
+
+    [GitHub]: https://github.com
+
+    ## Compiling and Building
+
+    1.  <div class="flex-col" markdown="1">
+
+        Why study [C]?
+
+        - Why not just [Python] or [C++]?
+
+        - Why is [C] considered a **systems programming language**?
+
+        - What is [C]'s relationship to [Unix]?
+
+    2.  <div class="flex-col" markdown="1">
+
+        What is the [compiler pipeline]?
+
+        - What exactly happens when you compile a program (ie. describe the
+          [compiler pipeline])?
+
+        - What is the difference between a **dynamic executable** and a
+          **static executable**?
+
+        - What is the difference between a **shared library** and a **static
+          library**?
+
+    3.  <div class="flex-col" markdown="1">
+
+        How do you write a [Makefile] that utilizes **rules** and **variables**
+        for a program that consists of multiple files?
+
+    <div class="alert success-bg" markdown="1">
+
+    ### <i class="icon icon-medium">{{ "help" | embed_icon }}</i> Sample Questions
+
+    1. Why is it important to specify all the dependencies of a **target** in a
+    `Makefile` rule?
+
+    2. What is the difference between **compiling** and **linking**? What are
+    some common errors that can occur in each phase?
+
+    3. Write a `Makefile` for a project that outputs a [shared library], a [static
+    library], a **dynamic executable**, and a **static executable**.
+
+    </div>
+
+    [C]: https://en.wikipedia.org/wiki/C_(programming_language)
+    [Python]: https://www.python.org/
+    [C++]: https://isocpp.org/
+    [Unix]: https://en.wikipedia.org/wiki/Unix
+    [compiler pipeline]: https://en.wikipedia.org/wiki/Compiler
+    [shared library]: https://en.wikipedia.org/wiki/Library_(computing)#Shared_libraries
+    [static library]: https://en.wikipedia.org/wiki/Static_library
+    [Makefile]: https://en.wikipedia.org/wiki/Makefile
+
+    ## Pointers, Arrays, Strings
+
+    1. What exactly is a [pointer]? [array]? [string]?  How are they related?
+
+    2. What does it mean to **dereference** a [pointer]?
+
+    3. How do we get the **address** of a variable?
+
+    4. What are multiple ways to access an element of an [array] or [string]?
+
+    <div class="alert success-bg" markdown="1">
+
+    ### <i class="icon icon-medium">{{ "help" | embed_icon }}</i> Sample Questions
+
+    Given the following code:
+
+        :::c
+        int main(int argc, char *argv[]) {  // | Label | Address | Value |
+            int  n   = 16;                  // |       | 0xF     | 0x00  |
+            int  a[] = {n};                 // | n     | 0xE     | 0x10  |
+            int *p   = a;                   // |       | 0xD     |       |
+            return 0;                       // |       | 0xC     |       |
+        }                                   // |       | 0xB     |       |
+                                            // |       | 0xA     |       |
+
+    Assuming a **16-bit little endian machine** where each integer is `2`
+    bytes, each character is `1` byte, and each pointer is `2` bytes, fill in
+    the **stack frame** to the right by recording the location of the variables
+    above and their values at the appropriate addresses.
+
+    The variable `n` is done for you; you need to add `p` and `a` to the
+    **stack frame**.
+
+    Distinguish between the character `0` and the integer `0` by using
+    **hexadecimal for integers**.
+    </div>
+
+    ## Memory Allocation
+
+    1. What is the difference between a [struct] and a [union]?
+
+    2. How much memory is allocated when we declare an `int`, `float`,
+    `double`, `char`, `int8_t`, `int32_t`, `int64_t`, `size_t`, [array],
+    [string], or [pointer]?
+
+    3. When we declare a variable, where is the data allocated ([stack],
+    [heap], **data**, **code**)?
+
+    <div class="alert success-bg" markdown="1">
+
+    ### <i class="icon icon-medium">{{ "help" | embed_icon }}</i> Sample Questions
+
+    Given the following [C] program:
+
+        :::C
+        typedef struct {
+            char key;
+            int  value;
+        } Pair;
+
+        int main(int argc, char* argv[]) {
+            char    c = 'k';
+            int     v = 2;
+
+            Pair   p0 = {c, v};
+            Pair  *p1 = malloc(sizeof(Pair));
+            Pair  *p2 = calloc(v, sizeof(Pair));
+            Pair **p3 = calloc(v, sizeof(Pair *));
+            return 0;
+        }
+
+    How much memory was allocated on the [stack], [heap], and **data** for each
+    of the variables in the `main` function?
+    </div>
+
+    ## Memory Management and Linked Lists
+
+    1. How do we [dynamically allocate] memory?  How do we deallocate that
+    memory?
+
+    2. When should we allocate on the [stack]? [heap]? **data**?  What are the
+    advantages and disadvantages of utilizing each memory segment?
+
+    3.  <div class="flex-col" markdown="1">
+
+        What is [singly linked list]? [doubly linked list]?
+
+        - How would we **insert** an entry into a [linked list]?
+
+        - How would we **search** for an entry in a [linked list]?
+
+        - How would we **remove** an entry in a [linked list]?
+
+    <div class="alert success-bg" markdown="1">
+
+    ### <i class="icon icon-medium">{{ "help" | embed_icon }}</i> Sample Questions
+
+    1.  <div class="flex-col" markdown="1">
+
+        Given the [doubly linked list] in [Homework 07], implement the
+        `list_contains` function:
+
+            :::c
+            /**
+             * Returns whether or not list contains the value.
+             **/
+            bool list_contains(List *l, Value v) {
+                Node *curr = ____;    // 1. ????
+
+                while (____) {        // 2. ????
+                    if (____) {       // 3. ????
+                        return _____; // 4. ????
+                    }
+                    curr = ____;      // 5. ????
+                }
+
+                return ____;          // 6. ????
+            }
+
+    2.  <div class="flex-col" markdown="1">
+
+        Given the following [C] code that uses the `list_contains` function above:
+
+            :::c
+            List *l = list_create();
+            list_append(l, "Reasonable");
+            list_append(l, "Obscure");
+            list_append(l, "Exam");
+
+            Value v0 = {.string="Reasonable"};
+            printf("Contains %s ? %d\n", v0.string, list_contains(l, v0));
+            Value v1 = {.string="Exam"};
+            printf("Contains %s ? %d\n", v1.string, list_contains(l, v1));
+
+        What is the output of this code? Explain why the output is not what you
+        might expect, and how you could fix it.
+
+    </div>
+
+    [singly linked list]: https://en.wikipedia.org/wiki/Linked_list#Singly_linked_list
+    [doubly linked list]: https://en.wikipedia.org/wiki/Linked_list#Doubly_linked_list
+    [linked list]: https://en.wikipedia.org/wiki/Linked_list
+    [complexities]: https://en.wikipedia.org/wiki/Computational_complexity_theory
+
+    [struct]: https://en.wikipedia.org/wiki/Record_(computer_science)
+    [union]: https://en.wikipedia.org/wiki/Union_type
+    [array]: https://en.wikipedia.org/wiki/Array_data_type
+    [string]: https://en.wikipedia.org/wiki/C_string_handling
+    [pointer]: https://en.wikipedia.org/wiki/Pointer_(computer_programming)
+    [stack]: https://en.wikipedia.org/wiki/Call_stack
+    [heap]: https://en.wikipedia.org/wiki/Memory_management#HEAP
+    [dynamically allocate]: https://en.wikipedia.org/wiki/Memory_management#Dynamic_memory_allocation
+    [memory leak]: https://en.wikipedia.org/wiki/Memory_leak
+    [memory leaks]: https://en.wikipedia.org/wiki/Memory_leak
+    [segmentation fault]:  https://en.wikipedia.org/wiki/Segmentation_fault
+    [segmentation faults]:  https://en.wikipedia.org/wiki/Segmentation_fault
+    [Homework 07]: homework07.html
+
+    ## Bitsets and Data Representation
+
+    1. How do you implement a [bitset] in [C] that support insertion, removal,
+    and searching?
+
+    2. How is an integer represented on a [little endian] machine vs a [big
+    endian] machine?
+
+    <div class="alert success-bg" markdown="1">
+
+    ### <i class="icon icon-medium">{{ "help" | embed_icon }}</i> Sample Questions
+
+    Given the following array and [bitset], complete the [C] code to add each
+    element in the array to the [bitset]:
+
+        :::c
+        int     numbers[] = {1, 12, 7, 10, -1};
+        int32_t bitset    = 0;
+
+        for (int *n = numbers; *n >= 0; n++) {
+            bitset = ____; // 1. ????
+        }
+
+    - How would you check if the number `7` is in the `bitset`?
+
+    - What is the **decimal** value of the `bitset` after adding all the
+      elements in the array?
+
+    - What is the **hexadecimal** representation of the `bitset` after adding
+      all the elements in the array on a [little endian] machine?
+
+    - What is the **hexadecimal** representation of the `bitset` after adding
+      all the elements in the array on a [big endian] machine?
+
+    </div>
+
+    [bitset]: https://en.wikipedia.org/wiki/Bit_array
+    [little endian]: https://en.wikipedia.org/wiki/Endianness
+    [big endian]: https://en.wikipedia.org/wiki/Endianness
+
+    ## Debugging
+
+    1. How do you **debug** problems such as [segmentation faults] in a [C]
+    program using [gdb]?
+
+    2. How do you **debug** memory errors such as invalid reads, uninitialized
+    memory, and [memory leaks] in a [C] program using [valgrind]?
+
+    [gdb]: https://www.gnu.org/software/gdb/
+    [valgrind]: http://valgrind.org/
+
+    <div class="alert success-bg" markdown="1">
+
+    ### <i class="icon icon-medium">{{ "help" | embed_icon }}</i> Sample Questions
+
+    The following program performs the equivalent of the following [unix
+    pipeline]:
+
+        :::bash
+        # Show counts of each letter
+        $ echo ... | grep -Eio [a-z] | sort | uniq -c
+
+    Use [gdb] and [valgrind] to eliminate all **logical** and **memory** errors
+    in this program:
+
+        :::c
+        /* str_counts.c: Count letters in string */
+
+        #include <stdio.h>
+        #include <stdlib.h>
+
+        int *str_counts(const char *s) {
+            int counts[1<<8];
+
+            for (const char *c = s; c; c++) {
+                counts[(int)*c]++;
+            }
+
+            return counts;
+        }
+
+        int main(int argc, char *argv[]) {
+            char *buffer = "";
+
+            while (fgets(buffer, BUFSIZ, stdin)) {
+                int *counts = str_counts(buffer);
+                for (int c = 'A'; c <= 'z'; c++) {
+                    if (counts[*c]) printf("%7d %c\n", counts[*c], c);
+                }
+            }
+
+            return EXIT_SUCCESS;
+        }
+
+    </div>
+
+    [unix pipeline]: https://en.wikipedia.org/wiki/Pipeline_(Unix)

@@ -321,6 +321,7 @@
         topics:         ''
         items:
           - name:       Checklist 03
+            link:       checklist03.html
 
       - date:           Wed 04/01
         items:
