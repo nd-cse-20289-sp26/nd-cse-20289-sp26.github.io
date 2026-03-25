@@ -303,6 +303,8 @@
         items:
           - name:       Slides 21
             link:       https://docs.google.com/presentation/d/1z_RGcJVOXh5krZAAj3J4IMbMEBxSRwqDuIOkEHJWe4E/edit?usp=sharing
+          - name:       Panopto
+            link:       https://notredame.hosted.panopto.com/Panopto/Pages/Viewer.aspx?id=c8ac4323-b25e-402d-b300-b4180131befc
 
       - date:           Fri 03/27
         topics:         Data Representation
