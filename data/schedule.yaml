@@ -311,6 +311,8 @@
         items:
           - name:       Slides 22
             link:       https://docs.google.com/presentation/d/1RSOXRf4bwgd7yhoOdtaNiTt-K5QOj5LGtnWz1manxIc/edit?usp=sharing
+          - name:       Panopto
+            link:       https://notredame.hosted.panopto.com/Panopto/Pages/Viewer.aspx?id=d6fa8139-53d2-47cb-9372-b41a012af1fb
 
       - date:           Sat 03/28
         topics:         '<i class="muted">SeqIt, TailIt</i>'
