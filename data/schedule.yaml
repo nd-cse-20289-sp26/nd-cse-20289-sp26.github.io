@@ -326,6 +326,8 @@
         items:
           - name:       Checklist 03
             link:       checklist03.html
+          - name:       Panopto
+            link:       https://notredame.hosted.panopto.com/Panopto/Pages/Viewer.aspx?id=107f593e-5fbb-462a-9bd2-b41d0128f6f0
 
       - date:           Wed 04/01
         items:
