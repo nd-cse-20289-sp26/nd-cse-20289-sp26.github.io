@@ -1,0 +1,29 @@
+{
+    "q01": {
+        "type": "blank",
+        "question": "\n<p>Given the following statements (inside a <code>main</code> function), fill\nin the table below to identify how much memory (in bytes) is allocated in\neach memory segment (ie. <b>stack</b>, <b>heap</b>, <b>data</b>) for the\ncorresponding variable declaration:</p>\n\n<table class=\"bordered\">\n  <thead>\n    <th>Code</th>\n    <th>Data</th>\n    <th>Heap</th>\n    <th>Stack</th>\n  </thead>\n  <tbody>\n    <tr>\n      <td><code>char *s = \"Solar Eclipse\";</code></td>\n      <td class=\"centered\">____ (01)</td>\n      <td class=\"centered\">____ (02)</td>\n      <td class=\"centered\">____ (03)</td>\n    </tr>\n    <tr>\n      <td><code>Data d = {.string=s};</code></td>\n      <td class=\"centered\">____ (04)</td>\n      <td class=\"centered\">____ (05)</td>\n      <td class=\"centered\">____ (06)</td>\n    </tr>\n    <tr>\n      <td><code>char *c = strdup(d.string);</code></td>\n      <td class=\"centered\">____ (07)</td>\n      <td class=\"centered\">____ (08)</td>\n      <td class=\"centered\">____ (09)</td>\n    </tr>\n    <tr>\n      <td><code>Node *n = node_create((Data)strdup(d.string), NULL);</code></td>\n      <td class=\"centered\">____ (10)</td>\n      <td class=\"centered\">____ (11)</td>\n      <td class=\"centered\">____ (12)</td>\n    </tr>\n  </tbody>\n</table>\n\n<p>Assume this program is compiled on a 64-bit Linux machine (ie. the\n<b>student</b> machines).</p>\n"
+    },
+    "q02": {
+        "type": "multiple",
+        "question": "\n<p>In each of the <code>Filters</code>, the function receives an <code>options</code>\nargument.  Which of the following are valid ways to check the\n<code>type</code> attribute of the <code>options</code> (select all that\napply)?</p>\n",
+        "responses": {
+            "a": "<code>options.type</code>",
+            "b": "<code>options->type</code>",
+            "c": "<code>(*options).type</code>",
+            "d": "<code>(*options)->type</code>"
+        }
+    },
+    "q03": {
+        "type": "multiple",
+        "question": "\n<p>For some of the <code>Filters</code>, you had to use <b>system calls</b> to\nimplement the function.  Which of the following statements are true (select\nall that apply)?</p>\n",
+        "responses": {
+            "type": "<code>filter_by_type</code> does not use any <b>system calls</b>.",
+            "name": "<code>filter_by_name</code> does not use any <b>system calls</b>.",
+            "mode": "<code>filter_by_mode</code> does not use any <b>system calls</b>."
+        }
+    },
+    "q04": {
+        "type": "blank",
+        "question": "\n<p>On the <b>student machines</b>, run <code>strace -e access,lstat,write -c\n./findit /etc -type f -name '*.conf' -readable</code> a few times and answer\nthe following questions:</p>\n\n<ol>\n    <li>Which of the three system calls was called the most often? ____</li>\n    <li>Which of the three system calls was called the least often? ____</li>\n    <li>Which of the three system calls had the most errors? ____</li>\n    <li>Which of the three system calls used the most time? ____</li>\n</ol>\n"
+    }
+}

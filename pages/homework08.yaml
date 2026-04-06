@@ -1,0 +1,918 @@
+title:      "Homework 08: Findit"
+body:       |
+
+  The goal of this homework assignment is to allow you to continue practicing
+  [dynamic memory] management in [C] by building another [linked list] library
+  and navigating the [file system] using low-level functions and [system
+  calls].  The first two activities involve implementing a [singly linked list]
+  with a **tail** pointer and then a few **filter** functions that check
+  various attributes about files, while the last activity requires you to use
+  these structures and functions to build a file system search utility similar
+  to [find] named `findit`.
+
+  For this assignment, record your source code and any responses to the
+  following activities in the `homework08` folder of your **assignments**
+  [GitHub] repository and push your work by **noon Saturday, April 11**.
+
+  [C]: https://en.wikipedia.org/wiki/C_(programming_language)
+  [dynamic memory]: https://en.wikipedia.org/wiki/C_dynamic_memory_allocation
+  [linked list]: https://en.wikipedia.org/wiki/Linked_list
+  [singly linked list]: https://en.wikipedia.org/wiki/Linked_list#Singly_linked_list
+  [system calls]: https://en.wikipedia.org/wiki/System_call
+  [find]: https://man7.org/linux/man-pages/man1/find.1.html
+  [file system]: https://en.wikipedia.org/wiki/File_system
+
+  <div class="alert info-bg" markdown="1">
+
+  ### <i class="icon icon-medium">{{ "help" | embed_icon }}</i> Frequently Asked Questions
+
+  <div class="centered">
+    <iframe src="https://docs.google.com/presentation/d/e/2PACX-1vRs4YDDkS0_AbJEzy8KPRRxdod1VxXicuGOZ1Vx4W8JzHbFe07-Q0ZQV1YcaxkxPRa8ELrWm7HT-wDo/pubembed?start=false&loop=false&delayms=3000" frameborder="0" width="960" height="749" allowfullscreen="true" mozallowfullscreen="true" webkitallowfullscreen="true"></iframe>
+  </div>
+
+  </div>
+
+  ## Activity 0: Preparation
+
+  Before starting this homework assignment, you should first perform a `git
+  pull` to retrieve any changes in your remote [GitHub] repository:
+
+      :::bash
+      $ cd path/to/repository                   # Go to assignments repository
+
+      $ git switch master                       # Make sure we are in master branch
+
+      $ git pull --rebase                       # Get any remote changes not present locally
+
+  Next, create a new branch for this assignment:
+
+      :::bash
+      $ git switch -c homework08                # Create homework08 branch and check it out
+
+  ### Task 1: Skeleton Code
+
+  To help you get started, the instructor has provided you with the following
+  **skeleton code**:
+
+      :::bash
+      # Go to homework08 folder
+      $ cd homework08
+
+      # Download Makefile
+      $ curl -LO https://pnutz.h4x0r.space/courses/cse.20289.sp26/static/txt/homework08/Makefile
+
+      # Download C skeleton code
+      $ curl -LO https://pnutz.h4x0r.space/courses/cse.20289.sp26/static/txt/homework08/filter.c
+      $ curl -LO https://pnutz.h4x0r.space/courses/cse.20289.sp26/static/txt/homework08/filter.unit.c
+      $ curl -LO https://pnutz.h4x0r.space/courses/cse.20289.sp26/static/txt/homework08/findit.c
+      $ curl -LO https://pnutz.h4x0r.space/courses/cse.20289.sp26/static/txt/homework08/findit.h
+      $ curl -LO https://pnutz.h4x0r.space/courses/cse.20289.sp26/static/txt/homework08/list.c
+      $ curl -LO https://pnutz.h4x0r.space/courses/cse.20289.sp26/static/txt/homework08/list.unit.c
+
+  Once downloaded, you should see the following files in your `homework08` directory:
+
+      :::bash
+      homework08
+          \_ Makefile       # This is the Makefile for building all the assignment artifacts
+          \_ filter.c       # This is the filter functions C source file
+          \_ filter.unit.c  # This is the filter functions C unit test source file
+          \_ findit.c       # This is the findit utility C source file
+          \_ findit.h       # This is the findit utility C header file
+          \_ list.c         # This is the linked list C source file
+          \_ list.unit.c    # This is the linked list C unit test source file
+
+  ### Task 2: Initial Import
+
+  Now that the files are downloaded into the `homework08` folder, you can
+  **commit** them to your [git] repository:
+
+      :::bash
+      $ git add Makefile                            # Mark changes for commit
+      $ git add *.c *.h
+      $ git commit -m "Homework 08: Initial Import" # Record changes
+
+  ### Task 3: Unit Tests
+
+  After downloading these files, you can run `make test` to run the tests.
+
+      :::bash
+      # Run all tests (will trigger automatic download)
+      $ make test
+
+  You will notice that the Makefile downloads these additional test data and scripts:
+
+      :::bash
+      homework08
+          \_ filter.unit.sh   # This is the filter functions unit test shell script
+          \_ find.test.sh     # This is the findit utility test shell script
+          \_ list.unit.sh     # This is the linked list unit test shell script
+
+  You will be using these [unit tests] to verify the correctness and behavior
+  of your code.
+
+  <div class="alert info-bg" markdown="1">
+
+  ### <i class="icon icon-medium">{{ "download" | embed_icon }}</i> Automatic Download
+
+  The `test` scripts are automatically downloaded by the `Makefile`, so any
+  modifications you do to them will be lost when you run `make` again. Likewise,
+  because they are automatically downloaded, you do not need to `add` or `commit`
+  them to your [git] repository.
+
+  </div>
+
+  ### Task 4: Makefile
+
+  The `Makefile` contains all the **rules** or **recipes** for building the
+  project artifacts (e.g. `findit`):
+
+      :::make
+      CC=       gcc
+      CFLAGS=   -Wall -std=gnu99 -g
+      LD=       gcc
+      LDFLAGS=  -L.
+      TARGETS=  findit
+
+      all:    $(TARGETS)
+
+      #-------------------------------------------------------------------------------
+      # TODO: Add rules for object files
+      #-------------------------------------------------------------------------------
+
+      list.o:
+
+      filter.o:
+
+      findit.o:
+
+      #-------------------------------------------------------------------------------
+      # TODO: Add rules for executables
+      #-------------------------------------------------------------------------------
+
+      findit:
+
+      #-------------------------------------------------------------------------------
+      # DO NOT MODIFY BELOW
+      #-------------------------------------------------------------------------------
+
+      ...
+
+  For this task, you will need to add [rules] for building the *intermediate*
+  [object] files (ie. `list.o`, `filter.o`, `findit.o`) and the `findit`
+  *executable* with the appropriate dependencies as shown the [DAG] below:
+
+  <div class="thumbnail">
+    <img src="static/img/homework08-makefile.png" class="responsive">
+  </div>
+
+  <div class="alert info-bg" markdown="1">
+  #### <i class="fa fa-cogs"></i> Makefile Variables
+
+  You **must** use the `CC`, `CFLAGS`, `LD`, `LDFLAGS`, `AR`, and `ARFLAGS`
+  variables when appropriate in your [rules].  You **should** also consider
+  using [automatic variables] such as `$@` and `$<` as well.
+
+  </div>
+
+  [DAG]: https://en.wikipedia.org/wiki/Directed_acyclic_graph
+
+  Once you have a working `Makefile`, you should be able to run the following commands:
+
+      :::bash
+      # Build all TARGETS
+      $ make
+      gcc -Wall -std=gnu99 -g -c -o findit.o findit.c
+      gcc -Wall -std=gnu99 -g -c -o list.o list.c
+      gcc -Wall -std=gnu99 -g -c -o filter.o filter.c
+      gcc -L. -o findit findit.o list.o filter.o
+
+      # Run all tests
+      $ make test
+      Testing list ...
+        node_create                                                  ... Success
+        node_delete                                                  ... Success
+        list_append                                                  ... Success
+        list_filter                                                  ... Success
+        list_output                                                  ... Success
+        --------------------
+         Score 5.00 / 5.00
+         Grade 1.00 / 1.00
+        Status Success
+
+      Testing filter ...
+        filter_by_type                                               ... Success
+        filter_by_name                                               ... Success
+        filter_by_mode                                               ... Success
+        --------------------
+         Score 3.00 / 3.00
+         Grade 1.00 / 1.00
+        Status Success
+
+      Testing findit ...
+        findit                                                       ... Success
+        findit /etc                                                  ... Success
+        findit /etc -type f                                          ... Success
+        findit /etc -type d                                          ... Success
+        findit /etc -name '*.conf'                                   ... Success
+        findit /etc -readable                                        ... Success
+        findit /etc -writable                                        ... Success
+        findit /etc -executable                                      ... Success
+        findit /etc -type d -name '*.d'                              ... Success
+        findit /etc -type d -name '*.d' -executable                  ... Success
+        findit . -name '*.c'                                         ... Success
+        findit . -writable                                           ... Success
+        findit . -type f -name '*.unit' -executable                  ... Success
+        --------------------
+         Score 13.00 / 13.00
+         Grade  1.00 /  1.00
+        Status Success
+
+      Checking homework08 quiz ...
+          Q01 12.00 / 12.00
+          Q02  2.00 /  2.00
+          Q03  1.00 /  1.00
+          Q04  4.00 /  4.00
+        --------------------
+         Score 19.00 / 19.00
+         Grade  1.00 /  1.00
+        Status Success
+
+      Grade Summary ...
+          List  0.25 /  0.25
+        Filter  0.15 /  0.15
+        Findit  0.40 /  0.40
+          Quiz  0.20 /  0.20
+         Total  1.00 /  1.00
+        Status Success
+
+      # Remove generated artifacts
+      $ make clean
+
+  <div class="alert danger-bg" markdown="1">
+
+  **Note**: The tests will **fail** if you haven't implemented all the
+  necessary functions appropriately.
+
+  </div>
+
+  <div class="alert warning-bg" markdown="1">
+
+  ### <i class="icon icon-medium">{{ "alert" | embed_icon }}</i> Compiler Warnings
+
+  You must include the `-Wall` flag in your `CFLAGS` when you compile.  This
+  also means that your code must **compile without any warnings**, otherwise
+  points will be deducted.
+
+  </div>
+
+  [rules]:          https://www.gnu.org/software/make/manual/html_node/Rule-Example.html#Rule-Example
+  [object]:         https://en.wikipedia.org/wiki/Object_file
+  [static library]: https://en.wikipedia.org/wiki/Static_library#Creating_static_libraries_in_C.2FC.2B.2B
+  [shared library]: https://en.wikipedia.org/wiki/Library_(computing)#Shared_libraries
+  [automatic variables]:    https://www.gnu.org/software/make/manual/html_node/Automatic-Variables.html
+
+  ### Task 5: `findit.h`
+
+  The `findit.h` file is the [header] file for the `findit` utility, which
+  means it contains the [type definitions] and function [prototypes]:
+
+      :::c
+      /* findit.h: Search for files in a directory hierarchy */
+
+      #pragma once
+
+      #include <stdbool.h>
+      #include <stdio.h>
+
+      /* Options Structure */
+
+      typedef struct {
+          int   type;         // File type (-type)
+          char *name;         // File name pattern (-name)
+          int   mode;         // Access modes (-executable, -readable, -writable)
+      } Options;
+
+      /* Filter Functions */
+
+      typedef bool (*Filter)(const char *path, Options *options);
+
+      bool  filter_by_type(const char *path, Options *options);
+      bool  filter_by_name(const char *path, Options *options);
+      bool  filter_by_mode(const char *path, Options *options);
+
+      /* Data Union */
+
+      typedef union {
+          char *  string;     // String data
+          Filter  function;   // Filter function
+      } Data;
+
+      /* Node Structure */
+
+      typedef struct Node Node;
+      struct Node {
+          Data    data;       // Data value
+          Node   *next;       // Pointer to next Node
+      };
+
+      Node *  node_create(Data data, Node *next);
+      void    node_delete(Node *n, bool release, bool recursive);
+
+      /* List Structure */
+
+      typedef struct {
+          Node   *head;       // Pointer to first Node
+          Node   *tail;       // Pointer to last Node
+      } List;
+
+      void    list_append(List *l, Data data);
+      void    list_filter(List *l, Filter filter, Options *options, bool release);
+      void    list_output(List *l, FILE *stream);
+
+  Other [C] source files will `#include` this file in order to use the
+  functions we will be implementing in this assignment.
+
+  #### Options Structure
+
+  The `Options` structure is used by the `Filter` functions to check the
+  attribute of various files and directories encountered in the `findit`
+  program.  It has the following fields:
+
+  1. `type`: This is used to store the file type (ie. [S_IFREG], [S_IFDIR]) to
+    match against.
+
+  2. `name`: This is used to store the [glob pattern] to match against the
+    [basename] of a `path` string.
+
+  3. `mode`: This is used to store the [access mode] to match against.
+
+  [S_IFREG]: https://man7.org/linux/man-pages/man7/inode.7.html
+  [S_IFDIR]: https://man7.org/linux/man-pages/man7/inode.7.html
+  [glob pattern]: https://man7.org/linux/man-pages/man7/glob.7.html
+  [basename]: https://man7.org/linux/man-pages/man3/basename.3.html
+  [access mode]: https://man7.org/linux/man-pages/man2/access.2.html
+
+  #### Data Union
+
+  The `Data` union is used by the `List` structure to store either a [string]
+  or a `Filter` function pointer:
+
+      :::C
+      // Declare a Data union with a string
+      Data dp = (Data)"file path";
+
+      // Access string
+      puts(dp.string)
+
+      // Declare a Data union with a Filter function pointer
+      Data df = (Data)filter_by_type;
+
+      // Access Filter function
+      df.function(path, options);
+
+  The details of the `Node` structure, `List` structure, and `Filter` functions
+  and what you need to implement are provided in the following sections.
+
+  <div class="alert info-bg" markdown="1">
+
+  **Note**: For this task, you **do not** need to modify this file.  Instead,
+  you should review it and ensure you understand the provided code.
+
+  </div>
+
+  [header]: https://en.wikipedia.org/wiki/Include_directive#C.2FC.2B.2B
+  [prototypes]: https://en.wikipedia.org/wiki/Function_prototype
+  [type definitions]: https://en.wikipedia.org/wiki/Typedef
+
+  ## Activity 1: Linked List (*0.25 Points*)
+
+  The `findit` utility works by first walking a directory *recursively* and
+  adding any *entries* it encounters to a [singly linked list] of *file paths*.
+  For the first activity, you are to implement a [singly linked list] with both
+  a `head` and `tail` pointer as show below:
+
+  <div class="centered">
+    <img src="static/img/homework08-linkedlist.png" class="responsive">
+  </div>
+
+  The `List` structure consists of two pointers to `Node` structures:
+
+  1. `head`: This points to the first `Node` in the [singly linked list].
+  2. `tail`: This points to the last `Node` in the [singly linked list].
+
+  If the `List` is empty, then both `head` and `tail` should be `NULL`.
+
+  Each `Node` structure contains a `Data` union to store either a [string] or a
+  `Filter` function pointer, and a pointer to the next `Node` in the [singly
+  linked list].
+
+  ### Task 1: `list.c`
+
+  The `list.c` file contains the [C] implementation for the [linked list]
+  structure.  For this task, you will need to implement the following
+  functions:
+
+  1.  <div class="flex-col" markdown="1">
+
+      `Node * node_create(Data data, Node *next)`
+
+      > This function allocates a new `Node` structure on the [heap],
+      initializes its `data` and `next` attributes, and returns a pointer to
+      this new `Node` structure.
+
+      <div class="alert success-bg" markdown="1">
+
+      **Hint**: Consider using [malloc] or [calloc].
+
+      </div>
+
+  2.  <div class="flex-col" markdown="1">
+
+      `void node_delete(Node *n, bool release, bool recursive)`
+
+      > This function deallocates the given `Node` structure.  If `recursive`
+      is `true`, then the function will call `node_delete` on the `next` item
+      in the [singly linked list].  Likewise, if `release` is `true` then the
+      `data` [string] will also be deallocated (before deallocating the `Node`
+      itself).
+
+      <div class="alert success-bg" markdown="1">
+
+      **Hint**: Consider using [free].
+
+      </div>
+
+  3.  <div class="flex-col" markdown="1">
+
+      `void list_append(List *l, Data data)`
+
+      > This function adds a new `Node` structure with the given `data` to the
+      `tail` of the given `List` structure.
+
+      <div class="alert success-bg" markdown="1">
+
+      **Hint**: Consider using `node_create` and make sure you update the
+        `head` and `tail` of the `List` appropriately.
+
+      </div>
+
+  4.  <div class="flex-col" markdown="1">
+
+      `void list_filter(List *l, Filter filter, Options *options, bool release)`
+
+      > This function filters the given `List` by applying the `Filter`
+      function to each `Node`'s `Data` string and the given `Options`
+      structure.  If the `Filter` function returns `true`, then the `Node` is
+      kept.  Otherwise, it is removed from the `List`.  If `release` is `true`,
+      then the `Data` [string] should also be deallocated when removing a `Node`.
+
+      <div class="alert success-bg" markdown="1">
+
+      **Hint**: Consider using `node_delete` when removing a `Node`.  Draw a
+        picture and consider how many pointers you need to effectively traverse
+        the `List` and to remove a `Node` in the middle of the `List`.
+        Moreover, make sure you update the `head` and `tail` of the `List`
+        appropriately.
+
+      </div>
+
+  5.  <div class="flex-col" markdown="1">
+
+      `void list_output(List *l, FILE *stream)`
+
+      > This function prints the `Data` [string] of each `Node` in the given
+      `List` to the specified `stream`.
+
+      <div class="alert success-bg" markdown="1">
+
+      **Hint**: Consider using [fprintf].
+
+      </div>
+
+  [heap]: https://en.wikipedia.org/wiki/Heap_(programming)
+  [string]: https://en.wikipedia.org/wiki/String_(computer_science)
+  [malloc]: https://man7.org/linux/man-pages/man3/malloc.3.html
+  [calloc]: https://man7.org/linux/man-pages/man3/malloc.3.html
+  [free]: https://man7.org/linux/man-pages/man3/malloc.3.html
+  [fprintf]: https://man7.org/linux/man-pages/man3/printf.3.html
+
+  ### Task 2: Testing
+
+  As you implement the functions in `list.c`, you should use the `list.unit`
+  executable with the `list.unit.sh` script to test each of your functions:
+
+      :::bash
+      # Build test artifacts and run test scripts
+      $ make test-list
+      Testing list ...
+        node_create                                                  ... Success
+        node_delete                                                  ... Success
+        list_append                                                  ... Success
+        list_filter                                                  ... Success
+        list_output                                                  ... Success
+        --------------------
+         Score 5.00 / 5.00
+         Grade 1.00 / 1.00
+        Status Success
+
+  You can also run the testing script manually:
+
+      :::bash
+      # Run Shell unit test script manually
+      $ ./list.unit.sh
+      ...
+
+  To **debug** your [linked list] functions, you can use [gdb] on the
+  `list.unit` executable:
+
+      :::bash
+      # Start gdb on list.unit
+      $ gdb ./list.unit
+      (gdb) run 0     # Run list.unit with the "0" command line argument (ie. node_create)
+      ...
+
+  You can also use [valgrind] to check for memory errors:
+
+      :::bash
+      # Check for memory errors on list_lower test case
+      $ valgrind --leak-check=full ./list.unit 0
+
+  <div class="alert success-bg" markdown="1">
+
+  ### <i class="icon icon-medium">{{ "repeat" | embed_icon }}</i> Iterative Development
+
+  You should practice [iterative development].  That is, rather than writing a
+  bunch of code and then debugging it all at once, you should concentrate on
+  one function at a time and then test that **one thing at a time**.  The
+  provided [unit tests] allow you to check on the correctness of the individual
+  functions without implementing everything at once.  Take advantage of this
+  and build one thing at a time.
+
+  </div>
+
+  [iterative development]: https://en.wikipedia.org/wiki/Iterative_and_incremental_development
+  [unit tests]: https://en.wikipedia.org/wiki/Unit_testing
+  [valgrind]: https://valgrind.org/
+
+  ## Activity 2: Filters (*0.15 Points*)
+
+  As with the conventional [find] command, the `findit` utility will allow for
+  *filtering* the list of *file paths* by their individual attributes.  For
+  instance, to only display the regular files in a directory, you can do the
+  following with [find]:
+
+      :::bash
+      # Only display regular files in the current directory
+      $ find . -type f
+
+  Internally, `findit` will support this feature by calling a `Filter` function
+  on each entry in its [singly linked list] of *file paths* to check whether or
+  not to keep it.  In this specific example, `findit` would call
+  `filter_by_type` with an `Options` structure that has its `type` attribute
+  set to [S_IFREG] on each `Data` [string] in its `List`.
+
+  To support filtering the list of *file paths* in `findit`, you are to
+  implement three `Filter` functions that return `true` if the file `path`
+  should be kept in the list.
+
+  ### Task 1: `filter.c`
+
+  The `filter.c` file contains the [C] implementation for the `Filter`
+  functions.  For this task, you will need to implement the following
+  functions:
+
+  1.  <div class="flex-col" markdown="1">
+
+      `bool filter_by_type(const char *path, Options *options)`
+
+      > This function returns `true` if the file at the specified `path` has
+      the corresponding **type** specified in the `Options` structure.
+
+      <div class="alert success-bg" markdown="1">
+
+      **Hint**: Consider using [lstat] and [S_IFMT].
+
+      </div>
+
+  2.  <div class="flex-col" markdown="1">
+
+      `bool filter_by_name(const char *path, Options *options)`
+
+      > This function returns `true` if the [basename] of the specified `path`
+      has matches the [glob pattern] specified in the `Options` structure.
+
+      <div class="alert success-bg" markdown="1">
+
+      **Hint**: Consider using [basename] and [fnmatch].
+
+      </div>
+
+  3.  <div class="flex-col" markdown="1">
+
+      `bool filter_by_mode(const char *path, Options *options`
+
+      > This function returns `true` if the file at the specified `path` has
+      the [access mode] specified in the `Options` structure.
+
+      <div class="alert success-bg" markdown="1">
+
+      **Hint**: Consider using [access].
+
+      </div>
+
+  [lstat]: https://man7.org/linux/man-pages/man2/stat.2.html
+  [S_IFMT]: https://man7.org/linux/man-pages/man2/stat.2.html
+  [fnmatch]: https://man7.org/linux/man-pages/man3/fnmatch.3.html
+  [access]: https://man7.org/linux/man-pages/man2/access.2.html
+
+  ### Task 2: Testing
+
+  As you implement the functions in `filter.c`, you should use the
+  `filter.unit` executable with the `filter.unit.sh` script to test each of
+  your functions:
+
+      :::bash
+      # Build test artifacts and run test scripts
+      $ make test-filter
+      Testing filter ...
+        filter_by_type                                               ... Success
+        filter_by_name                                               ... Success
+        filter_by_mode                                               ... Success
+        --------------------
+         Score 3.00 / 3.00
+         Grade 1.00 / 1.00
+        Status Success
+
+  You can also run the testing script manually:
+
+      :::bash
+      # Run Shell unit test script manually
+      $ ./filter.unit.sh
+      ...
+
+  To **debug** your `Filter` functions, you can use [gdb] on the `filter.unit`
+  executable:
+
+      :::bash
+      # Start gdb on list.unit
+      $ gdb ./filter.unit
+      (gdb) run 0     # Run list.unit with the "0" command line argument (ie. filter_by_type)
+      ...
+
+  You can also use [valgrind] to check for memory errors:
+
+      :::bash
+      # Check for memory errors on list_lower test case
+      $ valgrind --leak-check=full ./filter.unit 0
+
+  ## Activity 3: Findit (*0.40 Points*)
+
+  Once you have implemented the [singly linked list] and the `Filter`
+  functions, you can complete the `findit` utility:
+
+      :::bash
+      # Display current directory (no arguments)
+      $ ./findit
+      ./list.c
+      ./list.unit
+      ./Makefile.template
+      ./filter.c.template
+      ...
+
+      # Display only files
+      $ ./findit .
+      ./list.c
+      ./list.unit
+      ./Makefile.template
+      ./filter.c.template
+      ...
+
+      # Display only .c files
+      $ ./findit . -name '*.c'
+      ./list.c
+      ./filter.unit.c
+      ./findit.c
+      ./filter.c
+      ./list.unit.c
+
+      # Display only executable files
+      $ ./findit . -type f -executable
+      ./list.unit
+      ./findit
+      ./list.unit.sh
+      ./findit.test.sh
+      ./filter.unit.sh
+      ./filter.unit
+
+  As with the [find] program, `findit` takes the `PATH` of the directory to
+  *recursively* search as its first argument and then any *options* the user
+  wishes to specify to filter the found entries.  For `findit`, you only need
+  to support the options shown above, which should correspond to a `Filter`
+  function you implemented in **Activity 2**.
+
+  ### Task 1: `findit.c`
+
+  The `findit.c` file contains the [C] implementation for the `findit` program.
+  For this task, you will need to implement the following functions:
+
+  1.  <div class="flex-col" markdown="1">
+
+      `void find_files(const char *root, List *files)`
+
+      > This function recursively walks the given `root` directory and adds any
+      entries it finds to the given `List` of `files`.
+
+      <div class="alert success-bg" markdown="1">
+
+      **Hint**: Consider using [opendir], [readdir], and [closedir] as you did
+        for `walk` in [Reading 11].  When recursing on a **directory**, make
+        sure to use the **full path**.
+
+        When adding the **full path** to the `List` of `files`, consider using
+        [strdup].
+
+        Moreover, consider when to add the `root` itself to `files`.
+
+      </div>
+
+  2.  <div class="flex-col" markdown="1">
+
+      `void filter_files(List *files, List *filters, Options *options)`
+
+      > This function applies each `Filter` function in `filters` with the
+      given `Options` to the `List` of `files`.
+
+      <div class="alert success-bg" markdown="1">
+
+      **Hint**: Consider using `list_filter`.
+
+      </div>
+
+  3.  <div class="flex-col" markdown="1">
+
+      `int main(int argc, char *argv[])`
+
+      > This function parses the command line options, finds the files
+      recursively, applies any filters, and then prints out the found files.
+
+      <div class="alert success-bg" markdown="1">
+
+      **Hint**: Consider creating a `List` of `files`, a `List` of `filters`,
+        and an `Options` structure.  As you parse the command line options, set
+        the appropriate attributes in the `Options` structure and add the
+        corresponding `Filter` function to your `List` of `filters`.
+
+        After parsing the command line options, you should then use
+        `find_files`, `filter_files`, and then `list_output`.
+
+        Be sure to deallocate any resources you allocated on the [heap].
+
+      </div>
+
+  [opendir]: https://man7.org/linux/man-pages/man3/opendir.3.html
+  [readdir]: https://man7.org/linux/man-pages/man3/readdir.3.html
+  [closedir]: https://man7.org/linux/man-pages/man3/closedir.3.html
+  [strdup]: https://man7.org/linux/man-pages/man3/strdup.3.html
+
+  ### Task 2: Testing
+
+  To test your `findit` utility, you can use the provided `findit.test.sh` script:
+
+      :::bash
+      # Build test artifacts and run test scripts
+      $ make test-findit
+      Testing findit ...
+        findit                                                       ... Success
+        findit /etc                                                  ... Success
+        findit /etc -type f                                          ... Success
+        findit /etc -type d                                          ... Success
+        findit /etc -name '*.conf'                                   ... Success
+        findit /etc -readable                                        ... Success
+        findit /etc -writable                                        ... Success
+        findit /etc -executable                                      ... Success
+        findit /etc -type d -name '*.d'                              ... Success
+        findit /etc -type d -name '*.d' -executable                  ... Success
+        findit . -name '*.c'                                         ... Success
+        findit . -writable                                           ... Success
+        findit . -type f -name '*.unit' -executable                  ... Success
+        --------------------
+         Score 13.00 / 13.00
+         Grade  1.00 /  1.00
+        Status Success
+
+      # Run test script manually
+      $ ./findit.test.sh
+
+  ## Activity 4: Quiz (*0.20 Points*)
+
+  Once you have completed all the activities above, you are to complete the
+  following **reflection quiz**:
+
+  <div id="quiz-questions"></div>
+
+  <div id="quiz-responses"></div>
+
+  <script src="static/js/dredd-quiz.js"></script>
+  <script>
+  loadQuiz('static/json/homework08.json');
+  </script>
+
+  <pre style="display: none;" id="dr-container" class="codehilite"><code id="dredd-response"></code></pre>
+
+  As with [Reading 01], you will need to store your answers in a
+  `homework08/answers.json` file.  You can use the form above to generate the
+  contents of this file, or you can write the [JSON] by hand.
+
+  To test your quiz, you can use the `check.py` script:
+
+      :::bash
+      $ ../.scripts/check.py
+      Checking homework08 quiz ...
+          Q01 12.00 / 12.00
+          Q02  2.00 /  2.00
+          Q03  1.00 /  1.00
+          Q04  4.00 /  4.00
+        --------------------
+         Score 19.00 / 19.00
+         Grade  1.00 /  1.00
+        Status Success
+
+  [JSON]: https://json.org
+
+  ## Submission
+
+  To submit your assignment, please commit your work to the `homework08` folder
+  of your `homework08` branch in your **assignments** [GitHub] repository.
+  Your `homework08` folder should **only** contain the following files:
+
+  - `Makefile`
+  - `answers.json`
+  - `filter.c`
+  - `filter.unit.c`
+  - `findit.c`
+  - `findit.h`
+  - `list.c`
+  - `list.unit.c`
+
+  <div class="alert warning-bg" markdown="1">
+
+  **Note**: You do not need to commit the test scripts because the `Makefile`
+  automatically downloads them.
+
+  </div>
+
+      :::bash
+      #-----------------------------------------------------------------------
+      # Make sure you have already completed Activity 0: Preparation
+      #-----------------------------------------------------------------------
+      ...
+      $ git add Makefile                        # Mark changes for commit
+      $ git add list.c                          # Mark changes for commit
+      $ git commit -m "homework08: list.c"      # Record changes
+      ...
+      $ git add Makefile                        # Mark changes for commit
+      $ git add filter.c                        # Mark changes for commit
+      $ git commit -m "homework08: filter.c"    # Record changes
+      ...
+      $ git add Makefile                        # Mark changes for commit
+      $ git add findit.c                        # Mark changes for commit
+      $ git commit -m "homework08: findit.c"    # Record changes
+      ...
+      $ git add answers.json                    # Mark changes for commit
+      $ git commit -m "homework08: quiz"        # Record changes
+      ...
+      $ git push -u origin homework08           # Push branch to GitHub
+
+  <div class="alert warning-bg" markdown="1">
+
+  ### <i class="icon icon-medium">{{ "lifebuoy" | embed_icon }}</i> Acknowledgments
+
+  If you collaborated with any other students, or received help from TAs or AI
+  tools on this assignment, please record this support in the `README.md` in
+  the `homework08` folder and include it with your **Pull Request**.
+
+  </div>
+
+  <div class="alert success-bg" markdown="1">
+
+  ### <i class="icon icon-medium">{{ "account-question" | embed_icon }}</i> Graders
+
+  Once you have committed your work and pushed it to [GitHub], remember to
+  create a **pull request** and assign it to the appropriate **teaching
+  assistant** from the [Reading 08 TA List].
+
+  **Note**: this list changes each week, so be sure to consult the appropriate
+  list for each assignment.
+
+  </div>
+
+  [git]:    https://git-scm.com/
+  [clone]:  https://git-scm.com/docs/git-clone
+  [commit]: https://git-scm.com/docs/git-commit
+  [push]:   https://git-scm.com/docs/git-push
+  [branching]:   https://git-scm.com/docs/git-branch
+  [code review]: https://en.wikipedia.org/wiki/Code_review
+  [GitHub]: https://github.com
+  [Reading 01]: reading01.html
+  [Reading 08]: reading08.html
+  [Reading 08 TA List]: reading08_tas.html
