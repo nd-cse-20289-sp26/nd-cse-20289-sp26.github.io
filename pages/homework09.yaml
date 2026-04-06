@@ -1,0 +1,710 @@
+title:      "Homework 09: moveit, timeit"
+body:       |
+
+  The goal of this homework assignment is to allow you to practice using
+  [system calls] involving [processes] and [signals] in [C] by
+  implementing two new [Unix] utilities: `moveit` and `timeit`.
+
+  1. `moveit`: The first utility allows users to interactively rename specified
+  files using their favorite text `$EDITOR`.
+
+  2. `timeit`: The second utility allows users to compute the elapsed time of
+  an application while also enforcing a timeout (or cut off time).
+
+  <div class="alert danger-bg" markdown="1">
+
+  ### <i class="icon icon-medium">{{ "bomb" | embed_icon }}</i> Set us up the bomb (No!)
+
+  Be careful with the [fork] system call.  To prevent a [fork bomb], start off
+  by always putting a [sleep] after a [fork], that way you have time to kill
+  the [processes] (*you should eventually remove this [sleep] once you are
+  confident your code is working*).
+
+  If you still manage to create a [fork bomb], **do not** simply go to another
+  machine and run the same program.  Notify the
+  [csehelp@nd.edu](mailto:csehelp@nd.edu) and explain what happened.
+
+  </div>
+
+  For this assignment, record your source code and any responses to the
+  following activities in the `homework09` folder of your **assignments**
+  [GitHub] repository and push your work by **noon Saturday, April 18**.
+
+  <div class="alert info-bg" markdown="1">
+
+  ### <i class="icon icon-medium">{{ "help" | embed_icon }}</i> Frequently Asked Questions
+
+  <div class="centered">
+    <iframe src="https://docs.google.com/presentation/d/e/2PACX-1vQ82WWawL8gkzsC7JFjtY4CQfTs9mh34rgFzyxHghrW8ORD0lpUPBapSwqj_TVuaPMmQ5z11mSvDDoi/pubembed?start=false&loop=false&delayms=3000" frameborder="0" width="960" height="749" allowfullscreen="true" mozallowfullscreen="true" webkitallowfullscreen="true"></iframe>
+  </div>
+
+  </div>
+
+  ## Activity 0: Preparation
+
+  Before starting this homework assignment, you should first perform a `git
+  pull` to retrieve any changes in your remote [GitHub] repository:
+
+      :::bash
+      $ cd path/to/repository                   # Go to assignments repository
+
+      $ git switch master                       # Make sure we are in master branch
+
+      $ git pull --rebase                       # Get any remote changes not present locally
+
+  Next, create a new branch for this assignment:
+
+      :::bash
+      $ git switch -c homework09                # Create homework09 branch and check it out
+
+  ### Task 1: Skeleton Code
+
+  To help you get started, the instructor has provided you with the following
+  **skeleton code**:
+
+      :::bash
+      # Go to homework09 folder
+      $ cd homework09
+
+      # Download Makefile
+      $ curl -LO https://pnutz.h4x0r.space/courses/cse.20289.sp26/static/txt/homework09/Makefile
+
+      # Download C skeleton code
+      $ curl -LO https://pnutz.h4x0r.space/courses/cse.20289.sp26/static/txt/homework09/moveit.c
+      $ curl -LO https://pnutz.h4x0r.space/courses/cse.20289.sp26/static/txt/homework09/timeit.c
+
+  Once downloaded, you should see the following files in your `homework09`
+  directory:
+
+      :::bash
+      homework09
+          \_ Makefile           # This is the Makefile for building all the project artifacts
+          \_ moveit.c           # This is the moveit utility C source file
+          \_ timeit.c           # This is the timeit utility C source file
+
+  ### Task 2: Initial Import
+
+  Now that the files are downloaded into the `homework09` folder, you can
+  **commit** them to your [git] repository:
+
+      :::bash
+      $ git add Makefile                            # Mark changes for commit
+      $ git add *.c
+      $ git commit -m "Homework 09: Initial Import" # Record changes
+
+  ### Task 3: Functional Tests
+
+  After downloading these files, you can run `make test` to run the tests.
+
+      :::bash
+      # Run all tests (will trigger automatic download)
+      $ make test
+
+  You will notice that the Makefile downloads these additional test data and scripts:
+
+      :::bash
+      homework09
+          \_ moveit.test.sh   # This is the moveit utility test shell script
+          \_ timeit.test.sh   # This is the timeit utility test shell script
+
+  You will be using these [functional tests] to verify the correctness and
+  behavior of your code.
+
+  <div class="alert info-bg" markdown="1">
+
+  ### <i class="icon icon-medium">{{ "download" | embed_icon }}</i> Automatic Download
+
+  The `test` scripts are automatically downloaded by the `Makefile`, so any
+  modifications you do to them will be lost when you run `make` again. Likewise,
+  because they are automatically downloaded, you do not need to `add` or `commit`
+  them to your [git] repository.
+
+  </div>
+
+  ### Task 4: Makefile
+
+  The `Makefile` contains all the **rules** or **recipes** for building the
+  project artifacts (e.g. `moveit`, `timeit`):
+
+      :::make
+      CC=       gcc
+      CFLAGS=   -Wall -std=gnu99 -g
+      TARGETS=  moveit timeit
+
+      all:    $(TARGETS)
+
+      #------------------------------------------------------------------------------
+      # TODO: Add rules for moveit, timeit
+      #------------------------------------------------------------------------------
+
+      moveit:
+
+      timeit:
+
+      #------------------------------------------------------------------------------
+      # DO NOT MODIFY BELOW
+      #------------------------------------------------------------------------------
+
+      ...
+
+  For this task, you will need to add [rules] for building `moveit` and `timeit`
+  *executables* (*you do not need to make any intermediate object files*).
+
+  <div class="alert info-bg" markdown="1">
+
+  ### <i class="icon icon-medium">{{ "cogs" | embed_icon }}</i> Makefile Variables
+
+  You **must** use the `CC`, `CFLAGS` variables when appropriate in your
+  [rules].  You **should** also consider using [automatic variables] such as
+  `$@` and `$<` as well.
+
+  </div>
+
+  [DAG]: https://en.wikipedia.org/wiki/Directed_acyclic_graph
+
+  Once you have a working `Makefile`, you should be able to run the following commands:
+
+      :::bash
+      # Build all TARGETS
+      $ make
+      gcc -Wall -std=gnu99 -g -o moveit moveit.c
+      gcc -Wall -std=gnu99 -g -o timeit timeit.c
+
+      # Run all tests
+      $ make test
+      Testing moveit...
+      ...
+
+      Testing timeit...
+      ...
+
+      # Remove generated artifacts
+      $ make clean
+
+  <div class="alert danger-bg" markdown="1">
+
+  **Note**: The tests will **fail** if you haven't implemented all the
+  necessary functions appropriately.
+
+  </div>
+
+  <div class="alert warning-bg" markdown="1">
+
+  ### <i class="icon icon-medium">{{ "alert" | embed_icon }}</i> Compiler Warnings
+
+  You must include the `-Wall` flag in your `CFLAGS` when you compile.  This
+  also means that your code must **compile without any warnings**, otherwise
+  points will be deducted.
+
+  </div>
+
+  [rules]: https://www.gnu.org/software/make/manual/html_node/Rule-Example.html#Rule-Example
+  [object]: https://en.wikipedia.org/wiki/Object_file
+  [static library]: https://en.wikipedia.org/wiki/Static_library#Creating_static_libraries_in_C.2FC.2B.2B
+  [shared library]: https://en.wikipedia.org/wiki/Library_(computing)#Shared_libraries
+  [automatic variables]: https://www.gnu.org/software/make/manual/html_node/Automatic-Variables.html
+  [functional tests]: https://en.wikipedia.org/wiki/Functional_testing
+
+  ## Activity 1: `moveit` (*0.40 Points*)
+
+  For the first activity, write a program, `moveit`, that reads in filenames
+  from the command line arguments, stores them to a temporary file, opens an
+  `$EDITOR` on the temporary file, allows the user to modify the filenames, and
+  then renames the files based on the information in the temporary file:
+
+  <div class="centered">
+    <img src="static/img/homework09-moveit.png" class="responsive">
+  </div>
+
+  The functionality of `moveit` is demonstrated below:
+
+  <div class="framed centered">
+    <script src="https://asciinema.org/a/WRfMzLBfSWaiwkBN3d6DrMvVa.js" id="asciicast-WRfMzLBfSWaiwkBN3d6DrMvVa" async="true"></script>
+  </div>
+
+  <div class="alert warning-bg" markdown="1">
+
+  **Note**: Your program must remove the temporary file with the [unlink] system call.
+
+  </div>
+
+  ### Task 1: `moveit.c`
+
+  To implement the `moveit` utility, you are to complete the provided
+  `moveit.c` source file which contains the following [macros] and
+  **functions**:
+
+  #### Macros
+
+      :::c
+      #define streq(a, b) (strcmp(a, b) == 0)
+
+  > The `streq` [macro] compares if two [strings] are equal.
+
+      :::c
+      ##define strchomp(s) (s)[strlen(s) - 1] = 0
+
+  <hr>
+
+  > The `strchomp` [macro] removes the last character in a [string].
+
+  #### Functions
+
+      :::c
+      /**
+       * Display usage message and exit.
+       * @param   status      Exit status.
+       **/
+      void    usage(int status);
+
+  > This provided `usage` function displays the help message and terminates the
+  [process] with the specified `status` code.
+
+      :::c
+      /**
+       * Save list of file paths to temporary file.
+       * @param   files       Array of path strings.
+       * @param   n           Number of path strings.
+       * @return  Newly allocated path to temporary file.
+       **/
+      char *  save_files(char **files, size_t n);
+
+  > This `save_files` function writes each of the files specified in the
+  `files` array to a temporary file (one file per line) and returns the path of
+  this temporary file.
+
+  <div class="alert success-bg" markdown=1>
+
+  **Hint**: Use [mkstemp] to create a temporary file and [fdopen] to convert
+    the [file descriptor] into a stream.
+
+  </div>
+
+  <hr>
+
+      :::c
+      /**
+       * Run $EDITOR on specified path.
+       * @param   path        Path to file to edit.
+       * @return  Whether or not the $EDITOR process terminated successfully.
+       **/
+      bool    edit_files(const char *path);
+
+  > This `edit_files` function executes the users `$EDITOR` on the specified
+  file and returns the exit status of the `$EDITOR` process.
+
+  <div class="alert success-bg" markdown=1>
+
+  **Hint**: Use [getenv] to read `$EDITOR` from your [process] environment
+    (fall back to `vim`, `nano`, or `emacs` if the environment variable does
+    not exist).
+
+  </div>
+
+  <div class="alert danger-bg" markdown="1">
+
+  ### <i class="icon icon-medium">{{ "code-tags" | embed_icon }}</i> Fork It!
+
+  For this assignment, you must use low-level [system calls] for [processes]
+  such as [fork], [exec], [wait], and [kill].
+
+  You may not use [system] or [popen].
+
+  </div>
+
+  <hr>
+
+      :::c
+      /**
+       * Rename files as specified in contents of path.
+       * @param   files       Array of old path names.
+       * @param   n           Number of old path names.
+       * @param   path        Path to file with new names.
+       * @return  Whether or not all rename operations were successful.
+       **/
+      bool    move_files(char **files, size_t n, const char *path);
+
+  > This `move_files` function renames old files specified in the `files` array
+  with the new names contained in the `path` file (ie. `files[0]` corresponds
+  to the first line in `path`).
+
+  <div class="alert success-bg" markdown=1>
+
+  **Hint**: Use [rename] to move files only if the names are different.
+
+  </div>
+
+  <div class="alert warning-bg" markdown="1">
+
+  ### <i class="icon icon-medium">{{ "alert" | embed_icon }}</i> Failure is an Option
+
+  You must check if the [system calls] you use fail and handle those situations
+  appropriately.
+
+  </div>
+
+  ### Task 2: Testing
+
+  Once you have implemented `moveit`, you can test it by running the
+  `test-moveit` target:
+
+      :::text
+      $ make test-moveit
+      Testing moveit...
+        system calls                                                 ... Success
+        usage                                                        ... Success
+        usage (no arguments)                                         ... Success
+        deadpool spidey rogue -> deadpool spidey rogue               ... Success
+        deadpool spidey rogue -> deadpool spidey rogue (vim)         ... Success
+        deadpool spidey rogue -> deadpool spidey rogue (nano)        ... Success
+        deadpool spidey rogue -> deadpool spidey rogue (emacs)       ... Success
+        deadpool spidey rogue -> deadpool spidey rogue (FAKE)        ... Success
+        deadpool spidey rogue -> batman superman wonderwoman         ... Success
+        deadpool spidey rogue -> batman superman wonderwoman (FAKE)  ... Success
+        batman superman wonderwoman -> deadpool batman rogue         ... Success
+        batman superman wonderwoman -> deadpool batman rogue (FAKE)  ... Success
+        batman superman -> deadpool spidey rogue                     ... Success
+        batman superman -> deadpool spidey rogue (FAKE)              ... Success
+        deadpool spidey rogue -> batman superman                     ... Success
+        deadpool spidey rogue -> batman superman (FAKE)              ... Success
+        doom -> thing                                                ... Success
+        doom -> thing (rm)                                           ... Success
+        doom -> thing (false)                                        ... Success
+        --------------------
+         Score 19.00 / 19.00
+         Grade  1.00 /  1.00
+        Status Success
+
+  ## Activity 2: `timeit` (*0.4 Points*)
+
+  For the second activity, write a program, `timeit`, that executes the given
+  command until a timeout is reached or the program terminates as show below:
+
+  <div class="framed centered">
+    <script src="https://asciinema.org/a/VEyE5vVCwFtCSAFm9rK5Bd5NG.js" id="asciicast-VEyE5vVCwFtCSAFm9rK5Bd5NG" async="true"></script>
+  </div>
+
+  If the `verbose` mode is enabled, your `timeit` should display the following
+  sort of **debugging** messages:
+
+      :::text
+      $ ./timeit -v
+      timeit.c:68:parse_options: Timeout = 10
+      timeit.c:69:parse_options: Verbose = 1
+      Usage: timeit [options] command...
+      Options:
+          -t SECONDS  Timeout duration before killing command (default is 10)
+          -v          Display verbose debugging output
+
+      $ ./timeit -t 5 -v sleep 1
+      timeit.c:68:parse_options: Timeout = 5
+      timeit.c:69:parse_options: Verbose = 1
+      timeit.c:85:parse_options: Command = sleep 1
+      timeit.c:116:main: Registering handlers...
+      timeit.c:119:main: Grabbing start time...
+      timeit.c:137:main: Sleeping for 5 seconds...
+      timeit.c:139:main: Waiting for child 160815...
+      timeit.c:131:main: Executing child...
+      timeit.c:145:main: Child exit status: 0
+      timeit.c:148:main: Grabbing end time...
+      Time Elapsed: 1.0
+
+      $ ./timeit -t 1 -v sleep 2
+      timeit.c:68:parse_options: Timeout = 1
+      timeit.c:69:parse_options: Verbose = 1
+      timeit.c:85:parse_options: Command = sleep 2
+      timeit.c:116:main: Registering handlers...
+      timeit.c:119:main: Grabbing start time...
+      timeit.c:137:main: Sleeping for 1 seconds...
+      timeit.c:139:main: Waiting for child 160841...
+      timeit.c:131:main: Executing child...
+      timeit.c:101:handle_signal: Killing child 160841...
+      timeit.c:145:main: Child exit status: 9
+      timeit.c:148:main: Grabbing end time...
+      Time Elapsed: 1.0
+
+  <div class="alert warning-bg" markdown="1">
+
+  **Note**: If the time limit is exceeded, the parent should [kill] the child
+  and [wait] for it.  Moreover, the parent should always return the child's
+  exit status as its own exit status.
+
+  </div>
+
+  ### Task 1: `timeit.c`
+
+  To implement the `timeit` utility, you are to complete the provided
+  `timeit.c` source file which contains the following [macros] and
+  **functions**:
+
+  #### Macros
+
+      :::c
+      #define debug(M, ...) \
+          if (Verbose) { \
+              fprintf(stderr, "%s:%d:%s: " M, __FILE__, __LINE__, __func__, ##__VA_ARGS__); \
+      }
+
+  > This `debug` [macro] displays the specified formatted message only if the
+  `Verbose` global variable is `true`.  The message includes the name of the
+  file, the line number, and the function at which the [macro] is called.
+
+  #### Functions
+
+      :::c
+      /**
+       * Display usage message and exit.
+       * @param   status      Exit status.
+       **/
+      void    usage(int status);
+
+  > This provided `usage` function displays the help message and terminates the
+  [process] with the specified `status` code.
+
+  <hr>
+
+      :::c
+      /**
+       * Parse command line options.
+       * @param   argc        Number of command line arguments.
+       * @param   argv        Array of command line argument strings.
+       * @return  Array of strings representing command to execute.
+       **/
+      char ** parse_options(int argc, char **argv);
+
+  > This `parse_options` function processes the command line arguments by
+  setting the `Timeout` and `Verbose` global variables and by constructing an
+  [array] of [strings] to represent the specified `command`.
+
+  <div class="alert success-bg" markdown="1">
+
+  **Hint**: Use [calloc] to create an [array] of [strings] that is `NULL`
+    terminated.
+
+  </div>
+
+  <hr>
+
+      :::c
+      /**
+       * Handle signal.
+       * @param   signum      Signal number.
+       **/
+      void    handle_signal(int signum);
+
+  > This provided `handle_signal` function kills the child [process] whenever a
+  `SIGALRM` is invoked.
+
+  #### Main Execution
+
+  The main logic for `timeit` will be in the `main` function.  While there are
+  multiple approaches on how to accomplish the task of running a program with a
+  time limit, the recommended method is shown below:
+
+  <div class="centered">
+    <img src="static/img/homework09-timeit.png" class="responsive">
+  </div>
+
+  In this approach, the `main` function first registers the `signal_handle`
+  function for `SIGALRM` using [signal].  Then the parent [process] performs a
+  [fork] and the child [process] executes the specified `command` using one of
+  the [exec] variants.
+
+  After the [fork], the parent [process] sets an [alarm] based on the specified
+  `Timeout`.  It then simply calls [wait].  If the [alarm] triggers, then the
+  handler should [kill] the child process.  Otherwise, if the child terminates
+  before the `Timeout` then the parent cancels the [alarm] and completes its
+  [wait] to retrieve the child's exit status.
+
+  To measure the elapsed time, you must use the [clock_gettime] function with
+  the `CLOCK_MONOTONIC` clock identifier.
+
+  ### Task 2: Testing
+
+  Once you have implemented `timeit`, you can test it by running the
+  `test-timeit` target:
+
+      :::text
+      $ make test-timeit
+        system calls                                                 ... Success
+        usage (-h)                                                   ... Success
+        usage (no arguments)                                         ... Success
+        usage (-v, no command)                                       ... Success
+        usage (-t 5 -v, no command)                                  ... Success
+        sleep                                                        ... Success
+        sleep 1                                                      ... Success
+        -v sleep 1                                                   ... Success
+        -t 5 -v sleep 1                                              ... Success
+        sleep 5                                                      ... Success
+        -v sleep 5                                                   ... Success
+        -t 1 sleep 5                                                 ... Success
+        -t 1 -v sleep 5                                              ... Success
+        -v find /etc -type f                                         ... Success
+        -t 5 -v /tmp/timeit.1000/TROLL                               ... Success
+        --------------------
+         Score 15.00 / 15.00
+         Grade  1.00 /  1.00
+        Status Success
+
+  ## Activity 4: Quiz (*0.2 Points*)
+
+  Once you have completed all the activities above, you are to complete the
+  following **reflection quiz**:
+
+  <div id="quiz-questions"></div>
+
+  <div id="quiz-responses"></div>
+
+  <script src="static/js/dredd-quiz.js"></script>
+  <script>
+  loadQuiz('static/json/homework09.json');
+  </script>
+
+  <pre style="display: none;" id="dr-container" class="codehilite"><code id="dredd-response"></code></pre>
+
+  As with [Reading 01], you will need to store your answers in a
+  `homework09/answers.json` file.  You can use the form above to generate the
+  contents of this file, or you can write the [JSON] by hand.
+
+  To test your quiz, you can use the `check.py` script:
+
+      :::bash
+      $ ../.scripts/check.py
+      Checking homework09 quiz ...
+           Q01  4.00 /  4.00
+           Q02  2.00 /  2.00
+           Q03  1.00 /  1.00
+           Q04  1.00 /  1.00
+           Q05  1.00 /  1.00
+           Q06  1.00 /  1.00
+        --------------------
+         Score 10.00 / 10.00
+         Grade  1.00 /  1.00
+        Status Success
+
+  [JSON]: https://json.org
+
+  ## Submission
+
+  To submit your assignment, please commit your work to the `homework09` folder
+  of your `homework09` branch in your **assignments** [GitHub] repository.
+  Your `homework09` folder should **only** contain the following files:
+
+  - `Makefile`
+  - `answers.json`
+  - `moveit.c`
+  - `timeit.c`
+
+  <div class="alert warning-bg" markdown="1">
+
+  **Note**: You do not need to commit the test scripts because the `Makefile`
+  automatically downloads them.
+
+  </div>
+
+      :::bash
+      #-----------------------------------------------------------------------
+      # Make sure you have already completed Activity 0: Preparation
+      #-----------------------------------------------------------------------
+      ...
+      $ git add Makefile                        # Mark changes for commit
+      $ git add moveit.c                        # Mark changes for commit
+      $ git commit -m "Homework 09: moveit"     # Record changes
+      ...
+      $ git add Makefile                        # Mark changes for commit
+      $ git add timeit.c                        # Mark changes for commit
+      $ git commit -m "Homework 09: timeit"     # Record changes
+      ...
+      $ git add answers.json                    # Mark changes for commit
+      $ git commit -m "Homework 09: quiz"       # Record changes
+      ...
+      $ git push -u origin homework09           # Push branch to GitHub
+
+  <div class="alert warning-bg" markdown="1">
+
+  ### <i class="icon icon-medium">{{ "lifebuoy" | embed_icon }}</i> Acknowledgments
+
+  If you collaborated with any other students, or received help from TAs or AI
+  tools on this assignment, please record this support in the `README.md` in
+  the `homework09` folder and include it with your **Pull Request**.
+
+  </div>
+
+  <div class="alert success-bg" markdown="1">
+
+  ### <i class="icon icon-medium">{{ "account-question" | embed_icon }}</i> Graders
+
+  Once you have committed your work and pushed it to [GitHub], remember to
+  create a **pull request** and assign it to the appropriate **teaching
+  assistant** from the [Reading 09 TA List].
+
+  **Note**: this list changes each week, so be sure to consult the appropriate
+  list for each assignment.
+
+  </div>
+
+  [array]:              https://en.wikipedia.org/wiki/C_(programming_language)#Arrays
+  [arrays]:             https://en.wikipedia.org/wiki/C_(programming_language)#Arrays
+  [pointer]:            https://en.wikipedia.org/wiki/C_(programming_language)#Pointers
+  [pointers]:           https://en.wikipedia.org/wiki/C_(programming_language)#Pointers
+  [string]:             https://en.wikipedia.org/wiki/String_(computer_science)
+  [strings]:            https://en.wikipedia.org/wiki/String_(computer_science)
+  [C99]:                https://en.wikipedia.org/wiki/C_(programming_language)#C99
+  [shell]:              https://en.wikipedia.org/wiki/Unix_shell
+  [Python]:             https://www.python.org/
+  [C]:                  https://en.wikipedia.org/wiki/C_(programming_language)
+  [standard library]:   https://en.wikipedia.org/wiki/C_standard_library
+  [data structure]:     https://en.wikipedia.org/wiki/Data_structure
+  [data structures]:    https://en.wikipedia.org/wiki/Data_structure
+  [algorithms]:         https://en.wikipedia.org/wiki/Algorithm
+
+  [Markdown]:   https://daringfireball.net/projects/markdown/
+  [git]:    https://git-scm.com/
+  [clone]:  https://git-scm.com/docs/git-clone
+  [commit]: https://git-scm.com/docs/git-commit
+  [push]:   https://git-scm.com/docs/git-push
+  [branching]:   https://git-scm.com/docs/git-branch
+  [code review]: https://en.wikipedia.org/wiki/Code_review
+  [GitHub]: https://github.com
+  [Reading 09 TA List]: reading09_tas.html
+  [Reading 01]: reading01.html
+  [struct]:     https://en.wikipedia.org/wiki/Record_(computer_science)
+  [structs]:    https://en.wikipedia.org/wiki/Record_(computer_science)
+  [union]:      https://en.wikipedia.org/wiki/Union_type
+  [integer]:    https://en.wikipedia.org/wiki/Integer_(computer_science)
+  [unsigned integer]:   https://en.wikipedia.org/wiki/Integer_%28computer_science%29#Value_and_representation
+  [enum]:       https://en.wikipedia.org/wiki/Enumerated_type
+  [enumeration]:https://en.wikipedia.org/wiki/Enumerated_type
+  [header]:     https://en.wikipedia.org/wiki/Include_directive#C.2FC.2B.2B
+  [typedef]:    https://en.wikipedia.org/wiki/Typedef
+  [type definition]:    https://en.wikipedia.org/wiki/Typedef
+  [macro]:      https://en.wikipedia.org/wiki/C_preprocessor#Macro_definition_and_expansion
+  [macros]:     https://en.wikipedia.org/wiki/C_preprocessor#Macro_definition_and_expansion
+  [system calls]:   https://en.wikipedia.org/wiki/System_call
+  [process]:    https://en.wikipedia.org/wiki/Process_(computing)
+  [processes]:  https://en.wikipedia.org/wiki/Process_(computing)
+  [signal]:     https://en.wikipedia.org/wiki/Signal_(IPC)
+  [signals]:    https://en.wikipedia.org/wiki/Signal_(IPC)
+  [Unix]:       https://en.wikipedia.org/wiki/Unix
+  [strace]:     http://man7.org/linux/man-pages/man1/strace.1.html
+  [iterative and incremental development]: https://en.wikipedia.org/wiki/Iterative_and_incremental_development
+  [cron]:       https://en.wikipedia.org/wiki/Cron
+  [fork]:       http://man7.org/linux/man-pages/man2/fork.2.html
+  [fork bomb]:  https://en.wikipedia.org/wiki/Fork_bomb
+  [sleep]:      http://man7.org/linux/man-pages/man3/sleep.3.html
+  [kill]:       http://man7.org/linux/man-pages/man2/kill.2.html
+  [wait]:       http://man7.org/linux/man-pages/man2/wait.2.html
+  [exec]:       http://man7.org/linux/man-pages/man3/exec.3.html
+  [mkstemp]:    http://man7.org/linux/man-pages/man3/mkstemp.3.html
+  [fdopen]:     http://man7.org/linux/man-pages/man3/fdopen.3p.html
+  [getenv]:     http://man7.org/linux/man-pages/man3/getenv.3.html
+  [clock_gettime]:  http://man7.org/linux/man-pages/man2/clock_getres.2.html
+  [system]:     http://man7.org/linux/man-pages/man3/system.3.html
+  [popen]:      http://man7.org/linux/man-pages/man3/popen.3.html
+  [file descriptor]: https://en.wikipedia.org/wiki/File_descriptor
+  [rename]:     http://man7.org/linux/man-pages/man2/rename.2.html
+  [malloc]:     http://man7.org/linux/man-pages/man3/realloc.3.html
+  [calloc]:     http://man7.org/linux/man-pages/man3/realloc.3.html
+  [signal]:     http://man7.org/linux/man-pages/man2/signal.2.html
+  [alarm]:      http://man7.org/linux/man-pages/man2/alarm.2.html
+  [unlink]:     http://man7.org/linux/man-pages/man2/unlink.2.html
