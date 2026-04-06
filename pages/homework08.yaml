@@ -846,7 +846,17 @@ body:       |
   opportunities worth `0.5` points each.  You may do **none**, **one**,
   **two**, or all **three** of them.
 
-  <div class="alert warning-bg" markdown="1">
+  <div class="alert success-bg" markdown="1">
+
+  ### <i class="icon icon-medium">{{ "check-all" | embed_icon }}</i> Do The Homework
+
+  To be **eligible** for the extra credit, you must **successfully complete**
+  the corresponding **homework** assignment.  This means passing all the tests
+  and the reflection quiz.
+
+  </div>
+
+  <div class="alert danger-bg" markdown="1">
 
   ### <i class="icon icon-medium">{{ "leaf-circle" | embed_icon }}</i> Organic Code Only
 
@@ -884,7 +894,7 @@ body:       |
   Pass `findit` the right argument and it will display something...
   **precious**.
 
-  <div class="alert success-bg" markdown="1">
+  <div class="alert special-bg" markdown="1">
 
   ### <i class="icon icon-medium">{{ "checkbox-marked-outline" | embed_icon }}</i> Easter Egg: Verification
 
