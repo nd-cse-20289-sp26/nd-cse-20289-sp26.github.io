@@ -840,6 +840,96 @@ body:       |
 
   [JSON]: https://json.org
 
+  ## Extra Credit 04 (*0.5 Points*)
+
+  For the last quarter of the semester, you will have **three** extra credit
+  opportunities worth `0.5` points each.  You may do **none**, **one**,
+  **two**, or all **three** of them.
+
+  <div class="alert warning-bg" markdown="1">
+
+  ### <i class="icon icon-medium">{{ "leaf-circle" | embed_icon }}</i> Organic Code Only
+
+  You may not, however, use **AI tools** for any portion of them and if caught,
+  you will **forfeit** the opportunity to do any of these extra credit
+  opportunities.
+
+  </div>
+
+  ### Easter Egg
+
+  It is always fun to find [Easter Eggs] in programs and services.  For
+  instance, here is the first video game [easter egg] (as discussed in [History
+  of Computing]):
+
+  <div class="framed centered">
+    <iframe width="854" height="480" src="https://www.youtube.com/embed/Xk7Mg3aqpzM" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+  </div>
+
+  For extra credit, you are to add an [easter egg] you created yourself to your
+  `findit` program that does any of the following by **Wednesday, April 15**:
+
+  1. Display or scroll your favorite song, quote, or poem.
+
+  2. Run a mini-game (ie. [rogue], [nethack], or any of the [BSD games]).
+
+  3. Display some sort of animation (ala [cmatrix] or [chad_stride]).
+
+  For example, you can find the instructor's implementation of `findit` here:
+
+      :::bash
+      # Easter Egg Hint: Indiana Jones and the Last Crusade
+      $ ~pbui/pub/bin/findit
+
+  Pass `findit` the right argument and it will display something...
+  **precious**.
+
+  <div class="alert success-bg" markdown="1">
+
+  ### <i class="icon icon-medium">{{ "checkbox-marked-outline" | embed_icon }}</i> Easter Egg: Verification
+
+  To receive credit for the **Easter Egg**, you must:
+
+  1.  <div class="flex-col" markdown="1">
+
+      Place your `findit` **executable** in the `public` folder of your `$HOME`
+      directory on the **student** machines.
+
+      If you do not have a `public` folder already, then you will need to
+      create it:
+
+          ::bash
+          # Create public folder in your `$HOME` directory
+          $ mkdir ~/public
+
+          # Set permissions on public folder
+          $ chmod 755 ~/public
+
+          # Copy findit to public folder
+          $ cp findit ~/public
+
+          # Set permissions on findit
+          $ chmod 755 ~/public/findit
+
+  2. Post the location of your `findit` in the class **Slack** channel and
+  invite the class to discover the [easter egg].
+
+  3. Update your `README.md` in `homework08` to include instructions on how to
+  activate the [easter egg].
+
+  4. Post a **screenshot** of your [easter egg] in your **Pull Request**.
+
+  </div>
+
+  [easter eggs]: https://en.wikipedia.org/wiki/Easter_egg_(media)
+  [easter egg]: https://en.wikipedia.org/wiki/Easter_egg_(media)
+  [History of Computing]: https://www3.nd.edu/~pbui/teaching/cse.40850.sp18/
+  [rogue]: https://en.wikipedia.org/wiki/Rogue_(video_game)
+  [nethack]: https://en.wikipedia.org/wiki/NetHack
+  [BSD games]: https://github.com/vattam/BSDGames
+  [cmatrix]: https://github.com/abishekvashok/cmatrix
+  [chad_stride]: https://github.com/sambattalio/chad_stride
+
   ## Submission
 
   To submit your assignment, please commit your work to the `homework08` folder
