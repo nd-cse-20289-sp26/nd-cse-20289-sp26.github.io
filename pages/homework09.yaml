@@ -584,6 +584,80 @@ body:       |
 
   [JSON]: https://json.org
 
+  ## Extra Credit 04 (*0.5 Points*)
+
+  For the last quarter of the semester, you will have **three** extra credit
+  opportunities worth `0.5` points each.  You may do **none**, **one**,
+  **two**, or all **three** of them.
+
+  <div class="alert success-bg" markdown="1">
+
+  ### <i class="icon icon-medium">{{ "check-all" | embed_icon }}</i> Do The Homework
+
+  To be **eligible** for the extra credit, you must **successfully complete**
+  the corresponding **homework** assignment.  This means passing all the tests
+  and the reflection quiz.
+
+  </div>
+
+  <div class="alert danger-bg" markdown="1">
+
+  ### <i class="icon icon-medium">{{ "leaf-circle" | embed_icon }}</i> Organic Code Only
+
+  You may not, however, use **AI tools** for any portion of them and if caught,
+  you will **forfeit** the opportunity to do any of these extra credit
+  opportunities.
+
+  </div>
+
+  ### TROLL
+
+  For extra credit, you are to use [C] and [system calls] to implement your own
+  version of the `TROLL` from [Homework 01]. Recall, that the `TROLL` was a
+  [process] that intercepted [signals] such as `SIGINT` and `SIGTERM` and
+  taunted you when you tried to terminate it. Your version of the `TROLL`
+  should do something similar (*prevent easy termination*)... but its taunts and
+  other aesthetic details are up to you.
+
+  <div class="alert special-bg" markdown="1">
+
+  ### <i class="icon icon-medium">{{ "checkbox-marked-outline" | embed_icon }}</i> TROLL: Verification
+
+  To receive credit for the **TROLL**, you must:
+
+  1.  <div class="flex-col" markdown="1">
+
+      Place your `TROLL` **executable** in the `public` folder of your `$HOME`
+      directory on the **student** machines.
+
+      If you do not have a `public` folder already, then you will need to
+      create it:
+
+          ::bash
+          # Create public folder in your `$HOME` directory
+          $ mkdir ~/public
+
+          # Set permissions on public folder
+          $ chmod 755 ~/public
+
+          # Copy TROLL to public folder
+          $ cp TROLL ~/public
+
+          # Set permissions on TROLL
+          $ chmod 755 ~/public/TROLL
+
+  2. Post the location of your `TROLL` in the class **Slack** channel and
+  invite the class to battle your `TROLL`.
+
+  3. Update your `README.md` in `homework09` to include instructions on how to
+  activate the `TROLL`
+
+  4. Post a **screenshot** of your `TROLL` in action in your **Pull Request**.
+
+  </div>
+
+  [Homework 01]: homework01.html
+
   ## Submission
 
   To submit your assignment, please commit your work to the `homework09` folder
