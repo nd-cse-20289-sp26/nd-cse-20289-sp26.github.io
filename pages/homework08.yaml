@@ -166,7 +166,8 @@ body:       |
   </div>
 
   <div class="alert info-bg" markdown="1">
-  #### <i class="fa fa-cogs"></i> Makefile Variables
+
+  ### <i class="icon icon-medium">{{ "cogs" | embed_icon }}</i> Makefile Variables
 
   You **must** use the `CC`, `CFLAGS`, `LD`, `LDFLAGS`, `AR`, and `ARFLAGS`
   variables when appropriate in your [rules].  You **should** also consider
