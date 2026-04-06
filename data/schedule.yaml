@@ -348,30 +348,49 @@
         topics:         '<i class="muted">Easter</i>'
 
       - date:           Wed 04/08
-        topics:         File System
+        topics:         System Calls
         assignments:
           - Reading 08
+        items:
+          - name:       Slides
+            link:       https://docs.google.com/presentation/d/12mm73hBplhuhCZTvgZifUARgS0nLMSI_QFNURxyBVuE/edit?usp=sharing
 
       - date:           Fri 04/10
-        topics:         I/O
+        topics:         File System
+        items:
+          - name:       Slides
+            link:       https://docs.google.com/presentation/d/12mm73hBplhuhCZTvgZifUARgS0nLMSI_QFNURxyBVuE/edit?usp=sharing
+
 
       - date:           Sat 04/11
         topics:         '<i class="muted">FindIt</i>'
         assignments:
           - Homework 08
+        items:
+          - name:       Slides
+            link:       https://docs.google.com/presentation/d/12mm73hBplhuhCZTvgZifUARgS0nLMSI_QFNURxyBVuE/edit?usp=sharing
 
 - name:   "Processes"
   days:
       - date:           Mon 04/13
-        topics:         Processes
+        topics:         I/O
         assignments:
           - Reading 09
+        items:
+          - name:       Slides
+            link:       https://docs.google.com/presentation/d/1DHAig58aEaIQYTPIbI_fXEjMCQ9nP1_j9MH1L2yY-1c/edit?usp=sharing
 
       - date:           Wed 04/15
-        topics:         Pipes
+        topics:         Processes
+        items:
+          - name:       Slides
+            link:       https://docs.google.com/presentation/d/1DHAig58aEaIQYTPIbI_fXEjMCQ9nP1_j9MH1L2yY-1c/edit?usp=sharing
 
       - date:           Fri 04/17
         topics:         Signals
+        items:
+          - name:       Slides
+            link:       https://docs.google.com/presentation/d/1DHAig58aEaIQYTPIbI_fXEjMCQ9nP1_j9MH1L2yY-1c/edit?usp=sharing
 
       - date:           Sat 04/18
         topics:         '<i class="muted">MoveIt, TimeIt</i>'
@@ -384,12 +403,22 @@
         topics:         Client/Server, URLs, Sockets
         assignments:
           - Reading 10
+        items:
+          - name:       Slides
+            link:       https://docs.google.com/presentation/d/1l_aZ6CeS7Z2uW0jhbHQtEkFGcJ6nobH3KB8M-oMz3dE/edit?usp=sharing
 
       - date:           Wed 04/22
         topics:         HTTP Client
+        items:
+          - name:       Slides
+            link:       https://docs.google.com/presentation/d/1l_aZ6CeS7Z2uW0jhbHQtEkFGcJ6nobH3KB8M-oMz3dE/edit?usp=sharing
+
 
       - date:           Fri 04/24
         topics:         HTTP Server
+        items:
+          - name:       Slides
+            link:       https://docs.google.com/presentation/d/1l_aZ6CeS7Z2uW0jhbHQtEkFGcJ6nobH3KB8M-oMz3dE/edit?usp=sharing
 
       - date:           Sat 04/25
         topics:         '<i class="muted">ScanIt, CurlIt</i>'
@@ -399,12 +428,12 @@
 - name:   "Exam 04"
   days:
       - date:           Mon 04/27
-        topics:         'VPS'
-
-      - date:           Wed 04/29
-        topics:         ''
+        topics:         ""
         items:
           - name:       Checklist 04
+
+      - date:           Wed 04/29
+        topics:         '<i>Fin</i>'
         assignments:
           - Interview 04
 
