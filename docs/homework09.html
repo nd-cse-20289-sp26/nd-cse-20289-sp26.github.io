@@ -1,0 +1,577 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<!-- Favicon -->
+<link rel="icon" type="image/png" sizes="32x32" href="static/ico/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="static/ico/favicon-16x16.png">
+<link rel="manifest" href="static/ico/site.webmanifest">
+<!-- Stylesheets -->
+<link rel="stylesheet" href="static/css/pnutzh4x0r.css">
+<title>Homework 09: moveit, timeit</title>
+</head>
+<body>
+<header>
+<a class="logo" href="homework09.html">
+    <h1>Homework 09: moveit, timeit</h1>
+</a>
+<nav>
+    <ul>
+        <li><a href="index.html"><h4>Home</h4></a></li>
+        </ul>
+</nav></header>
+<main>
+<p>The goal of this homework assignment is to allow you to practice using
+<a href="https://en.wikipedia.org/wiki/System_call">system calls</a> involving <a href="https://en.wikipedia.org/wiki/Process_(computing)">processes</a> and <a href="https://en.wikipedia.org/wiki/Signal_(IPC)">signals</a> in <a href="https://en.wikipedia.org/wiki/C_(programming_language)">C</a> by
+implementing two new <a href="https://en.wikipedia.org/wiki/Unix">Unix</a> utilities: <code>moveit</code> and <code>timeit</code>.</p>
+<ol>
+<li>
+<p><code>moveit</code>: The first utility allows users to interactively rename specified
+files using their favorite text <code>$EDITOR</code>.</p>
+</li>
+<li>
+<p><code>timeit</code>: The second utility allows users to compute the elapsed time of
+an application while also enforcing a timeout (or cut off time).</p>
+</li>
+</ol>
+<div class="alert danger-bg">
+<h3 id="bomb-embed_icon-set-us-up-the-bomb-no"><i class="icon icon-medium"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><title>bomb</title><path d="M11.25,6A3.25,3.25 0 0,1 14.5,2.75A3.25,3.25 0 0,1 17.75,6C17.75,6.42 18.08,6.75 18.5,6.75C18.92,6.75 19.25,6.42 19.25,6V5.25H20.75V6A2.25,2.25 0 0,1 18.5,8.25A2.25,2.25 0 0,1 16.25,6A1.75,1.75 0 0,0 14.5,4.25A1.75,1.75 0 0,0 12.75,6H14V7.29C16.89,8.15 19,10.83 19,14A7,7 0 0,1 12,21A7,7 0 0,1 5,14C5,10.83 7.11,8.15 10,7.29V6H11.25M22,6H24V7H22V6M19,4V2H20V4H19M20.91,4.38L22.33,2.96L23.04,3.67L21.62,5.09L20.91,4.38Z" /></svg>
+</i> Set us up the bomb (No!)<a class="headerlink" href="#bomb-embed_icon-set-us-up-the-bomb-no" title="Permanent link">&para;</a></h3>
+<p>Be careful with the <a href="http://man7.org/linux/man-pages/man2/fork.2.html">fork</a> system call.  To prevent a <a href="https://en.wikipedia.org/wiki/Fork_bomb">fork bomb</a>, start off
+by always putting a <a href="http://man7.org/linux/man-pages/man3/sleep.3.html">sleep</a> after a <a href="http://man7.org/linux/man-pages/man2/fork.2.html">fork</a>, that way you have time to kill
+the <a href="https://en.wikipedia.org/wiki/Process_(computing)">processes</a> (<em>you should eventually remove this <a href="http://man7.org/linux/man-pages/man3/sleep.3.html">sleep</a> once you are
+confident your code is working</em>).</p>
+<p>If you still manage to create a <a href="https://en.wikipedia.org/wiki/Fork_bomb">fork bomb</a>, <strong>do not</strong> simply go to another
+machine and run the same program.  Notify the
+<a href="mailto:csehelp@nd.edu">csehelp@nd.edu</a> and explain what happened.</p>
+</div>
+<p>For this assignment, record your source code and any responses to the
+following activities in the <code>homework09</code> folder of your <strong>assignments</strong>
+<a href="https://github.com">GitHub</a> repository and push your work by <strong>noon Saturday, April 18</strong>.</p>
+<div class="alert info-bg">
+<h3 id="help-embed_icon-frequently-asked-questions"><i class="icon icon-medium"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><title>help</title><path d="M10,19H13V22H10V19M12,2C17.35,2.22 19.68,7.62 16.5,11.67C15.67,12.67 14.33,13.33 13.67,14.17C13,15 13,16 13,17H10C10,15.33 10,13.92 10.67,12.92C11.33,11.92 12.67,11.33 13.5,10.67C15.92,8.43 15.32,5.26 12,5A3,3 0 0,0 9,8H6A6,6 0 0,1 12,2Z" /></svg>
+</i> Frequently Asked Questions<a class="headerlink" href="#help-embed_icon-frequently-asked-questions" title="Permanent link">&para;</a></h3>
+<div class="centered">
+<iframe allowfullscreen="true" frameborder="0" height="749" mozallowfullscreen="true" src="https://docs.google.com/presentation/d/e/2PACX-1vQ82WWawL8gkzsC7JFjtY4CQfTs9mh34rgFzyxHghrW8ORD0lpUPBapSwqj_TVuaPMmQ5z11mSvDDoi/pubembed?start=false&amp;loop=false&amp;delayms=3000" webkitallowfullscreen="true" width="960"></iframe>
+</div>
+</div>
+<h2 id="activity-0-preparation">Activity 0: Preparation<a class="headerlink" href="#activity-0-preparation" title="Permanent link">&para;</a></h2>
+<p>Before starting this homework assignment, you should first perform a <code>git
+pull</code> to retrieve any changes in your remote <a href="https://github.com">GitHub</a> repository:</p>
+<div class="codehilite"><pre><span></span><code>$<span class="w"> </span><span class="nb">cd</span><span class="w"> </span>path/to/repository<span class="w">                   </span><span class="c1"># Go to assignments repository</span>
+
+$<span class="w"> </span>git<span class="w"> </span>switch<span class="w"> </span>master<span class="w">                       </span><span class="c1"># Make sure we are in master branch</span>
+
+$<span class="w"> </span>git<span class="w"> </span>pull<span class="w"> </span>--rebase<span class="w">                       </span><span class="c1"># Get any remote changes not present locally</span>
+</code></pre></div>
+
+<p>Next, create a new branch for this assignment:</p>
+<div class="codehilite"><pre><span></span><code>$<span class="w"> </span>git<span class="w"> </span>switch<span class="w"> </span>-c<span class="w"> </span>homework09<span class="w">                </span><span class="c1"># Create homework09 branch and check it out</span>
+</code></pre></div>
+
+<h3 id="task-1-skeleton-code">Task 1: Skeleton Code<a class="headerlink" href="#task-1-skeleton-code" title="Permanent link">&para;</a></h3>
+<p>To help you get started, the instructor has provided you with the following
+<strong>skeleton code</strong>:</p>
+<div class="codehilite"><pre><span></span><code><span class="c1"># Go to homework09 folder</span>
+$<span class="w"> </span><span class="nb">cd</span><span class="w"> </span>homework09
+
+<span class="c1"># Download Makefile</span>
+$<span class="w"> </span>curl<span class="w"> </span>-LO<span class="w"> </span>https://pnutz.h4x0r.space/courses/cse.20289.sp26/static/txt/homework09/Makefile
+
+<span class="c1"># Download C skeleton code</span>
+$<span class="w"> </span>curl<span class="w"> </span>-LO<span class="w"> </span>https://pnutz.h4x0r.space/courses/cse.20289.sp26/static/txt/homework09/moveit.c
+$<span class="w"> </span>curl<span class="w"> </span>-LO<span class="w"> </span>https://pnutz.h4x0r.space/courses/cse.20289.sp26/static/txt/homework09/timeit.c
+</code></pre></div>
+
+<p>Once downloaded, you should see the following files in your <code>homework09</code>
+directory:</p>
+<div class="codehilite"><pre><span></span><code>homework09
+<span class="w">    </span><span class="se">\_</span><span class="w"> </span>Makefile<span class="w">           </span><span class="c1"># This is the Makefile for building all the project artifacts</span>
+<span class="w">    </span><span class="se">\_</span><span class="w"> </span>moveit.c<span class="w">           </span><span class="c1"># This is the moveit utility C source file</span>
+<span class="w">    </span><span class="se">\_</span><span class="w"> </span>timeit.c<span class="w">           </span><span class="c1"># This is the timeit utility C source file</span>
+</code></pre></div>
+
+<h3 id="task-2-initial-import">Task 2: Initial Import<a class="headerlink" href="#task-2-initial-import" title="Permanent link">&para;</a></h3>
+<p>Now that the files are downloaded into the <code>homework09</code> folder, you can
+<strong>commit</strong> them to your <a href="https://git-scm.com/">git</a> repository:</p>
+<div class="codehilite"><pre><span></span><code>$<span class="w"> </span>git<span class="w"> </span>add<span class="w"> </span>Makefile<span class="w">                            </span><span class="c1"># Mark changes for commit</span>
+$<span class="w"> </span>git<span class="w"> </span>add<span class="w"> </span>*.c
+$<span class="w"> </span>git<span class="w"> </span>commit<span class="w"> </span>-m<span class="w"> </span><span class="s2">&quot;Homework 09: Initial Import&quot;</span><span class="w"> </span><span class="c1"># Record changes</span>
+</code></pre></div>
+
+<h3 id="task-3-functional-tests">Task 3: Functional Tests<a class="headerlink" href="#task-3-functional-tests" title="Permanent link">&para;</a></h3>
+<p>After downloading these files, you can run <code>make test</code> to run the tests.</p>
+<div class="codehilite"><pre><span></span><code><span class="c1"># Run all tests (will trigger automatic download)</span>
+$<span class="w"> </span>make<span class="w"> </span><span class="nb">test</span>
+</code></pre></div>
+
+<p>You will notice that the Makefile downloads these additional test data and scripts:</p>
+<div class="codehilite"><pre><span></span><code>homework09
+<span class="w">    </span><span class="se">\_</span><span class="w"> </span>moveit.test.sh<span class="w">   </span><span class="c1"># This is the moveit utility test shell script</span>
+<span class="w">    </span><span class="se">\_</span><span class="w"> </span>timeit.test.sh<span class="w">   </span><span class="c1"># This is the timeit utility test shell script</span>
+</code></pre></div>
+
+<p>You will be using these <a href="https://en.wikipedia.org/wiki/Functional_testing">functional tests</a> to verify the correctness and
+behavior of your code.</p>
+<div class="alert info-bg">
+<h3 id="download-embed_icon-automatic-download"><i class="icon icon-medium"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><title>download</title><path d="M5,20H19V18H5M19,9H15V3H9V9H5L12,16L19,9Z" /></svg>
+</i> Automatic Download<a class="headerlink" href="#download-embed_icon-automatic-download" title="Permanent link">&para;</a></h3>
+<p>The <code>test</code> scripts are automatically downloaded by the <code>Makefile</code>, so any
+modifications you do to them will be lost when you run <code>make</code> again. Likewise,
+because they are automatically downloaded, you do not need to <code>add</code> or <code>commit</code>
+them to your <a href="https://git-scm.com/">git</a> repository.</p>
+</div>
+<h3 id="task-4-makefile">Task 4: Makefile<a class="headerlink" href="#task-4-makefile" title="Permanent link">&para;</a></h3>
+<p>The <code>Makefile</code> contains all the <strong>rules</strong> or <strong>recipes</strong> for building the
+project artifacts (e.g. <code>moveit</code>, <code>timeit</code>):</p>
+<div class="codehilite"><pre><span></span><code><span class="nv">CC</span><span class="o">=</span><span class="w">       </span>gcc
+<span class="nv">CFLAGS</span><span class="o">=</span><span class="w">   </span>-Wall<span class="w"> </span>-std<span class="o">=</span>gnu99<span class="w"> </span>-g
+<span class="nv">TARGETS</span><span class="o">=</span><span class="w">  </span>moveit<span class="w"> </span>timeit
+
+<span class="nf">all</span><span class="o">:</span><span class="w">    </span><span class="k">$(</span><span class="nv">TARGETS</span><span class="k">)</span>
+
+<span class="c">#------------------------------------------------------------------------------</span>
+<span class="c"># TODO: Add rules for moveit, timeit</span>
+<span class="c">#------------------------------------------------------------------------------</span>
+
+<span class="nf">moveit</span><span class="o">:</span>
+
+<span class="nf">timeit</span><span class="o">:</span>
+
+<span class="c">#------------------------------------------------------------------------------</span>
+<span class="c"># DO NOT MODIFY BELOW</span>
+<span class="c">#------------------------------------------------------------------------------</span>
+
+<span class="err">...</span>
+</code></pre></div>
+
+<p>For this task, you will need to add <a href="https://www.gnu.org/software/make/manual/html_node/Rule-Example.html#Rule-Example">rules</a> for building <code>moveit</code> and <code>timeit</code>
+<em>executables</em> (<em>you do not need to make any intermediate object files</em>).</p>
+<div class="alert info-bg">
+<h3 id="cogs-embed_icon-makefile-variables"><i class="icon icon-medium"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><title>cogs</title><path d="M15.9,18.45C17.25,18.45 18.35,17.35 18.35,16C18.35,14.65 17.25,13.55 15.9,13.55C14.54,13.55 13.45,14.65 13.45,16C13.45,17.35 14.54,18.45 15.9,18.45M21.1,16.68L22.58,17.84C22.71,17.95 22.75,18.13 22.66,18.29L21.26,20.71C21.17,20.86 21,20.92 20.83,20.86L19.09,20.16C18.73,20.44 18.33,20.67 17.91,20.85L17.64,22.7C17.62,22.87 17.47,23 17.3,23H14.5C14.32,23 14.18,22.87 14.15,22.7L13.89,20.85C13.46,20.67 13.07,20.44 12.71,20.16L10.96,20.86C10.81,20.92 10.62,20.86 10.54,20.71L9.14,18.29C9.05,18.13 9.09,17.95 9.22,17.84L10.7,16.68L10.65,16L10.7,15.31L9.22,14.16C9.09,14.05 9.05,13.86 9.14,13.71L10.54,11.29C10.62,11.13 10.81,11.07 10.96,11.13L12.71,11.84C13.07,11.56 13.46,11.32 13.89,11.15L14.15,9.29C14.18,9.13 14.32,9 14.5,9H17.3C17.47,9 17.62,9.13 17.64,9.29L17.91,11.15C18.33,11.32 18.73,11.56 19.09,11.84L20.83,11.13C21,11.07 21.17,11.13 21.26,11.29L22.66,13.71C22.75,13.86 22.71,14.05 22.58,14.16L21.1,15.31L21.15,16L21.1,16.68M6.69,8.07C7.56,8.07 8.26,7.37 8.26,6.5C8.26,5.63 7.56,4.92 6.69,4.92A1.58,1.58 0 0,0 5.11,6.5C5.11,7.37 5.82,8.07 6.69,8.07M10.03,6.94L11,7.68C11.07,7.75 11.09,7.87 11.03,7.97L10.13,9.53C10.08,9.63 9.96,9.67 9.86,9.63L8.74,9.18L8,9.62L7.81,10.81C7.79,10.92 7.7,11 7.59,11H5.79C5.67,11 5.58,10.92 5.56,10.81L5.4,9.62L4.64,9.18L3.5,9.63C3.41,9.67 3.3,9.63 3.24,9.53L2.34,7.97C2.28,7.87 2.31,7.75 2.39,7.68L3.34,6.94L3.31,6.5L3.34,6.06L2.39,5.32C2.31,5.25 2.28,5.13 2.34,5.03L3.24,3.47C3.3,3.37 3.41,3.33 3.5,3.37L4.63,3.82L5.4,3.38L5.56,2.19C5.58,2.08 5.67,2 5.79,2H7.59C7.7,2 7.79,2.08 7.81,2.19L8,3.38L8.74,3.82L9.86,3.37C9.96,3.33 10.08,3.37 10.13,3.47L11.03,5.03C11.09,5.13 11.07,5.25 11,5.32L10.03,6.06L10.06,6.5L10.03,6.94Z" /></svg>
+</i> Makefile Variables<a class="headerlink" href="#cogs-embed_icon-makefile-variables" title="Permanent link">&para;</a></h3>
+<p>You <strong>must</strong> use the <code>CC</code>, <code>CFLAGS</code> variables when appropriate in your
+<a href="https://www.gnu.org/software/make/manual/html_node/Rule-Example.html#Rule-Example">rules</a>.  You <strong>should</strong> also consider using <a href="https://www.gnu.org/software/make/manual/html_node/Automatic-Variables.html">automatic variables</a> such as
+<code>$@</code> and <code>$&lt;</code> as well.</p>
+</div>
+<p>Once you have a working <code>Makefile</code>, you should be able to run the following commands:</p>
+<div class="codehilite"><pre><span></span><code><span class="c1"># Build all TARGETS</span>
+$<span class="w"> </span>make
+gcc<span class="w"> </span>-Wall<span class="w"> </span>-std<span class="o">=</span>gnu99<span class="w"> </span>-g<span class="w"> </span>-o<span class="w"> </span>moveit<span class="w"> </span>moveit.c
+gcc<span class="w"> </span>-Wall<span class="w"> </span>-std<span class="o">=</span>gnu99<span class="w"> </span>-g<span class="w"> </span>-o<span class="w"> </span>timeit<span class="w"> </span>timeit.c
+
+<span class="c1"># Run all tests</span>
+$<span class="w"> </span>make<span class="w"> </span><span class="nb">test</span>
+Testing<span class="w"> </span>moveit...
+...
+
+Testing<span class="w"> </span>timeit...
+...
+
+<span class="c1"># Remove generated artifacts</span>
+$<span class="w"> </span>make<span class="w"> </span>clean
+</code></pre></div>
+
+<div class="alert danger-bg">
+<p><strong>Note</strong>: The tests will <strong>fail</strong> if you haven't implemented all the
+necessary functions appropriately.</p>
+</div>
+<div class="alert warning-bg">
+<h3 id="alert-embed_icon-compiler-warnings"><i class="icon icon-medium"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><title>alert</title><path d="M13 14H11V9H13M13 18H11V16H13M1 21H23L12 2L1 21Z" /></svg>
+</i> Compiler Warnings<a class="headerlink" href="#alert-embed_icon-compiler-warnings" title="Permanent link">&para;</a></h3>
+<p>You must include the <code>-Wall</code> flag in your <code>CFLAGS</code> when you compile.  This
+also means that your code must <strong>compile without any warnings</strong>, otherwise
+points will be deducted.</p>
+</div>
+<h2 id="activity-1-moveit-040-points">Activity 1: <code>moveit</code> (<em>0.40 Points</em>)<a class="headerlink" href="#activity-1-moveit-040-points" title="Permanent link">&para;</a></h2>
+<p>For the first activity, write a program, <code>moveit</code>, that reads in filenames
+from the command line arguments, stores them to a temporary file, opens an
+<code>$EDITOR</code> on the temporary file, allows the user to modify the filenames, and
+then renames the files based on the information in the temporary file:</p>
+<div class="centered">
+  <img src="static/img/homework09-moveit.png" class="responsive">
+</div>
+
+<p>The functionality of <code>moveit</code> is demonstrated below:</p>
+<div class="framed centered">
+  <script src="https://asciinema.org/a/WRfMzLBfSWaiwkBN3d6DrMvVa.js" id="asciicast-WRfMzLBfSWaiwkBN3d6DrMvVa" async="true"></script>
+</div>
+
+<div class="alert warning-bg">
+<p><strong>Note</strong>: Your program must remove the temporary file with the <a href="http://man7.org/linux/man-pages/man2/unlink.2.html">unlink</a> system call.</p>
+</div>
+<h3 id="task-1-moveitc">Task 1: <code>moveit.c</code><a class="headerlink" href="#task-1-moveitc" title="Permanent link">&para;</a></h3>
+<p>To implement the <code>moveit</code> utility, you are to complete the provided
+<code>moveit.c</code> source file which contains the following <a href="https://en.wikipedia.org/wiki/C_preprocessor#Macro_definition_and_expansion">macros</a> and
+<strong>functions</strong>:</p>
+<h4 id="macros">Macros<a class="headerlink" href="#macros" title="Permanent link">&para;</a></h4>
+<div class="codehilite"><pre><span></span><code><span class="cp">#define streq(a, b) (strcmp(a, b) == 0)</span>
+</code></pre></div>
+
+<blockquote>
+<p>The <code>streq</code> <a href="https://en.wikipedia.org/wiki/C_preprocessor#Macro_definition_and_expansion">macro</a> compares if two <a href="https://en.wikipedia.org/wiki/String_(computer_science)">strings</a> are equal.</p>
+</blockquote>
+<div class="codehilite"><pre><span></span><code><span class="cp">##define strchomp(s) (s)[strlen(s) - 1] = 0</span>
+</code></pre></div>
+
+<hr>
+
+<blockquote>
+<p>The <code>strchomp</code> <a href="https://en.wikipedia.org/wiki/C_preprocessor#Macro_definition_and_expansion">macro</a> removes the last character in a <a href="https://en.wikipedia.org/wiki/String_(computer_science)">string</a>.</p>
+</blockquote>
+<h4 id="functions">Functions<a class="headerlink" href="#functions" title="Permanent link">&para;</a></h4>
+<div class="codehilite"><pre><span></span><code><span class="cm">/**</span>
+<span class="cm"> * Display usage message and exit.</span>
+<span class="cm"> * @param   status      Exit status.</span>
+<span class="cm"> **/</span>
+<span class="kt">void</span><span class="w">    </span><span class="nf">usage</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">status</span><span class="p">);</span>
+</code></pre></div>
+
+<blockquote>
+<p>This provided <code>usage</code> function displays the help message and terminates the
+<a href="https://en.wikipedia.org/wiki/Process_(computing)">process</a> with the specified <code>status</code> code.</p>
+</blockquote>
+<div class="codehilite"><pre><span></span><code><span class="cm">/**</span>
+<span class="cm"> * Save list of file paths to temporary file.</span>
+<span class="cm"> * @param   files       Array of path strings.</span>
+<span class="cm"> * @param   n           Number of path strings.</span>
+<span class="cm"> * @return  Newly allocated path to temporary file.</span>
+<span class="cm"> **/</span>
+<span class="kt">char</span><span class="w"> </span><span class="o">*</span><span class="w">  </span><span class="nf">save_files</span><span class="p">(</span><span class="kt">char</span><span class="w"> </span><span class="o">**</span><span class="n">files</span><span class="p">,</span><span class="w"> </span><span class="kt">size_t</span><span class="w"> </span><span class="n">n</span><span class="p">);</span>
+</code></pre></div>
+
+<blockquote>
+<p>This <code>save_files</code> function writes each of the files specified in the
+<code>files</code> array to a temporary file (one file per line) and returns the path of
+this temporary file.</p>
+</blockquote>
+<div class="alert success-bg">
+<p><strong>Hint</strong>: Use <a href="http://man7.org/linux/man-pages/man3/mkstemp.3.html">mkstemp</a> to create a temporary file and <a href="http://man7.org/linux/man-pages/man3/fdopen.3p.html">fdopen</a> to convert
+  the <a href="https://en.wikipedia.org/wiki/File_descriptor">file descriptor</a> into a stream.</p>
+</div>
+<hr>
+
+<div class="codehilite"><pre><span></span><code><span class="cm">/**</span>
+<span class="cm"> * Run $EDITOR on specified path.</span>
+<span class="cm"> * @param   path        Path to file to edit.</span>
+<span class="cm"> * @return  Whether or not the $EDITOR process terminated successfully.</span>
+<span class="cm"> **/</span>
+<span class="kt">bool</span><span class="w">    </span><span class="nf">edit_files</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="kt">char</span><span class="w"> </span><span class="o">*</span><span class="n">path</span><span class="p">);</span>
+</code></pre></div>
+
+<blockquote>
+<p>This <code>edit_files</code> function executes the users <code>$EDITOR</code> on the specified
+file and returns the exit status of the <code>$EDITOR</code> process.</p>
+</blockquote>
+<div class="alert success-bg">
+<p><strong>Hint</strong>: Use <a href="http://man7.org/linux/man-pages/man3/getenv.3.html">getenv</a> to read <code>$EDITOR</code> from your <a href="https://en.wikipedia.org/wiki/Process_(computing)">process</a> environment
+  (fall back to <code>vim</code>, <code>nano</code>, or <code>emacs</code> if the environment variable does
+  not exist).</p>
+</div>
+<div class="alert danger-bg">
+<h3 id="code-tags-embed_icon-fork-it"><i class="icon icon-medium"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><title>code-tags</title><path d="M14.6,16.6L19.2,12L14.6,7.4L16,6L22,12L16,18L14.6,16.6M9.4,16.6L4.8,12L9.4,7.4L8,6L2,12L8,18L9.4,16.6Z" /></svg>
+</i> Fork It!<a class="headerlink" href="#code-tags-embed_icon-fork-it" title="Permanent link">&para;</a></h3>
+<p>For this assignment, you must use low-level <a href="https://en.wikipedia.org/wiki/System_call">system calls</a> for <a href="https://en.wikipedia.org/wiki/Process_(computing)">processes</a>
+such as <a href="http://man7.org/linux/man-pages/man2/fork.2.html">fork</a>, <a href="http://man7.org/linux/man-pages/man3/exec.3.html">exec</a>, <a href="http://man7.org/linux/man-pages/man2/wait.2.html">wait</a>, and <a href="http://man7.org/linux/man-pages/man2/kill.2.html">kill</a>.</p>
+<p>You may not use <a href="http://man7.org/linux/man-pages/man3/system.3.html">system</a> or <a href="http://man7.org/linux/man-pages/man3/popen.3.html">popen</a>.</p>
+</div>
+<hr>
+
+<div class="codehilite"><pre><span></span><code><span class="cm">/**</span>
+<span class="cm"> * Rename files as specified in contents of path.</span>
+<span class="cm"> * @param   files       Array of old path names.</span>
+<span class="cm"> * @param   n           Number of old path names.</span>
+<span class="cm"> * @param   path        Path to file with new names.</span>
+<span class="cm"> * @return  Whether or not all rename operations were successful.</span>
+<span class="cm"> **/</span>
+<span class="kt">bool</span><span class="w">    </span><span class="nf">move_files</span><span class="p">(</span><span class="kt">char</span><span class="w"> </span><span class="o">**</span><span class="n">files</span><span class="p">,</span><span class="w"> </span><span class="kt">size_t</span><span class="w"> </span><span class="n">n</span><span class="p">,</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="kt">char</span><span class="w"> </span><span class="o">*</span><span class="n">path</span><span class="p">);</span>
+</code></pre></div>
+
+<blockquote>
+<p>This <code>move_files</code> function renames old files specified in the <code>files</code> array
+with the new names contained in the <code>path</code> file (ie. <code>files[0]</code> corresponds
+to the first line in <code>path</code>).</p>
+</blockquote>
+<div class="alert success-bg">
+<p><strong>Hint</strong>: Use <a href="http://man7.org/linux/man-pages/man2/rename.2.html">rename</a> to move files only if the names are different.</p>
+</div>
+<div class="alert warning-bg">
+<h3 id="alert-embed_icon-failure-is-an-option"><i class="icon icon-medium"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><title>alert</title><path d="M13 14H11V9H13M13 18H11V16H13M1 21H23L12 2L1 21Z" /></svg>
+</i> Failure is an Option<a class="headerlink" href="#alert-embed_icon-failure-is-an-option" title="Permanent link">&para;</a></h3>
+<p>You must check if the <a href="https://en.wikipedia.org/wiki/System_call">system calls</a> you use fail and handle those situations
+appropriately.</p>
+</div>
+<h3 id="task-2-testing">Task 2: Testing<a class="headerlink" href="#task-2-testing" title="Permanent link">&para;</a></h3>
+<p>Once you have implemented <code>moveit</code>, you can test it by running the
+<code>test-moveit</code> target:</p>
+<div class="codehilite"><pre><span></span><code>$ make test-moveit
+Testing moveit...
+  system calls                                                 ... Success
+  usage                                                        ... Success
+  usage (no arguments)                                         ... Success
+  deadpool spidey rogue -&gt; deadpool spidey rogue               ... Success
+  deadpool spidey rogue -&gt; deadpool spidey rogue (vim)         ... Success
+  deadpool spidey rogue -&gt; deadpool spidey rogue (nano)        ... Success
+  deadpool spidey rogue -&gt; deadpool spidey rogue (emacs)       ... Success
+  deadpool spidey rogue -&gt; deadpool spidey rogue (FAKE)        ... Success
+  deadpool spidey rogue -&gt; batman superman wonderwoman         ... Success
+  deadpool spidey rogue -&gt; batman superman wonderwoman (FAKE)  ... Success
+  batman superman wonderwoman -&gt; deadpool batman rogue         ... Success
+  batman superman wonderwoman -&gt; deadpool batman rogue (FAKE)  ... Success
+  batman superman -&gt; deadpool spidey rogue                     ... Success
+  batman superman -&gt; deadpool spidey rogue (FAKE)              ... Success
+  deadpool spidey rogue -&gt; batman superman                     ... Success
+  deadpool spidey rogue -&gt; batman superman (FAKE)              ... Success
+  doom -&gt; thing                                                ... Success
+  doom -&gt; thing (rm)                                           ... Success
+  doom -&gt; thing (false)                                        ... Success
+  --------------------
+   Score 19.00 / 19.00
+   Grade  1.00 /  1.00
+  Status Success
+</code></pre></div>
+
+<h2 id="activity-2-timeit-04-points">Activity 2: <code>timeit</code> (<em>0.4 Points</em>)<a class="headerlink" href="#activity-2-timeit-04-points" title="Permanent link">&para;</a></h2>
+<p>For the second activity, write a program, <code>timeit</code>, that executes the given
+command until a timeout is reached or the program terminates as show below:</p>
+<div class="framed centered">
+  <script src="https://asciinema.org/a/VEyE5vVCwFtCSAFm9rK5Bd5NG.js" id="asciicast-VEyE5vVCwFtCSAFm9rK5Bd5NG" async="true"></script>
+</div>
+
+<p>If the <code>verbose</code> mode is enabled, your <code>timeit</code> should display the following
+sort of <strong>debugging</strong> messages:</p>
+<div class="codehilite"><pre><span></span><code>$ ./timeit -v
+timeit.c:68:parse_options: Timeout = 10
+timeit.c:69:parse_options: Verbose = 1
+Usage: timeit [options] command...
+Options:
+    -t SECONDS  Timeout duration before killing command (default is 10)
+    -v          Display verbose debugging output
+
+$ ./timeit -t 5 -v sleep 1
+timeit.c:68:parse_options: Timeout = 5
+timeit.c:69:parse_options: Verbose = 1
+timeit.c:85:parse_options: Command = sleep 1
+timeit.c:116:main: Registering handlers...
+timeit.c:119:main: Grabbing start time...
+timeit.c:137:main: Sleeping for 5 seconds...
+timeit.c:139:main: Waiting for child 160815...
+timeit.c:131:main: Executing child...
+timeit.c:145:main: Child exit status: 0
+timeit.c:148:main: Grabbing end time...
+Time Elapsed: 1.0
+
+$ ./timeit -t 1 -v sleep 2
+timeit.c:68:parse_options: Timeout = 1
+timeit.c:69:parse_options: Verbose = 1
+timeit.c:85:parse_options: Command = sleep 2
+timeit.c:116:main: Registering handlers...
+timeit.c:119:main: Grabbing start time...
+timeit.c:137:main: Sleeping for 1 seconds...
+timeit.c:139:main: Waiting for child 160841...
+timeit.c:131:main: Executing child...
+timeit.c:101:handle_signal: Killing child 160841...
+timeit.c:145:main: Child exit status: 9
+timeit.c:148:main: Grabbing end time...
+Time Elapsed: 1.0
+</code></pre></div>
+
+<div class="alert warning-bg">
+<p><strong>Note</strong>: If the time limit is exceeded, the parent should <a href="http://man7.org/linux/man-pages/man2/kill.2.html">kill</a> the child
+and <a href="http://man7.org/linux/man-pages/man2/wait.2.html">wait</a> for it.  Moreover, the parent should always return the child's
+exit status as its own exit status.</p>
+</div>
+<h3 id="task-1-timeitc">Task 1: <code>timeit.c</code><a class="headerlink" href="#task-1-timeitc" title="Permanent link">&para;</a></h3>
+<p>To implement the <code>timeit</code> utility, you are to complete the provided
+<code>timeit.c</code> source file which contains the following <a href="https://en.wikipedia.org/wiki/C_preprocessor#Macro_definition_and_expansion">macros</a> and
+<strong>functions</strong>:</p>
+<h4 id="macros_1">Macros<a class="headerlink" href="#macros_1" title="Permanent link">&para;</a></h4>
+<div class="codehilite"><pre><span></span><code><span class="cp">#define debug(M, ...) \</span>
+<span class="cp">    if (Verbose) { \</span>
+<span class="cp">        fprintf(stderr, &quot;%s:%d:%s: &quot; M, __FILE__, __LINE__, __func__, ##__VA_ARGS__); \</span>
+<span class="cp">}</span>
+</code></pre></div>
+
+<blockquote>
+<p>This <code>debug</code> <a href="https://en.wikipedia.org/wiki/C_preprocessor#Macro_definition_and_expansion">macro</a> displays the specified formatted message only if the
+<code>Verbose</code> global variable is <code>true</code>.  The message includes the name of the
+file, the line number, and the function at which the <a href="https://en.wikipedia.org/wiki/C_preprocessor#Macro_definition_and_expansion">macro</a> is called.</p>
+</blockquote>
+<h4 id="functions_1">Functions<a class="headerlink" href="#functions_1" title="Permanent link">&para;</a></h4>
+<div class="codehilite"><pre><span></span><code><span class="cm">/**</span>
+<span class="cm"> * Display usage message and exit.</span>
+<span class="cm"> * @param   status      Exit status.</span>
+<span class="cm"> **/</span>
+<span class="kt">void</span><span class="w">    </span><span class="nf">usage</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">status</span><span class="p">);</span>
+</code></pre></div>
+
+<blockquote>
+<p>This provided <code>usage</code> function displays the help message and terminates the
+<a href="https://en.wikipedia.org/wiki/Process_(computing)">process</a> with the specified <code>status</code> code.</p>
+</blockquote>
+<hr>
+
+<div class="codehilite"><pre><span></span><code><span class="cm">/**</span>
+<span class="cm"> * Parse command line options.</span>
+<span class="cm"> * @param   argc        Number of command line arguments.</span>
+<span class="cm"> * @param   argv        Array of command line argument strings.</span>
+<span class="cm"> * @return  Array of strings representing command to execute.</span>
+<span class="cm"> **/</span>
+<span class="kt">char</span><span class="w"> </span><span class="o">**</span><span class="w"> </span><span class="nf">parse_options</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">argc</span><span class="p">,</span><span class="w"> </span><span class="kt">char</span><span class="w"> </span><span class="o">**</span><span class="n">argv</span><span class="p">);</span>
+</code></pre></div>
+
+<blockquote>
+<p>This <code>parse_options</code> function processes the command line arguments by
+setting the <code>Timeout</code> and <code>Verbose</code> global variables and by constructing an
+<a href="https://en.wikipedia.org/wiki/C_(programming_language)#Arrays">array</a> of <a href="https://en.wikipedia.org/wiki/String_(computer_science)">strings</a> to represent the specified <code>command</code>.</p>
+</blockquote>
+<div class="alert success-bg">
+<p><strong>Hint</strong>: Use <a href="http://man7.org/linux/man-pages/man3/realloc.3.html">calloc</a> to create an <a href="https://en.wikipedia.org/wiki/C_(programming_language)#Arrays">array</a> of <a href="https://en.wikipedia.org/wiki/String_(computer_science)">strings</a> that is <code>NULL</code>
+  terminated.</p>
+</div>
+<hr>
+
+<div class="codehilite"><pre><span></span><code><span class="cm">/**</span>
+<span class="cm"> * Handle signal.</span>
+<span class="cm"> * @param   signum      Signal number.</span>
+<span class="cm"> **/</span>
+<span class="kt">void</span><span class="w">    </span><span class="nf">handle_signal</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">signum</span><span class="p">);</span>
+</code></pre></div>
+
+<blockquote>
+<p>This provided <code>handle_signal</code> function kills the child <a href="https://en.wikipedia.org/wiki/Process_(computing)">process</a> whenever a
+<code>SIGALRM</code> is invoked.</p>
+</blockquote>
+<h4 id="main-execution">Main Execution<a class="headerlink" href="#main-execution" title="Permanent link">&para;</a></h4>
+<p>The main logic for <code>timeit</code> will be in the <code>main</code> function.  While there are
+multiple approaches on how to accomplish the task of running a program with a
+time limit, the recommended method is shown below:</p>
+<div class="centered">
+  <img src="static/img/homework09-timeit.png" class="responsive">
+</div>
+
+<p>In this approach, the <code>main</code> function first registers the <code>signal_handle</code>
+function for <code>SIGALRM</code> using <a href="http://man7.org/linux/man-pages/man2/signal.2.html">signal</a>.  Then the parent <a href="https://en.wikipedia.org/wiki/Process_(computing)">process</a> performs a
+<a href="http://man7.org/linux/man-pages/man2/fork.2.html">fork</a> and the child <a href="https://en.wikipedia.org/wiki/Process_(computing)">process</a> executes the specified <code>command</code> using one of
+the <a href="http://man7.org/linux/man-pages/man3/exec.3.html">exec</a> variants.</p>
+<p>After the <a href="http://man7.org/linux/man-pages/man2/fork.2.html">fork</a>, the parent <a href="https://en.wikipedia.org/wiki/Process_(computing)">process</a> sets an <a href="http://man7.org/linux/man-pages/man2/alarm.2.html">alarm</a> based on the specified
+<code>Timeout</code>.  It then simply calls <a href="http://man7.org/linux/man-pages/man2/wait.2.html">wait</a>.  If the <a href="http://man7.org/linux/man-pages/man2/alarm.2.html">alarm</a> triggers, then the
+handler should <a href="http://man7.org/linux/man-pages/man2/kill.2.html">kill</a> the child process.  Otherwise, if the child terminates
+before the <code>Timeout</code> then the parent cancels the <a href="http://man7.org/linux/man-pages/man2/alarm.2.html">alarm</a> and completes its
+<a href="http://man7.org/linux/man-pages/man2/wait.2.html">wait</a> to retrieve the child's exit status.</p>
+<p>To measure the elapsed time, you must use the <a href="http://man7.org/linux/man-pages/man2/clock_getres.2.html">clock_gettime</a> function with
+the <code>CLOCK_MONOTONIC</code> clock identifier.</p>
+<h3 id="task-2-testing_1">Task 2: Testing<a class="headerlink" href="#task-2-testing_1" title="Permanent link">&para;</a></h3>
+<p>Once you have implemented <code>timeit</code>, you can test it by running the
+<code>test-timeit</code> target:</p>
+<div class="codehilite"><pre><span></span><code>$ make test-timeit
+  system calls                                                 ... Success
+  usage (-h)                                                   ... Success
+  usage (no arguments)                                         ... Success
+  usage (-v, no command)                                       ... Success
+  usage (-t 5 -v, no command)                                  ... Success
+  sleep                                                        ... Success
+  sleep 1                                                      ... Success
+  -v sleep 1                                                   ... Success
+  -t 5 -v sleep 1                                              ... Success
+  sleep 5                                                      ... Success
+  -v sleep 5                                                   ... Success
+  -t 1 sleep 5                                                 ... Success
+  -t 1 -v sleep 5                                              ... Success
+  -v find /etc -type f                                         ... Success
+  -t 5 -v /tmp/timeit.1000/TROLL                               ... Success
+  --------------------
+   Score 15.00 / 15.00
+   Grade  1.00 /  1.00
+  Status Success
+</code></pre></div>
+
+<h2 id="activity-4-quiz-02-points">Activity 4: Quiz (<em>0.2 Points</em>)<a class="headerlink" href="#activity-4-quiz-02-points" title="Permanent link">&para;</a></h2>
+<p>Once you have completed all the activities above, you are to complete the
+following <strong>reflection quiz</strong>:</p>
+<div id="quiz-questions"></div>
+
+<div id="quiz-responses"></div>
+
+<script src="static/js/dredd-quiz.js"></script>
+<script>
+loadQuiz('static/json/homework09.json');
+</script>
+
+<pre style="display: none;" id="dr-container" class="codehilite"><code id="dredd-response"></code></pre>
+
+<p>As with <a href="reading01.html">Reading 01</a>, you will need to store your answers in a
+<code>homework09/answers.json</code> file.  You can use the form above to generate the
+contents of this file, or you can write the <a href="https://json.org">JSON</a> by hand.</p>
+<p>To test your quiz, you can use the <code>check.py</code> script:</p>
+<div class="codehilite"><pre><span></span><code>$<span class="w"> </span>../.scripts/check.py
+Checking<span class="w"> </span>homework09<span class="w"> </span>quiz<span class="w"> </span>...
+<span class="w">     </span>Q01<span class="w">  </span><span class="m">4</span>.00<span class="w"> </span>/<span class="w">  </span><span class="m">4</span>.00
+<span class="w">     </span>Q02<span class="w">  </span><span class="m">2</span>.00<span class="w"> </span>/<span class="w">  </span><span class="m">2</span>.00
+<span class="w">     </span>Q03<span class="w">  </span><span class="m">1</span>.00<span class="w"> </span>/<span class="w">  </span><span class="m">1</span>.00
+<span class="w">     </span>Q04<span class="w">  </span><span class="m">1</span>.00<span class="w"> </span>/<span class="w">  </span><span class="m">1</span>.00
+<span class="w">     </span>Q05<span class="w">  </span><span class="m">1</span>.00<span class="w"> </span>/<span class="w">  </span><span class="m">1</span>.00
+<span class="w">     </span>Q06<span class="w">  </span><span class="m">1</span>.00<span class="w"> </span>/<span class="w">  </span><span class="m">1</span>.00
+<span class="w">  </span>--------------------
+<span class="w">   </span>Score<span class="w"> </span><span class="m">10</span>.00<span class="w"> </span>/<span class="w"> </span><span class="m">10</span>.00
+<span class="w">   </span>Grade<span class="w">  </span><span class="m">1</span>.00<span class="w"> </span>/<span class="w">  </span><span class="m">1</span>.00
+<span class="w">  </span>Status<span class="w"> </span>Success
+</code></pre></div>
+
+<h2 id="submission">Submission<a class="headerlink" href="#submission" title="Permanent link">&para;</a></h2>
+<p>To submit your assignment, please commit your work to the <code>homework09</code> folder
+of your <code>homework09</code> branch in your <strong>assignments</strong> <a href="https://github.com">GitHub</a> repository.
+Your <code>homework09</code> folder should <strong>only</strong> contain the following files:</p>
+<ul>
+<li><code>Makefile</code></li>
+<li><code>answers.json</code></li>
+<li><code>moveit.c</code></li>
+<li><code>timeit.c</code></li>
+</ul>
+<div class="alert warning-bg">
+<p><strong>Note</strong>: You do not need to commit the test scripts because the <code>Makefile</code>
+automatically downloads them.</p>
+</div>
+<div class="codehilite"><pre><span></span><code><span class="c1">#-----------------------------------------------------------------------</span>
+<span class="c1"># Make sure you have already completed Activity 0: Preparation</span>
+<span class="c1">#-----------------------------------------------------------------------</span>
+...
+$<span class="w"> </span>git<span class="w"> </span>add<span class="w"> </span>Makefile<span class="w">                        </span><span class="c1"># Mark changes for commit</span>
+$<span class="w"> </span>git<span class="w"> </span>add<span class="w"> </span>moveit.c<span class="w">                        </span><span class="c1"># Mark changes for commit</span>
+$<span class="w"> </span>git<span class="w"> </span>commit<span class="w"> </span>-m<span class="w"> </span><span class="s2">&quot;Homework 09: moveit&quot;</span><span class="w">     </span><span class="c1"># Record changes</span>
+...
+$<span class="w"> </span>git<span class="w"> </span>add<span class="w"> </span>Makefile<span class="w">                        </span><span class="c1"># Mark changes for commit</span>
+$<span class="w"> </span>git<span class="w"> </span>add<span class="w"> </span>timeit.c<span class="w">                        </span><span class="c1"># Mark changes for commit</span>
+$<span class="w"> </span>git<span class="w"> </span>commit<span class="w"> </span>-m<span class="w"> </span><span class="s2">&quot;Homework 09: timeit&quot;</span><span class="w">     </span><span class="c1"># Record changes</span>
+...
+$<span class="w"> </span>git<span class="w"> </span>add<span class="w"> </span>answers.json<span class="w">                    </span><span class="c1"># Mark changes for commit</span>
+$<span class="w"> </span>git<span class="w"> </span>commit<span class="w"> </span>-m<span class="w"> </span><span class="s2">&quot;Homework 09: quiz&quot;</span><span class="w">       </span><span class="c1"># Record changes</span>
+...
+$<span class="w"> </span>git<span class="w"> </span>push<span class="w"> </span>-u<span class="w"> </span>origin<span class="w"> </span>homework09<span class="w">           </span><span class="c1"># Push branch to GitHub</span>
+</code></pre></div>
+
+<div class="alert warning-bg">
+<h3 id="lifebuoy-embed_icon-acknowledgments"><i class="icon icon-medium"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><title>lifebuoy</title><path d="M19.79,15.41C20.74,13.24 20.74,10.75 19.79,8.59L17.05,9.83C17.65,11.21 17.65,12.78 17.06,14.17L19.79,15.41M15.42,4.21C13.25,3.26 10.76,3.26 8.59,4.21L9.83,6.94C11.22,6.35 12.79,6.35 14.18,6.95L15.42,4.21M4.21,8.58C3.26,10.76 3.26,13.24 4.21,15.42L6.95,14.17C6.35,12.79 6.35,11.21 6.95,9.82L4.21,8.58M8.59,19.79C10.76,20.74 13.25,20.74 15.42,19.78L14.18,17.05C12.8,17.65 11.22,17.65 9.84,17.06L8.59,19.79M12,2A10,10 0 0,1 22,12A10,10 0 0,1 12,22A10,10 0 0,1 2,12A10,10 0 0,1 12,2M12,8A4,4 0 0,0 8,12A4,4 0 0,0 12,16A4,4 0 0,0 16,12A4,4 0 0,0 12,8Z" /></svg>
+</i> Acknowledgments<a class="headerlink" href="#lifebuoy-embed_icon-acknowledgments" title="Permanent link">&para;</a></h3>
+<p>If you collaborated with any other students, or received help from TAs or AI
+tools on this assignment, please record this support in the <code>README.md</code> in
+the <code>homework09</code> folder and include it with your <strong>Pull Request</strong>.</p>
+</div>
+<div class="alert success-bg">
+<h3 id="account-question-embed_icon-graders"><i class="icon icon-medium"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><title>account-question</title><path d="M13,8A4,4 0 0,1 9,12A4,4 0 0,1 5,8A4,4 0 0,1 9,4A4,4 0 0,1 13,8M17,18V20H1V18C1,15.79 4.58,14 9,14C13.42,14 17,15.79 17,18M20.5,14.5V16H19V14.5H20.5M18.5,9.5H17V9A3,3 0 0,1 20,6A3,3 0 0,1 23,9C23,9.97 22.5,10.88 21.71,11.41L21.41,11.6C20.84,12 20.5,12.61 20.5,13.3V13.5H19V13.3C19,12.11 19.6,11 20.59,10.35L20.88,10.16C21.27,9.9 21.5,9.47 21.5,9A1.5,1.5 0 0,0 20,7.5A1.5,1.5 0 0,0 18.5,9V9.5Z" /></svg>
+</i> Graders<a class="headerlink" href="#account-question-embed_icon-graders" title="Permanent link">&para;</a></h3>
+<p>Once you have committed your work and pushed it to <a href="https://github.com">GitHub</a>, remember to
+create a <strong>pull request</strong> and assign it to the appropriate <strong>teaching
+assistant</strong> from the <a href="reading09_tas.html">Reading 09 TA List</a>.</p>
+<p><strong>Note</strong>: this list changes each week, so be sure to consult the appropriate
+list for each assignment.</p>
+</div>
+</main>
+<footer>
+Built using <a href="https://python.org">Python</a>
+and <a href="https://jinja.palletsprojects.com">Jinja</a>
+with colors from <a href="https://nordtheme.com">Nord Theme</a>
+and icons from <a href="https://pictogrammers.com/library/mdi/">Material Design Icons</a>.</footer>
+</body>
+</html>

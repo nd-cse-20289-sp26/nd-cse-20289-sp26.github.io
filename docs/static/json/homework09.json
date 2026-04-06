@@ -1,0 +1,56 @@
+{
+    "q01": {
+        "type": "blank",
+        "question": "\n<p>As discussed in class, working with <b>low-level functions</b> and\n<b>system calls</b> can be tricky because unlike most normal functions,\nthey can <b>fail</b>. For each of the following scenarios involving\n<code>moveit</code>, identify which <b>low-level function</b> or <b>system\ncall</b> (used in <code>moveit</code>) would fail:</p>\n\n<ol>\n  <li>User has reached their <b>limit of file descriptors</b>. ____</li>\n  <li>User has reach their <b>limit of processes</b>. ____</li>\n  <li>User has their <code>EDITOR</code> set to <code>vscode</code> but it does not exist on the system. ____</li>\n  <li>User does not have <b>permission</b> to write to a <b>destination path</b>. ____</li>\n</ol>\n"
+    },
+    "q02": {
+        "type": "multiple",
+        "question": "\n<p>In <code>moveit</code>, you should have used <code>execlp</code> in the\n<code>edit_files</code> function.  Given the following code:</p>\n\n<pre>\nexeclp(\"vscode\", \"editor\", \"tmp.file\", NULL);\n</pre>\n\n<p>Which of the following statements regarding are true (select all that\napply)?</p>\n",
+        "responses": {
+            "path_vscode": "The <b>path</b> to the program to load into memory is <b>vscode</b>.",
+            "arg0_vscode": "The <code>argv[0]</code> of the process will be <b>vscode</b>.",
+            "path_editor": "The <b>path</b> to the program to load into memory is <b>editor</b>.",
+            "arg0_editor": "The <code>argv[0]</code> of the process will be <b>editor</b>."
+        }
+    },
+    "q03": {
+        "type": "single",
+        "question": "\n<p>An eager student proposes changing <code>timeit</code> such that the\n<b>child process</b> sets an <code>alarm</code> before calling <code>execvp</code>\nso that it can <code>kill</code> itself if the <b>signal handler</b> is\ninvoked.  Would this work?</p>\n",
+        "responses": {
+            "yeah": "Yeah, totally.",
+            "nope_1": "Nope, only a parent process can set an <code>alarm</code>.",
+            "nope_2": "Nope, a process cannot <code>kill</code> itself.",
+            "nope_3": "Nope, <code>execvp</code> loads new code so the <code>alarm</code> handler is removed."
+        }
+    },
+    "q04": {
+        "type": "single",
+        "question": "\n<p>A malicious student proposes changing <code>timeit</code> such that the\n<b>child process</b> changes the <code>ChildPid</code> global variable before\ncalling <code>execvp</code> in order to prevent the parent from killing the\nchild process.  Would this work?</p>\n",
+        "responses": {
+            "yeah": "Yeah, totally.",
+            "nope_1": "Nope, only a parent process can change <b>global variables</b>.",
+            "nope_2": "Nope, a process cannot modify <b>global variables</b>.",
+            "nope_3": "Nope, the parent and child have separate <b>address spaces</b>."
+        }
+    },
+    "q05": {
+        "type": "single",
+        "question": "\n<p>A concerned student proposes changing <code>timeit</code> such that the\n<b>parent process</b> sends <code>SIGSTOP</code> to the <b>child process</b>\nwhen <code>alarm</code> handler is invoked.  Would this work?</p>\n",
+        "responses": {
+            "yeah": "Yeah, totally.",
+            "nope_1": "Nope, because the <b>child process</b> can ignore <code>SIGSTOP</code>.",
+            "nope_2": "Nope, because only the kernel can use this signal.",
+            "nope_3": "Nope, because this only suspends the process and does not terminate it."
+        }
+    },
+    "q06": {
+        "type": "single",
+        "question": "\n<p>A clever student proposes changing <code>timeit</code> such that\n<code>parse_options</code> simply returns a pointer to the first command line\noption in <code>argv</code> that is not a flag:</p>\n\n<pre>\nint argind = 1;\n\nwhile (argind < argc && strlen(argv[argind]) > 1 && argv[argind][0] == '-') {\n    char *arg = argv[argind++];\n    ...\n}\n\n...\n\nreturn &argv[argind];\n</pre>\n\n<p>Would this work?</p>\n",
+        "responses": {
+            "yeah": "Yeah, totally.",
+            "nope_0": "Nope, you cannot use <code>&amp;</code> on an element in an array.",
+            "nope_1": "Nope, <code>execvp</code> requires the vector to be on the <b>heap</b>.",
+            "nope_2": "Nope, <code>argv</code> is not <code>NULL</code> terminated."
+        }
+    }
+}
