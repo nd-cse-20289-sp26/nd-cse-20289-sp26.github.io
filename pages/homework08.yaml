@@ -868,18 +868,18 @@ body:       |
       ...
       $ git add Makefile                        # Mark changes for commit
       $ git add list.c                          # Mark changes for commit
-      $ git commit -m "homework08: list.c"      # Record changes
+      $ git commit -m "Homework 08: list.c"     # Record changes
       ...
       $ git add Makefile                        # Mark changes for commit
       $ git add filter.c                        # Mark changes for commit
-      $ git commit -m "homework08: filter.c"    # Record changes
+      $ git commit -m "Homework 08: filter.c"   # Record changes
       ...
       $ git add Makefile                        # Mark changes for commit
       $ git add findit.c                        # Mark changes for commit
-      $ git commit -m "homework08: findit.c"    # Record changes
+      $ git commit -m "Homework 08: findit.c"   # Record changes
       ...
       $ git add answers.json                    # Mark changes for commit
-      $ git commit -m "homework08: quiz"        # Record changes
+      $ git commit -m "Homework 08: quiz"       # Record changes
       ...
       $ git push -u origin homework08           # Push branch to GitHub
 
