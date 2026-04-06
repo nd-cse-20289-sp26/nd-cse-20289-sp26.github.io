@@ -1,0 +1,277 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<!-- Favicon -->
+<link rel="icon" type="image/png" sizes="32x32" href="static/ico/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="static/ico/favicon-16x16.png">
+<link rel="manifest" href="static/ico/site.webmanifest">
+<!-- Stylesheets -->
+<link rel="stylesheet" href="static/css/pnutzh4x0r.css">
+<title>Reading 08: File System, I/O</title>
+</head>
+<body>
+<header>
+<a class="logo" href="reading08.html">
+    <h1>Reading 08: File System, I/O</h1>
+</a>
+<nav>
+    <ul>
+        <li><a href="index.html"><h4>Home</h4></a></li>
+        </ul>
+</nav></header>
+<main>
+<p><strong>Everyone</strong>:</p>
+<p>Next week, we will descending further down the system stack and introduce
+<a href="https://en.wikipedia.org/wiki/System_call">system calls</a>, which are services or operations performed by the operating
+system <a href="https://en.wikipedia.org/wiki/Kernel_(operating_system)">kernel</a> on our behalf.  In particular, we will explore <a href="https://en.wikipedia.org/wiki/System_call">system calls</a>
+related to <a href="https://en.wikipedia.org/wiki/Input/output">I/O</a>, <a href="https://en.wikipedia.org/wiki/Computer_file">files</a>, and <a href="https://en.wikipedia.org/wiki/Directory_(computing)">directories</a> and discuss how many of the
+utilities we use every day are implemented.</p>
+<div class="alert info-bg">
+<h3 id="book-embed_icon-tldr"><i class="icon icon-medium"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><title>book</title><path d="M18,22A2,2 0 0,0 20,20V4C20,2.89 19.1,2 18,2H12V9L9.5,7.5L7,9V2H6A2,2 0 0,0 4,4V20A2,2 0 0,0 6,22H18Z" /></svg>
+</i> TL;DR<a class="headerlink" href="#book-embed_icon-tldr" title="Permanent link">&para;</a></h3>
+<p>The focus of this reading is to explore <a href="https://en.wikipedia.org/wiki/System_call">system calls</a> related to <a href="https://en.wikipedia.org/wiki/Input/output">I/O</a>,
+<a href="https://en.wikipedia.org/wiki/Computer_file">files</a>, and <a href="https://en.wikipedia.org/wiki/Directory_(computing)">directories</a> in <a href="https://en.wikipedia.org/wiki/C_(programming_language)">C</a>.</p>
+</div>
+<h2 id="readings">Readings<a class="headerlink" href="#readings" title="Permanent link">&para;</a></h2>
+<div class="flex-row">
+<div class="flex-col">
+<p>The readings for this week are:</p>
+<ol>
+<li>
+<div class="flex-col" markdown="1">
+<p><a href="http://pages.cs.wisc.edu/~remzi/OSTEP/">Operating Systems: Three Easy Pieces</a></p>
+<ul>
+<li><a href="http://pages.cs.wisc.edu/~remzi/OSTEP/file-intro.pdf">Files and Directories</a></li>
+</ul>
+</li>
+</ol>
+<h3 id="optional-references">Optional References<a class="headerlink" href="#optional-references" title="Permanent link">&para;</a></h3>
+<ul>
+<li>
+<div class="flex-col" markdown="1">
+<p><a href="https://github.com/angrave/SystemProgramming/wiki">System Programming Wiki</a></p>
+<ul>
+<li><a href="https://github.com/angrave/SystemProgramming/wiki#9-file-systems">Filesystems</a></li>
+</ul>
+</li>
+<li>
+<div class="flex-col" markdown="1">
+<p><a href="http://man7.org/tlpi/">Linux Programming Interface</a></p>
+<ul>
+<li><a href="http://man7.org/tlpi/download/TLPI-04-File_IO_The_Universal_IO_Model.pdf">File I/O: The Universal I/O Model</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="flex-col-33">
+<div class="centered">
+    <img src="static/img/ostep.jpg">
+  </div>
+</div>
+</div>
+<ul>
+<li>
+<div class="flex-col" markdown="1">
+<p><a href="https://jvns.ca/">Julia Evans</a></p>
+<div class="flex-row" markdown="1">
+<p><div class="flex-col" markdown="1">
+<a href="https://wizardzines.com/comics/file-descriptors/">
+<img src="https://wizardzines.com/images/uploads/file-descriptors.png" class="responsive">
+</a>
+</div></p>
+<p><div class="flex-col" markdown="1">
+<a href="https://wizardzines.com/comics/inodes/">
+<img src="https://wizardzines.com/images/uploads/inodes.png" class="responsive">
+</a>
+</div></p>
+<p><div class="flex-col" markdown="1">
+<a href="https://wizardzines.com/comics/directories-and-symlinks-1/">
+<img src="https://wizardzines.com/images/uploads/directories.png" class="responsive">
+</a>
+</div></p>
+</div>
+</div>
+</li>
+</ul>
+<h2 id="quiz">Quiz<a class="headerlink" href="#quiz" title="Permanent link">&para;</a></h2>
+<p>This week, the reading is split into two sections: the first part is a
+<a href="https://dredd.h4x0r.space">dredd</a> quiz, while the second part involves one <a href="https://en.wikipedia.org/wiki/C_(programming_language)">C</a> program: <a href="https://pnutz.h4x0r.space/courses/cse.20289.sp26/static/txt/reading08/walk.c">walk.c</a>.</p>
+<p>To test the <a href="https://en.wikipedia.org/wiki/C_(programming_language)">C</a> program, you will need to download the <a href="https://pnutz.h4x0r.space/courses/cse.20289.sp26/static/txt/reading08/Makefile">Makefile</a> and test
+scripts:</p>
+<div class="codehilite"><pre><span></span><code>$<span class="w"> </span>git<span class="w"> </span>switch<span class="w"> </span>master<span class="w">                   </span><span class="c1"># Make sure we are in master branch</span>
+$<span class="w"> </span>git<span class="w"> </span>pull<span class="w"> </span>--rebase<span class="w">                   </span><span class="c1"># Make sure we are up-to-date with GitHub</span>
+
+$<span class="w"> </span>git<span class="w"> </span>switch<span class="w"> </span>-c<span class="w"> </span>reading08<span class="w">             </span><span class="c1"># Create reading08 branch and check it out</span>
+
+$<span class="w"> </span><span class="nb">cd</span><span class="w"> </span>reading08<span class="w">                        </span><span class="c1"># Go into reading08 folder</span>
+
+<span class="c1"># Download Reading 08 Makefile</span>
+$<span class="w"> </span>curl<span class="w"> </span>-LO<span class="w"> </span>https://pnutz.h4x0r.space/courses/cse.20289.sp26/static/txt/reading08/Makefile
+
+<span class="c1"># Download Reading 08 walk.c</span>
+$<span class="w"> </span>curl<span class="w"> </span>-LO<span class="w"> </span>https://pnutz.h4x0r.space/courses/cse.20289.sp26/static/txt/reading08/walk.c
+
+<span class="c1"># Download, build, and execute tests</span>
+$<span class="w"> </span>make<span class="w"> </span><span class="nb">test</span>
+</code></pre></div>
+
+<h3 id="questions">Questions<a class="headerlink" href="#questions" title="Permanent link">&para;</a></h3>
+<p>Record the answers to the following <a href="static/json/reading08.json">Reading 08 Quiz</a> questions in your
+<code>reading08</code> branch:</p>
+<div id="quiz-questions"></div>
+
+<div id="quiz-responses"></div>
+
+<script src="static/js/dredd-quiz.js"></script>
+
+<script>
+loadQuiz('static/json/reading08.json');
+</script>
+
+<pre style="display: none;" id="dr-container" class="codehilite"><code id="dredd-response"></code></pre>
+
+<h3 id="programs">Programs<a class="headerlink" href="#programs" title="Permanent link">&para;</a></h3>
+<p>Given the provided <a href="https://pnutz.h4x0r.space/courses/cse.20289.sp26/static/txt/reading08/Makefile">Makefile</a> and <a href="https://pnutz.h4x0r.space/courses/cse.20289.sp26/static/txt/reading08/walk.c">walk.c</a>, you are to do the following:</p>
+<ol>
+<li>
+<div class="flex-col" markdown="1">
+<p>Modify <a href="https://pnutz.h4x0r.space/courses/cse.20289.sp26/static/txt/reading08/Makefile">Makefile</a> to include a <a href="https://www.gnu.org/software/make/manual/html_node/Rule-Example.html#Rule-Example">rule</a> for the <code>walk</code> program.  Be sure to
+use the <code>CC</code> and <code>CFLAGS</code> variables in your <a href="https://www.gnu.org/software/make/manual/html_node/Rule-Example.html#Rule-Example">rule</a>.</p>
+<div class="alert success-bg" markdown="1">
+<p><strong>Note</strong>: Consider the use of <a href="https://www.gnu.org/software/make/manual/html_node/Automatic-Variables.html">automatic variables</a>.</p>
+</div>
+<p>Once you have a working <a href="https://pnutz.h4x0r.space/courses/cse.20289.sp26/static/txt/reading08/Makefile">Makefile</a>, you should be able to use the <a href="http://man7.org/linux/man-pages/man1/make.1.html">make</a>
+command to run your <strong>recipes</strong>:</p>
+<div class="codehilite"><pre><span></span><code>$<span class="w"> </span>make<span class="w"> </span>clean<span class="w">                                  </span><span class="c1"># Remove targets</span>
+rm<span class="w"> </span>-f<span class="w"> </span>walk
+
+$<span class="w"> </span>make<span class="w">                                        </span><span class="c1"># Build targets</span>
+gcc<span class="w"> </span>-Wall<span class="w"> </span>-std<span class="o">=</span>gnu99<span class="w"> </span>-g<span class="w"> </span>-o<span class="w"> </span>walk<span class="w"> </span>walk.c
+</code></pre></div>
+
+</li>
+<li>
+<div class="flex-col" markdown="1">
+<p>Modify <a href="https://pnutz.h4x0r.space/courses/cse.20289.sp26/static/txt/reading08/walk.c">walk.c</a> so that it uses <a href="https://en.wikipedia.org/wiki/System_call">system calls</a> in <a href="https://en.wikipedia.org/wiki/C_(programming_language)">C</a> to implement the
+equivalent <a href="https://www.python.org">Python</a> script:</p>
+<div class="codehilite"><pre><span></span><code><span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">sys</span>
+
+<span class="n">root</span> <span class="o">=</span> <span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span> <span class="k">else</span> <span class="s1">&#39;.&#39;</span>
+
+<span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">os</span><span class="o">.</span><span class="n">listdir</span><span class="p">(</span><span class="n">root</span><span class="p">):</span>
+    <span class="n">path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">root</span><span class="p">,</span> <span class="n">name</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="n">path</span><span class="p">)</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">islink</span><span class="p">(</span><span class="n">path</span><span class="p">):</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">getsize</span><span class="p">(</span><span class="n">path</span><span class="p">))</span>
+</code></pre></div>
+
+<p>That is, given a <code>root</code> command-line argument (default is "." if nothing
+is specified), the program should iterate through the contents of that
+<code>root</code> directory and print out the name and size of each <em>regular file</em>.</p>
+<div class="alert success-bg" markdown="1">
+<h3 id="code-tags-embed_icon-fill-in-the-blanks"><i class="icon icon-medium"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><title>code-tags</title><path d="M14.6,16.6L19.2,12L14.6,7.4L16,6L22,12L16,18L14.6,16.6M9.4,16.6L4.8,12L9.4,7.4L8,6L2,12L8,18L9.4,16.6Z" /></svg>
+</i> Fill in the Blanks<a class="headerlink" href="#code-tags-embed_icon-fill-in-the-blanks" title="Permanent link">&para;</a></h3>
+<p>The code has a few <code>____</code> placeholders.  You will need to replace these
+placeholders with the appropriate <strong>functions</strong> and <strong>variables</strong> to
+complete the program.</p>
+<p>Here is a list of some possible <strong>functions</strong> and <strong>variables</strong> you may wish to use:</p>
+<ul>
+<li><a href="https://man7.org/linux/man-pages/man3/opendir.3.html">opendir</a></li>
+<li><a href="https://man7.org/linux/man-pages/man3/readdir.3.html">readdir</a></li>
+<li><a href="https://man7.org/linux/man-pages/man3/closedir.3.html">closedir</a></li>
+<li><a href="https://man7.org/linux/man-pages/man3/strerror.3.html">strerror</a></li>
+<li><a href="https://man7.org/linux/man-pages/man3/printf.3.html">sprintf</a></li>
+<li><a href="https://man7.org/linux/man-pages/man2/lstat.2.html">stat</a></li>
+<li><code>e-&gt;d_type</code></li>
+<li><code>e-&gt;d_name</code></li>
+<li><code>s.st_size</code></li>
+</ul>
+</div>
+<p>Once you have a working <code>walk.c</code>, you should be able to build and run it:</p>
+<div class="codehilite"><pre><span></span><code>$<span class="w"> </span>./walk<span class="w">        </span><span class="c1"># No arguments (current directory)</span>
+Makefile<span class="w"> </span><span class="m">446</span>
+walk<span class="w"> </span><span class="m">24864</span>
+README.md<span class="w"> </span><span class="m">13</span>
+answers.json<span class="w"> </span><span class="m">303</span>
+test_walk.sh<span class="w"> </span><span class="m">1824</span>
+walk.c<span class="w"> </span><span class="m">1000</span>
+
+$<span class="w"> </span>./walk<span class="w"> </span>..<span class="w">     </span><span class="c1"># Parent directory</span>
+Makefile<span class="w"> </span><span class="m">385</span>
+README.md<span class="w"> </span><span class="m">2654</span>
+.gitignore<span class="w"> </span><span class="m">34</span>
+Dockerfile<span class="w"> </span><span class="m">499</span>
+</code></pre></div>
+
+</li>
+</ol>
+<h2 id="submission">Submission<a class="headerlink" href="#submission" title="Permanent link">&para;</a></h2>
+<p>To submit you work, follow the same process outlined in <a href="reading01.html">Reading 01</a>:</p>
+<div class="codehilite"><pre><span></span><code><span class="c1">#--------------------------------------------------</span>
+<span class="c1"># BE SURE TO DO THE PREPARATION STEPS ABOVE</span>
+<span class="c1">#--------------------------------------------------</span>
+
+$<span class="w"> </span><span class="nb">cd</span><span class="w"> </span>reading08<span class="w">                        </span><span class="c1"># Go into reading08 folder</span>
+
+$<span class="w"> </span><span class="nv">$EDITOR</span><span class="w"> </span>answers.json<span class="w">                </span><span class="c1"># Edit your answers.json file</span>
+
+$<span class="w"> </span>../.scripts/check.py<span class="w">                </span><span class="c1"># Check reading08 quiz</span>
+Checking<span class="w"> </span>reading08<span class="w"> </span>quiz<span class="w"> </span>...
+<span class="w">     </span>Q01<span class="w">  </span><span class="m">5</span>.00<span class="w"> </span>/<span class="w">  </span><span class="m">5</span>.00
+<span class="w">     </span>Q02<span class="w">  </span><span class="m">5</span>.00<span class="w"> </span>/<span class="w">  </span><span class="m">5</span>.00
+<span class="w">     </span>Q03<span class="w"> </span><span class="m">10</span>.00<span class="w"> </span>/<span class="w"> </span><span class="m">10</span>.00
+<span class="w">  </span>--------------------
+<span class="w">   </span>Score<span class="w"> </span><span class="m">20</span>.00<span class="w"> </span>/<span class="w"> </span><span class="m">20</span>.00
+<span class="w">   </span>Grade<span class="w">  </span><span class="m">1</span>.00<span class="w"> </span>/<span class="w">  </span><span class="m">1</span>.00
+<span class="w">  </span>Status<span class="w"> </span>Success
+
+$<span class="w"> </span>git<span class="w"> </span>add<span class="w"> </span>answers.json<span class="w">                </span><span class="c1"># Add answers.json to staging area</span>
+$<span class="w"> </span>git<span class="w"> </span>commit<span class="w"> </span>-m<span class="w"> </span><span class="s2">&quot;Reading 08: Quiz&quot;</span><span class="w">    </span><span class="c1"># Commit work</span>
+
+$<span class="w"> </span><span class="nv">$EDITOR</span><span class="w"> </span>walk.c<span class="w">                      </span><span class="c1"># Edit source code</span>
+
+$<span class="w"> </span>make<span class="w"> </span><span class="nb">test</span><span class="w">                           </span><span class="c1"># Build and Run tests</span>
+Checking<span class="w"> </span>reading08<span class="w"> </span>walk<span class="w"> </span>...
+<span class="w">  </span>walk<span class="w"> </span><span class="o">(</span>no<span class="w"> </span>arguments<span class="o">)</span><span class="w">                      </span>...<span class="w"> </span>Success
+<span class="w">  </span>walk<span class="w"> </span>.<span class="w">                                   </span>...<span class="w"> </span>Success
+<span class="w">  </span>walk<span class="w"> </span>..<span class="w">                                  </span>...<span class="w"> </span>Success
+<span class="w">  </span>walk<span class="w"> </span>/etc<span class="w">                                </span>...<span class="w"> </span>Success
+<span class="w">  </span>walk<span class="w"> </span>asdf<span class="w">                                </span>...<span class="w"> </span>Success
+<span class="w">  </span>--------------------
+<span class="w">   </span>Score<span class="w"> </span><span class="m">5</span>.00<span class="w"> </span>/<span class="w"> </span><span class="m">5</span>.00
+<span class="w">   </span>Grade<span class="w"> </span><span class="m">1</span>.00<span class="w"> </span>/<span class="w"> </span><span class="m">1</span>.00
+<span class="w">  </span>Status<span class="w"> </span>Success
+
+$<span class="w"> </span>git<span class="w"> </span>add<span class="w"> </span>Makefile<span class="w">                    </span><span class="c1"># Add Makefile to staging area</span>
+$<span class="w"> </span>git<span class="w"> </span>add<span class="w"> </span>walk.c<span class="w">                      </span><span class="c1"># Add source code to staging area</span>
+$<span class="w"> </span>git<span class="w"> </span>commit<span class="w"> </span>-m<span class="w"> </span><span class="s2">&quot;Reading 08: Code&quot;</span><span class="w">    </span><span class="c1"># Commit work</span>
+
+$<span class="w"> </span>git<span class="w"> </span>push<span class="w"> </span>-u<span class="w"> </span>origin<span class="w"> </span>reading08<span class="w">        </span><span class="c1"># Push branch to GitHub</span>
+</code></pre></div>
+
+<div class="alert warning-bg">
+<h3 id="lifebuoy-embed_icon-acknowledgments"><i class="icon icon-medium"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><title>lifebuoy</title><path d="M19.79,15.41C20.74,13.24 20.74,10.75 19.79,8.59L17.05,9.83C17.65,11.21 17.65,12.78 17.06,14.17L19.79,15.41M15.42,4.21C13.25,3.26 10.76,3.26 8.59,4.21L9.83,6.94C11.22,6.35 12.79,6.35 14.18,6.95L15.42,4.21M4.21,8.58C3.26,10.76 3.26,13.24 4.21,15.42L6.95,14.17C6.35,12.79 6.35,11.21 6.95,9.82L4.21,8.58M8.59,19.79C10.76,20.74 13.25,20.74 15.42,19.78L14.18,17.05C12.8,17.65 11.22,17.65 9.84,17.06L8.59,19.79M12,2A10,10 0 0,1 22,12A10,10 0 0,1 12,22A10,10 0 0,1 2,12A10,10 0 0,1 12,2M12,8A4,4 0 0,0 8,12A4,4 0 0,0 12,16A4,4 0 0,0 16,12A4,4 0 0,0 12,8Z" /></svg>
+</i> Acknowledgments<a class="headerlink" href="#lifebuoy-embed_icon-acknowledgments" title="Permanent link">&para;</a></h3>
+<p>If you collaborated with any other students, or received help from TAs or AI
+tools on this assignment, please record this support in the <code>README.md</code> in
+the <code>reading08</code> folder and include it with your <strong>Pull Request</strong>.</p>
+</div>
+<div class="alert success-bg">
+<h3 id="account-question-embed_icon-graders"><i class="icon icon-medium"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><title>account-question</title><path d="M13,8A4,4 0 0,1 9,12A4,4 0 0,1 5,8A4,4 0 0,1 9,4A4,4 0 0,1 13,8M17,18V20H1V18C1,15.79 4.58,14 9,14C13.42,14 17,15.79 17,18M20.5,14.5V16H19V14.5H20.5M18.5,9.5H17V9A3,3 0 0,1 20,6A3,3 0 0,1 23,9C23,9.97 22.5,10.88 21.71,11.41L21.41,11.6C20.84,12 20.5,12.61 20.5,13.3V13.5H19V13.3C19,12.11 19.6,11 20.59,10.35L20.88,10.16C21.27,9.9 21.5,9.47 21.5,9A1.5,1.5 0 0,0 20,7.5A1.5,1.5 0 0,0 18.5,9V9.5Z" /></svg>
+</i> Graders<a class="headerlink" href="#account-question-embed_icon-graders" title="Permanent link">&para;</a></h3>
+<p>Once you have committed your work and pushed it to <a href="https://github.com">GitHub</a>, remember to
+create a <strong>pull request</strong> and assign it to the appropriate <strong>teaching
+assistant</strong> from the <a href="reading08_tas.html">Reading 08 TA List</a>.</p>
+<p><strong>Note</strong>: this list changes each week, so be sure to consult the appropriate
+list for each assignment.</p>
+</div>
+</main>
+<footer>
+Built using <a href="https://python.org">Python</a>
+and <a href="https://jinja.palletsprojects.com">Jinja</a>
+with colors from <a href="https://nordtheme.com">Nord Theme</a>
+and icons from <a href="https://pictogrammers.com/library/mdi/">Material Design Icons</a>.</footer>
+</body>
+</html>

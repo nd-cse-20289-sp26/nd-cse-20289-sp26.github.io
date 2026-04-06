@@ -1,0 +1,782 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<!-- Favicon -->
+<link rel="icon" type="image/png" sizes="32x32" href="static/ico/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="static/ico/favicon-16x16.png">
+<link rel="manifest" href="static/ico/site.webmanifest">
+<!-- Stylesheets -->
+<link rel="stylesheet" href="static/css/pnutzh4x0r.css">
+<title>Homework 08: Findit</title>
+</head>
+<body>
+<header>
+<a class="logo" href="homework08.html">
+    <h1>Homework 08: Findit</h1>
+</a>
+<nav>
+    <ul>
+        <li><a href="index.html"><h4>Home</h4></a></li>
+        </ul>
+</nav></header>
+<main>
+<p>The goal of this homework assignment is to allow you to continue practicing
+<a href="https://en.wikipedia.org/wiki/C_dynamic_memory_allocation">dynamic memory</a> management in <a href="https://en.wikipedia.org/wiki/C_(programming_language)">C</a> by building another <a href="https://en.wikipedia.org/wiki/Linked_list">linked list</a> library
+and navigating the <a href="https://en.wikipedia.org/wiki/File_system">file system</a> using low-level functions and <a href="https://en.wikipedia.org/wiki/System_call">system
+calls</a>.  The first two activities involve implementing a <a href="https://en.wikipedia.org/wiki/Linked_list#Singly_linked_list">singly linked list</a>
+with a <strong>tail</strong> pointer and then a few <strong>filter</strong> functions that check
+various attributes about files, while the last activity requires you to use
+these structures and functions to build a file system search utility similar
+to <a href="https://man7.org/linux/man-pages/man1/find.1.html">find</a> named <code>findit</code>.</p>
+<p>For this assignment, record your source code and any responses to the
+following activities in the <code>homework08</code> folder of your <strong>assignments</strong>
+<a href="https://github.com">GitHub</a> repository and push your work by <strong>noon Saturday, April 11</strong>.</p>
+<div class="alert info-bg">
+<h3 id="help-embed_icon-frequently-asked-questions"><i class="icon icon-medium"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><title>help</title><path d="M10,19H13V22H10V19M12,2C17.35,2.22 19.68,7.62 16.5,11.67C15.67,12.67 14.33,13.33 13.67,14.17C13,15 13,16 13,17H10C10,15.33 10,13.92 10.67,12.92C11.33,11.92 12.67,11.33 13.5,10.67C15.92,8.43 15.32,5.26 12,5A3,3 0 0,0 9,8H6A6,6 0 0,1 12,2Z" /></svg>
+</i> Frequently Asked Questions<a class="headerlink" href="#help-embed_icon-frequently-asked-questions" title="Permanent link">&para;</a></h3>
+<div class="centered">
+<iframe allowfullscreen="true" frameborder="0" height="749" mozallowfullscreen="true" src="https://docs.google.com/presentation/d/e/2PACX-1vRs4YDDkS0_AbJEzy8KPRRxdod1VxXicuGOZ1Vx4W8JzHbFe07-Q0ZQV1YcaxkxPRa8ELrWm7HT-wDo/pubembed?start=false&amp;loop=false&amp;delayms=3000" webkitallowfullscreen="true" width="960"></iframe>
+</div>
+</div>
+<h2 id="activity-0-preparation">Activity 0: Preparation<a class="headerlink" href="#activity-0-preparation" title="Permanent link">&para;</a></h2>
+<p>Before starting this homework assignment, you should first perform a <code>git
+pull</code> to retrieve any changes in your remote <a href="https://github.com">GitHub</a> repository:</p>
+<div class="codehilite"><pre><span></span><code>$<span class="w"> </span><span class="nb">cd</span><span class="w"> </span>path/to/repository<span class="w">                   </span><span class="c1"># Go to assignments repository</span>
+
+$<span class="w"> </span>git<span class="w"> </span>switch<span class="w"> </span>master<span class="w">                       </span><span class="c1"># Make sure we are in master branch</span>
+
+$<span class="w"> </span>git<span class="w"> </span>pull<span class="w"> </span>--rebase<span class="w">                       </span><span class="c1"># Get any remote changes not present locally</span>
+</code></pre></div>
+
+<p>Next, create a new branch for this assignment:</p>
+<div class="codehilite"><pre><span></span><code>$<span class="w"> </span>git<span class="w"> </span>switch<span class="w"> </span>-c<span class="w"> </span>homework08<span class="w">                </span><span class="c1"># Create homework08 branch and check it out</span>
+</code></pre></div>
+
+<h3 id="task-1-skeleton-code">Task 1: Skeleton Code<a class="headerlink" href="#task-1-skeleton-code" title="Permanent link">&para;</a></h3>
+<p>To help you get started, the instructor has provided you with the following
+<strong>skeleton code</strong>:</p>
+<div class="codehilite"><pre><span></span><code><span class="c1"># Go to homework08 folder</span>
+$<span class="w"> </span><span class="nb">cd</span><span class="w"> </span>homework08
+
+<span class="c1"># Download Makefile</span>
+$<span class="w"> </span>curl<span class="w"> </span>-LO<span class="w"> </span>https://pnutz.h4x0r.space/courses/cse.20289.sp26/static/txt/homework08/Makefile
+
+<span class="c1"># Download C skeleton code</span>
+$<span class="w"> </span>curl<span class="w"> </span>-LO<span class="w"> </span>https://pnutz.h4x0r.space/courses/cse.20289.sp26/static/txt/homework08/filter.c
+$<span class="w"> </span>curl<span class="w"> </span>-LO<span class="w"> </span>https://pnutz.h4x0r.space/courses/cse.20289.sp26/static/txt/homework08/filter.unit.c
+$<span class="w"> </span>curl<span class="w"> </span>-LO<span class="w"> </span>https://pnutz.h4x0r.space/courses/cse.20289.sp26/static/txt/homework08/findit.c
+$<span class="w"> </span>curl<span class="w"> </span>-LO<span class="w"> </span>https://pnutz.h4x0r.space/courses/cse.20289.sp26/static/txt/homework08/findit.h
+$<span class="w"> </span>curl<span class="w"> </span>-LO<span class="w"> </span>https://pnutz.h4x0r.space/courses/cse.20289.sp26/static/txt/homework08/list.c
+$<span class="w"> </span>curl<span class="w"> </span>-LO<span class="w"> </span>https://pnutz.h4x0r.space/courses/cse.20289.sp26/static/txt/homework08/list.unit.c
+</code></pre></div>
+
+<p>Once downloaded, you should see the following files in your <code>homework08</code> directory:</p>
+<div class="codehilite"><pre><span></span><code>homework08
+<span class="w">    </span><span class="se">\_</span><span class="w"> </span>Makefile<span class="w">       </span><span class="c1"># This is the Makefile for building all the assignment artifacts</span>
+<span class="w">    </span><span class="se">\_</span><span class="w"> </span>filter.c<span class="w">       </span><span class="c1"># This is the filter functions C source file</span>
+<span class="w">    </span><span class="se">\_</span><span class="w"> </span>filter.unit.c<span class="w">  </span><span class="c1"># This is the filter functions C unit test source file</span>
+<span class="w">    </span><span class="se">\_</span><span class="w"> </span>findit.c<span class="w">       </span><span class="c1"># This is the findit utility C source file</span>
+<span class="w">    </span><span class="se">\_</span><span class="w"> </span>findit.h<span class="w">       </span><span class="c1"># This is the findit utility C header file</span>
+<span class="w">    </span><span class="se">\_</span><span class="w"> </span>list.c<span class="w">         </span><span class="c1"># This is the linked list C source file</span>
+<span class="w">    </span><span class="se">\_</span><span class="w"> </span>list.unit.c<span class="w">    </span><span class="c1"># This is the linked list C unit test source file</span>
+</code></pre></div>
+
+<h3 id="task-2-initial-import">Task 2: Initial Import<a class="headerlink" href="#task-2-initial-import" title="Permanent link">&para;</a></h3>
+<p>Now that the files are downloaded into the <code>homework08</code> folder, you can
+<strong>commit</strong> them to your <a href="https://git-scm.com/">git</a> repository:</p>
+<div class="codehilite"><pre><span></span><code>$<span class="w"> </span>git<span class="w"> </span>add<span class="w"> </span>Makefile<span class="w">                            </span><span class="c1"># Mark changes for commit</span>
+$<span class="w"> </span>git<span class="w"> </span>add<span class="w"> </span>*.c<span class="w"> </span>*.h
+$<span class="w"> </span>git<span class="w"> </span>commit<span class="w"> </span>-m<span class="w"> </span><span class="s2">&quot;Homework 08: Initial Import&quot;</span><span class="w"> </span><span class="c1"># Record changes</span>
+</code></pre></div>
+
+<h3 id="task-3-unit-tests">Task 3: Unit Tests<a class="headerlink" href="#task-3-unit-tests" title="Permanent link">&para;</a></h3>
+<p>After downloading these files, you can run <code>make test</code> to run the tests.</p>
+<div class="codehilite"><pre><span></span><code><span class="c1"># Run all tests (will trigger automatic download)</span>
+$<span class="w"> </span>make<span class="w"> </span><span class="nb">test</span>
+</code></pre></div>
+
+<p>You will notice that the Makefile downloads these additional test data and scripts:</p>
+<div class="codehilite"><pre><span></span><code>homework08
+<span class="w">    </span><span class="se">\_</span><span class="w"> </span>filter.unit.sh<span class="w">   </span><span class="c1"># This is the filter functions unit test shell script</span>
+<span class="w">    </span><span class="se">\_</span><span class="w"> </span>find.test.sh<span class="w">     </span><span class="c1"># This is the findit utility test shell script</span>
+<span class="w">    </span><span class="se">\_</span><span class="w"> </span>list.unit.sh<span class="w">     </span><span class="c1"># This is the linked list unit test shell script</span>
+</code></pre></div>
+
+<p>You will be using these <a href="https://en.wikipedia.org/wiki/Unit_testing">unit tests</a> to verify the correctness and behavior
+of your code.</p>
+<div class="alert info-bg">
+<h3 id="download-embed_icon-automatic-download"><i class="icon icon-medium"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><title>download</title><path d="M5,20H19V18H5M19,9H15V3H9V9H5L12,16L19,9Z" /></svg>
+</i> Automatic Download<a class="headerlink" href="#download-embed_icon-automatic-download" title="Permanent link">&para;</a></h3>
+<p>The <code>test</code> scripts are automatically downloaded by the <code>Makefile</code>, so any
+modifications you do to them will be lost when you run <code>make</code> again. Likewise,
+because they are automatically downloaded, you do not need to <code>add</code> or <code>commit</code>
+them to your <a href="https://git-scm.com/">git</a> repository.</p>
+</div>
+<h3 id="task-4-makefile">Task 4: Makefile<a class="headerlink" href="#task-4-makefile" title="Permanent link">&para;</a></h3>
+<p>The <code>Makefile</code> contains all the <strong>rules</strong> or <strong>recipes</strong> for building the
+project artifacts (e.g. <code>findit</code>):</p>
+<div class="codehilite"><pre><span></span><code><span class="nv">CC</span><span class="o">=</span><span class="w">       </span>gcc
+<span class="nv">CFLAGS</span><span class="o">=</span><span class="w">   </span>-Wall<span class="w"> </span>-std<span class="o">=</span>gnu99<span class="w"> </span>-g
+<span class="nv">LD</span><span class="o">=</span><span class="w">       </span>gcc
+<span class="nv">LDFLAGS</span><span class="o">=</span><span class="w">  </span>-L.
+<span class="nv">TARGETS</span><span class="o">=</span><span class="w">  </span>findit
+
+<span class="nf">all</span><span class="o">:</span><span class="w">    </span><span class="k">$(</span><span class="nv">TARGETS</span><span class="k">)</span>
+
+<span class="c">#-------------------------------------------------------------------------------</span>
+<span class="c"># TODO: Add rules for object files</span>
+<span class="c">#-------------------------------------------------------------------------------</span>
+
+<span class="nf">list.o</span><span class="o">:</span>
+
+<span class="nf">filter.o</span><span class="o">:</span>
+
+<span class="nf">findit.o</span><span class="o">:</span>
+
+<span class="c">#-------------------------------------------------------------------------------</span>
+<span class="c"># TODO: Add rules for executables</span>
+<span class="c">#-------------------------------------------------------------------------------</span>
+
+<span class="nf">findit</span><span class="o">:</span>
+
+<span class="c">#-------------------------------------------------------------------------------</span>
+<span class="c"># DO NOT MODIFY BELOW</span>
+<span class="c">#-------------------------------------------------------------------------------</span>
+
+<span class="err">...</span>
+</code></pre></div>
+
+<p>For this task, you will need to add <a href="https://www.gnu.org/software/make/manual/html_node/Rule-Example.html#Rule-Example">rules</a> for building the <em>intermediate</em>
+<a href="https://en.wikipedia.org/wiki/Object_file">object</a> files (ie. <code>list.o</code>, <code>filter.o</code>, <code>findit.o</code>) and the <code>findit</code>
+<em>executable</em> with the appropriate dependencies as shown the <a href="https://en.wikipedia.org/wiki/Directed_acyclic_graph">DAG</a> below:</p>
+<div class="thumbnail">
+  <img src="static/img/homework08-makefile.png" class="responsive">
+</div>
+
+<div class="alert info-bg">
+<h4 id="makefile-variables"><i class="fa fa-cogs"></i> Makefile Variables<a class="headerlink" href="#makefile-variables" title="Permanent link">&para;</a></h4>
+<p>You <strong>must</strong> use the <code>CC</code>, <code>CFLAGS</code>, <code>LD</code>, <code>LDFLAGS</code>, <code>AR</code>, and <code>ARFLAGS</code>
+variables when appropriate in your <a href="https://www.gnu.org/software/make/manual/html_node/Rule-Example.html#Rule-Example">rules</a>.  You <strong>should</strong> also consider
+using <a href="https://www.gnu.org/software/make/manual/html_node/Automatic-Variables.html">automatic variables</a> such as <code>$@</code> and <code>$&lt;</code> as well.</p>
+</div>
+<p>Once you have a working <code>Makefile</code>, you should be able to run the following commands:</p>
+<div class="codehilite"><pre><span></span><code><span class="c1"># Build all TARGETS</span>
+$<span class="w"> </span>make
+gcc<span class="w"> </span>-Wall<span class="w"> </span>-std<span class="o">=</span>gnu99<span class="w"> </span>-g<span class="w"> </span>-c<span class="w"> </span>-o<span class="w"> </span>findit.o<span class="w"> </span>findit.c
+gcc<span class="w"> </span>-Wall<span class="w"> </span>-std<span class="o">=</span>gnu99<span class="w"> </span>-g<span class="w"> </span>-c<span class="w"> </span>-o<span class="w"> </span>list.o<span class="w"> </span>list.c
+gcc<span class="w"> </span>-Wall<span class="w"> </span>-std<span class="o">=</span>gnu99<span class="w"> </span>-g<span class="w"> </span>-c<span class="w"> </span>-o<span class="w"> </span>filter.o<span class="w"> </span>filter.c
+gcc<span class="w"> </span>-L.<span class="w"> </span>-o<span class="w"> </span>findit<span class="w"> </span>findit.o<span class="w"> </span>list.o<span class="w"> </span>filter.o
+
+<span class="c1"># Run all tests</span>
+$<span class="w"> </span>make<span class="w"> </span><span class="nb">test</span>
+Testing<span class="w"> </span>list<span class="w"> </span>...
+<span class="w">  </span>node_create<span class="w">                                                  </span>...<span class="w"> </span>Success
+<span class="w">  </span>node_delete<span class="w">                                                  </span>...<span class="w"> </span>Success
+<span class="w">  </span>list_append<span class="w">                                                  </span>...<span class="w"> </span>Success
+<span class="w">  </span>list_filter<span class="w">                                                  </span>...<span class="w"> </span>Success
+<span class="w">  </span>list_output<span class="w">                                                  </span>...<span class="w"> </span>Success
+<span class="w">  </span>--------------------
+<span class="w">   </span>Score<span class="w"> </span><span class="m">5</span>.00<span class="w"> </span>/<span class="w"> </span><span class="m">5</span>.00
+<span class="w">   </span>Grade<span class="w"> </span><span class="m">1</span>.00<span class="w"> </span>/<span class="w"> </span><span class="m">1</span>.00
+<span class="w">  </span>Status<span class="w"> </span>Success
+
+Testing<span class="w"> </span>filter<span class="w"> </span>...
+<span class="w">  </span>filter_by_type<span class="w">                                               </span>...<span class="w"> </span>Success
+<span class="w">  </span>filter_by_name<span class="w">                                               </span>...<span class="w"> </span>Success
+<span class="w">  </span>filter_by_mode<span class="w">                                               </span>...<span class="w"> </span>Success
+<span class="w">  </span>--------------------
+<span class="w">   </span>Score<span class="w"> </span><span class="m">3</span>.00<span class="w"> </span>/<span class="w"> </span><span class="m">3</span>.00
+<span class="w">   </span>Grade<span class="w"> </span><span class="m">1</span>.00<span class="w"> </span>/<span class="w"> </span><span class="m">1</span>.00
+<span class="w">  </span>Status<span class="w"> </span>Success
+
+Testing<span class="w"> </span>findit<span class="w"> </span>...
+<span class="w">  </span>findit<span class="w">                                                       </span>...<span class="w"> </span>Success
+<span class="w">  </span>findit<span class="w"> </span>/etc<span class="w">                                                  </span>...<span class="w"> </span>Success
+<span class="w">  </span>findit<span class="w"> </span>/etc<span class="w"> </span>-type<span class="w"> </span>f<span class="w">                                          </span>...<span class="w"> </span>Success
+<span class="w">  </span>findit<span class="w"> </span>/etc<span class="w"> </span>-type<span class="w"> </span>d<span class="w">                                          </span>...<span class="w"> </span>Success
+<span class="w">  </span>findit<span class="w"> </span>/etc<span class="w"> </span>-name<span class="w"> </span><span class="s1">&#39;*.conf&#39;</span><span class="w">                                   </span>...<span class="w"> </span>Success
+<span class="w">  </span>findit<span class="w"> </span>/etc<span class="w"> </span>-readable<span class="w">                                        </span>...<span class="w"> </span>Success
+<span class="w">  </span>findit<span class="w"> </span>/etc<span class="w"> </span>-writable<span class="w">                                        </span>...<span class="w"> </span>Success
+<span class="w">  </span>findit<span class="w"> </span>/etc<span class="w"> </span>-executable<span class="w">                                      </span>...<span class="w"> </span>Success
+<span class="w">  </span>findit<span class="w"> </span>/etc<span class="w"> </span>-type<span class="w"> </span>d<span class="w"> </span>-name<span class="w"> </span><span class="s1">&#39;*.d&#39;</span><span class="w">                              </span>...<span class="w"> </span>Success
+<span class="w">  </span>findit<span class="w"> </span>/etc<span class="w"> </span>-type<span class="w"> </span>d<span class="w"> </span>-name<span class="w"> </span><span class="s1">&#39;*.d&#39;</span><span class="w"> </span>-executable<span class="w">                  </span>...<span class="w"> </span>Success
+<span class="w">  </span>findit<span class="w"> </span>.<span class="w"> </span>-name<span class="w"> </span><span class="s1">&#39;*.c&#39;</span><span class="w">                                         </span>...<span class="w"> </span>Success
+<span class="w">  </span>findit<span class="w"> </span>.<span class="w"> </span>-writable<span class="w">                                           </span>...<span class="w"> </span>Success
+<span class="w">  </span>findit<span class="w"> </span>.<span class="w"> </span>-type<span class="w"> </span>f<span class="w"> </span>-name<span class="w"> </span><span class="s1">&#39;*.unit&#39;</span><span class="w"> </span>-executable<span class="w">                  </span>...<span class="w"> </span>Success
+<span class="w">  </span>--------------------
+<span class="w">   </span>Score<span class="w"> </span><span class="m">13</span>.00<span class="w"> </span>/<span class="w"> </span><span class="m">13</span>.00
+<span class="w">   </span>Grade<span class="w">  </span><span class="m">1</span>.00<span class="w"> </span>/<span class="w">  </span><span class="m">1</span>.00
+<span class="w">  </span>Status<span class="w"> </span>Success
+
+Checking<span class="w"> </span>homework08<span class="w"> </span>quiz<span class="w"> </span>...
+<span class="w">    </span>Q01<span class="w"> </span><span class="m">12</span>.00<span class="w"> </span>/<span class="w"> </span><span class="m">12</span>.00
+<span class="w">    </span>Q02<span class="w">  </span><span class="m">2</span>.00<span class="w"> </span>/<span class="w">  </span><span class="m">2</span>.00
+<span class="w">    </span>Q03<span class="w">  </span><span class="m">1</span>.00<span class="w"> </span>/<span class="w">  </span><span class="m">1</span>.00
+<span class="w">    </span>Q04<span class="w">  </span><span class="m">4</span>.00<span class="w"> </span>/<span class="w">  </span><span class="m">4</span>.00
+<span class="w">  </span>--------------------
+<span class="w">   </span>Score<span class="w"> </span><span class="m">19</span>.00<span class="w"> </span>/<span class="w"> </span><span class="m">19</span>.00
+<span class="w">   </span>Grade<span class="w">  </span><span class="m">1</span>.00<span class="w"> </span>/<span class="w">  </span><span class="m">1</span>.00
+<span class="w">  </span>Status<span class="w"> </span>Success
+
+Grade<span class="w"> </span>Summary<span class="w"> </span>...
+<span class="w">    </span>List<span class="w">  </span><span class="m">0</span>.25<span class="w"> </span>/<span class="w">  </span><span class="m">0</span>.25
+<span class="w">  </span>Filter<span class="w">  </span><span class="m">0</span>.15<span class="w"> </span>/<span class="w">  </span><span class="m">0</span>.15
+<span class="w">  </span>Findit<span class="w">  </span><span class="m">0</span>.40<span class="w"> </span>/<span class="w">  </span><span class="m">0</span>.40
+<span class="w">    </span>Quiz<span class="w">  </span><span class="m">0</span>.20<span class="w"> </span>/<span class="w">  </span><span class="m">0</span>.20
+<span class="w">   </span>Total<span class="w">  </span><span class="m">1</span>.00<span class="w"> </span>/<span class="w">  </span><span class="m">1</span>.00
+<span class="w">  </span>Status<span class="w"> </span>Success
+
+<span class="c1"># Remove generated artifacts</span>
+$<span class="w"> </span>make<span class="w"> </span>clean
+</code></pre></div>
+
+<div class="alert danger-bg">
+<p><strong>Note</strong>: The tests will <strong>fail</strong> if you haven't implemented all the
+necessary functions appropriately.</p>
+</div>
+<div class="alert warning-bg">
+<h3 id="alert-embed_icon-compiler-warnings"><i class="icon icon-medium"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><title>alert</title><path d="M13 14H11V9H13M13 18H11V16H13M1 21H23L12 2L1 21Z" /></svg>
+</i> Compiler Warnings<a class="headerlink" href="#alert-embed_icon-compiler-warnings" title="Permanent link">&para;</a></h3>
+<p>You must include the <code>-Wall</code> flag in your <code>CFLAGS</code> when you compile.  This
+also means that your code must <strong>compile without any warnings</strong>, otherwise
+points will be deducted.</p>
+</div>
+<h3 id="task-5-findith">Task 5: <code>findit.h</code><a class="headerlink" href="#task-5-findith" title="Permanent link">&para;</a></h3>
+<p>The <code>findit.h</code> file is the <a href="https://en.wikipedia.org/wiki/Include_directive#C.2FC.2B.2B">header</a> file for the <code>findit</code> utility, which
+means it contains the <a href="https://en.wikipedia.org/wiki/Typedef">type definitions</a> and function <a href="https://en.wikipedia.org/wiki/Function_prototype">prototypes</a>:</p>
+<div class="codehilite"><pre><span></span><code><span class="cm">/* findit.h: Search for files in a directory hierarchy */</span>
+
+<span class="cp">#pragma once</span>
+
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;stdbool.h&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;stdio.h&gt;</span>
+
+<span class="cm">/* Options Structure */</span>
+
+<span class="k">typedef</span><span class="w"> </span><span class="k">struct</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kt">int</span><span class="w">   </span><span class="n">type</span><span class="p">;</span><span class="w">         </span><span class="c1">// File type (-type)</span>
+<span class="w">    </span><span class="kt">char</span><span class="w"> </span><span class="o">*</span><span class="n">name</span><span class="p">;</span><span class="w">         </span><span class="c1">// File name pattern (-name)</span>
+<span class="w">    </span><span class="kt">int</span><span class="w">   </span><span class="n">mode</span><span class="p">;</span><span class="w">         </span><span class="c1">// Access modes (-executable, -readable, -writable)</span>
+<span class="p">}</span><span class="w"> </span><span class="n">Options</span><span class="p">;</span>
+
+<span class="cm">/* Filter Functions */</span>
+
+<span class="k">typedef</span><span class="w"> </span><span class="kt">bool</span><span class="w"> </span><span class="p">(</span><span class="o">*</span><span class="n">Filter</span><span class="p">)(</span><span class="k">const</span><span class="w"> </span><span class="kt">char</span><span class="w"> </span><span class="o">*</span><span class="n">path</span><span class="p">,</span><span class="w"> </span><span class="n">Options</span><span class="w"> </span><span class="o">*</span><span class="n">options</span><span class="p">);</span>
+
+<span class="kt">bool</span><span class="w">  </span><span class="nf">filter_by_type</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="kt">char</span><span class="w"> </span><span class="o">*</span><span class="n">path</span><span class="p">,</span><span class="w"> </span><span class="n">Options</span><span class="w"> </span><span class="o">*</span><span class="n">options</span><span class="p">);</span>
+<span class="kt">bool</span><span class="w">  </span><span class="nf">filter_by_name</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="kt">char</span><span class="w"> </span><span class="o">*</span><span class="n">path</span><span class="p">,</span><span class="w"> </span><span class="n">Options</span><span class="w"> </span><span class="o">*</span><span class="n">options</span><span class="p">);</span>
+<span class="kt">bool</span><span class="w">  </span><span class="nf">filter_by_mode</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="kt">char</span><span class="w"> </span><span class="o">*</span><span class="n">path</span><span class="p">,</span><span class="w"> </span><span class="n">Options</span><span class="w"> </span><span class="o">*</span><span class="n">options</span><span class="p">);</span>
+
+<span class="cm">/* Data Union */</span>
+
+<span class="k">typedef</span><span class="w"> </span><span class="k">union</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kt">char</span><span class="w"> </span><span class="o">*</span><span class="w">  </span><span class="n">string</span><span class="p">;</span><span class="w">     </span><span class="c1">// String data</span>
+<span class="w">    </span><span class="n">Filter</span><span class="w">  </span><span class="n">function</span><span class="p">;</span><span class="w">   </span><span class="c1">// Filter function</span>
+<span class="p">}</span><span class="w"> </span><span class="n">Data</span><span class="p">;</span>
+
+<span class="cm">/* Node Structure */</span>
+
+<span class="k">typedef</span><span class="w"> </span><span class="k">struct</span><span class="w"> </span><span class="nc">Node</span><span class="w"> </span><span class="n">Node</span><span class="p">;</span>
+<span class="k">struct</span><span class="w"> </span><span class="nc">Node</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">Data</span><span class="w">    </span><span class="n">data</span><span class="p">;</span><span class="w">       </span><span class="c1">// Data value</span>
+<span class="w">    </span><span class="n">Node</span><span class="w">   </span><span class="o">*</span><span class="n">next</span><span class="p">;</span><span class="w">       </span><span class="c1">// Pointer to next Node</span>
+<span class="p">};</span>
+
+<span class="n">Node</span><span class="w"> </span><span class="o">*</span><span class="w">  </span><span class="nf">node_create</span><span class="p">(</span><span class="n">Data</span><span class="w"> </span><span class="n">data</span><span class="p">,</span><span class="w"> </span><span class="n">Node</span><span class="w"> </span><span class="o">*</span><span class="n">next</span><span class="p">);</span>
+<span class="kt">void</span><span class="w">    </span><span class="nf">node_delete</span><span class="p">(</span><span class="n">Node</span><span class="w"> </span><span class="o">*</span><span class="n">n</span><span class="p">,</span><span class="w"> </span><span class="kt">bool</span><span class="w"> </span><span class="n">release</span><span class="p">,</span><span class="w"> </span><span class="kt">bool</span><span class="w"> </span><span class="n">recursive</span><span class="p">);</span>
+
+<span class="cm">/* List Structure */</span>
+
+<span class="k">typedef</span><span class="w"> </span><span class="k">struct</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">Node</span><span class="w">   </span><span class="o">*</span><span class="n">head</span><span class="p">;</span><span class="w">       </span><span class="c1">// Pointer to first Node</span>
+<span class="w">    </span><span class="n">Node</span><span class="w">   </span><span class="o">*</span><span class="n">tail</span><span class="p">;</span><span class="w">       </span><span class="c1">// Pointer to last Node</span>
+<span class="p">}</span><span class="w"> </span><span class="n">List</span><span class="p">;</span>
+
+<span class="kt">void</span><span class="w">    </span><span class="nf">list_append</span><span class="p">(</span><span class="n">List</span><span class="w"> </span><span class="o">*</span><span class="n">l</span><span class="p">,</span><span class="w"> </span><span class="n">Data</span><span class="w"> </span><span class="n">data</span><span class="p">);</span>
+<span class="kt">void</span><span class="w">    </span><span class="nf">list_filter</span><span class="p">(</span><span class="n">List</span><span class="w"> </span><span class="o">*</span><span class="n">l</span><span class="p">,</span><span class="w"> </span><span class="n">Filter</span><span class="w"> </span><span class="n">filter</span><span class="p">,</span><span class="w"> </span><span class="n">Options</span><span class="w"> </span><span class="o">*</span><span class="n">options</span><span class="p">,</span><span class="w"> </span><span class="kt">bool</span><span class="w"> </span><span class="n">release</span><span class="p">);</span>
+<span class="kt">void</span><span class="w">    </span><span class="nf">list_output</span><span class="p">(</span><span class="n">List</span><span class="w"> </span><span class="o">*</span><span class="n">l</span><span class="p">,</span><span class="w"> </span><span class="kt">FILE</span><span class="w"> </span><span class="o">*</span><span class="n">stream</span><span class="p">);</span>
+</code></pre></div>
+
+<p>Other <a href="https://en.wikipedia.org/wiki/C_(programming_language)">C</a> source files will <code>#include</code> this file in order to use the
+functions we will be implementing in this assignment.</p>
+<h4 id="options-structure">Options Structure<a class="headerlink" href="#options-structure" title="Permanent link">&para;</a></h4>
+<p>The <code>Options</code> structure is used by the <code>Filter</code> functions to check the
+attribute of various files and directories encountered in the <code>findit</code>
+program.  It has the following fields:</p>
+<ol>
+<li>
+<p><code>type</code>: This is used to store the file type (ie. <a href="https://man7.org/linux/man-pages/man7/inode.7.html">S_IFREG</a>, <a href="https://man7.org/linux/man-pages/man7/inode.7.html">S_IFDIR</a>) to
+  match against.</p>
+</li>
+<li>
+<p><code>name</code>: This is used to store the <a href="https://man7.org/linux/man-pages/man7/glob.7.html">glob pattern</a> to match against the
+  <a href="https://man7.org/linux/man-pages/man3/basename.3.html">basename</a> of a <code>path</code> string.</p>
+</li>
+<li>
+<p><code>mode</code>: This is used to store the <a href="https://man7.org/linux/man-pages/man2/access.2.html">access mode</a> to match against.</p>
+</li>
+</ol>
+<h4 id="data-union">Data Union<a class="headerlink" href="#data-union" title="Permanent link">&para;</a></h4>
+<p>The <code>Data</code> union is used by the <code>List</code> structure to store either a <a href="https://en.wikipedia.org/wiki/String_(computer_science)">string</a>
+or a <code>Filter</code> function pointer:</p>
+<div class="codehilite"><pre><span></span><code><span class="c1">// Declare a Data union with a string</span>
+<span class="n">Data</span><span class="w"> </span><span class="n">dp</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="n">Data</span><span class="p">)</span><span class="s">&quot;file path&quot;</span><span class="p">;</span>
+
+<span class="c1">// Access string</span>
+<span class="n">puts</span><span class="p">(</span><span class="n">dp</span><span class="p">.</span><span class="n">string</span><span class="p">)</span>
+
+<span class="c1">// Declare a Data union with a Filter function pointer</span>
+<span class="n">Data</span><span class="w"> </span><span class="n">df</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="n">Data</span><span class="p">)</span><span class="n">filter_by_type</span><span class="p">;</span>
+
+<span class="c1">// Access Filter function</span>
+<span class="n">df</span><span class="p">.</span><span class="n">function</span><span class="p">(</span><span class="n">path</span><span class="p">,</span><span class="w"> </span><span class="n">options</span><span class="p">);</span>
+</code></pre></div>
+
+<p>The details of the <code>Node</code> structure, <code>List</code> structure, and <code>Filter</code> functions
+and what you need to implement are provided in the following sections.</p>
+<div class="alert info-bg">
+<p><strong>Note</strong>: For this task, you <strong>do not</strong> need to modify this file.  Instead,
+you should review it and ensure you understand the provided code.</p>
+</div>
+<h2 id="activity-1-linked-list-025-points">Activity 1: Linked List (<em>0.25 Points</em>)<a class="headerlink" href="#activity-1-linked-list-025-points" title="Permanent link">&para;</a></h2>
+<p>The <code>findit</code> utility works by first walking a directory <em>recursively</em> and
+adding any <em>entries</em> it encounters to a <a href="https://en.wikipedia.org/wiki/Linked_list#Singly_linked_list">singly linked list</a> of <em>file paths</em>.
+For the first activity, you are to implement a <a href="https://en.wikipedia.org/wiki/Linked_list#Singly_linked_list">singly linked list</a> with both
+a <code>head</code> and <code>tail</code> pointer as show below:</p>
+<div class="centered">
+  <img src="static/img/homework08-linkedlist.png" class="responsive">
+</div>
+
+<p>The <code>List</code> structure consists of two pointers to <code>Node</code> structures:</p>
+<ol>
+<li><code>head</code>: This points to the first <code>Node</code> in the <a href="https://en.wikipedia.org/wiki/Linked_list#Singly_linked_list">singly linked list</a>.</li>
+<li><code>tail</code>: This points to the last <code>Node</code> in the <a href="https://en.wikipedia.org/wiki/Linked_list#Singly_linked_list">singly linked list</a>.</li>
+</ol>
+<p>If the <code>List</code> is empty, then both <code>head</code> and <code>tail</code> should be <code>NULL</code>.</p>
+<p>Each <code>Node</code> structure contains a <code>Data</code> union to store either a <a href="https://en.wikipedia.org/wiki/String_(computer_science)">string</a> or a
+<code>Filter</code> function pointer, and a pointer to the next <code>Node</code> in the <a href="https://en.wikipedia.org/wiki/Linked_list#Singly_linked_list">singly
+linked list</a>.</p>
+<h3 id="task-1-listc">Task 1: <code>list.c</code><a class="headerlink" href="#task-1-listc" title="Permanent link">&para;</a></h3>
+<p>The <code>list.c</code> file contains the <a href="https://en.wikipedia.org/wiki/C_(programming_language)">C</a> implementation for the <a href="https://en.wikipedia.org/wiki/Linked_list">linked list</a>
+structure.  For this task, you will need to implement the following
+functions:</p>
+<ol>
+<li>
+<div class="flex-col" markdown="1">
+<p><code>Node * node_create(Data data, Node *next)</code></p>
+<blockquote>
+<p>This function allocates a new <code>Node</code> structure on the <a href="https://en.wikipedia.org/wiki/Heap_(programming)">heap</a>,
+initializes its <code>data</code> and <code>next</code> attributes, and returns a pointer to
+this new <code>Node</code> structure.</p>
+</blockquote>
+<div class="alert success-bg" markdown="1">
+<p><strong>Hint</strong>: Consider using <a href="https://man7.org/linux/man-pages/man3/malloc.3.html">malloc</a> or <a href="https://man7.org/linux/man-pages/man3/malloc.3.html">calloc</a>.</p>
+</div>
+</li>
+<li>
+<div class="flex-col" markdown="1">
+<p><code>void node_delete(Node *n, bool release, bool recursive)</code></p>
+<blockquote>
+<p>This function deallocates the given <code>Node</code> structure.  If <code>recursive</code>
+is <code>true</code>, then the function will call <code>node_delete</code> on the <code>next</code> item
+in the <a href="https://en.wikipedia.org/wiki/Linked_list#Singly_linked_list">singly linked list</a>.  Likewise, if <code>release</code> is <code>true</code> then the
+<code>data</code> <a href="https://en.wikipedia.org/wiki/String_(computer_science)">string</a> will also be deallocated (before deallocating the <code>Node</code>
+itself).</p>
+</blockquote>
+<div class="alert success-bg" markdown="1">
+<p><strong>Hint</strong>: Consider using <a href="https://man7.org/linux/man-pages/man3/malloc.3.html">free</a>.</p>
+</div>
+</li>
+<li>
+<div class="flex-col" markdown="1">
+<p><code>void list_append(List *l, Data data)</code></p>
+<blockquote>
+<p>This function adds a new <code>Node</code> structure with the given <code>data</code> to the
+<code>tail</code> of the given <code>List</code> structure.</p>
+</blockquote>
+<div class="alert success-bg" markdown="1">
+<p><strong>Hint</strong>: Consider using <code>node_create</code> and make sure you update the
+  <code>head</code> and <code>tail</code> of the <code>List</code> appropriately.</p>
+</div>
+</li>
+<li>
+<div class="flex-col" markdown="1">
+<p><code>void list_filter(List *l, Filter filter, Options *options, bool release)</code></p>
+<blockquote>
+<p>This function filters the given <code>List</code> by applying the <code>Filter</code>
+function to each <code>Node</code>'s <code>Data</code> string and the given <code>Options</code>
+structure.  If the <code>Filter</code> function returns <code>true</code>, then the <code>Node</code> is
+kept.  Otherwise, it is removed from the <code>List</code>.  If <code>release</code> is <code>true</code>,
+then the <code>Data</code> <a href="https://en.wikipedia.org/wiki/String_(computer_science)">string</a> should also be deallocated when removing a <code>Node</code>.</p>
+</blockquote>
+<div class="alert success-bg" markdown="1">
+<p><strong>Hint</strong>: Consider using <code>node_delete</code> when removing a <code>Node</code>.  Draw a
+  picture and consider how many pointers you need to effectively traverse
+  the <code>List</code> and to remove a <code>Node</code> in the middle of the <code>List</code>.
+  Moreover, make sure you update the <code>head</code> and <code>tail</code> of the <code>List</code>
+  appropriately.</p>
+</div>
+</li>
+<li>
+<div class="flex-col" markdown="1">
+<p><code>void list_output(List *l, FILE *stream)</code></p>
+<blockquote>
+<p>This function prints the <code>Data</code> <a href="https://en.wikipedia.org/wiki/String_(computer_science)">string</a> of each <code>Node</code> in the given
+<code>List</code> to the specified <code>stream</code>.</p>
+</blockquote>
+<div class="alert success-bg" markdown="1">
+<p><strong>Hint</strong>: Consider using <a href="https://man7.org/linux/man-pages/man3/printf.3.html">fprintf</a>.</p>
+</div>
+</li>
+</ol>
+<h3 id="task-2-testing">Task 2: Testing<a class="headerlink" href="#task-2-testing" title="Permanent link">&para;</a></h3>
+<p>As you implement the functions in <code>list.c</code>, you should use the <code>list.unit</code>
+executable with the <code>list.unit.sh</code> script to test each of your functions:</p>
+<div class="codehilite"><pre><span></span><code><span class="c1"># Build test artifacts and run test scripts</span>
+$<span class="w"> </span>make<span class="w"> </span>test-list
+Testing<span class="w"> </span>list<span class="w"> </span>...
+<span class="w">  </span>node_create<span class="w">                                                  </span>...<span class="w"> </span>Success
+<span class="w">  </span>node_delete<span class="w">                                                  </span>...<span class="w"> </span>Success
+<span class="w">  </span>list_append<span class="w">                                                  </span>...<span class="w"> </span>Success
+<span class="w">  </span>list_filter<span class="w">                                                  </span>...<span class="w"> </span>Success
+<span class="w">  </span>list_output<span class="w">                                                  </span>...<span class="w"> </span>Success
+<span class="w">  </span>--------------------
+<span class="w">   </span>Score<span class="w"> </span><span class="m">5</span>.00<span class="w"> </span>/<span class="w"> </span><span class="m">5</span>.00
+<span class="w">   </span>Grade<span class="w"> </span><span class="m">1</span>.00<span class="w"> </span>/<span class="w"> </span><span class="m">1</span>.00
+<span class="w">  </span>Status<span class="w"> </span>Success
+</code></pre></div>
+
+<p>You can also run the testing script manually:</p>
+<div class="codehilite"><pre><span></span><code><span class="c1"># Run Shell unit test script manually</span>
+$<span class="w"> </span>./list.unit.sh
+...
+</code></pre></div>
+
+<p>To <strong>debug</strong> your <a href="https://en.wikipedia.org/wiki/Linked_list">linked list</a> functions, you can use [gdb] on the
+<code>list.unit</code> executable:</p>
+<div class="codehilite"><pre><span></span><code><span class="c1"># Start gdb on list.unit</span>
+$<span class="w"> </span>gdb<span class="w"> </span>./list.unit
+<span class="o">(</span>gdb<span class="o">)</span><span class="w"> </span>run<span class="w"> </span><span class="m">0</span><span class="w">     </span><span class="c1"># Run list.unit with the &quot;0&quot; command line argument (ie. node_create)</span>
+...
+</code></pre></div>
+
+<p>You can also use <a href="https://valgrind.org/">valgrind</a> to check for memory errors:</p>
+<div class="codehilite"><pre><span></span><code><span class="c1"># Check for memory errors on list_lower test case</span>
+$<span class="w"> </span>valgrind<span class="w"> </span>--leak-check<span class="o">=</span>full<span class="w"> </span>./list.unit<span class="w"> </span><span class="m">0</span>
+</code></pre></div>
+
+<div class="alert success-bg">
+<h3 id="repeat-embed_icon-iterative-development"><i class="icon icon-medium"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><title>repeat</title><path d="M17,17H7V14L3,18L7,22V19H19V13H17M7,7H17V10L21,6L17,2V5H5V11H7V7Z" /></svg>
+</i> Iterative Development<a class="headerlink" href="#repeat-embed_icon-iterative-development" title="Permanent link">&para;</a></h3>
+<p>You should practice <a href="https://en.wikipedia.org/wiki/Iterative_and_incremental_development">iterative development</a>.  That is, rather than writing a
+bunch of code and then debugging it all at once, you should concentrate on
+one function at a time and then test that <strong>one thing at a time</strong>.  The
+provided <a href="https://en.wikipedia.org/wiki/Unit_testing">unit tests</a> allow you to check on the correctness of the individual
+functions without implementing everything at once.  Take advantage of this
+and build one thing at a time.</p>
+</div>
+<h2 id="activity-2-filters-015-points">Activity 2: Filters (<em>0.15 Points</em>)<a class="headerlink" href="#activity-2-filters-015-points" title="Permanent link">&para;</a></h2>
+<p>As with the conventional <a href="https://man7.org/linux/man-pages/man1/find.1.html">find</a> command, the <code>findit</code> utility will allow for
+<em>filtering</em> the list of <em>file paths</em> by their individual attributes.  For
+instance, to only display the regular files in a directory, you can do the
+following with <a href="https://man7.org/linux/man-pages/man1/find.1.html">find</a>:</p>
+<div class="codehilite"><pre><span></span><code><span class="c1"># Only display regular files in the current directory</span>
+$<span class="w"> </span>find<span class="w"> </span>.<span class="w"> </span>-type<span class="w"> </span>f
+</code></pre></div>
+
+<p>Internally, <code>findit</code> will support this feature by calling a <code>Filter</code> function
+on each entry in its <a href="https://en.wikipedia.org/wiki/Linked_list#Singly_linked_list">singly linked list</a> of <em>file paths</em> to check whether or
+not to keep it.  In this specific example, <code>findit</code> would call
+<code>filter_by_type</code> with an <code>Options</code> structure that has its <code>type</code> attribute
+set to <a href="https://man7.org/linux/man-pages/man7/inode.7.html">S_IFREG</a> on each <code>Data</code> <a href="https://en.wikipedia.org/wiki/String_(computer_science)">string</a> in its <code>List</code>.</p>
+<p>To support filtering the list of <em>file paths</em> in <code>findit</code>, you are to
+implement three <code>Filter</code> functions that return <code>true</code> if the file <code>path</code>
+should be kept in the list.</p>
+<h3 id="task-1-filterc">Task 1: <code>filter.c</code><a class="headerlink" href="#task-1-filterc" title="Permanent link">&para;</a></h3>
+<p>The <code>filter.c</code> file contains the <a href="https://en.wikipedia.org/wiki/C_(programming_language)">C</a> implementation for the <code>Filter</code>
+functions.  For this task, you will need to implement the following
+functions:</p>
+<ol>
+<li>
+<div class="flex-col" markdown="1">
+<p><code>bool filter_by_type(const char *path, Options *options)</code></p>
+<blockquote>
+<p>This function returns <code>true</code> if the file at the specified <code>path</code> has
+the corresponding <strong>type</strong> specified in the <code>Options</code> structure.</p>
+</blockquote>
+<div class="alert success-bg" markdown="1">
+<p><strong>Hint</strong>: Consider using <a href="https://man7.org/linux/man-pages/man2/stat.2.html">lstat</a> and <a href="https://man7.org/linux/man-pages/man2/stat.2.html">S_IFMT</a>.</p>
+</div>
+</li>
+<li>
+<div class="flex-col" markdown="1">
+<p><code>bool filter_by_name(const char *path, Options *options)</code></p>
+<blockquote>
+<p>This function returns <code>true</code> if the <a href="https://man7.org/linux/man-pages/man3/basename.3.html">basename</a> of the specified <code>path</code>
+has matches the <a href="https://man7.org/linux/man-pages/man7/glob.7.html">glob pattern</a> specified in the <code>Options</code> structure.</p>
+</blockquote>
+<div class="alert success-bg" markdown="1">
+<p><strong>Hint</strong>: Consider using <a href="https://man7.org/linux/man-pages/man3/basename.3.html">basename</a> and <a href="https://man7.org/linux/man-pages/man3/fnmatch.3.html">fnmatch</a>.</p>
+</div>
+</li>
+<li>
+<div class="flex-col" markdown="1">
+<p><code>bool filter_by_mode(const char *path, Options *options</code></p>
+<blockquote>
+<p>This function returns <code>true</code> if the file at the specified <code>path</code> has
+the <a href="https://man7.org/linux/man-pages/man2/access.2.html">access mode</a> specified in the <code>Options</code> structure.</p>
+</blockquote>
+<div class="alert success-bg" markdown="1">
+<p><strong>Hint</strong>: Consider using <a href="https://man7.org/linux/man-pages/man2/access.2.html">access</a>.</p>
+</div>
+</li>
+</ol>
+<h3 id="task-2-testing_1">Task 2: Testing<a class="headerlink" href="#task-2-testing_1" title="Permanent link">&para;</a></h3>
+<p>As you implement the functions in <code>filter.c</code>, you should use the
+<code>filter.unit</code> executable with the <code>filter.unit.sh</code> script to test each of
+your functions:</p>
+<div class="codehilite"><pre><span></span><code><span class="c1"># Build test artifacts and run test scripts</span>
+$<span class="w"> </span>make<span class="w"> </span>test-filter
+Testing<span class="w"> </span>filter<span class="w"> </span>...
+<span class="w">  </span>filter_by_type<span class="w">                                               </span>...<span class="w"> </span>Success
+<span class="w">  </span>filter_by_name<span class="w">                                               </span>...<span class="w"> </span>Success
+<span class="w">  </span>filter_by_mode<span class="w">                                               </span>...<span class="w"> </span>Success
+<span class="w">  </span>--------------------
+<span class="w">   </span>Score<span class="w"> </span><span class="m">3</span>.00<span class="w"> </span>/<span class="w"> </span><span class="m">3</span>.00
+<span class="w">   </span>Grade<span class="w"> </span><span class="m">1</span>.00<span class="w"> </span>/<span class="w"> </span><span class="m">1</span>.00
+<span class="w">  </span>Status<span class="w"> </span>Success
+</code></pre></div>
+
+<p>You can also run the testing script manually:</p>
+<div class="codehilite"><pre><span></span><code><span class="c1"># Run Shell unit test script manually</span>
+$<span class="w"> </span>./filter.unit.sh
+...
+</code></pre></div>
+
+<p>To <strong>debug</strong> your <code>Filter</code> functions, you can use [gdb] on the <code>filter.unit</code>
+executable:</p>
+<div class="codehilite"><pre><span></span><code><span class="c1"># Start gdb on list.unit</span>
+$<span class="w"> </span>gdb<span class="w"> </span>./filter.unit
+<span class="o">(</span>gdb<span class="o">)</span><span class="w"> </span>run<span class="w"> </span><span class="m">0</span><span class="w">     </span><span class="c1"># Run list.unit with the &quot;0&quot; command line argument (ie. filter_by_type)</span>
+...
+</code></pre></div>
+
+<p>You can also use <a href="https://valgrind.org/">valgrind</a> to check for memory errors:</p>
+<div class="codehilite"><pre><span></span><code><span class="c1"># Check for memory errors on list_lower test case</span>
+$<span class="w"> </span>valgrind<span class="w"> </span>--leak-check<span class="o">=</span>full<span class="w"> </span>./filter.unit<span class="w"> </span><span class="m">0</span>
+</code></pre></div>
+
+<h2 id="activity-3-findit-040-points">Activity 3: Findit (<em>0.40 Points</em>)<a class="headerlink" href="#activity-3-findit-040-points" title="Permanent link">&para;</a></h2>
+<p>Once you have implemented the <a href="https://en.wikipedia.org/wiki/Linked_list#Singly_linked_list">singly linked list</a> and the <code>Filter</code>
+functions, you can complete the <code>findit</code> utility:</p>
+<div class="codehilite"><pre><span></span><code><span class="c1"># Display current directory (no arguments)</span>
+$<span class="w"> </span>./findit
+./list.c
+./list.unit
+./Makefile.template
+./filter.c.template
+...
+
+<span class="c1"># Display only files</span>
+$<span class="w"> </span>./findit<span class="w"> </span>.
+./list.c
+./list.unit
+./Makefile.template
+./filter.c.template
+...
+
+<span class="c1"># Display only .c files</span>
+$<span class="w"> </span>./findit<span class="w"> </span>.<span class="w"> </span>-name<span class="w"> </span><span class="s1">&#39;*.c&#39;</span>
+./list.c
+./filter.unit.c
+./findit.c
+./filter.c
+./list.unit.c
+
+<span class="c1"># Display only executable files</span>
+$<span class="w"> </span>./findit<span class="w"> </span>.<span class="w"> </span>-type<span class="w"> </span>f<span class="w"> </span>-executable
+./list.unit
+./findit
+./list.unit.sh
+./findit.test.sh
+./filter.unit.sh
+./filter.unit
+</code></pre></div>
+
+<p>As with the <a href="https://man7.org/linux/man-pages/man1/find.1.html">find</a> program, <code>findit</code> takes the <code>PATH</code> of the directory to
+<em>recursively</em> search as its first argument and then any <em>options</em> the user
+wishes to specify to filter the found entries.  For <code>findit</code>, you only need
+to support the options shown above, which should correspond to a <code>Filter</code>
+function you implemented in <strong>Activity 2</strong>.</p>
+<h3 id="task-1-finditc">Task 1: <code>findit.c</code><a class="headerlink" href="#task-1-finditc" title="Permanent link">&para;</a></h3>
+<p>The <code>findit.c</code> file contains the <a href="https://en.wikipedia.org/wiki/C_(programming_language)">C</a> implementation for the <code>findit</code> program.
+For this task, you will need to implement the following functions:</p>
+<ol>
+<li>
+<div class="flex-col" markdown="1">
+<p><code>void find_files(const char *root, List *files)</code></p>
+<blockquote>
+<p>This function recursively walks the given <code>root</code> directory and adds any
+entries it finds to the given <code>List</code> of <code>files</code>.</p>
+</blockquote>
+<div class="alert success-bg" markdown="1">
+<p><strong>Hint</strong>: Consider using <a href="https://man7.org/linux/man-pages/man3/opendir.3.html">opendir</a>, <a href="https://man7.org/linux/man-pages/man3/readdir.3.html">readdir</a>, and <a href="https://man7.org/linux/man-pages/man3/closedir.3.html">closedir</a> as you did
+  for <code>walk</code> in [Reading 11].  When recursing on a <strong>directory</strong>, make
+  sure to use the <strong>full path</strong>.</p>
+<p>When adding the <strong>full path</strong> to the <code>List</code> of <code>files</code>, consider using
+  <a href="https://man7.org/linux/man-pages/man3/strdup.3.html">strdup</a>.</p>
+<p>Moreover, consider when to add the <code>root</code> itself to <code>files</code>.</p>
+</div>
+</li>
+<li>
+<div class="flex-col" markdown="1">
+<p><code>void filter_files(List *files, List *filters, Options *options)</code></p>
+<blockquote>
+<p>This function applies each <code>Filter</code> function in <code>filters</code> with the
+given <code>Options</code> to the <code>List</code> of <code>files</code>.</p>
+</blockquote>
+<div class="alert success-bg" markdown="1">
+<p><strong>Hint</strong>: Consider using <code>list_filter</code>.</p>
+</div>
+</li>
+<li>
+<div class="flex-col" markdown="1">
+<p><code>int main(int argc, char *argv[])</code></p>
+<blockquote>
+<p>This function parses the command line options, finds the files
+recursively, applies any filters, and then prints out the found files.</p>
+</blockquote>
+<div class="alert success-bg" markdown="1">
+<p><strong>Hint</strong>: Consider creating a <code>List</code> of <code>files</code>, a <code>List</code> of <code>filters</code>,
+  and an <code>Options</code> structure.  As you parse the command line options, set
+  the appropriate attributes in the <code>Options</code> structure and add the
+  corresponding <code>Filter</code> function to your <code>List</code> of <code>filters</code>.</p>
+<p>After parsing the command line options, you should then use
+  <code>find_files</code>, <code>filter_files</code>, and then <code>list_output</code>.</p>
+<p>Be sure to deallocate any resources you allocated on the <a href="https://en.wikipedia.org/wiki/Heap_(programming)">heap</a>.</p>
+</div>
+</li>
+</ol>
+<h3 id="task-2-testing_2">Task 2: Testing<a class="headerlink" href="#task-2-testing_2" title="Permanent link">&para;</a></h3>
+<p>To test your <code>findit</code> utility, you can use the provided <code>findit.test.sh</code> script:</p>
+<div class="codehilite"><pre><span></span><code><span class="c1"># Build test artifacts and run test scripts</span>
+$<span class="w"> </span>make<span class="w"> </span>test-findit
+Testing<span class="w"> </span>findit<span class="w"> </span>...
+<span class="w">  </span>findit<span class="w">                                                       </span>...<span class="w"> </span>Success
+<span class="w">  </span>findit<span class="w"> </span>/etc<span class="w">                                                  </span>...<span class="w"> </span>Success
+<span class="w">  </span>findit<span class="w"> </span>/etc<span class="w"> </span>-type<span class="w"> </span>f<span class="w">                                          </span>...<span class="w"> </span>Success
+<span class="w">  </span>findit<span class="w"> </span>/etc<span class="w"> </span>-type<span class="w"> </span>d<span class="w">                                          </span>...<span class="w"> </span>Success
+<span class="w">  </span>findit<span class="w"> </span>/etc<span class="w"> </span>-name<span class="w"> </span><span class="s1">&#39;*.conf&#39;</span><span class="w">                                   </span>...<span class="w"> </span>Success
+<span class="w">  </span>findit<span class="w"> </span>/etc<span class="w"> </span>-readable<span class="w">                                        </span>...<span class="w"> </span>Success
+<span class="w">  </span>findit<span class="w"> </span>/etc<span class="w"> </span>-writable<span class="w">                                        </span>...<span class="w"> </span>Success
+<span class="w">  </span>findit<span class="w"> </span>/etc<span class="w"> </span>-executable<span class="w">                                      </span>...<span class="w"> </span>Success
+<span class="w">  </span>findit<span class="w"> </span>/etc<span class="w"> </span>-type<span class="w"> </span>d<span class="w"> </span>-name<span class="w"> </span><span class="s1">&#39;*.d&#39;</span><span class="w">                              </span>...<span class="w"> </span>Success
+<span class="w">  </span>findit<span class="w"> </span>/etc<span class="w"> </span>-type<span class="w"> </span>d<span class="w"> </span>-name<span class="w"> </span><span class="s1">&#39;*.d&#39;</span><span class="w"> </span>-executable<span class="w">                  </span>...<span class="w"> </span>Success
+<span class="w">  </span>findit<span class="w"> </span>.<span class="w"> </span>-name<span class="w"> </span><span class="s1">&#39;*.c&#39;</span><span class="w">                                         </span>...<span class="w"> </span>Success
+<span class="w">  </span>findit<span class="w"> </span>.<span class="w"> </span>-writable<span class="w">                                           </span>...<span class="w"> </span>Success
+<span class="w">  </span>findit<span class="w"> </span>.<span class="w"> </span>-type<span class="w"> </span>f<span class="w"> </span>-name<span class="w"> </span><span class="s1">&#39;*.unit&#39;</span><span class="w"> </span>-executable<span class="w">                  </span>...<span class="w"> </span>Success
+<span class="w">  </span>--------------------
+<span class="w">   </span>Score<span class="w"> </span><span class="m">13</span>.00<span class="w"> </span>/<span class="w"> </span><span class="m">13</span>.00
+<span class="w">   </span>Grade<span class="w">  </span><span class="m">1</span>.00<span class="w"> </span>/<span class="w">  </span><span class="m">1</span>.00
+<span class="w">  </span>Status<span class="w"> </span>Success
+
+<span class="c1"># Run test script manually</span>
+$<span class="w"> </span>./findit.test.sh
+</code></pre></div>
+
+<h2 id="activity-4-quiz-020-points">Activity 4: Quiz (<em>0.20 Points</em>)<a class="headerlink" href="#activity-4-quiz-020-points" title="Permanent link">&para;</a></h2>
+<p>Once you have completed all the activities above, you are to complete the
+following <strong>reflection quiz</strong>:</p>
+<div id="quiz-questions"></div>
+
+<div id="quiz-responses"></div>
+
+<script src="static/js/dredd-quiz.js"></script>
+<script>
+loadQuiz('static/json/homework08.json');
+</script>
+
+<pre style="display: none;" id="dr-container" class="codehilite"><code id="dredd-response"></code></pre>
+
+<p>As with <a href="reading01.html">Reading 01</a>, you will need to store your answers in a
+<code>homework08/answers.json</code> file.  You can use the form above to generate the
+contents of this file, or you can write the <a href="https://json.org">JSON</a> by hand.</p>
+<p>To test your quiz, you can use the <code>check.py</code> script:</p>
+<div class="codehilite"><pre><span></span><code>$<span class="w"> </span>../.scripts/check.py
+Checking<span class="w"> </span>homework08<span class="w"> </span>quiz<span class="w"> </span>...
+<span class="w">    </span>Q01<span class="w"> </span><span class="m">12</span>.00<span class="w"> </span>/<span class="w"> </span><span class="m">12</span>.00
+<span class="w">    </span>Q02<span class="w">  </span><span class="m">2</span>.00<span class="w"> </span>/<span class="w">  </span><span class="m">2</span>.00
+<span class="w">    </span>Q03<span class="w">  </span><span class="m">1</span>.00<span class="w"> </span>/<span class="w">  </span><span class="m">1</span>.00
+<span class="w">    </span>Q04<span class="w">  </span><span class="m">4</span>.00<span class="w"> </span>/<span class="w">  </span><span class="m">4</span>.00
+<span class="w">  </span>--------------------
+<span class="w">   </span>Score<span class="w"> </span><span class="m">19</span>.00<span class="w"> </span>/<span class="w"> </span><span class="m">19</span>.00
+<span class="w">   </span>Grade<span class="w">  </span><span class="m">1</span>.00<span class="w"> </span>/<span class="w">  </span><span class="m">1</span>.00
+<span class="w">  </span>Status<span class="w"> </span>Success
+</code></pre></div>
+
+<h2 id="submission">Submission<a class="headerlink" href="#submission" title="Permanent link">&para;</a></h2>
+<p>To submit your assignment, please commit your work to the <code>homework08</code> folder
+of your <code>homework08</code> branch in your <strong>assignments</strong> <a href="https://github.com">GitHub</a> repository.
+Your <code>homework08</code> folder should <strong>only</strong> contain the following files:</p>
+<ul>
+<li><code>Makefile</code></li>
+<li><code>answers.json</code></li>
+<li><code>filter.c</code></li>
+<li><code>filter.unit.c</code></li>
+<li><code>findit.c</code></li>
+<li><code>findit.h</code></li>
+<li><code>list.c</code></li>
+<li><code>list.unit.c</code></li>
+</ul>
+<div class="alert warning-bg">
+<p><strong>Note</strong>: You do not need to commit the test scripts because the <code>Makefile</code>
+automatically downloads them.</p>
+</div>
+<div class="codehilite"><pre><span></span><code><span class="c1">#-----------------------------------------------------------------------</span>
+<span class="c1"># Make sure you have already completed Activity 0: Preparation</span>
+<span class="c1">#-----------------------------------------------------------------------</span>
+...
+$<span class="w"> </span>git<span class="w"> </span>add<span class="w"> </span>Makefile<span class="w">                        </span><span class="c1"># Mark changes for commit</span>
+$<span class="w"> </span>git<span class="w"> </span>add<span class="w"> </span>list.c<span class="w">                          </span><span class="c1"># Mark changes for commit</span>
+$<span class="w"> </span>git<span class="w"> </span>commit<span class="w"> </span>-m<span class="w"> </span><span class="s2">&quot;Homework 08: list.c&quot;</span><span class="w">     </span><span class="c1"># Record changes</span>
+...
+$<span class="w"> </span>git<span class="w"> </span>add<span class="w"> </span>Makefile<span class="w">                        </span><span class="c1"># Mark changes for commit</span>
+$<span class="w"> </span>git<span class="w"> </span>add<span class="w"> </span>filter.c<span class="w">                        </span><span class="c1"># Mark changes for commit</span>
+$<span class="w"> </span>git<span class="w"> </span>commit<span class="w"> </span>-m<span class="w"> </span><span class="s2">&quot;Homework 08: filter.c&quot;</span><span class="w">   </span><span class="c1"># Record changes</span>
+...
+$<span class="w"> </span>git<span class="w"> </span>add<span class="w"> </span>Makefile<span class="w">                        </span><span class="c1"># Mark changes for commit</span>
+$<span class="w"> </span>git<span class="w"> </span>add<span class="w"> </span>findit.c<span class="w">                        </span><span class="c1"># Mark changes for commit</span>
+$<span class="w"> </span>git<span class="w"> </span>commit<span class="w"> </span>-m<span class="w"> </span><span class="s2">&quot;Homework 08: findit.c&quot;</span><span class="w">   </span><span class="c1"># Record changes</span>
+...
+$<span class="w"> </span>git<span class="w"> </span>add<span class="w"> </span>answers.json<span class="w">                    </span><span class="c1"># Mark changes for commit</span>
+$<span class="w"> </span>git<span class="w"> </span>commit<span class="w"> </span>-m<span class="w"> </span><span class="s2">&quot;Homework 08: quiz&quot;</span><span class="w">       </span><span class="c1"># Record changes</span>
+...
+$<span class="w"> </span>git<span class="w"> </span>push<span class="w"> </span>-u<span class="w"> </span>origin<span class="w"> </span>homework08<span class="w">           </span><span class="c1"># Push branch to GitHub</span>
+</code></pre></div>
+
+<div class="alert warning-bg">
+<h3 id="lifebuoy-embed_icon-acknowledgments"><i class="icon icon-medium"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><title>lifebuoy</title><path d="M19.79,15.41C20.74,13.24 20.74,10.75 19.79,8.59L17.05,9.83C17.65,11.21 17.65,12.78 17.06,14.17L19.79,15.41M15.42,4.21C13.25,3.26 10.76,3.26 8.59,4.21L9.83,6.94C11.22,6.35 12.79,6.35 14.18,6.95L15.42,4.21M4.21,8.58C3.26,10.76 3.26,13.24 4.21,15.42L6.95,14.17C6.35,12.79 6.35,11.21 6.95,9.82L4.21,8.58M8.59,19.79C10.76,20.74 13.25,20.74 15.42,19.78L14.18,17.05C12.8,17.65 11.22,17.65 9.84,17.06L8.59,19.79M12,2A10,10 0 0,1 22,12A10,10 0 0,1 12,22A10,10 0 0,1 2,12A10,10 0 0,1 12,2M12,8A4,4 0 0,0 8,12A4,4 0 0,0 12,16A4,4 0 0,0 16,12A4,4 0 0,0 12,8Z" /></svg>
+</i> Acknowledgments<a class="headerlink" href="#lifebuoy-embed_icon-acknowledgments" title="Permanent link">&para;</a></h3>
+<p>If you collaborated with any other students, or received help from TAs or AI
+tools on this assignment, please record this support in the <code>README.md</code> in
+the <code>homework08</code> folder and include it with your <strong>Pull Request</strong>.</p>
+</div>
+<div class="alert success-bg">
+<h3 id="account-question-embed_icon-graders"><i class="icon icon-medium"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><title>account-question</title><path d="M13,8A4,4 0 0,1 9,12A4,4 0 0,1 5,8A4,4 0 0,1 9,4A4,4 0 0,1 13,8M17,18V20H1V18C1,15.79 4.58,14 9,14C13.42,14 17,15.79 17,18M20.5,14.5V16H19V14.5H20.5M18.5,9.5H17V9A3,3 0 0,1 20,6A3,3 0 0,1 23,9C23,9.97 22.5,10.88 21.71,11.41L21.41,11.6C20.84,12 20.5,12.61 20.5,13.3V13.5H19V13.3C19,12.11 19.6,11 20.59,10.35L20.88,10.16C21.27,9.9 21.5,9.47 21.5,9A1.5,1.5 0 0,0 20,7.5A1.5,1.5 0 0,0 18.5,9V9.5Z" /></svg>
+</i> Graders<a class="headerlink" href="#account-question-embed_icon-graders" title="Permanent link">&para;</a></h3>
+<p>Once you have committed your work and pushed it to <a href="https://github.com">GitHub</a>, remember to
+create a <strong>pull request</strong> and assign it to the appropriate <strong>teaching
+assistant</strong> from the <a href="reading08_tas.html">Reading 08 TA List</a>.</p>
+<p><strong>Note</strong>: this list changes each week, so be sure to consult the appropriate
+list for each assignment.</p>
+</div>
+</main>
+<footer>
+Built using <a href="https://python.org">Python</a>
+and <a href="https://jinja.palletsprojects.com">Jinja</a>
+with colors from <a href="https://nordtheme.com">Nord Theme</a>
+and icons from <a href="https://pictogrammers.com/library/mdi/">Material Design Icons</a>.</footer>
+</body>
+</html>
