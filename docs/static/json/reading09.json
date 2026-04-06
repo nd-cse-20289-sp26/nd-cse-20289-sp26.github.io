@@ -1,0 +1,30 @@
+{
+    "q01": {
+        "type": "order",
+        "question": "\n<p>Identify the <b>system call</b> you should use to accomplish the\nfollowing tasks:</p>\n\n<p>\n<ol>\n  <li>Send a signal to a process.</li>\n  <li>Create a new process.</li>\n  <li>Replace current process image with a new process image.</li>\n  <li>Retrieve the exit status of a child process.</li>\n  <li>Terminate current process.</li>\n</ol>\n</p>\n",
+        "responses": {
+            "fork": "<code>fork()</code>",
+            "exec": "<code>exec()</code>",
+            "wait": "<code>wait()</code>",
+            "exit": "<code>exit()</code>",
+            "kill": "<code>kill()</code>"
+        }
+    },
+    "q02": {
+        "type": "multiple",
+        "question": "\n<p>Which of the following statements regarding <code>fork</code> and\n<code>exec</code> are true (<i>choose all that apply</i>)?</p>\n",
+        "responses": {
+            "parent": "After a <code>fork()</code>, the parent gets the <code>PID</code> of the child process.",
+            "child": "After a <code>fork()</code>, the child gets the <code>PID</code> of itself.",
+            "process": "After a <code>fork()</code>, the parent and child processes are nearly identical.",
+            "perror": "During a <code>fork()</code>, the parent is terminated if there is an error.",
+            "pfirst": "After a <code>fork()</code>, the parent is guaranteed to run first.",
+            "cfirst": "After a <code>fork()</code>, the child is guaranteed to run first.",
+            "scheduler": "After a <code>fork()</code>, the next process to run is determined by the scheduler.",
+            "create": "After an <code>exec()</code>, a new process is created.",
+            "load": "After an <code>exec()</code>, new program code is loaded.",
+            "before": "You must always call <code>fork()</code> before you call <code>exec()</code>.",
+            "after": "You must always call <code>exec()</code> after you call <code>fork()</code>."
+        }
+    }
+}

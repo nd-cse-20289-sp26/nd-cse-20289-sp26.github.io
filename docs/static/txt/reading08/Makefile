@@ -51,9 +51,9 @@ walk_grade, walk_status = run_and_extract('make test-walk')
 all_success = all([walk_status, quiz_status])
 
 print('Grade Summary ...')
-print('  Quiz    {:4.2f} /  0.20'.format(0.2*quiz_grade))
-print('  Walk    {:4.2f} /  0.80'.format(0.8*walk_grade))
-print('  Total   {:4.2f} /  1.00'.format(
+print('    Quiz  {:4.2f} /  0.20'.format(0.2*quiz_grade))
+print('    Walk  {:4.2f} /  0.80'.format(0.8*walk_grade))
+print('   Total  {:4.2f} /  1.00'.format(
     0.8*walk_grade + 0.2*quiz_grade
 ))
 print('  Status {}'.format('Success' if all_success else 'Failure'))
