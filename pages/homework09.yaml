@@ -613,11 +613,13 @@ body:       |
   ### TROLL
 
   For extra credit, you are to use [C] and [system calls] to implement your own
-  version of the `TROLL` from [Homework 01]. Recall, that the `TROLL` was a
-  [process] that intercepted [signals] such as `SIGINT` and `SIGTERM` and
-  taunted you when you tried to terminate it. Your version of the `TROLL`
-  should do something similar (*prevent easy termination*)... but its taunts and
-  other aesthetic details are up to you.
+  version of the `TROLL` from [Homework 01] and share it with the class by by
+  **Wednesday, April 22**.
+
+  Recall, that the `TROLL` was a [process] that intercepted [signals] such as
+  `SIGINT` and `SIGTERM` and taunted you when you tried to terminate it. Your
+  version of the `TROLL` should do something similar (*prevent easy
+  termination*)... but its taunts and other aesthetic details are up to you.
 
   <div class="alert special-bg" markdown="1">
 
