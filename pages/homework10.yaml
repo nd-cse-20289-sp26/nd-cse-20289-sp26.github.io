@@ -1,0 +1,1040 @@
+title:      "Homework 10: nmapit, curlit"
+body:       |
+
+  The goal of this homework assignment is to allow you to practice using
+  [system calls] involving [networking] with [sockets] in [C] by implementing
+  simplified versions of two familiar [Unix] utilities:
+
+  1. `nmapit`: The first utility implements a simple [port scanning] utility
+    similar to [nmap].
+
+  2. `curlit`: The second utility implements a simple [HTTP] client similar to
+    [curl].
+
+  For this assignment, record your source code and any responses to the
+  following activities in the `homework10` folder of your **assignments**
+  [GitHub] repository and push your work by **noon Saturday, April 25**.
+
+  [networking]: https://en.wikipedia.org/wiki/Computer_network
+  [sockets]: https://en.wikipedia.org/wiki/Network_socket
+  [HTTP]: https://en.wikipedia.org/wiki/Hypertext_Transfer_Protocol
+  [nmap]: https://nmap.org/
+  [curl]: https://curl.se/
+  [port scanning]: https://en.wikipedia.org/wiki/Port_scanner
+
+  <div class="alert info-bg" markdown="1">
+
+  ### <i class="icon icon-medium">{{ "help" | embed_icon }}</i> Frequently Asked Question
+
+  <div class="centered">
+    <iframe src="https://docs.google.com/presentation/d/e/2PACX-1vToF0b48-uTTuZfrrd_KcfE9H_OOe9RE9H4zqwdJamvHCdh9kbLejtc6dmm22etgKNzIZjOnvvy7slI/pubembed?start=false&loop=false&delayms=3000" frameborder="0" width="960" height="749" allowfullscreen="true" mozallowfullscreen="true" webkitallowfullscreen="true"></iframe>
+  </div>
+
+  </div>
+
+  ## Activity 0: Preparation
+
+  Before starting this homework assignment, you should first perform a `git
+  pull` to retrieve any changes in your remote [GitHub] repository:
+
+      :::bash
+      $ cd path/to/repository                   # Go to assignments repository
+
+      $ git switch master                       # Make sure we are in master branch
+
+      $ git pull --rebase                       # Get any remote changes not present locally
+
+  Next, create a new branch for this assignment:
+
+      :::bash
+      $ git switch -c homework10                # Create homework10 branch and check it out
+
+  ### Task 1: Skeleton Code
+
+  To help you get started, the instructor has provided you with the following
+  **skeleton code**:
+
+      :::bash
+      # Create homework10 folder
+      $ mkdir homework10
+
+      # Go to homework10 folder
+      $ cd homework10
+
+      # Create README
+      $ echo "# Homework 10" > README.md
+
+      # Download Makefile
+      $ curl -LO https://pnutz.h4x0r.space/courses/cse.20289.sp26/static/txt/homework10/Makefile
+
+      # Download C skeleton code
+      $ curl -LO https://pnutz.h4x0r.space/courses/cse.20289.sp26/static/txt/homework10/curlit.c
+      $ curl -LO https://pnutz.h4x0r.space/courses/cse.20289.sp26/static/txt/homework10/nmapit.c
+      $ curl -LO https://pnutz.h4x0r.space/courses/cse.20289.sp26/static/txt/homework10/socket.c
+      $ curl -LO https://pnutz.h4x0r.space/courses/cse.20289.sp26/static/txt/homework10/socket.h
+      $ curl -LO https://pnutz.h4x0r.space/courses/cse.20289.sp26/static/txt/homework10/socket.unit.c
+
+  Once downloaded, you should see the following files in your `homework10`
+  directory:
+
+      :::bash
+      homework10
+          \_ Makefile           # This is the Makefile for building all the assignment artifacts
+          \_ nmapit.c           # This is the nmapit utility C source file
+          \_ curlit.c           # This is the curlit utility C source file
+          \_ socket.c           # This is the timeit library C source file
+          \_ socket.h           # This is the socket library C header file
+          \_ socket.unit.c      # This is the socket library C unit test source file
+
+  ### Task 2: Initial Import
+
+  Now that the files are downloaded into the `homework10` folder, you can
+  **commit** them to your [git] repository:
+
+      :::bash
+      $ git add Makefile                            # Mark changes for commit
+      $ git add *.c *.h *.md
+      $ git commit -m "Homework 10: Initial Import" # Record changes
+
+  ### Task 3: Unit and Functional Tests
+
+  After downloading these files, you can run `make test` to run the tests.
+
+      :::bash
+      # Run all tests (will trigger automatic download)
+      $ make test
+
+  You will notice that the Makefile downloads these additional test data and scripts:
+
+      :::bash
+      homework10
+          \_ curlit.test.sh   # This is the curlit utility test shell script
+          \_ nmapit.test.sh   # This is the nmapit utility test shell script
+          \_ socket.unit.sh   # This is the socket library unit test shell script
+
+  You will be using these [unit tests] and [functional tests] to verify the
+  correctness and behavior of your code.
+
+  <div class="alert info-bg" markdown="1">
+
+  ### <i class="icon icon-medium">{{ "download" | embed_icon }}</i> Automatic Download
+
+  The `test` scripts are automatically downloaded by the `Makefile`, so any
+  modifications you do to them will be lost when you run `make` again. Likewise,
+  because they are automatically downloaded, you do not need to `add` or `commit`
+  them to your [git] repository.
+
+  </div>
+
+  ### Task 4: Makefile
+
+  The `Makefile` contains all the **rules** or **recipes** for building the
+  project artifacts (e.g. `moveit`, `timeit`):
+
+      :::make
+      CC=       gcc
+      CFLAGS=   -Wall -std=gnu99 -g
+      LD=       gcc
+      LDFLAGS=  -L.
+      TARGETS=  nmapit curlit
+
+      all:    $(TARGETS)
+
+      #------------------------------------------------------------------------------
+      # TODO: Rules for object files and executables
+      #------------------------------------------------------------------------------
+
+      socket.o:
+
+      nmapit.o:
+
+      curlit.o:
+
+      nmapit:
+
+      curlit:
+
+      #------------------------------------------------------------------------------
+      # DO NOT MODIFY BELOW
+      #------------------------------------------------------------------------------
+
+      ...
+
+  For this task, you will need to add [rules] for building the *intermediate*
+  [object] files, and the `nmapit` and `curlit` *executables* with the
+  appropriate dependencies as shown in the [DAG] below:
+
+  <div class="centered">
+    <img src="static/img/homework10-makefile.png" class="responsive">
+  </div>
+
+  <div class="alert info-bg" markdown="1">
+
+  ### <i class="icon icon-medium">{{ "cogs" | embed_icon }}</i> Makefile Variables
+
+  You **must** use the `CC`, `CFLAGS` variables when appropriate in your
+  [rules].  You **should** also consider using [automatic variables] such as
+  `$@` and `$<` as well.
+
+  </div>
+
+  [DAG]: https://en.wikipedia.org/wiki/Directed_acyclic_graph
+
+  Once you have a working `Makefile`, you should be able to run the following commands:
+
+      :::bash
+      # Build all TARGETS
+      $ make
+      gcc -Wall -std=gnu99 -g -c -o nmapit.o nmapit.c
+      gcc -Wall -std=gnu99 -g -c -o socket.o socket.c
+      gcc -L. -o nmapit nmapit.o socket.o
+      gcc -Wall -std=gnu99 -g -c -o curlit.o curlit.c
+      gcc -L. -o curlit curlit.o socket.o
+
+      # Run all tests
+      $ make test
+      Testing socket ...
+      ...
+
+      Testing nmapit utility...
+      ...
+
+      Testing curlit utility...
+      ...
+
+      # Remove generated artifacts
+      $ make clean
+
+  <div class="alert danger-bg" markdown="1">
+
+  **Note**: The tests will **fail** if you haven't implemented all the
+    necessary functions appropriately.
+
+  </div>
+
+  <div class="alert warning-bg" markdown="1">
+
+  ### <i class="icon icon-medium">{{ "alert" | embed_icon }}</i> Compiler Warnings
+
+  You must include the `-Wall` flag in your `CFLAGS` when you compile.  This
+  also means that your code must **compile without any warnings**, otherwise
+  points will be deducted.
+
+  </div>
+
+  [rules]: https://www.gnu.org/software/make/manual/html_node/Rule-Example.html#Rule-Example
+  [object]: https://en.wikipedia.org/wiki/Object_file
+  [static library]: https://en.wikipedia.org/wiki/Static_library#Creating_static_libraries_in_C.2FC.2B.2B
+  [shared library]: https://en.wikipedia.org/wiki/Library_(computing)#Shared_libraries
+  [automatic variables]: https://www.gnu.org/software/make/manual/html_node/Automatic-Variables.html
+  [unit tests]: https://en.wikipedia.org/wiki/Unit_testing
+  [functional tests]: https://en.wikipedia.org/wiki/Functional_testing
+
+  ## Activity 1: `socket` (*0.1 Points*)
+
+  Both `nmapit` and `curlit` will require using [sockets] in [C] to communicate
+  with a remote **host**.  To simplify the process of establishing a
+  connection, you are to make consolidate all the code for connecting to a
+  remote **host** into a single `socket_dial` function.
+
+  ### Task 1: `socket.c`
+
+  To implement the `socket` library, you are to complete the provided
+  `socket.c` source file which contains the following **function**:
+
+      :::c
+      /**
+       * Create socket connection to specified host and port.
+       * @param   host        Host string to connect to.
+       * @param   port        Port string to connect to.
+       * @return  Socket file stream of connection if successful, otherwise NULL.
+       **/
+      FILE *socket_dial(const char *host, const char *port)`
+
+  > This function uses [socket] to connect to the given `host` and `port` using
+  [TCP] and returns a **read/writable** `FILE` stream corresponding to the
+  [socket] connection.
+
+  <div class="alert success-bg" markdown="1">
+
+  **Hints**:
+
+   - You must check if any of the [system calls] fail.
+
+   - You should use [getaddrinfo], [socket], [connect], [freeaddrinfo], and [fdopen].
+
+  </div>
+
+  [socket]: http://man7.org/linux/man-pages/man2/socket.2.html
+  [TCP]: https://en.wikipedia.org/wiki/Transmission_Control_Protocol
+  [getaddrinfo]: http://man7.org/linux/man-pages/man3/getaddrinfo.3.html
+  [connect]: http://man7.org/linux/man-pages/man2/connect.2.html
+  [freeaddrinfo]: http://man7.org/linux/man-pages/man3/getaddrinfo.3.html
+  [fdopen]: https://man7.org/linux/man-pages/man3/fopen.3.html
+
+  ### Task 2: Testing
+
+  As you implement the functions in `socket.c`, you should use the
+  `socket.unit` executable with the `socket.unit.sh` script to test each of
+  your functions:
+
+      :::bash
+      # Build test artifacts and run test scripts
+      $ make test-socket
+      Testing socket ...
+        socket_dial_success                                          ... Success
+        socket_dial_failure                                          ... Success
+        socket_dial_mode                                             ... Success
+        --------------------
+         Score 3.00 / 3.00
+         Grade 1.00 / 1.00
+        Status Success
+
+  You can also run the testing script manually:
+
+      :::bash
+      # Run shell unit test script manually
+      $ ./socket.unit.sh
+      ...
+
+  To debug your [socket] functions, you can use [gdb] on the socket.unit
+  executable:
+
+      :::bash
+      # Start gdb on socket.unit
+      $ gdb ./socket.unit
+      (gdb) run 0     # Run socket.unit with the "0" command line argument (ie. socket_dial_success)
+      ...
+
+  You can also use valgrind to check for memory errors:
+
+      :::bash
+      # Check for memory errors on first test case
+      # $ valgrind --leak-check=full ./socket.unit 0
+
+  [gdb]: https://www.sourceware.org/gdb/
+  [valgrind]: https://valgrind.org/
+
+  ## Activity 2: `nmapit` (*0.3 Points*)
+
+  Once you have the `socket_dial` function implemented, you can complete the
+  `nmapit` utility, which *scans* a range of **ports** on a remote **host** and
+  reports which ones are *active* (ie. establish a connection) as shown below:
+
+  <div class="centered">
+    <img src="static/img/homework10-nmapit.png" class="responsive">
+  </div>
+
+  Because some **hosts** have [firewalls] which can cause [connect] to hang for
+  long periods of time, you will use a one second [alarm] to interrupt
+  `socket_dial`.  This interruption will cause `socket_dial` to fail, which
+  means the **port** is considered *inactive*.
+
+  Here are some examples of `nmapit` in action:
+
+      :::bash
+      # Display usage message
+      $ ./nmapit -h
+      Usage: nmapit [-p START-END] HOST
+      Options:
+          -p START-END    Specifies the range of port numbers to scan
+
+      # Scan student05.cse.nd.edu with default ports (1-1023)
+      $ ./nmapit student05.cse.nd.edu
+      22
+      80
+      111
+
+      # Return success if at least one port is found
+      $ echo $?
+      0
+
+      # Scan student05.cse.nd.edu with ports 9000-9999
+      $ ./nmapit -p 9000-9999 student05.cse.nd.edu
+
+      # Return failure if no active ports are found
+      $ echo $?
+      1
+
+  By default, `nmapit` will scan ports `1` through `1023` on the remote
+  **host**.  The user may specify a range of ports via the `-p START-END` flag.
+  If any port is found during the scan, then `nmap` will return **success**.
+  Otherwise, if no port is found, then it will return **failure**.
+
+  [firewalls]: https://en.wikipedia.org/wiki/Firewall_(computing)
+
+  ### Task 1: `nmapit.c`
+
+  To implement the `nmapit` utility, you are to complete the provided
+  `nmapit.c` source file which contains the following **functions**:
+
+      :::c
+      /**
+       * Display usage message and exit.
+       * @param   status      Exit status
+       **/
+      void    usage(int status);
+
+  > This provided `usage` function displays the help message and terminates the
+  process with the specified `status` code.
+
+      :::c
+      /**
+       * Handle alarm signal.
+       * @param   signum      Signal number
+       **/
+      void sigalrm_handler(int signum);
+
+  > This function is called whenever a `SIGALRM` is delivered to the [process].
+  When this happens, the current [alarm] should be cancelled.
+
+  <div class="alert success-bg" markdown="1">
+
+  **Hint**: Use [alarm].
+
+  </div>
+
+      :::c
+      /**
+       * Parse port range string into start and end port integers.
+       * @param   range       Port range string (ie. START-END)
+       * @param   start       Pointer to starting port integer
+       * @param   end         Pointer to ending port integer
+       * @return  true if parsing both start and end were successful, otherwise false
+       **/
+      bool parse_ports(char *range, int *start, int *end);
+
+  > This function parses the `range` string (ie. `"START-END"`) into individual
+  `start` and `end` integers.  It returns `true` if parsing both the `start`
+  and `end` integers from the `range` string is successful, otherwise it
+  returns `false`.
+
+  <div class="alert success-bg" markdown="1">
+
+  **Hint**: Use [strtok] and [atoi].  Make sure to check for failures.
+
+  </div>
+
+      :::c
+      /**
+       * Scan ports at specified host from starting and ending port numbers
+       * (inclusive).
+       * @param   host        Host to scan
+       * @param   start       Starting port number
+       * @param   end         Ending port number
+       * @return  true if any port is found, otherwise false
+       **/
+      bool scan_ports(const char* host, int start, int end);
+
+  > This function scans the `host` from the `start` port through the `end`
+  port.  As it scans the ports, it will print the number if the port is
+  *active* on the `host`.  If any ports are found, then the function returns
+  `true`.  Otherwise, it returns `false` if no *active* ports are found.
+
+  <div class="alert success-bg" markdown="1">
+
+  **Hints**:
+
+  - Use [sigaction] to register `sigalrm_handler` for `SIGALRM`.
+
+  - Set an [alarm] before attempting `socket_dial`.
+
+  - Cancel [alarm] if a connection is established and cleanup.
+
+  </div>
+
+  [strtok]: https://man7.org/linux/man-pages/man3/strtok.3.html
+  [atoi]: https://man7.org/linux/man-pages/man3/atoi.3.html
+  [sigaction]: https://man7.org/linux/man-pages/man2/sigaction.2.html
+
+  ### Task 2: Testing
+
+  Once you have implemented `nmapit`, you can test it by running the
+  `test-nmapit` target:
+
+      :::bash
+      $ make test-nmapit
+        nmapit                                                       ... Success
+        nmapit -h                                                    ... Success
+        nmapit -p 9000                                               ... Success
+        nmapit -p 9000-                                              ... Success
+        nmapit -p -9000                                              ... Success
+        nmapit xavier.h4x0r.space                                    ... Success
+        nmapit -p 9000-9999 xavier.h4x0r.space                       ... Success
+        nmapit -p 9005-9010 weasel.h4x0r.space                       ... Success
+        nmapit -p 9895-9900 weasel.h4x0r.space                       ... Success
+        --------------------
+         Score  9.00 / 9.00
+         Grade  1.00 / 1.00
+        Status Success
+
+  ## Activity 3: `curlit` (*0.4 Points*)
+
+  Once you have the `socket_dial` function implemented, you can complete the
+  `curlit` utility, which performs a [HTTP] request at the specified [URL].
+
+  <div class="centered">
+    <img src="static/img/homework10-curlit.png" class="responsive">
+  </div>
+
+  Here are some examples of `curlit` in action:
+
+      :::bash
+      # Display usage message
+      $ ./curlit -h
+      Usage: curlit [-h ] URL
+
+      # Make HTTP request to http://example.com
+      $ ./curlit http://example.com
+      <!doctype html><html lang="en"><head><title>Example Domain</title><meta name="viewport" content="width=device-width, initial-scale=1"><style>body{background:#eee;width:60vw;margin:15vh auto;font-family:system-ui,sans-serif}h1{font-size:1.5em}div{opacity:0.8}a:link,a:visited{color:#348}</style></head><body><div><h1>Example Domain</h1><p>This domain is for use in documentation examples without needing permission. Avoid use in operations.</p><p><a href="https://iana.org/domains/example">Learn more</a></p></div></body></html>
+      Time Elapsed: 0.03 s
+      Bandwidth:    0.05 MB/s
+
+      # Return success if status was 200 OK
+      $ echo $?
+      0
+
+      # Make HTTP request to google.com
+      $ ./curlit google.com
+      <HTML><HEAD><meta http-equiv="content-type" content="text/html;charset=utf-8">
+      <TITLE>301 Moved</TITLE></HEAD><BODY>
+      <H1>301 Moved</H1>
+      The document has moved
+      <A HREF="http://www.google.com/">here</A>.
+      </BODY></HTML>
+      Time Elapsed: 0.04 s
+      Bandwidth:    0.01 MB/s
+
+      # Return failure if status was not 200 OK
+      $ echo $?
+      1
+
+  <div class="alert warning-bg" markdown="1">
+
+  ### <i class="icon icon-medium">{{ "link" | embed_icon }}</i> Missing Link Components
+
+  **Note**: Not all [URL]s will specify every component explicitly.  Some may
+    be missing the **protocol** or the **port** or even the **path** (the
+    **host** must always be given).
+
+  For instance, here are some valid [URL]s you will need to support:
+
+  - `example.com`
+  - `http://example.com`
+  - `http://example.com:8888`
+  - `http://example.com/data`
+  - `example.com:9999/data`
+
+  If the **port** is not specified, then you are to assume the default [HTTP]
+  port: `80`.  If a **path** is not specified, then you can assume an empty
+  path: `""`.
+
+  </div>
+
+  [URL]: https://en.wikipedia.org/wiki/URL
+
+  ### Task 1: `curlit.c`
+
+  To implement the `curlit` utility, you are to complete the provided
+  `curlit.c` source file which contains the following **functions**:
+
+      :::c
+      /**
+       * Display usage message and exit.
+       * @param   status      Exit status
+       **/
+      void    usage(int status);
+
+  > This provided `usage` function displays the help message and terminates the
+  process with the specified `status` code.
+
+      :::c
+      /**
+       * Parse URL string into URL structure.
+       * @param   s       URL string
+       * @param   url     Pointer to URL structure
+       **/
+      void    parse_url(const char *s, URL *url);
+
+  > This function parses the `s` [URL] string to extract the `host`, `port`,
+  and `path` components and copies them into the corresponding attributes of
+  the `URL` structure.
+
+  <div class="alert success-bg" markdown="1">
+
+  **Hints**:
+
+  - Copy the [URL] `s` string to a local **buffer** that you can manipulate.
+
+  - Use [strstr] and [strchr] to search the local **buffer** for the appropriate
+    delimiters (e.g. `HOST_DELIMITER`, `PATH_DELIMITER`, and `PORT_DELIMITER`) and
+    split the string into different components.
+
+  - Use [strcpy] to copy the found components to the `URL` structure.
+
+  </div>
+
+      :::c
+      /**
+       * Fetch contents of URL and print to standard out.
+       *
+       * Print elapsed time and bandwidth to standard error.
+       * @param   s       URL string
+       * @param   url     Pointer to URL structure
+       * @return  true if client is able to read all of the content (or if the
+       * content length is unset), otherwise false
+       **/
+      bool    fetch_url(URL *url);
+
+  > This function performs a [HTTP] request with the given `URL` by using
+  `socket_dial` to form a [TCP] connection.  It writes the response **body** or
+  **contents** to **standard out**, and the **elapsed time** and **bandwidth**
+  metrics to **standard error**.  It returns `false` if any error was
+  experienced during the [HTTP] transaction or if the server response was not
+  `200 OK`.
+
+  <div class="alert success-bg" markdown="1">
+
+  **Hints**:
+
+  - You must check if any of the [system calls] fail.
+
+  - <div class="flex-col" markdown="1">
+
+      You will want to follow the [HTTP] transaction steps described above and
+      outlined below:
+
+        1. Connect to remote host and port.
+        2. Send [HTTP] request to remote server.
+        3. Read response status and verify success.
+        4. Read response headers (until there is an empty line).
+        5. Read response body and copy to `stream`.
+        6. Close connection.
+        7. <p>Return number of bytes written to `stream`.</p>
+
+  - Remember that [HTTP] uses [DOS line endings] and terminates each line
+    with `\r\n`.
+
+  - Use [strstr] to check the response status.
+
+  - Use [sscanf] to parse the response headers for the value of
+    `Content-Length`.
+
+  - Use [fgets] to read the response status and headers.
+
+  - Use [fread] and [fwrite] to read the response body since it may contain
+    binary data.
+
+  - If the server does not return a [HTTP] status of `200 OK`  or it provides a
+    `Content-Length` and the number of bytes written to `steam` does not match,
+    then the function should return `false` to indicate an error.  Otherwise,
+    if the [HTTP] status is `200 OK` and there is no `Content-Length` or the
+    number of bytes written matches, then it should return `true`.
+
+  - Only a [HTTP] status of `200 OK` is considered **successful**.
+
+  </div>
+
+  [strstr]: https://man7.org/linux/man-pages/man3/strstr.3.html
+  [strchr]: https://man7.org/linux/man-pages/man3/strchr.3.html
+  [strcpy]: https://man7.org/linux/man-pages/man3/strcpy.3.html
+  [DOS line endings]: https://en.wikipedia.org/wiki/Newline#Representation
+  [sscanf]: https://man7.org/linux/man-pages/man3/scanf.3.html
+  [fgets]: https://man7.org/linux/man-pages/man3/fgetc.3.html
+  [fread]: https://man7.org/linux/man-pages/man3/fread.3.html
+  [fwrite]: https://man7.org/linux/man-pages/man3/fread.3.html
+
+  ### Task 2: Testing
+
+  Once you have implemented `curlit`, you can test it by running the
+  `test-curlit` target:
+
+      :::bash
+      $ make test-curlit
+      Testing curlit ...
+        curlit                                                       ... Success
+        curlit -h                                                    ... Success
+        curlit -?                                                    ... Success
+        curlit http://fake.host                                      ... Success
+        curlit http://example.com                                    ... Success
+        curlit http://nd.edu                                         ... Success
+        curlit h4x0r.space                                           ... Success
+        curlit h4x0r.space:9898/mind.txt                             ... Success
+        curlit h4x0r.space:9898/txt/walden.txt                       ... Success
+        curlit h4x0r.space:9898/txt/gatsby.txt                       ... Success
+        curlit http://h4x0r.space:9898/txt/warandpeace.txt           ... Success
+        curlit http://h4x0r.space:9898/img/appa.png                  ... Success
+        --------------------
+         Score 12.00 / 12.00
+         Grade  1.00 /  1.00
+        Status Success
+
+  ## Activity 4: Quiz (*0.2 Points*)
+
+  Once you have completed all the activities above, you are to complete the
+  following **reflection quiz**:
+
+  <div id="quiz-questions"></div>
+
+  <div id="quiz-responses"></div>
+
+  <script src="static/js/dredd-quiz.js"></script>
+  <script>
+  loadQuiz('static/json/homework10.json');
+  </script>
+
+  <pre style="display: none;" id="dr-container" class="codehilite"><code id="dredd-response"></code></pre>
+
+  As with [Reading 01], you will need to store your answers in a
+  `homework10/answers.json` file.  You can use the form above to generate the
+  contents of this file, or you can write the [JSON] by hand.
+
+  To test your quiz, you can use the `check.py` script:
+
+      :::bash
+      $ ../.scripts/check.py
+      Checking homework10 quiz ...
+           Q01  8.00 /  8.00
+           Q02  4.00 /  4.00
+           Q03  4.00 /  4.00
+           Q04  4.00 /  4.00
+        --------------------
+         Score 20.00 / 20.00
+         Grade  1.00 /  1.00
+        Status Success
+
+  [JSON]: https://json.org
+
+  ## Extra Credit 04 (*0.5 Points*)
+
+  For the last quarter of the semester, you will have **three** extra credit
+  opportunities worth `0.5` points each.  You may do **none**, **one**,
+  **two**, or all **three** of them.
+
+  <div class="alert success-bg" markdown="1">
+
+  ### <i class="icon icon-medium">{{ "check-all" | embed_icon }}</i> Do The Homework
+
+  To be **eligible** for the extra credit, you must **successfully complete**
+  the corresponding **homework** assignment.  This means passing all the tests
+  and the reflection quiz.
+
+  </div>
+
+  <div class="alert danger-bg" markdown="1">
+
+  ### <i class="icon icon-medium">{{ "leaf-circle" | embed_icon }}</i> Organic Code Only
+
+  You may not, however, use **AI tools** for any portion of them and if caught,
+  you will **forfeit** the opportunity to do any of these extra credit
+  opportunities.
+
+  </div>
+
+  ### IRC Bot
+
+  For extra credit, you are to use [Python] and [sockets] to implement your own
+  version of [bobbit], an [IRC] chat bot by **Wednesday, April 29**.  Your bot
+  should connect to the [chat.ndlug.org] server and join the `#bots` channel.
+  It should be able to respond to at least one type of command or message.  The
+  particular operation is up to you.
+
+  To help you get started, here are some resources:
+
+  - [Internet Relay Chat - Specifications](https://ircdocs.horse/specs/)
+  - [Modern IRC Client Protocol](https://modern.ircdocs.horse/)
+
+  <div class="alert warning-bg" markdown="1">
+
+  ### <i class="icon icon-medium">{{ "linux" | embed_icon }}</i> Notre Dame Linux Users Group
+
+  To connect to the [NDLUG] server yourself, you can use the following
+  **anonymous web client**:
+
+  > [https://gamja.ndlug.org/?channels=#bots](https://gamja.ndlug.org/?channels=#bots)
+
+  Alternatively, if you wish to have access to more chat features such as
+  history, you can register via [regserv.ndlug.org], which will setup a
+  [Lounge] and [IRC] account for you.
+
+  The [Lounge] is a web-based [IRC] client that you can use from any web
+  browser, but you are free to connect to the [IRC] server from any [IRC]
+  client such as [Weechat], [Hexchat], or [Textual] using `chat.ndlug.org` as
+  the hostname and `6697` as the port.
+
+  </div>
+
+  A basic [IRC] client session looks like this:
+
+      :::text
+      USER ircle-pbui 0 * :pbui's bot
+      NICK ircle-pbui
+      JOIN #bots
+      PRIVMSG #bots :I've fallen and I can't get up!
+
+  1. The `USER` command sets the users real name and registers the user.
+
+  2. The `NICK` command sets the users nickname.
+
+  3. The `JOIN` command allows the user to join in a channel (in this case `#bots`).
+
+  4. The `PRIVMSG` command allows the user to send a message (in this case to
+  the channel `#bots`).
+
+  Here is a basic skeleton, [ircle.py], that you can start with:
+
+      :::python
+      import os
+      import socket
+      import ssl
+
+      # Constants
+
+      HOST = 'chat.ndlug.org'
+      PORT = 6697
+      NICK = f'ircle-{os.environ["USER"]}'
+
+      # Functions
+
+      def ircle():
+          # Connect to IRC server
+          ssl_context = ssl.create_default_context()
+          tcp_socket  = socket.create_connection((HOST, PORT))
+          ssl_socket  = ssl_context.wrap_socket(tcp_socket, server_hostname=HOST)
+          ssl_stream  = ssl_socket.makefile('rw')
+
+          # Identify ourselves
+          ssl_stream.write(f'USER {NICK} 0 * :{NICK}\r\n')
+          ssl_stream.write(f'NICK {NICK}\r\n')
+          ssl_stream.flush()
+
+          # Join #bots channel
+          ssl_stream.write(f'JOIN #bots\r\n')
+          ssl_stream.flush()
+
+          # Write message to channel
+          ssl_stream.write(f"PRIVMSG #bots :I've fallen and I can't get up!\r\n")
+          ssl_stream.flush()
+
+          # Read and display
+          while True:
+              message = ssl_stream.readline().strip()
+              print(message)
+
+      # Main Execution
+
+      def main():
+          ircle()
+
+      if __name__ == '__main__':
+          main()
+
+  Alternatively, if you are interested in using the new [asyncio] features of
+  [Python] 3 to perform event-driven and concurrent programming, you can
+  use the following skeleton [ircle-async.py]:
+
+      :::python
+      import asyncio
+      import os
+      import sys
+
+      # Constants
+
+      HOST = 'chat.ndlug.org'
+      PORT = 6697
+      NICK = f'ircle-{os.environ["USER"]}'
+
+      # Functions
+
+      async def ircle():
+          # Connect to IRC server
+          reader, writer = await asyncio.open_connection(HOST, PORT, ssl=True)
+
+          # Identify ourselves
+          writer.write(f'USER {NICK} 0 * :{NICK}\r\n'.encode())
+          writer.write(f'NICK {NICK}\r\n'.encode())
+          await writer.drain()
+
+          # Join #bots channel
+          writer.write(f'JOIN #bots\r\n'.encode())
+          await writer.drain()
+
+          # Write message to channel
+          writer.write(f"PRIVMSG #bots :I've fallen and I can't get up!\r\n".encode())
+          await writer.drain()
+
+          # Read and display
+          while True:
+              message = (await reader.readline()).decode().strip()
+              print(message)
+
+      # Main execution
+
+      def main():
+          asyncio.run(ircle())
+
+      if __name__ == '__main__':
+          main()
+
+  <div class="alert special-bg" markdown="1">
+
+  ### <i class="icon icon-medium">{{ "checkbox-marked-outline" | embed_icon }}</i> IRC Bot: Verification
+
+  To receive credit for the **IRC Bot**, you must:
+
+  1. Have your **IRC bot** join the `#bots` channel on [chat.ndlug.org] server.
+
+  2. Demonstrate your bot's functionality by logging into the server with your
+  own separate account and showing one of the TAs.
+
+  3. Post a **screenshot** of your `IRC Bot` in action in your **Pull Request**.
+
+  </div>
+
+  [bobbit]: https://github.com/pbui/bobbit/
+  [IRC]: https://en.wikipedia.org/wiki/Internet_Relay_Chat
+  [chat.ndlug.org]: https://chat.ndlug.org
+  [ircle.py]: https://pnutz.h4x0r.space/courses/cse.20289.sp26/static/txt/homework10/ircle.py
+  [ircle-async.py]: https://pnutz.h4x0r.space/courses/cse.20289.sp26/static/txt/homework10/ircle-async.py
+  [asyncio]: https://docs.python.org/3/library/asyncio.html
+  [NDLUG]: https://ndlug.org/
+  [regserv.ndlug.org]: https://regserv.ndlug.org/
+  [Lounge]: https://thelounge.chat/
+  [weechat]: https://weechat.org/
+  [hexchat]: https://hexchat.github.io/
+  [textual]: https://www.codeux.com/textual/
+
+  ## Submission
+
+  To submit your assignment, please commit your work to the `homework10` folder
+  of your `homework10` branch in your **assignments** [GitHub] repository.
+  Your `homework10` folder should **only** contain the following files:
+
+  - `Makefile`
+  - `README.md`
+  - `answers.json`
+  - `curlit.c`
+  - `nmapit.c`
+  - `socket.c`
+  - `socket.h`
+  - `socket.unit.c`
+
+  <div class="alert warning-bg" markdown="1">
+
+  **Note**: You do not need to commit the test scripts because the `Makefile`
+  automatically downloads them.
+
+  </div>
+
+      :::bash
+      #-----------------------------------------------------------------------
+      # Make sure you have already completed Activity 0: Preparation
+      #-----------------------------------------------------------------------
+      ...
+      $ git add Makefile                        # Mark changes for commit
+      $ git add socket.c                        # Mark changes for commit
+      $ git commit -m "Homework 10: socket"     # Record changes
+      ...
+      $ git add Makefile                        # Mark changes for commit
+      $ git add nmapit.c                        # Mark changes for commit
+      $ git commit -m "Homework 10: nmapit"     # Record changes
+      ...
+      $ git add Makefile                        # Mark changes for commit
+      $ git add curlit.c                        # Mark changes for commit
+      $ git commit -m "Homework 10: curlit"     # Record changes
+      ...
+      $ git add answers.json                    # Mark changes for commit
+      $ git commit -m "Homework 10: quiz"       # Record changes
+      ...
+      $ git push -u origin homework10           # Push branch to GitHub
+
+
+  <div class="alert warning-bg" markdown="1">
+
+  ### <i class="icon icon-medium">{{ "lifebuoy" | embed_icon }}</i> Acknowledgments
+
+  If you collaborated with any other students, or received help from TAs or AI
+  tools on this assignment, please record this support in the `README.md` in
+  the `homework10` folder and include it with your **Pull Request**.
+
+  </div>
+
+  <div class="alert success-bg" markdown="1">
+
+  ### <i class="icon icon-medium">{{ "account-question" | embed_icon }}</i> Graders
+
+  Once you have committed your work and pushed it to [GitHub], remember to
+  create a **pull request** and assign it to the appropriate **teaching
+  assistant** from the [Reading 10 TA List].
+
+  **Note**: this list changes each week, so be sure to consult the appropriate
+  list for each assignment.
+
+  </div>
+
+
+  [array]:              https://en.wikipedia.org/wiki/C_(programming_language)#Arrays
+  [arrays]:             https://en.wikipedia.org/wiki/C_(programming_language)#Arrays
+  [pointer]:            https://en.wikipedia.org/wiki/C_(programming_language)#Pointers
+  [pointers]:           https://en.wikipedia.org/wiki/C_(programming_language)#Pointers
+  [string]:             https://en.wikipedia.org/wiki/String_(computer_science)
+  [strings]:            https://en.wikipedia.org/wiki/String_(computer_science)
+  [shell]:              https://en.wikipedia.org/wiki/Unix_shell
+  [Python]:             https://www.python.org/
+  [C]:                  https://en.wikipedia.org/wiki/C_(programming_language)
+  [standard library]:   https://en.wikipedia.org/wiki/C_standard_library
+  [data structure]:     https://en.wikipedia.org/wiki/Data_structure
+  [data structures]:    https://en.wikipedia.org/wiki/Data_structure
+  [algorithms]:         https://en.wikipedia.org/wiki/Algorithm
+
+  [git]:    https://git-scm.com/
+  [clone]:  https://git-scm.com/docs/git-clone
+  [commit]: https://git-scm.com/docs/git-commit
+  [push]:   https://git-scm.com/docs/git-push
+  [branching]:   https://git-scm.com/docs/git-branch
+  [code review]: https://en.wikipedia.org/wiki/Code_review
+  [GitHub]: https://github.com
+  [Reading 10 TA List]: reading10_tas.html
+  [Reading 01]: reading05.html
+  [struct]:     https://en.wikipedia.org/wiki/Record_(computer_science)
+  [structs]:    https://en.wikipedia.org/wiki/Record_(computer_science)
+  [union]:      https://en.wikipedia.org/wiki/Union_type
+  [integer]:    https://en.wikipedia.org/wiki/Integer_(computer_science)
+  [unsigned integer]:   https://en.wikipedia.org/wiki/Integer_%28computer_science%29#Value_and_representation
+  [enum]:       https://en.wikipedia.org/wiki/Enumerated_type
+  [enumeration]:https://en.wikipedia.org/wiki/Enumerated_type
+  [header]:     https://en.wikipedia.org/wiki/Include_directive#C.2FC.2B.2B
+  [typedef]:    https://en.wikipedia.org/wiki/Typedef
+  [type definition]:    https://en.wikipedia.org/wiki/Typedef
+  [macro]:      https://en.wikipedia.org/wiki/C_preprocessor#Macro_definition_and_expansion
+  [macros]:     https://en.wikipedia.org/wiki/C_preprocessor#Macro_definition_and_expansion
+  [system calls]:   https://en.wikipedia.org/wiki/System_call
+  [process]:    https://en.wikipedia.org/wiki/Process_(computing)
+  [processes]:  https://en.wikipedia.org/wiki/Process_(computing)
+  [signal]:     https://en.wikipedia.org/wiki/Signal_(IPC)
+  [signals]:    https://en.wikipedia.org/wiki/Signal_(IPC)
+  [Unix]:       https://en.wikipedia.org/wiki/Unix
+  [strace]:     http://man7.org/linux/man-pages/man1/strace.1.html
+  [iterative and incremental development]: https://en.wikipedia.org/wiki/Iterative_and_incremental_development
+  [cron]:       https://en.wikipedia.org/wiki/Cron
+  [fork]:       http://man7.org/linux/man-pages/man2/fork.2.html
+  [fork bomb]:  https://en.wikipedia.org/wiki/Fork_bomb
+  [sleep]:      http://man7.org/linux/man-pages/man3/sleep.3.html
+  [kill]:       http://man7.org/linux/man-pages/man2/kill.2.html
+  [wait]:       http://man7.org/linux/man-pages/man2/wait.2.html
+  [exec]:       http://man7.org/linux/man-pages/man3/exec.3.html
+  [mkstemp]:    http://man7.org/linux/man-pages/man3/mkstemp.3.html
+  [fdopen]:     http://man7.org/linux/man-pages/man3/fdopen.3p.html
+  [getenv]:     http://man7.org/linux/man-pages/man3/getenv.3.html
+  [clock_gettime]:  http://man7.org/linux/man-pages/man2/clock_getres.2.html
+  [system]:     http://man7.org/linux/man-pages/man3/system.3.html
+  [popen]:      http://man7.org/linux/man-pages/man3/popen.3.html
+  [file descriptor]: https://en.wikipedia.org/wiki/File_descriptor
+  [rename]:     http://man7.org/linux/man-pages/man2/rename.2.html
+  [malloc]:     http://man7.org/linux/man-pages/man3/realloc.3.html
+  [calloc]:     http://man7.org/linux/man-pages/man3/realloc.3.html
+  [signal]:     http://man7.org/linux/man-pages/man2/signal.2.html
+  [alarm]:      http://man7.org/linux/man-pages/man2/alarm.2.html
+  [unlink]:     http://man7.org/linux/man-pages/man2/unlink.2.html
+
+  [sockets]: https://en.wikipedia.org/wiki/Network_socket
