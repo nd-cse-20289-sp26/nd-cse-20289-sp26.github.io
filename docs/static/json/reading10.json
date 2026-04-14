@@ -1,0 +1,20 @@
+{
+    "q1": {
+        "type": "blank",
+        "question": "\n<p>Given the <b>URL</b>:\n  <code>http://momo.ndlug.org:9414/script.py?friend=appa</code>,\n  identify the following components:</p>\n\n<table class=\"bordered\">\n<tbody>\n<tr><td style=\"text-align: right;\">Protocol:</td><td width=\"50%\"><b>(1)</b> ____</td></tr>\n<tr><td style=\"text-align: right;\">Domain Name:</td><td><b>(2)</b> ____</td></tr>\n<tr><td style=\"text-align: right;\">Port Number:</td><td><b>(3)</b> ____</td></tr>\n<tr><td style=\"text-align: right;\">Resource Path:</td><td><b>(4)</b> ____</td></tr>\n<tr><td style=\"text-align: right;\">Query Parameter:</td><td><b>(5)</b> ____</td></tr>\n</table>\n"
+    },
+    "q2": {
+        "type": "order",
+        "question": "\n<p>Identify the networking <b>system call</b> or <b>standard library\nfunction</b> you should use to accomplish the following tasks:</p>\n\n<p>\n<ol>\n  <li>Create a file descriptor or endpoint for communicating over the network.</li>\n  <li>Convert network file descriptor into a file stream.</li>\n  <li>Lookup the address information for a particular machine or service.</li>\n  <li>Associate an address and service to a server network file descriptor (aka assign a name to a socket).</li>\n  <li>Translate the network address structure into corresponding host and service strings.</li>\n  <li>Establish a client network file descriptor to a specified address.</li>\n  <li>Mark network file descriptor as waiting for incoming connections.</li>\n  <li>Create a new network file descriptor based on a incoming connection.</li>\n</ol>\n</p>\n",
+        "responses": {
+            "fdopen": "<code>fdopen()</code>",
+            "socket": "<code>socket()</code>",
+            "connect": "<code>connect()</code>",
+            "listen": "<code>listen()</code>",
+            "bind": "<code>bind()</code>",
+            "accept": "<code>accept()</code>",
+            "getnameinfo": "<code>getnameinfo()</code>",
+            "getaddrinfo": "<code>getaddrinfo()</code>"
+        }
+    }
+}
