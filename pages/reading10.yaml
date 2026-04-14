@@ -1,0 +1,343 @@
+title:      "Reading 10: Networking"
+body:       |
+
+  **Everyone**:
+
+  Next week, we will discuss [system calls] involving [networking].  We will
+  explore using [sockets] to communicate between [clients] and [servers] and
+  eventually create our own [HTTP] client in [Homework 10].
+
+  <div class="alert info-bg" markdown="1">
+
+  ### <i class="icon icon-medium">{{ "book" | embed_icon }}</i> TL;DR
+
+  The focus of this reading is to explore [system calls] related to network
+  [sockets] in [C].
+
+  </div>
+
+  ## Readings
+
+  <div class="flex-row" markdown="1">
+
+  <div class="flex-col" markdown="1">
+
+  The readings for this week are:
+
+  1.  <div class="flex-col" markdown="1">
+
+      [Beej's Guide to Network Programming](https://beej.us/guide/bgnet/html/index-wide.html)
+
+      *You can skip the parts about datagram sockets and slightly advanced
+      techniques.*
+
+  2.  <div class="flex-col" markdown="1">
+
+      [Mozilla Developer Network](https://developer.mozilla.org)
+
+      - [How the web works](https://developer.mozilla.org/en-US/docs/Learn_web_development/Getting_started/Web_standards/How_the_web_works)
+      - [What is a URL?](https://developer.mozilla.org/en-US/docs/Learn/Common_questions/What_is_a_URL)
+
+  </div>
+
+  <div class="flex-col" markdown="1">
+
+  ### Optional References
+
+  1.  <div class="flex-col" markdown="1">
+
+      [Dive into Systems](https://diveintosystems.org/)
+
+      - [13.4.2. Message Passing](https://diveintosystems.org/book/C13-OS/ipc_msging.html#_message_passing)
+
+  2.  <div class="flex-col" markdown="1">
+
+      [System Programming Wiki](https://github.com/angrave/SystemProgramming/wiki)
+
+      This has basic coverage of
+      [networking](https://github.com/angrave/SystemProgramming/wiki#8-networking), along with
+      some information about remote procedure calls (RPC) that you can skip.
+
+  </div>
+
+  <div class="flex-col-25" markdown="1">
+    <div class="centered">
+      <img src="static/img/diveintosystems.jpg">
+    </div>
+  </div>
+
+  </div>
+
+  </div>
+
+  [system calls]:   https://en.wikipedia.org/wiki/System_call
+  [files]:          https://en.wikipedia.org/wiki/Computer_file
+  [directories]:    https://en.wikipedia.org/wiki/Directory_(computing)
+  [kernel]:         https://en.wikipedia.org/wiki/Kernel_(operating_system)
+  [C]:              https://en.wikipedia.org/wiki/C_(programming_language)
+  [i/o]:            https://en.wikipedia.org/wiki/Input/output
+
+  ## Quiz
+
+  This week, the reading is split into two sections: the first part is a
+  [dredd] quiz, while the second part involves one [C] program: `ncat.c`.
+
+  To test the [C] program, you will need to download the [Makefile] and test
+  scripts:
+
+      :::bash
+      $ git switch master                   # Make sure we are in master branch
+      $ git pull --rebase                   # Make sure we are up-to-date with GitHub
+
+      $ git switch -c reading10             # Create reading10 branch and check it out
+
+      $ mkdir reading10                     # Create reading10 folder
+
+      $ cd reading10                        # Go into reading10 folder
+
+      # Download Reading 10 Makefile
+      $ curl -LO https://pnutz.h4x0r.space/courses/cse.20289.sp26/static/txt/reading10/Makefile
+
+      # Download Starter code
+      $ curl -LO https://pnutz.h4x0r.space/courses/cse.20289.sp26/static/txt/reading10/ncat.c
+
+      # Download, build, and execute tests
+      $ make test
+
+  [Makefile]: https://pnutz.h4x0r.space/courses/cse.20289.sp26/static/txt/reading10/Makefile
+
+  ### Questions
+
+  Record the answers to the following [Reading 10 Quiz] questions in your
+  `reading10` branch:
+
+  <div id="quiz-questions"></div>
+
+  <div id="quiz-responses"></div>
+
+  <script src="static/js/dredd-quiz.js"></script>
+
+  <script>
+  loadQuiz('static/json/reading10.json');
+  </script>
+
+  <pre style="display: none;" id="dr-container" class="codehilite"><code id="dredd-response"></code></pre>
+
+  ### Programs
+
+  Given the provided [Makefile] and [ncat.c], you are to do the following:
+
+  1.  <div class="flex-col" markdown="1">
+
+      Modify [Makefile] to include a rule for the `ncat` program. Be sure to
+      use the `CC` and `CFLAGS` variables in your rule.
+
+      Once you have a working [Makefile], you should be able to use the [make]
+      command to run your **recipes**:
+
+
+          :::bash
+          $ make clean                                # Remove targets
+          rm -f ncat
+
+          $ make                                      # Build targets
+          gcc -Wall -g -std=gnu99 -o ncat ncat.c
+
+  2.  <div class="flex-col" markdown="1">
+
+      Modify [ncat.c] so that it uses [system calls] in [C] to implement the
+      equivalent Python script:
+
+          :::python
+          #!/usr/bin/env python3
+
+          import socket
+          import sys
+
+          # Parse command line options
+          try:
+              HOST = sys.argv[1]
+              PORT = int(sys.argv[2])
+          except IndexError:
+              print("Usage: {} HOST PORT".format(sys.argv[0]), file=sys.stderr)
+              sys.exit(1)
+
+          # Create socket and connect to specified HOST and PORT
+          try:
+              csocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+              csocket.connect((HOST, PORT))
+              cstream = csocket.makefile('w')
+          except socket.error as e:
+              print('Socket Error: {}'.format(e))
+              sys.exit(1)
+
+          # Read from stdin and write to socket
+          for line in sys.stdin:
+              cstream.write(line)
+
+          # Cleanup
+          csocket.close()
+
+  This is basically a partial implementation of the [nc] command you have used
+  previously: given a `HOST` and `PORT`, the program creates a [socket],
+  connects to the server, and then sends data from [standard input] to the
+  remote server via the [socket] connection.
+
+  <div class="alert success-bg" markdown="1">
+
+  ### <i class="icon icon-medium">{{ "code-tags" | embed_icon }}</i> Fill in the Blank
+
+  The code has a few `____` placeholders. You will need to replace these
+  placeholders with the appropriate **functions** and **variables** to complete
+  the program.
+
+  Here is a list of some possible **functions** and **variables** you may wish
+  to use:
+
+  - `AF_UNSPEC`
+  - `SOCK_STREAM`
+  - `socket_fd`
+  - `socket_file`
+  - [getaddrinfo]
+  - [gai_strerror]
+  - [socket]
+  - [close]
+  - [connect]
+  - [freeaddrinfo]
+  - [fdopen]
+  - [fclose]
+  - [fgets]
+  - [fputs]
+
+  </div>
+
+  Once you have a working `ncat.c`, you should be able to build and run it:
+
+      $ make                            # Build ncat program
+      gcc -Wall -std=gnu99 -g -o ncat ncat.c
+
+      $ ./ncat                          # Usage
+      Usage: ./ncat HOST PORT
+
+      $ nc -l 9123 &                    # Start netcat server in background
+      [1] 12532
+
+      $ date | ./ncat localhost 9123    # Send message to server
+      Connected to localhost:9123
+      Sun Apr 13 16:50:38 EDT 2025
+      [1]+  Done                    nc -l -p 9123
+
+      $ ./ncat fakehost 9999
+      Could not look up fakehost:9999: Name or service not known
+
+      $ ./ncat localhost 0
+      Unable to connect to localhost:0: Connection refused
+
+      $ make clean                      # Cleanup
+      rm -f ncat
+
+  [rule]:       https://www.gnu.org/software/make/manual/html_node/Rule-Example.html#Rule-Example
+  [make]:       http://man7.org/linux/man-pages/man1/make.1.html
+
+  ## Submission
+
+  To submit you work, follow the same process outlined in [Reading 01]:
+
+      :::bash
+      #--------------------------------------------------
+      # BE SURE TO DO THE PREPARATION STEPS ABOVE
+      #--------------------------------------------------
+
+      $ cd reading10                        # Go into reading10 folder
+
+      $ $EDITOR answers.json                # Edit your answers.json file
+
+      $ ../.scripts/check.py                # Check reading10 quiz
+      Checking reading10 quiz ...
+            Q1  5.00 /  5.00
+            Q2  8.00 /  8.00
+        --------------------
+         Score 13.00 / 13.00
+         Grade  1.00 /  1.00
+        Status Success
+
+      $ git add answers.json                # Add answers.json to staging area
+      $ git commit -m "Reading 10: Quiz"    # Commit work
+
+      $ $EDITOR ncat.c                      # Edit source code
+
+      $ make test                           # Build and Run tests
+      Checking reading10 ncat ...
+        ncat (syscalls)                          ... Success
+        ncat (usage)                             ... Success
+        ncat (fakehost 9999)                     ... Success
+        ncat (localhost 0)                       ... Success
+        ncat (localhost 9342)                    ... Success
+        ncat (weasel.h4x0r.space 9910)           ... Success
+        --------------------
+         Score 6.00 / 6.00
+         Grade 1.00 / 1.00
+        Status Success
+
+      $ git add Makefile                    # Add Makefile to staging area
+      $ git add ncat.c                      # Add source code to staging area
+      $ git commit -m "Reading 10: Code"    # Commit work
+
+      $ git push -u origin reading10        # Push branch to GitHub
+
+  <div class="alert warning-bg" markdown="1">
+
+  ### <i class="icon icon-medium">{{ "lifebuoy" | embed_icon }}</i> Acknowledgments
+
+  If you collaborated with any other students, or received help from TAs or AI
+  tools on this assignment, please record this support in the `README.md` in
+  the `reading10` folder and include it with your **Pull Request**.
+
+  </div>
+
+  <div class="alert success-bg" markdown="1">
+
+  ### <i class="icon icon-medium">{{ "account-question" | embed_icon }}</i> Graders
+
+  Once you have committed your work and pushed it to [GitHub], remember to
+  create a **pull request** and assign it to the appropriate **teaching
+  assistant** from the [Reading 10 TA List].
+
+  **Note**: this list changes each week, so be sure to consult the appropriate
+  list for each assignment.
+
+  </div>
+
+  [Markdown]:           https://daringfireball.net/projects/markdown/
+  [git]:                https://git-scm.com/
+  [clone]:              https://git-scm.com/docs/git-clone
+  [commit]:             https://git-scm.com/docs/git-commit
+  [push]:               https://git-scm.com/docs/git-push
+  [GitHub]:             https://github.com
+  [Reading 01]:         reading01.html
+  [Homework 01]:        homework01.html
+  [Reading 10 TA List]: reading10_tas.html
+  [dredd]:              https://dredd.h4x0r.space
+  [Reading 10 Quiz]:    static/json/reading10.json
+  [Python]:             https://www.python.org
+  [networking]:         https://en.wikipedia.org/wiki/Computer_network
+  [sockets]:            https://en.wikipedia.org/wiki/Network_socket
+  [socket]:             http://man7.org/linux/man-pages/man2/socket.2.html
+  [getaddrinfo]:        http://man7.org/linux/man-pages/man3/getaddrinfo.3.html
+  [freeaddrinfo]:       http://man7.org/linux/man-pages/man3/getaddrinfo.3.html
+  [connect]:            http://man7.org/linux/man-pages/man2/connect.2.html
+  [HTTP]:               https://en.wikipedia.org/wiki/Hypertext_Transfer_Protocol
+  [clients]:            https://en.wikipedia.org/wiki/Client_(computing)
+  [servers]:            https://en.wikipedia.org/wiki/Server_(computing)
+  [nc]:                 https://linux.die.net/man/1/nc
+  [ncat.c]:             https://pnutz.h4x0r.space/courses/cse.20289.sp26/static/txt/reading10/ncat.c
+  [standard input]:     https://en.wikipedia.org/wiki/Standard_streams#Standard_input_(stdin)
+  [gai_strerror]:       http://man7.org/linux/man-pages/man3/gai_strerror.3p.html
+  [connect]:            http://man7.org/linux/man-pages/man2/connect.2.html
+  [strerror]:           http://man7.org/linux/man-pages/man3/strerror.3.html
+  [fdopen]:             https://man7.org/linux/man-pages/man3/fopen.3.html
+  [fclose]:             https://man7.org/linux/man-pages/man3/fclose.3.html
+  [close]:              https://man7.org/linux/man-pages/man2/close.2.html
+  [fgets]:              https://man7.org/linux/man-pages/man3/fgetc.3.html
+  [fputs]:              https://man7.org/linux/man-pages/man3/puts.3.html
+  [Homework 10]:        homework10.html
