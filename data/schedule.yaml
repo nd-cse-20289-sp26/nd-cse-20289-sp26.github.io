@@ -369,9 +369,6 @@
         topics:         '<i class="muted">FindIt</i>'
         assignments:
           - Homework 08
-        items:
-          - name:       Slides
-            link:       https://docs.google.com/presentation/d/12mm73hBplhuhCZTvgZifUARgS0nLMSI_QFNURxyBVuE/edit?usp=sharing
 
 - name:   "Processes"
   days:
@@ -380,8 +377,9 @@
         assignments:
           - Reading 09
         items:
+        items:
           - name:       Slides
-            link:       https://docs.google.com/presentation/d/1DHAig58aEaIQYTPIbI_fXEjMCQ9nP1_j9MH1L2yY-1c/edit?usp=sharing
+            link:       https://docs.google.com/presentation/d/12mm73hBplhuhCZTvgZifUARgS0nLMSI_QFNURxyBVuE/edit?usp=sharing
           - name:       Panopto
             link:       https://notredame.hosted.panopto.com/Panopto/Pages/Viewer.aspx?id=eba76038-c063-4140-a9b7-b42b012787e6
 
@@ -390,6 +388,8 @@
         items:
           - name:       Slides
             link:       https://docs.google.com/presentation/d/1DHAig58aEaIQYTPIbI_fXEjMCQ9nP1_j9MH1L2yY-1c/edit?usp=sharing
+          - name:       Panopto
+            link:       https://notredame.hosted.panopto.com/Panopto/Pages/Viewer.aspx?id=ff80c9ff-8ae5-4185-9b1f-b42d012b4942
 
       - date:           Fri 04/17
         topics:         Signals
