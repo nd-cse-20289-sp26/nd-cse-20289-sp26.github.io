@@ -1,0 +1,876 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<!-- Favicon -->
+<link rel="icon" type="image/png" sizes="32x32" href="static/ico/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="static/ico/favicon-16x16.png">
+<link rel="manifest" href="static/ico/site.webmanifest">
+<!-- Stylesheets -->
+<link rel="stylesheet" href="static/css/pnutzh4x0r.css">
+<title>Homework 10: nmapit, curlit</title>
+</head>
+<body>
+<header>
+<a class="logo" href="homework10.html">
+    <h1>Homework 10: nmapit, curlit</h1>
+</a>
+<nav>
+    <ul>
+        <li><a href="index.html"><h4>Home</h4></a></li>
+        </ul>
+</nav></header>
+<main>
+<p>The goal of this homework assignment is to allow you to practice using
+<a href="https://en.wikipedia.org/wiki/System_call">system calls</a> involving <a href="https://en.wikipedia.org/wiki/Computer_network">networking</a> with <a href="https://en.wikipedia.org/wiki/Network_socket">sockets</a> in <a href="https://en.wikipedia.org/wiki/C_(programming_language)">C</a> by implementing
+simplified versions of two familiar <a href="https://en.wikipedia.org/wiki/Unix">Unix</a> utilities:</p>
+<ol>
+<li>
+<p><code>nmapit</code>: The first utility implements a simple <a href="https://en.wikipedia.org/wiki/Port_scanner">port scanning</a> utility
+  similar to <a href="https://nmap.org/">nmap</a>.</p>
+</li>
+<li>
+<p><code>curlit</code>: The second utility implements a simple <a href="https://en.wikipedia.org/wiki/Hypertext_Transfer_Protocol">HTTP</a> client similar to
+  <a href="https://curl.se/">curl</a>.</p>
+</li>
+</ol>
+<p>For this assignment, record your source code and any responses to the
+following activities in the <code>homework10</code> folder of your <strong>assignments</strong>
+<a href="https://github.com">GitHub</a> repository and push your work by <strong>noon Saturday, April 25</strong>.</p>
+<div class="alert info-bg">
+<h3 id="help-embed_icon-frequently-asked-question"><i class="icon icon-medium"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><title>help</title><path d="M10,19H13V22H10V19M12,2C17.35,2.22 19.68,7.62 16.5,11.67C15.67,12.67 14.33,13.33 13.67,14.17C13,15 13,16 13,17H10C10,15.33 10,13.92 10.67,12.92C11.33,11.92 12.67,11.33 13.5,10.67C15.92,8.43 15.32,5.26 12,5A3,3 0 0,0 9,8H6A6,6 0 0,1 12,2Z" /></svg>
+</i> Frequently Asked Question<a class="headerlink" href="#help-embed_icon-frequently-asked-question" title="Permanent link">&para;</a></h3>
+<div class="centered">
+<iframe allowfullscreen="true" frameborder="0" height="749" mozallowfullscreen="true" src="https://docs.google.com/presentation/d/e/2PACX-1vToF0b48-uTTuZfrrd_KcfE9H_OOe9RE9H4zqwdJamvHCdh9kbLejtc6dmm22etgKNzIZjOnvvy7slI/pubembed?start=false&amp;loop=false&amp;delayms=3000" webkitallowfullscreen="true" width="960"></iframe>
+</div>
+</div>
+<h2 id="activity-0-preparation">Activity 0: Preparation<a class="headerlink" href="#activity-0-preparation" title="Permanent link">&para;</a></h2>
+<p>Before starting this homework assignment, you should first perform a <code>git
+pull</code> to retrieve any changes in your remote <a href="https://github.com">GitHub</a> repository:</p>
+<div class="codehilite"><pre><span></span><code>$<span class="w"> </span><span class="nb">cd</span><span class="w"> </span>path/to/repository<span class="w">                   </span><span class="c1"># Go to assignments repository</span>
+
+$<span class="w"> </span>git<span class="w"> </span>switch<span class="w"> </span>master<span class="w">                       </span><span class="c1"># Make sure we are in master branch</span>
+
+$<span class="w"> </span>git<span class="w"> </span>pull<span class="w"> </span>--rebase<span class="w">                       </span><span class="c1"># Get any remote changes not present locally</span>
+</code></pre></div>
+
+<p>Next, create a new branch for this assignment:</p>
+<div class="codehilite"><pre><span></span><code>$<span class="w"> </span>git<span class="w"> </span>switch<span class="w"> </span>-c<span class="w"> </span>homework10<span class="w">                </span><span class="c1"># Create homework10 branch and check it out</span>
+</code></pre></div>
+
+<h3 id="task-1-skeleton-code">Task 1: Skeleton Code<a class="headerlink" href="#task-1-skeleton-code" title="Permanent link">&para;</a></h3>
+<p>To help you get started, the instructor has provided you with the following
+<strong>skeleton code</strong>:</p>
+<div class="codehilite"><pre><span></span><code><span class="c1"># Create homework10 folder</span>
+$<span class="w"> </span>mkdir<span class="w"> </span>homework10
+
+<span class="c1"># Go to homework10 folder</span>
+$<span class="w"> </span><span class="nb">cd</span><span class="w"> </span>homework10
+
+<span class="c1"># Create README</span>
+$<span class="w"> </span><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;# Homework 10&quot;</span><span class="w"> </span>&gt;<span class="w"> </span>README.md
+
+<span class="c1"># Download Makefile</span>
+$<span class="w"> </span>curl<span class="w"> </span>-LO<span class="w"> </span>https://pnutz.h4x0r.space/courses/cse.20289.sp26/static/txt/homework10/Makefile
+
+<span class="c1"># Download C skeleton code</span>
+$<span class="w"> </span>curl<span class="w"> </span>-LO<span class="w"> </span>https://pnutz.h4x0r.space/courses/cse.20289.sp26/static/txt/homework10/curlit.c
+$<span class="w"> </span>curl<span class="w"> </span>-LO<span class="w"> </span>https://pnutz.h4x0r.space/courses/cse.20289.sp26/static/txt/homework10/nmapit.c
+$<span class="w"> </span>curl<span class="w"> </span>-LO<span class="w"> </span>https://pnutz.h4x0r.space/courses/cse.20289.sp26/static/txt/homework10/socket.c
+$<span class="w"> </span>curl<span class="w"> </span>-LO<span class="w"> </span>https://pnutz.h4x0r.space/courses/cse.20289.sp26/static/txt/homework10/socket.h
+$<span class="w"> </span>curl<span class="w"> </span>-LO<span class="w"> </span>https://pnutz.h4x0r.space/courses/cse.20289.sp26/static/txt/homework10/socket.unit.c
+</code></pre></div>
+
+<p>Once downloaded, you should see the following files in your <code>homework10</code>
+directory:</p>
+<div class="codehilite"><pre><span></span><code>homework10
+<span class="w">    </span><span class="se">\_</span><span class="w"> </span>Makefile<span class="w">           </span><span class="c1"># This is the Makefile for building all the assignment artifacts</span>
+<span class="w">    </span><span class="se">\_</span><span class="w"> </span>nmapit.c<span class="w">           </span><span class="c1"># This is the nmapit utility C source file</span>
+<span class="w">    </span><span class="se">\_</span><span class="w"> </span>curlit.c<span class="w">           </span><span class="c1"># This is the curlit utility C source file</span>
+<span class="w">    </span><span class="se">\_</span><span class="w"> </span>socket.c<span class="w">           </span><span class="c1"># This is the timeit library C source file</span>
+<span class="w">    </span><span class="se">\_</span><span class="w"> </span>socket.h<span class="w">           </span><span class="c1"># This is the socket library C header file</span>
+<span class="w">    </span><span class="se">\_</span><span class="w"> </span>socket.unit.c<span class="w">      </span><span class="c1"># This is the socket library C unit test source file</span>
+</code></pre></div>
+
+<h3 id="task-2-initial-import">Task 2: Initial Import<a class="headerlink" href="#task-2-initial-import" title="Permanent link">&para;</a></h3>
+<p>Now that the files are downloaded into the <code>homework10</code> folder, you can
+<strong>commit</strong> them to your <a href="https://git-scm.com/">git</a> repository:</p>
+<div class="codehilite"><pre><span></span><code>$<span class="w"> </span>git<span class="w"> </span>add<span class="w"> </span>Makefile<span class="w">                            </span><span class="c1"># Mark changes for commit</span>
+$<span class="w"> </span>git<span class="w"> </span>add<span class="w"> </span>*.c<span class="w"> </span>*.h<span class="w"> </span>*.md
+$<span class="w"> </span>git<span class="w"> </span>commit<span class="w"> </span>-m<span class="w"> </span><span class="s2">&quot;Homework 10: Initial Import&quot;</span><span class="w"> </span><span class="c1"># Record changes</span>
+</code></pre></div>
+
+<h3 id="task-3-unit-and-functional-tests">Task 3: Unit and Functional Tests<a class="headerlink" href="#task-3-unit-and-functional-tests" title="Permanent link">&para;</a></h3>
+<p>After downloading these files, you can run <code>make test</code> to run the tests.</p>
+<div class="codehilite"><pre><span></span><code><span class="c1"># Run all tests (will trigger automatic download)</span>
+$<span class="w"> </span>make<span class="w"> </span><span class="nb">test</span>
+</code></pre></div>
+
+<p>You will notice that the Makefile downloads these additional test data and scripts:</p>
+<div class="codehilite"><pre><span></span><code>homework10
+<span class="w">    </span><span class="se">\_</span><span class="w"> </span>curlit.test.sh<span class="w">   </span><span class="c1"># This is the curlit utility test shell script</span>
+<span class="w">    </span><span class="se">\_</span><span class="w"> </span>nmapit.test.sh<span class="w">   </span><span class="c1"># This is the nmapit utility test shell script</span>
+<span class="w">    </span><span class="se">\_</span><span class="w"> </span>socket.unit.sh<span class="w">   </span><span class="c1"># This is the socket library unit test shell script</span>
+</code></pre></div>
+
+<p>You will be using these <a href="https://en.wikipedia.org/wiki/Unit_testing">unit tests</a> and <a href="https://en.wikipedia.org/wiki/Functional_testing">functional tests</a> to verify the
+correctness and behavior of your code.</p>
+<div class="alert info-bg">
+<h3 id="download-embed_icon-automatic-download"><i class="icon icon-medium"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><title>download</title><path d="M5,20H19V18H5M19,9H15V3H9V9H5L12,16L19,9Z" /></svg>
+</i> Automatic Download<a class="headerlink" href="#download-embed_icon-automatic-download" title="Permanent link">&para;</a></h3>
+<p>The <code>test</code> scripts are automatically downloaded by the <code>Makefile</code>, so any
+modifications you do to them will be lost when you run <code>make</code> again. Likewise,
+because they are automatically downloaded, you do not need to <code>add</code> or <code>commit</code>
+them to your <a href="https://git-scm.com/">git</a> repository.</p>
+</div>
+<h3 id="task-4-makefile">Task 4: Makefile<a class="headerlink" href="#task-4-makefile" title="Permanent link">&para;</a></h3>
+<p>The <code>Makefile</code> contains all the <strong>rules</strong> or <strong>recipes</strong> for building the
+project artifacts (e.g. <code>moveit</code>, <code>timeit</code>):</p>
+<div class="codehilite"><pre><span></span><code><span class="nv">CC</span><span class="o">=</span><span class="w">       </span>gcc
+<span class="nv">CFLAGS</span><span class="o">=</span><span class="w">   </span>-Wall<span class="w"> </span>-std<span class="o">=</span>gnu99<span class="w"> </span>-g
+<span class="nv">LD</span><span class="o">=</span><span class="w">       </span>gcc
+<span class="nv">LDFLAGS</span><span class="o">=</span><span class="w">  </span>-L.
+<span class="nv">TARGETS</span><span class="o">=</span><span class="w">  </span>nmapit<span class="w"> </span>curlit
+
+<span class="nf">all</span><span class="o">:</span><span class="w">    </span><span class="k">$(</span><span class="nv">TARGETS</span><span class="k">)</span>
+
+<span class="c">#------------------------------------------------------------------------------</span>
+<span class="c"># TODO: Rules for object files and executables</span>
+<span class="c">#------------------------------------------------------------------------------</span>
+
+<span class="nf">socket.o</span><span class="o">:</span>
+
+<span class="nf">nmapit.o</span><span class="o">:</span>
+
+<span class="nf">curlit.o</span><span class="o">:</span>
+
+<span class="nf">nmapit</span><span class="o">:</span>
+
+<span class="nf">curlit</span><span class="o">:</span>
+
+<span class="c">#------------------------------------------------------------------------------</span>
+<span class="c"># DO NOT MODIFY BELOW</span>
+<span class="c">#------------------------------------------------------------------------------</span>
+
+<span class="err">...</span>
+</code></pre></div>
+
+<p>For this task, you will need to add <a href="https://www.gnu.org/software/make/manual/html_node/Rule-Example.html#Rule-Example">rules</a> for building the <em>intermediate</em>
+<a href="https://en.wikipedia.org/wiki/Object_file">object</a> files, and the <code>nmapit</code> and <code>curlit</code> <em>executables</em> with the
+appropriate dependencies as shown in the <a href="https://en.wikipedia.org/wiki/Directed_acyclic_graph">DAG</a> below:</p>
+<div class="centered">
+  <img src="static/img/homework10-makefile.png" class="responsive">
+</div>
+
+<div class="alert info-bg">
+<h3 id="cogs-embed_icon-makefile-variables"><i class="icon icon-medium"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><title>cogs</title><path d="M15.9,18.45C17.25,18.45 18.35,17.35 18.35,16C18.35,14.65 17.25,13.55 15.9,13.55C14.54,13.55 13.45,14.65 13.45,16C13.45,17.35 14.54,18.45 15.9,18.45M21.1,16.68L22.58,17.84C22.71,17.95 22.75,18.13 22.66,18.29L21.26,20.71C21.17,20.86 21,20.92 20.83,20.86L19.09,20.16C18.73,20.44 18.33,20.67 17.91,20.85L17.64,22.7C17.62,22.87 17.47,23 17.3,23H14.5C14.32,23 14.18,22.87 14.15,22.7L13.89,20.85C13.46,20.67 13.07,20.44 12.71,20.16L10.96,20.86C10.81,20.92 10.62,20.86 10.54,20.71L9.14,18.29C9.05,18.13 9.09,17.95 9.22,17.84L10.7,16.68L10.65,16L10.7,15.31L9.22,14.16C9.09,14.05 9.05,13.86 9.14,13.71L10.54,11.29C10.62,11.13 10.81,11.07 10.96,11.13L12.71,11.84C13.07,11.56 13.46,11.32 13.89,11.15L14.15,9.29C14.18,9.13 14.32,9 14.5,9H17.3C17.47,9 17.62,9.13 17.64,9.29L17.91,11.15C18.33,11.32 18.73,11.56 19.09,11.84L20.83,11.13C21,11.07 21.17,11.13 21.26,11.29L22.66,13.71C22.75,13.86 22.71,14.05 22.58,14.16L21.1,15.31L21.15,16L21.1,16.68M6.69,8.07C7.56,8.07 8.26,7.37 8.26,6.5C8.26,5.63 7.56,4.92 6.69,4.92A1.58,1.58 0 0,0 5.11,6.5C5.11,7.37 5.82,8.07 6.69,8.07M10.03,6.94L11,7.68C11.07,7.75 11.09,7.87 11.03,7.97L10.13,9.53C10.08,9.63 9.96,9.67 9.86,9.63L8.74,9.18L8,9.62L7.81,10.81C7.79,10.92 7.7,11 7.59,11H5.79C5.67,11 5.58,10.92 5.56,10.81L5.4,9.62L4.64,9.18L3.5,9.63C3.41,9.67 3.3,9.63 3.24,9.53L2.34,7.97C2.28,7.87 2.31,7.75 2.39,7.68L3.34,6.94L3.31,6.5L3.34,6.06L2.39,5.32C2.31,5.25 2.28,5.13 2.34,5.03L3.24,3.47C3.3,3.37 3.41,3.33 3.5,3.37L4.63,3.82L5.4,3.38L5.56,2.19C5.58,2.08 5.67,2 5.79,2H7.59C7.7,2 7.79,2.08 7.81,2.19L8,3.38L8.74,3.82L9.86,3.37C9.96,3.33 10.08,3.37 10.13,3.47L11.03,5.03C11.09,5.13 11.07,5.25 11,5.32L10.03,6.06L10.06,6.5L10.03,6.94Z" /></svg>
+</i> Makefile Variables<a class="headerlink" href="#cogs-embed_icon-makefile-variables" title="Permanent link">&para;</a></h3>
+<p>You <strong>must</strong> use the <code>CC</code>, <code>CFLAGS</code> variables when appropriate in your
+<a href="https://www.gnu.org/software/make/manual/html_node/Rule-Example.html#Rule-Example">rules</a>.  You <strong>should</strong> also consider using <a href="https://www.gnu.org/software/make/manual/html_node/Automatic-Variables.html">automatic variables</a> such as
+<code>$@</code> and <code>$&lt;</code> as well.</p>
+</div>
+<p>Once you have a working <code>Makefile</code>, you should be able to run the following commands:</p>
+<div class="codehilite"><pre><span></span><code><span class="c1"># Build all TARGETS</span>
+$<span class="w"> </span>make
+gcc<span class="w"> </span>-Wall<span class="w"> </span>-std<span class="o">=</span>gnu99<span class="w"> </span>-g<span class="w"> </span>-c<span class="w"> </span>-o<span class="w"> </span>nmapit.o<span class="w"> </span>nmapit.c
+gcc<span class="w"> </span>-Wall<span class="w"> </span>-std<span class="o">=</span>gnu99<span class="w"> </span>-g<span class="w"> </span>-c<span class="w"> </span>-o<span class="w"> </span>socket.o<span class="w"> </span>socket.c
+gcc<span class="w"> </span>-L.<span class="w"> </span>-o<span class="w"> </span>nmapit<span class="w"> </span>nmapit.o<span class="w"> </span>socket.o
+gcc<span class="w"> </span>-Wall<span class="w"> </span>-std<span class="o">=</span>gnu99<span class="w"> </span>-g<span class="w"> </span>-c<span class="w"> </span>-o<span class="w"> </span>curlit.o<span class="w"> </span>curlit.c
+gcc<span class="w"> </span>-L.<span class="w"> </span>-o<span class="w"> </span>curlit<span class="w"> </span>curlit.o<span class="w"> </span>socket.o
+
+<span class="c1"># Run all tests</span>
+$<span class="w"> </span>make<span class="w"> </span><span class="nb">test</span>
+Testing<span class="w"> </span>socket<span class="w"> </span>...
+...
+
+Testing<span class="w"> </span>nmapit<span class="w"> </span>utility...
+...
+
+Testing<span class="w"> </span>curlit<span class="w"> </span>utility...
+...
+
+<span class="c1"># Remove generated artifacts</span>
+$<span class="w"> </span>make<span class="w"> </span>clean
+</code></pre></div>
+
+<div class="alert danger-bg">
+<p><strong>Note</strong>: The tests will <strong>fail</strong> if you haven't implemented all the
+  necessary functions appropriately.</p>
+</div>
+<div class="alert warning-bg">
+<h3 id="alert-embed_icon-compiler-warnings"><i class="icon icon-medium"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><title>alert</title><path d="M13 14H11V9H13M13 18H11V16H13M1 21H23L12 2L1 21Z" /></svg>
+</i> Compiler Warnings<a class="headerlink" href="#alert-embed_icon-compiler-warnings" title="Permanent link">&para;</a></h3>
+<p>You must include the <code>-Wall</code> flag in your <code>CFLAGS</code> when you compile.  This
+also means that your code must <strong>compile without any warnings</strong>, otherwise
+points will be deducted.</p>
+</div>
+<h2 id="activity-1-socket-01-points">Activity 1: <code>socket</code> (<em>0.1 Points</em>)<a class="headerlink" href="#activity-1-socket-01-points" title="Permanent link">&para;</a></h2>
+<p>Both <code>nmapit</code> and <code>curlit</code> will require using <a href="https://en.wikipedia.org/wiki/Network_socket">sockets</a> in <a href="https://en.wikipedia.org/wiki/C_(programming_language)">C</a> to communicate
+with a remote <strong>host</strong>.  To simplify the process of establishing a
+connection, you are to make consolidate all the code for connecting to a
+remote <strong>host</strong> into a single <code>socket_dial</code> function.</p>
+<h3 id="task-1-socketc">Task 1: <code>socket.c</code><a class="headerlink" href="#task-1-socketc" title="Permanent link">&para;</a></h3>
+<p>To implement the <code>socket</code> library, you are to complete the provided
+<code>socket.c</code> source file which contains the following <strong>function</strong>:</p>
+<div class="codehilite"><pre><span></span><code><span class="cm">/**</span>
+<span class="cm"> * Create socket connection to specified host and port.</span>
+<span class="cm"> * @param   host        Host string to connect to.</span>
+<span class="cm"> * @param   port        Port string to connect to.</span>
+<span class="cm"> * @return  Socket file stream of connection if successful, otherwise NULL.</span>
+<span class="cm"> **/</span>
+<span class="kt">FILE</span><span class="w"> </span><span class="o">*</span><span class="n">socket_dial</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="kt">char</span><span class="w"> </span><span class="o">*</span><span class="n">host</span><span class="p">,</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="kt">char</span><span class="w"> </span><span class="o">*</span><span class="n">port</span><span class="p">)</span><span class="err">`</span>
+</code></pre></div>
+
+<blockquote>
+<p>This function uses <a href="http://man7.org/linux/man-pages/man2/socket.2.html">socket</a> to connect to the given <code>host</code> and <code>port</code> using
+<a href="https://en.wikipedia.org/wiki/Transmission_Control_Protocol">TCP</a> and returns a <strong>read/writable</strong> <code>FILE</code> stream corresponding to the
+<a href="http://man7.org/linux/man-pages/man2/socket.2.html">socket</a> connection.</p>
+</blockquote>
+<div class="alert success-bg">
+<p><strong>Hints</strong>:</p>
+<ul>
+<li>
+<p>You must check if any of the <a href="https://en.wikipedia.org/wiki/System_call">system calls</a> fail.</p>
+</li>
+<li>
+<p>You should use <a href="http://man7.org/linux/man-pages/man3/getaddrinfo.3.html">getaddrinfo</a>, <a href="http://man7.org/linux/man-pages/man2/socket.2.html">socket</a>, <a href="http://man7.org/linux/man-pages/man2/connect.2.html">connect</a>, <a href="http://man7.org/linux/man-pages/man3/getaddrinfo.3.html">freeaddrinfo</a>, and <a href="http://man7.org/linux/man-pages/man3/fdopen.3p.html">fdopen</a>.</p>
+</li>
+</ul>
+</div>
+<h3 id="task-2-testing">Task 2: Testing<a class="headerlink" href="#task-2-testing" title="Permanent link">&para;</a></h3>
+<p>As you implement the functions in <code>socket.c</code>, you should use the
+<code>socket.unit</code> executable with the <code>socket.unit.sh</code> script to test each of
+your functions:</p>
+<div class="codehilite"><pre><span></span><code><span class="c1"># Build test artifacts and run test scripts</span>
+$<span class="w"> </span>make<span class="w"> </span>test-socket
+Testing<span class="w"> </span>socket<span class="w"> </span>...
+<span class="w">  </span>socket_dial_success<span class="w">                                          </span>...<span class="w"> </span>Success
+<span class="w">  </span>socket_dial_failure<span class="w">                                          </span>...<span class="w"> </span>Success
+<span class="w">  </span>socket_dial_mode<span class="w">                                             </span>...<span class="w"> </span>Success
+<span class="w">  </span>--------------------
+<span class="w">   </span>Score<span class="w"> </span><span class="m">3</span>.00<span class="w"> </span>/<span class="w"> </span><span class="m">3</span>.00
+<span class="w">   </span>Grade<span class="w"> </span><span class="m">1</span>.00<span class="w"> </span>/<span class="w"> </span><span class="m">1</span>.00
+<span class="w">  </span>Status<span class="w"> </span>Success
+</code></pre></div>
+
+<p>You can also run the testing script manually:</p>
+<div class="codehilite"><pre><span></span><code><span class="c1"># Run shell unit test script manually</span>
+$<span class="w"> </span>./socket.unit.sh
+...
+</code></pre></div>
+
+<p>To debug your <a href="http://man7.org/linux/man-pages/man2/socket.2.html">socket</a> functions, you can use <a href="https://www.sourceware.org/gdb/">gdb</a> on the socket.unit
+executable:</p>
+<div class="codehilite"><pre><span></span><code><span class="c1"># Start gdb on socket.unit</span>
+$<span class="w"> </span>gdb<span class="w"> </span>./socket.unit
+<span class="o">(</span>gdb<span class="o">)</span><span class="w"> </span>run<span class="w"> </span><span class="m">0</span><span class="w">     </span><span class="c1"># Run socket.unit with the &quot;0&quot; command line argument (ie. socket_dial_success)</span>
+...
+</code></pre></div>
+
+<p>You can also use valgrind to check for memory errors:</p>
+<div class="codehilite"><pre><span></span><code><span class="c1"># Check for memory errors on first test case</span>
+<span class="c1"># $ valgrind --leak-check=full ./socket.unit 0</span>
+</code></pre></div>
+
+<h2 id="activity-2-nmapit-03-points">Activity 2: <code>nmapit</code> (<em>0.3 Points</em>)<a class="headerlink" href="#activity-2-nmapit-03-points" title="Permanent link">&para;</a></h2>
+<p>Once you have the <code>socket_dial</code> function implemented, you can complete the
+<code>nmapit</code> utility, which <em>scans</em> a range of <strong>ports</strong> on a remote <strong>host</strong> and
+reports which ones are <em>active</em> (ie. establish a connection) as shown below:</p>
+<div class="centered">
+  <img src="static/img/homework10-nmapit.png" class="responsive">
+</div>
+
+<p>Because some <strong>hosts</strong> have <a href="https://en.wikipedia.org/wiki/Firewall_(computing)">firewalls</a> which can cause <a href="http://man7.org/linux/man-pages/man2/connect.2.html">connect</a> to hang for
+long periods of time, you will use a one second <a href="http://man7.org/linux/man-pages/man2/alarm.2.html">alarm</a> to interrupt
+<code>socket_dial</code>.  This interruption will cause <code>socket_dial</code> to fail, which
+means the <strong>port</strong> is considered <em>inactive</em>.</p>
+<p>Here are some examples of <code>nmapit</code> in action:</p>
+<div class="codehilite"><pre><span></span><code><span class="c1"># Display usage message</span>
+$<span class="w"> </span>./nmapit<span class="w"> </span>-h
+Usage:<span class="w"> </span>nmapit<span class="w"> </span><span class="o">[</span>-p<span class="w"> </span>START-END<span class="o">]</span><span class="w"> </span>HOST
+Options:
+<span class="w">    </span>-p<span class="w"> </span>START-END<span class="w">    </span>Specifies<span class="w"> </span>the<span class="w"> </span>range<span class="w"> </span>of<span class="w"> </span>port<span class="w"> </span>numbers<span class="w"> </span>to<span class="w"> </span>scan
+
+<span class="c1"># Scan student05.cse.nd.edu with default ports (1-1023)</span>
+$<span class="w"> </span>./nmapit<span class="w"> </span>student05.cse.nd.edu
+<span class="m">22</span>
+<span class="m">80</span>
+<span class="m">111</span>
+
+<span class="c1"># Return success if at least one port is found</span>
+$<span class="w"> </span><span class="nb">echo</span><span class="w"> </span><span class="nv">$?</span>
+<span class="m">0</span>
+
+<span class="c1"># Scan student05.cse.nd.edu with ports 9000-9999</span>
+$<span class="w"> </span>./nmapit<span class="w"> </span>-p<span class="w"> </span><span class="m">9000</span>-9999<span class="w"> </span>student05.cse.nd.edu
+
+<span class="c1"># Return failure if no active ports are found</span>
+$<span class="w"> </span><span class="nb">echo</span><span class="w"> </span><span class="nv">$?</span>
+<span class="m">1</span>
+</code></pre></div>
+
+<p>By default, <code>nmapit</code> will scan ports <code>1</code> through <code>1023</code> on the remote
+<strong>host</strong>.  The user may specify a range of ports via the <code>-p START-END</code> flag.
+If any port is found during the scan, then <code>nmap</code> will return <strong>success</strong>.
+Otherwise, if no port is found, then it will return <strong>failure</strong>.</p>
+<h3 id="task-1-nmapitc">Task 1: <code>nmapit.c</code><a class="headerlink" href="#task-1-nmapitc" title="Permanent link">&para;</a></h3>
+<p>To implement the <code>nmapit</code> utility, you are to complete the provided
+<code>nmapit.c</code> source file which contains the following <strong>functions</strong>:</p>
+<div class="codehilite"><pre><span></span><code><span class="cm">/**</span>
+<span class="cm"> * Display usage message and exit.</span>
+<span class="cm"> * @param   status      Exit status</span>
+<span class="cm"> **/</span>
+<span class="kt">void</span><span class="w">    </span><span class="nf">usage</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">status</span><span class="p">);</span>
+</code></pre></div>
+
+<blockquote>
+<p>This provided <code>usage</code> function displays the help message and terminates the
+process with the specified <code>status</code> code.</p>
+</blockquote>
+<div class="codehilite"><pre><span></span><code><span class="cm">/**</span>
+<span class="cm"> * Handle alarm signal.</span>
+<span class="cm"> * @param   signum      Signal number</span>
+<span class="cm"> **/</span>
+<span class="kt">void</span><span class="w"> </span><span class="nf">sigalrm_handler</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">signum</span><span class="p">);</span>
+</code></pre></div>
+
+<blockquote>
+<p>This function is called whenever a <code>SIGALRM</code> is delivered to the <a href="https://en.wikipedia.org/wiki/Process_(computing)">process</a>.
+When this happens, the current <a href="http://man7.org/linux/man-pages/man2/alarm.2.html">alarm</a> should be cancelled.</p>
+</blockquote>
+<div class="alert success-bg">
+<p><strong>Hint</strong>: Use <a href="http://man7.org/linux/man-pages/man2/alarm.2.html">alarm</a>.</p>
+</div>
+<div class="codehilite"><pre><span></span><code><span class="cm">/**</span>
+<span class="cm"> * Parse port range string into start and end port integers.</span>
+<span class="cm"> * @param   range       Port range string (ie. START-END)</span>
+<span class="cm"> * @param   start       Pointer to starting port integer</span>
+<span class="cm"> * @param   end         Pointer to ending port integer</span>
+<span class="cm"> * @return  true if parsing both start and end were successful, otherwise false</span>
+<span class="cm"> **/</span>
+<span class="kt">bool</span><span class="w"> </span><span class="nf">parse_ports</span><span class="p">(</span><span class="kt">char</span><span class="w"> </span><span class="o">*</span><span class="n">range</span><span class="p">,</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="o">*</span><span class="n">start</span><span class="p">,</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="o">*</span><span class="n">end</span><span class="p">);</span>
+</code></pre></div>
+
+<blockquote>
+<p>This function parses the <code>range</code> string (ie. <code>"START-END"</code>) into individual
+<code>start</code> and <code>end</code> integers.  It returns <code>true</code> if parsing both the <code>start</code>
+and <code>end</code> integers from the <code>range</code> string is successful, otherwise it
+returns <code>false</code>.</p>
+</blockquote>
+<div class="alert success-bg">
+<p><strong>Hint</strong>: Use <a href="https://man7.org/linux/man-pages/man3/strtok.3.html">strtok</a> and <a href="https://man7.org/linux/man-pages/man3/atoi.3.html">atoi</a>.  Make sure to check for failures.</p>
+</div>
+<div class="codehilite"><pre><span></span><code><span class="cm">/**</span>
+<span class="cm"> * Scan ports at specified host from starting and ending port numbers</span>
+<span class="cm"> * (inclusive).</span>
+<span class="cm"> * @param   host        Host to scan</span>
+<span class="cm"> * @param   start       Starting port number</span>
+<span class="cm"> * @param   end         Ending port number</span>
+<span class="cm"> * @return  true if any port is found, otherwise false</span>
+<span class="cm"> **/</span>
+<span class="kt">bool</span><span class="w"> </span><span class="nf">scan_ports</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="kt">char</span><span class="o">*</span><span class="w"> </span><span class="n">host</span><span class="p">,</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">start</span><span class="p">,</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">end</span><span class="p">);</span>
+</code></pre></div>
+
+<blockquote>
+<p>This function scans the <code>host</code> from the <code>start</code> port through the <code>end</code>
+port.  As it scans the ports, it will print the number if the port is
+<em>active</em> on the <code>host</code>.  If any ports are found, then the function returns
+<code>true</code>.  Otherwise, it returns <code>false</code> if no <em>active</em> ports are found.</p>
+</blockquote>
+<div class="alert success-bg">
+<p><strong>Hints</strong>:</p>
+<ul>
+<li>
+<p>Use <a href="https://man7.org/linux/man-pages/man2/sigaction.2.html">sigaction</a> to register <code>sigalrm_handler</code> for <code>SIGALRM</code>.</p>
+</li>
+<li>
+<p>Set an <a href="http://man7.org/linux/man-pages/man2/alarm.2.html">alarm</a> before attempting <code>socket_dial</code>.</p>
+</li>
+<li>
+<p>Cancel <a href="http://man7.org/linux/man-pages/man2/alarm.2.html">alarm</a> if a connection is established and cleanup.</p>
+</li>
+</ul>
+</div>
+<h3 id="task-2-testing_1">Task 2: Testing<a class="headerlink" href="#task-2-testing_1" title="Permanent link">&para;</a></h3>
+<p>Once you have implemented <code>nmapit</code>, you can test it by running the
+<code>test-nmapit</code> target:</p>
+<div class="codehilite"><pre><span></span><code>$<span class="w"> </span>make<span class="w"> </span>test-nmapit
+<span class="w">  </span>nmapit<span class="w">                                                       </span>...<span class="w"> </span>Success
+<span class="w">  </span>nmapit<span class="w"> </span>-h<span class="w">                                                    </span>...<span class="w"> </span>Success
+<span class="w">  </span>nmapit<span class="w"> </span>-p<span class="w"> </span><span class="m">9000</span><span class="w">                                               </span>...<span class="w"> </span>Success
+<span class="w">  </span>nmapit<span class="w"> </span>-p<span class="w"> </span><span class="m">9000</span>-<span class="w">                                              </span>...<span class="w"> </span>Success
+<span class="w">  </span>nmapit<span class="w"> </span>-p<span class="w"> </span>-9000<span class="w">                                              </span>...<span class="w"> </span>Success
+<span class="w">  </span>nmapit<span class="w"> </span>xavier.h4x0r.space<span class="w">                                    </span>...<span class="w"> </span>Success
+<span class="w">  </span>nmapit<span class="w"> </span>-p<span class="w"> </span><span class="m">9000</span>-9999<span class="w"> </span>xavier.h4x0r.space<span class="w">                       </span>...<span class="w"> </span>Success
+<span class="w">  </span>nmapit<span class="w"> </span>-p<span class="w"> </span><span class="m">9005</span>-9010<span class="w"> </span>weasel.h4x0r.space<span class="w">                       </span>...<span class="w"> </span>Success
+<span class="w">  </span>nmapit<span class="w"> </span>-p<span class="w"> </span><span class="m">9895</span>-9900<span class="w"> </span>weasel.h4x0r.space<span class="w">                       </span>...<span class="w"> </span>Success
+<span class="w">  </span>--------------------
+<span class="w">   </span>Score<span class="w">  </span><span class="m">9</span>.00<span class="w"> </span>/<span class="w"> </span><span class="m">9</span>.00
+<span class="w">   </span>Grade<span class="w">  </span><span class="m">1</span>.00<span class="w"> </span>/<span class="w"> </span><span class="m">1</span>.00
+<span class="w">  </span>Status<span class="w"> </span>Success
+</code></pre></div>
+
+<h2 id="activity-3-curlit-04-points">Activity 3: <code>curlit</code> (<em>0.4 Points</em>)<a class="headerlink" href="#activity-3-curlit-04-points" title="Permanent link">&para;</a></h2>
+<p>Once you have the <code>socket_dial</code> function implemented, you can complete the
+<code>curlit</code> utility, which performs a <a href="https://en.wikipedia.org/wiki/Hypertext_Transfer_Protocol">HTTP</a> request at the specified <a href="https://en.wikipedia.org/wiki/URL">URL</a>.</p>
+<div class="centered">
+  <img src="static/img/homework10-curlit.png" class="responsive">
+</div>
+
+<p>Here are some examples of <code>curlit</code> in action:</p>
+<div class="codehilite"><pre><span></span><code><span class="c1"># Display usage message</span>
+$<span class="w"> </span>./curlit<span class="w"> </span>-h
+Usage:<span class="w"> </span>curlit<span class="w"> </span><span class="o">[</span>-h<span class="w"> </span><span class="o">]</span><span class="w"> </span>URL
+
+<span class="c1"># Make HTTP request to http://example.com</span>
+$<span class="w"> </span>./curlit<span class="w"> </span>http://example.com
+&lt;!doctype<span class="w"> </span>html&gt;&lt;html<span class="w"> </span><span class="nv">lang</span><span class="o">=</span><span class="s2">&quot;en&quot;</span>&gt;&lt;head&gt;&lt;title&gt;Example<span class="w"> </span>Domain&lt;/title&gt;&lt;meta<span class="w"> </span><span class="nv">name</span><span class="o">=</span><span class="s2">&quot;viewport&quot;</span><span class="w"> </span><span class="nv">content</span><span class="o">=</span><span class="s2">&quot;width=device-width, initial-scale=1&quot;</span>&gt;&lt;style&gt;body<span class="o">{</span>background:#eee<span class="p">;</span>width:60vw<span class="p">;</span>margin:15vh<span class="w"> </span>auto<span class="p">;</span>font-family:system-ui,sans-serif<span class="o">}</span>h1<span class="o">{</span>font-size:1.5em<span class="o">}</span>div<span class="o">{</span>opacity:0.8<span class="o">}</span>a:link,a:visited<span class="o">{</span>color:#348<span class="o">}</span>&lt;/style&gt;&lt;/head&gt;&lt;body&gt;&lt;div&gt;&lt;h1&gt;Example<span class="w"> </span>Domain&lt;/h1&gt;&lt;p&gt;This<span class="w"> </span>domain<span class="w"> </span>is<span class="w"> </span><span class="k">for</span><span class="w"> </span>use<span class="w"> </span><span class="k">in</span><span class="w"> </span>documentation<span class="w"> </span>examples<span class="w"> </span>without<span class="w"> </span>needing<span class="w"> </span>permission.<span class="w"> </span>Avoid<span class="w"> </span>use<span class="w"> </span><span class="k">in</span><span class="w"> </span>operations.&lt;/p&gt;&lt;p&gt;&lt;a<span class="w"> </span><span class="nv">href</span><span class="o">=</span><span class="s2">&quot;https://iana.org/domains/example&quot;</span>&gt;Learn<span class="w"> </span>more&lt;/a&gt;&lt;/p&gt;&lt;/div&gt;&lt;/body&gt;&lt;/html&gt;
+Time<span class="w"> </span>Elapsed:<span class="w"> </span><span class="m">0</span>.03<span class="w"> </span>s
+Bandwidth:<span class="w">    </span><span class="m">0</span>.05<span class="w"> </span>MB/s
+
+<span class="c1"># Return success if status was 200 OK</span>
+$<span class="w"> </span><span class="nb">echo</span><span class="w"> </span><span class="nv">$?</span>
+<span class="m">0</span>
+
+<span class="c1"># Make HTTP request to google.com</span>
+$<span class="w"> </span>./curlit<span class="w"> </span>google.com
+&lt;HTML&gt;&lt;HEAD&gt;&lt;meta<span class="w"> </span>http-equiv<span class="o">=</span><span class="s2">&quot;content-type&quot;</span><span class="w"> </span><span class="nv">content</span><span class="o">=</span><span class="s2">&quot;text/html;charset=utf-8&quot;</span>&gt;
+&lt;TITLE&gt;301<span class="w"> </span>Moved&lt;/TITLE&gt;&lt;/HEAD&gt;&lt;BODY&gt;
+&lt;H1&gt;301<span class="w"> </span>Moved&lt;/H1&gt;
+The<span class="w"> </span>document<span class="w"> </span>has<span class="w"> </span>moved
+&lt;A<span class="w"> </span><span class="nv">HREF</span><span class="o">=</span><span class="s2">&quot;http://www.google.com/&quot;</span>&gt;here&lt;/A&gt;.
+&lt;/BODY&gt;&lt;/HTML&gt;
+Time<span class="w"> </span>Elapsed:<span class="w"> </span><span class="m">0</span>.04<span class="w"> </span>s
+Bandwidth:<span class="w">    </span><span class="m">0</span>.01<span class="w"> </span>MB/s
+
+<span class="c1"># Return failure if status was not 200 OK</span>
+$<span class="w"> </span><span class="nb">echo</span><span class="w"> </span><span class="nv">$?</span>
+<span class="m">1</span>
+</code></pre></div>
+
+<div class="alert warning-bg">
+<h3 id="link-embed_icon-missing-link-components"><i class="icon icon-medium"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><title>link</title><path d="M3.9,12C3.9,10.29 5.29,8.9 7,8.9H11V7H7A5,5 0 0,0 2,12A5,5 0 0,0 7,17H11V15.1H7C5.29,15.1 3.9,13.71 3.9,12M8,13H16V11H8V13M17,7H13V8.9H17C18.71,8.9 20.1,10.29 20.1,12C20.1,13.71 18.71,15.1 17,15.1H13V17H17A5,5 0 0,0 22,12A5,5 0 0,0 17,7Z" /></svg>
+</i> Missing Link Components<a class="headerlink" href="#link-embed_icon-missing-link-components" title="Permanent link">&para;</a></h3>
+<p><strong>Note</strong>: Not all <a href="https://en.wikipedia.org/wiki/URL">URL</a>s will specify every component explicitly.  Some may
+  be missing the <strong>protocol</strong> or the <strong>port</strong> or even the <strong>path</strong> (the
+  <strong>host</strong> must always be given).</p>
+<p>For instance, here are some valid <a href="https://en.wikipedia.org/wiki/URL">URL</a>s you will need to support:</p>
+<ul>
+<li><code>example.com</code></li>
+<li><code>http://example.com</code></li>
+<li><code>http://example.com:8888</code></li>
+<li><code>http://example.com/data</code></li>
+<li><code>example.com:9999/data</code></li>
+</ul>
+<p>If the <strong>port</strong> is not specified, then you are to assume the default <a href="https://en.wikipedia.org/wiki/Hypertext_Transfer_Protocol">HTTP</a>
+port: <code>80</code>.  If a <strong>path</strong> is not specified, then you can assume an empty
+path: <code>""</code>.</p>
+</div>
+<h3 id="task-1-curlitc">Task 1: <code>curlit.c</code><a class="headerlink" href="#task-1-curlitc" title="Permanent link">&para;</a></h3>
+<p>To implement the <code>curlit</code> utility, you are to complete the provided
+<code>curlit.c</code> source file which contains the following <strong>functions</strong>:</p>
+<div class="codehilite"><pre><span></span><code><span class="cm">/**</span>
+<span class="cm"> * Display usage message and exit.</span>
+<span class="cm"> * @param   status      Exit status</span>
+<span class="cm"> **/</span>
+<span class="kt">void</span><span class="w">    </span><span class="nf">usage</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">status</span><span class="p">);</span>
+</code></pre></div>
+
+<blockquote>
+<p>This provided <code>usage</code> function displays the help message and terminates the
+process with the specified <code>status</code> code.</p>
+</blockquote>
+<div class="codehilite"><pre><span></span><code><span class="cm">/**</span>
+<span class="cm"> * Parse URL string into URL structure.</span>
+<span class="cm"> * @param   s       URL string</span>
+<span class="cm"> * @param   url     Pointer to URL structure</span>
+<span class="cm"> **/</span>
+<span class="kt">void</span><span class="w">    </span><span class="nf">parse_url</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="kt">char</span><span class="w"> </span><span class="o">*</span><span class="n">s</span><span class="p">,</span><span class="w"> </span><span class="n">URL</span><span class="w"> </span><span class="o">*</span><span class="n">url</span><span class="p">);</span>
+</code></pre></div>
+
+<blockquote>
+<p>This function parses the <code>s</code> <a href="https://en.wikipedia.org/wiki/URL">URL</a> string to extract the <code>host</code>, <code>port</code>,
+and <code>path</code> components and copies them into the corresponding attributes of
+the <code>URL</code> structure.</p>
+</blockquote>
+<div class="alert success-bg">
+<p><strong>Hints</strong>:</p>
+<ul>
+<li>
+<p>Copy the <a href="https://en.wikipedia.org/wiki/URL">URL</a> <code>s</code> string to a local <strong>buffer</strong> that you can manipulate.</p>
+</li>
+<li>
+<p>Use <a href="https://man7.org/linux/man-pages/man3/strstr.3.html">strstr</a> and <a href="https://man7.org/linux/man-pages/man3/strchr.3.html">strchr</a> to search the local <strong>buffer</strong> for the appropriate
+  delimiters (e.g. <code>HOST_DELIMITER</code>, <code>PATH_DELIMITER</code>, and <code>PORT_DELIMITER</code>) and
+  split the string into different components.</p>
+</li>
+<li>
+<p>Use <a href="https://man7.org/linux/man-pages/man3/strcpy.3.html">strcpy</a> to copy the found components to the <code>URL</code> structure.</p>
+</li>
+</ul>
+</div>
+<div class="codehilite"><pre><span></span><code><span class="cm">/**</span>
+<span class="cm"> * Fetch contents of URL and print to standard out.</span>
+<span class="cm"> *</span>
+<span class="cm"> * Print elapsed time and bandwidth to standard error.</span>
+<span class="cm"> * @param   s       URL string</span>
+<span class="cm"> * @param   url     Pointer to URL structure</span>
+<span class="cm"> * @return  true if client is able to read all of the content (or if the</span>
+<span class="cm"> * content length is unset), otherwise false</span>
+<span class="cm"> **/</span>
+<span class="kt">bool</span><span class="w">    </span><span class="nf">fetch_url</span><span class="p">(</span><span class="n">URL</span><span class="w"> </span><span class="o">*</span><span class="n">url</span><span class="p">);</span>
+</code></pre></div>
+
+<blockquote>
+<p>This function performs a <a href="https://en.wikipedia.org/wiki/Hypertext_Transfer_Protocol">HTTP</a> request with the given <code>URL</code> by using
+<code>socket_dial</code> to form a <a href="https://en.wikipedia.org/wiki/Transmission_Control_Protocol">TCP</a> connection.  It writes the response <strong>body</strong> or
+<strong>contents</strong> to <strong>standard out</strong>, and the <strong>elapsed time</strong> and <strong>bandwidth</strong>
+metrics to <strong>standard error</strong>.  It returns <code>false</code> if any error was
+experienced during the <a href="https://en.wikipedia.org/wiki/Hypertext_Transfer_Protocol">HTTP</a> transaction or if the server response was not
+<code>200 OK</code>.</p>
+</blockquote>
+<div class="alert success-bg">
+<p><strong>Hints</strong>:</p>
+<ul>
+<li>
+<p>You must check if any of the <a href="https://en.wikipedia.org/wiki/System_call">system calls</a> fail.</p>
+</li>
+<li>
+<div class="flex-col" markdown="1">
+<p>You will want to follow the <a href="https://en.wikipedia.org/wiki/Hypertext_Transfer_Protocol">HTTP</a> transaction steps described above and
+outlined below:</p>
+<ol>
+<li>Connect to remote host and port.</li>
+<li>Send <a href="https://en.wikipedia.org/wiki/Hypertext_Transfer_Protocol">HTTP</a> request to remote server.</li>
+<li>Read response status and verify success.</li>
+<li>Read response headers (until there is an empty line).</li>
+<li>Read response body and copy to <code>stream</code>.</li>
+<li>Close connection.</li>
+<li><p>Return number of bytes written to <code>stream</code>.</p></li>
+</ol>
+</li>
+<li>
+<p>Remember that <a href="https://en.wikipedia.org/wiki/Hypertext_Transfer_Protocol">HTTP</a> uses <a href="https://en.wikipedia.org/wiki/Newline#Representation">DOS line endings</a> and terminates each line
+  with <code>\r\n</code>.</p>
+</li>
+<li>
+<p>Use <a href="https://man7.org/linux/man-pages/man3/strstr.3.html">strstr</a> to check the response status.</p>
+</li>
+<li>
+<p>Use <a href="https://man7.org/linux/man-pages/man3/scanf.3.html">sscanf</a> to parse the response headers for the value of
+  <code>Content-Length</code>.</p>
+</li>
+<li>
+<p>Use <a href="https://man7.org/linux/man-pages/man3/fgetc.3.html">fgets</a> to read the response status and headers.</p>
+</li>
+<li>
+<p>Use <a href="https://man7.org/linux/man-pages/man3/fread.3.html">fread</a> and <a href="https://man7.org/linux/man-pages/man3/fread.3.html">fwrite</a> to read the response body since it may contain
+  binary data.</p>
+</li>
+<li>
+<p>If the server does not return a <a href="https://en.wikipedia.org/wiki/Hypertext_Transfer_Protocol">HTTP</a> status of <code>200 OK</code>  or it provides a
+  <code>Content-Length</code> and the number of bytes written to <code>steam</code> does not match,
+  then the function should return <code>false</code> to indicate an error.  Otherwise,
+  if the <a href="https://en.wikipedia.org/wiki/Hypertext_Transfer_Protocol">HTTP</a> status is <code>200 OK</code> and there is no <code>Content-Length</code> or the
+  number of bytes written matches, then it should return <code>true</code>.</p>
+</li>
+<li>
+<p>Only a <a href="https://en.wikipedia.org/wiki/Hypertext_Transfer_Protocol">HTTP</a> status of <code>200 OK</code> is considered <strong>successful</strong>.</p>
+</li>
+</ul>
+</div>
+<h3 id="task-2-testing_2">Task 2: Testing<a class="headerlink" href="#task-2-testing_2" title="Permanent link">&para;</a></h3>
+<p>Once you have implemented <code>curlit</code>, you can test it by running the
+<code>test-curlit</code> target:</p>
+<div class="codehilite"><pre><span></span><code>$<span class="w"> </span>make<span class="w"> </span>test-curlit
+Testing<span class="w"> </span>curlit<span class="w"> </span>...
+<span class="w">  </span>curlit<span class="w">                                                       </span>...<span class="w"> </span>Success
+<span class="w">  </span>curlit<span class="w"> </span>-h<span class="w">                                                    </span>...<span class="w"> </span>Success
+<span class="w">  </span>curlit<span class="w"> </span>-?<span class="w">                                                    </span>...<span class="w"> </span>Success
+<span class="w">  </span>curlit<span class="w"> </span>http://fake.host<span class="w">                                      </span>...<span class="w"> </span>Success
+<span class="w">  </span>curlit<span class="w"> </span>http://example.com<span class="w">                                    </span>...<span class="w"> </span>Success
+<span class="w">  </span>curlit<span class="w"> </span>http://nd.edu<span class="w">                                         </span>...<span class="w"> </span>Success
+<span class="w">  </span>curlit<span class="w"> </span>h4x0r.space<span class="w">                                           </span>...<span class="w"> </span>Success
+<span class="w">  </span>curlit<span class="w"> </span>h4x0r.space:9898/mind.txt<span class="w">                             </span>...<span class="w"> </span>Success
+<span class="w">  </span>curlit<span class="w"> </span>h4x0r.space:9898/txt/walden.txt<span class="w">                       </span>...<span class="w"> </span>Success
+<span class="w">  </span>curlit<span class="w"> </span>h4x0r.space:9898/txt/gatsby.txt<span class="w">                       </span>...<span class="w"> </span>Success
+<span class="w">  </span>curlit<span class="w"> </span>http://h4x0r.space:9898/txt/warandpeace.txt<span class="w">           </span>...<span class="w"> </span>Success
+<span class="w">  </span>curlit<span class="w"> </span>http://h4x0r.space:9898/img/appa.png<span class="w">                  </span>...<span class="w"> </span>Success
+<span class="w">  </span>--------------------
+<span class="w">   </span>Score<span class="w"> </span><span class="m">12</span>.00<span class="w"> </span>/<span class="w"> </span><span class="m">12</span>.00
+<span class="w">   </span>Grade<span class="w">  </span><span class="m">1</span>.00<span class="w"> </span>/<span class="w">  </span><span class="m">1</span>.00
+<span class="w">  </span>Status<span class="w"> </span>Success
+</code></pre></div>
+
+<h2 id="activity-4-quiz-02-points">Activity 4: Quiz (<em>0.2 Points</em>)<a class="headerlink" href="#activity-4-quiz-02-points" title="Permanent link">&para;</a></h2>
+<p>Once you have completed all the activities above, you are to complete the
+following <strong>reflection quiz</strong>:</p>
+<div id="quiz-questions"></div>
+
+<div id="quiz-responses"></div>
+
+<script src="static/js/dredd-quiz.js"></script>
+<script>
+loadQuiz('static/json/homework10.json');
+</script>
+
+<pre style="display: none;" id="dr-container" class="codehilite"><code id="dredd-response"></code></pre>
+
+<p>As with <a href="reading05.html">Reading 01</a>, you will need to store your answers in a
+<code>homework10/answers.json</code> file.  You can use the form above to generate the
+contents of this file, or you can write the <a href="https://json.org">JSON</a> by hand.</p>
+<p>To test your quiz, you can use the <code>check.py</code> script:</p>
+<div class="codehilite"><pre><span></span><code>$<span class="w"> </span>../.scripts/check.py
+Checking<span class="w"> </span>homework10<span class="w"> </span>quiz<span class="w"> </span>...
+<span class="w">     </span>Q01<span class="w">  </span><span class="m">8</span>.00<span class="w"> </span>/<span class="w">  </span><span class="m">8</span>.00
+<span class="w">     </span>Q02<span class="w">  </span><span class="m">4</span>.00<span class="w"> </span>/<span class="w">  </span><span class="m">4</span>.00
+<span class="w">     </span>Q03<span class="w">  </span><span class="m">4</span>.00<span class="w"> </span>/<span class="w">  </span><span class="m">4</span>.00
+<span class="w">     </span>Q04<span class="w">  </span><span class="m">4</span>.00<span class="w"> </span>/<span class="w">  </span><span class="m">4</span>.00
+<span class="w">  </span>--------------------
+<span class="w">   </span>Score<span class="w"> </span><span class="m">20</span>.00<span class="w"> </span>/<span class="w"> </span><span class="m">20</span>.00
+<span class="w">   </span>Grade<span class="w">  </span><span class="m">1</span>.00<span class="w"> </span>/<span class="w">  </span><span class="m">1</span>.00
+<span class="w">  </span>Status<span class="w"> </span>Success
+</code></pre></div>
+
+<h2 id="extra-credit-04-05-points">Extra Credit 04 (<em>0.5 Points</em>)<a class="headerlink" href="#extra-credit-04-05-points" title="Permanent link">&para;</a></h2>
+<p>For the last quarter of the semester, you will have <strong>three</strong> extra credit
+opportunities worth <code>0.5</code> points each.  You may do <strong>none</strong>, <strong>one</strong>,
+<strong>two</strong>, or all <strong>three</strong> of them.</p>
+<div class="alert success-bg">
+<h3 id="check-all-embed_icon-do-the-homework"><i class="icon icon-medium"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><title>check-all</title><path d="M0.41,13.41L6,19L7.41,17.58L1.83,12M22.24,5.58L11.66,16.17L7.5,12L6.07,13.41L11.66,19L23.66,7M18,7L16.59,5.58L10.24,11.93L11.66,13.34L18,7Z" /></svg>
+</i> Do The Homework<a class="headerlink" href="#check-all-embed_icon-do-the-homework" title="Permanent link">&para;</a></h3>
+<p>To be <strong>eligible</strong> for the extra credit, you must <strong>successfully complete</strong>
+the corresponding <strong>homework</strong> assignment.  This means passing all the tests
+and the reflection quiz.</p>
+</div>
+<div class="alert danger-bg">
+<h3 id="leaf-circle-embed_icon-organic-code-only"><i class="icon icon-medium"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><title>leaf-circle</title><path d="M12 2C6.5 2 2 6.5 2 12S6.5 22 12 22 22 17.5 22 12 17.5 2 12 2M9.6 17.2C9.38 17.2 9.08 17.12 8.8 17L8.23 18.4L7.09 18L7.25 17.61C8.45 14.59 9.83 11.15 15 10C15 10 9 10 7.05 15.55C7.05 15.55 6 14.5 6 13.3S7.2 9.55 10.2 8.95C11.05 8.78 12 8.65 12.94 8.5C15.3 8.18 17.57 7.86 18 7C18 7 16.2 17.2 9.6 17.2Z" /></svg>
+</i> Organic Code Only<a class="headerlink" href="#leaf-circle-embed_icon-organic-code-only" title="Permanent link">&para;</a></h3>
+<p>You may not, however, use <strong>AI tools</strong> for any portion of them and if caught,
+you will <strong>forfeit</strong> the opportunity to do any of these extra credit
+opportunities.</p>
+</div>
+<h3 id="irc-bot">IRC Bot<a class="headerlink" href="#irc-bot" title="Permanent link">&para;</a></h3>
+<p>For extra credit, you are to use <a href="https://www.python.org/">Python</a> and <a href="https://en.wikipedia.org/wiki/Network_socket">sockets</a> to implement your own
+version of <a href="https://github.com/pbui/bobbit/">bobbit</a>, an <a href="https://en.wikipedia.org/wiki/Internet_Relay_Chat">IRC</a> chat bot by <strong>Wednesday, April 29</strong>.  Your bot
+should connect to the <a href="https://chat.ndlug.org">chat.ndlug.org</a> server and join the <code>#bots</code> channel.
+It should be able to respond to at least one type of command or message.  The
+particular operation is up to you.</p>
+<p>To help you get started, here are some resources:</p>
+<ul>
+<li><a href="https://ircdocs.horse/specs/">Internet Relay Chat - Specifications</a></li>
+<li><a href="https://modern.ircdocs.horse/">Modern IRC Client Protocol</a></li>
+</ul>
+<div class="alert warning-bg">
+<h3 id="linux-embed_icon-notre-dame-linux-users-group"><i class="icon icon-medium"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><title>linux</title><path d="M14.62,8.35C14.2,8.63 12.87,9.39 12.67,9.54C12.28,9.85 11.92,9.83 11.53,9.53C11.33,9.37 10,8.61 9.58,8.34C9.1,8.03 9.13,7.64 9.66,7.42C11.3,6.73 12.94,6.78 14.57,7.45C15.06,7.66 15.08,8.05 14.62,8.35M21.84,15.63C20.91,13.54 19.64,11.64 18,9.97C17.47,9.42 17.14,8.8 16.94,8.09C16.84,7.76 16.77,7.42 16.7,7.08C16.5,6.2 16.41,5.3 16,4.47C15.27,2.89 14,2.07 12.16,2C10.35,2.05 9,2.81 8.21,4.4C8,4.83 7.85,5.28 7.75,5.74C7.58,6.5 7.43,7.29 7.25,8.06C7.1,8.71 6.8,9.27 6.29,9.77C4.68,11.34 3.39,13.14 2.41,15.12C2.27,15.41 2.13,15.7 2.04,16C1.85,16.66 2.33,17.12 3.03,16.96C3.47,16.87 3.91,16.78 4.33,16.65C4.74,16.5 4.9,16.6 5,17C5.65,19.15 7.07,20.66 9.24,21.5C13.36,23.06 18.17,20.84 19.21,16.92C19.28,16.65 19.38,16.55 19.68,16.65C20.14,16.79 20.61,16.89 21.08,17C21.57,17.09 21.93,16.84 22,16.36C22.03,16.1 21.94,15.87 21.84,15.63" /></svg>
+</i> Notre Dame Linux Users Group<a class="headerlink" href="#linux-embed_icon-notre-dame-linux-users-group" title="Permanent link">&para;</a></h3>
+<p>To connect to the <a href="https://ndlug.org/">NDLUG</a> server yourself, you can use the following
+<strong>anonymous web client</strong>:</p>
+<blockquote>
+<p><a href="https://gamja.ndlug.org/?channels=#bots">https://gamja.ndlug.org/?channels=#bots</a></p>
+</blockquote>
+<p>Alternatively, if you wish to have access to more chat features such as
+history, you can register via <a href="https://regserv.ndlug.org/">regserv.ndlug.org</a>, which will setup a
+<a href="https://thelounge.chat/">Lounge</a> and <a href="https://en.wikipedia.org/wiki/Internet_Relay_Chat">IRC</a> account for you.</p>
+<p>The <a href="https://thelounge.chat/">Lounge</a> is a web-based <a href="https://en.wikipedia.org/wiki/Internet_Relay_Chat">IRC</a> client that you can use from any web
+browser, but you are free to connect to the <a href="https://en.wikipedia.org/wiki/Internet_Relay_Chat">IRC</a> server from any <a href="https://en.wikipedia.org/wiki/Internet_Relay_Chat">IRC</a>
+client such as <a href="https://weechat.org/">Weechat</a>, <a href="https://hexchat.github.io/">Hexchat</a>, or <a href="https://www.codeux.com/textual/">Textual</a> using <code>chat.ndlug.org</code> as
+the hostname and <code>6697</code> as the port.</p>
+</div>
+<p>A basic <a href="https://en.wikipedia.org/wiki/Internet_Relay_Chat">IRC</a> client session looks like this:</p>
+<div class="codehilite"><pre><span></span><code>USER ircle-pbui 0 * :pbui&#39;s bot
+NICK ircle-pbui
+JOIN #bots
+PRIVMSG #bots :I&#39;ve fallen and I can&#39;t get up!
+</code></pre></div>
+
+<ol>
+<li>
+<p>The <code>USER</code> command sets the users real name and registers the user.</p>
+</li>
+<li>
+<p>The <code>NICK</code> command sets the users nickname.</p>
+</li>
+<li>
+<p>The <code>JOIN</code> command allows the user to join in a channel (in this case <code>#bots</code>).</p>
+</li>
+<li>
+<p>The <code>PRIVMSG</code> command allows the user to send a message (in this case to
+the channel <code>#bots</code>).</p>
+</li>
+</ol>
+<p>Here is a basic skeleton, <a href="https://pnutz.h4x0r.space/courses/cse.20289.sp26/static/txt/homework10/ircle.py">ircle.py</a>, that you can start with:</p>
+<div class="codehilite"><pre><span></span><code><span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">socket</span>
+<span class="kn">import</span> <span class="nn">ssl</span>
+
+<span class="c1"># Constants</span>
+
+<span class="n">HOST</span> <span class="o">=</span> <span class="s1">&#39;chat.ndlug.org&#39;</span>
+<span class="n">PORT</span> <span class="o">=</span> <span class="mi">6697</span>
+<span class="n">NICK</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;ircle-</span><span class="si">{</span><span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">&quot;USER&quot;</span><span class="p">]</span><span class="si">}</span><span class="s1">&#39;</span>
+
+<span class="c1"># Functions</span>
+
+<span class="k">def</span> <span class="nf">ircle</span><span class="p">():</span>
+    <span class="c1"># Connect to IRC server</span>
+    <span class="n">ssl_context</span> <span class="o">=</span> <span class="n">ssl</span><span class="o">.</span><span class="n">create_default_context</span><span class="p">()</span>
+    <span class="n">tcp_socket</span>  <span class="o">=</span> <span class="n">socket</span><span class="o">.</span><span class="n">create_connection</span><span class="p">((</span><span class="n">HOST</span><span class="p">,</span> <span class="n">PORT</span><span class="p">))</span>
+    <span class="n">ssl_socket</span>  <span class="o">=</span> <span class="n">ssl_context</span><span class="o">.</span><span class="n">wrap_socket</span><span class="p">(</span><span class="n">tcp_socket</span><span class="p">,</span> <span class="n">server_hostname</span><span class="o">=</span><span class="n">HOST</span><span class="p">)</span>
+    <span class="n">ssl_stream</span>  <span class="o">=</span> <span class="n">ssl_socket</span><span class="o">.</span><span class="n">makefile</span><span class="p">(</span><span class="s1">&#39;rw&#39;</span><span class="p">)</span>
+
+    <span class="c1"># Identify ourselves</span>
+    <span class="n">ssl_stream</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;USER </span><span class="si">{</span><span class="n">NICK</span><span class="si">}</span><span class="s1"> 0 * :</span><span class="si">{</span><span class="n">NICK</span><span class="si">}</span><span class="se">\r\n</span><span class="s1">&#39;</span><span class="p">)</span>
+    <span class="n">ssl_stream</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;NICK </span><span class="si">{</span><span class="n">NICK</span><span class="si">}</span><span class="se">\r\n</span><span class="s1">&#39;</span><span class="p">)</span>
+    <span class="n">ssl_stream</span><span class="o">.</span><span class="n">flush</span><span class="p">()</span>
+
+    <span class="c1"># Join #bots channel</span>
+    <span class="n">ssl_stream</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;JOIN #bots</span><span class="se">\r\n</span><span class="s1">&#39;</span><span class="p">)</span>
+    <span class="n">ssl_stream</span><span class="o">.</span><span class="n">flush</span><span class="p">()</span>
+
+    <span class="c1"># Write message to channel</span>
+    <span class="n">ssl_stream</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;PRIVMSG #bots :I&#39;ve fallen and I can&#39;t get up!</span><span class="se">\r\n</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="n">ssl_stream</span><span class="o">.</span><span class="n">flush</span><span class="p">()</span>
+
+    <span class="c1"># Read and display</span>
+    <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
+        <span class="n">message</span> <span class="o">=</span> <span class="n">ssl_stream</span><span class="o">.</span><span class="n">readline</span><span class="p">()</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">message</span><span class="p">)</span>
+
+<span class="c1"># Main Execution</span>
+
+<span class="k">def</span> <span class="nf">main</span><span class="p">():</span>
+    <span class="n">ircle</span><span class="p">()</span>
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
+    <span class="n">main</span><span class="p">()</span>
+</code></pre></div>
+
+<p>Alternatively, if you are interested in using the new <a href="https://docs.python.org/3/library/asyncio.html">asyncio</a> features of
+<a href="https://www.python.org/">Python</a> 3 to perform event-driven and concurrent programming, you can
+use the following skeleton <a href="https://pnutz.h4x0r.space/courses/cse.20289.sp26/static/txt/homework10/ircle-async.py">ircle-async.py</a>:</p>
+<div class="codehilite"><pre><span></span><code><span class="kn">import</span> <span class="nn">asyncio</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">sys</span>
+
+<span class="c1"># Constants</span>
+
+<span class="n">HOST</span> <span class="o">=</span> <span class="s1">&#39;chat.ndlug.org&#39;</span>
+<span class="n">PORT</span> <span class="o">=</span> <span class="mi">6697</span>
+<span class="n">NICK</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;ircle-</span><span class="si">{</span><span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">&quot;USER&quot;</span><span class="p">]</span><span class="si">}</span><span class="s1">&#39;</span>
+
+<span class="c1"># Functions</span>
+
+<span class="k">async</span> <span class="k">def</span> <span class="nf">ircle</span><span class="p">():</span>
+    <span class="c1"># Connect to IRC server</span>
+    <span class="n">reader</span><span class="p">,</span> <span class="n">writer</span> <span class="o">=</span> <span class="k">await</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">open_connection</span><span class="p">(</span><span class="n">HOST</span><span class="p">,</span> <span class="n">PORT</span><span class="p">,</span> <span class="n">ssl</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+    <span class="c1"># Identify ourselves</span>
+    <span class="n">writer</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;USER </span><span class="si">{</span><span class="n">NICK</span><span class="si">}</span><span class="s1"> 0 * :</span><span class="si">{</span><span class="n">NICK</span><span class="si">}</span><span class="se">\r\n</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">encode</span><span class="p">())</span>
+    <span class="n">writer</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;NICK </span><span class="si">{</span><span class="n">NICK</span><span class="si">}</span><span class="se">\r\n</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">encode</span><span class="p">())</span>
+    <span class="k">await</span> <span class="n">writer</span><span class="o">.</span><span class="n">drain</span><span class="p">()</span>
+
+    <span class="c1"># Join #bots channel</span>
+    <span class="n">writer</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;JOIN #bots</span><span class="se">\r\n</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">encode</span><span class="p">())</span>
+    <span class="k">await</span> <span class="n">writer</span><span class="o">.</span><span class="n">drain</span><span class="p">()</span>
+
+    <span class="c1"># Write message to channel</span>
+    <span class="n">writer</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;PRIVMSG #bots :I&#39;ve fallen and I can&#39;t get up!</span><span class="se">\r\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">encode</span><span class="p">())</span>
+    <span class="k">await</span> <span class="n">writer</span><span class="o">.</span><span class="n">drain</span><span class="p">()</span>
+
+    <span class="c1"># Read and display</span>
+    <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
+        <span class="n">message</span> <span class="o">=</span> <span class="p">(</span><span class="k">await</span> <span class="n">reader</span><span class="o">.</span><span class="n">readline</span><span class="p">())</span><span class="o">.</span><span class="n">decode</span><span class="p">()</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">message</span><span class="p">)</span>
+
+<span class="c1"># Main execution</span>
+
+<span class="k">def</span> <span class="nf">main</span><span class="p">():</span>
+    <span class="n">asyncio</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">ircle</span><span class="p">())</span>
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
+    <span class="n">main</span><span class="p">()</span>
+</code></pre></div>
+
+<div class="alert special-bg">
+<h3 id="checkbox-marked-outline-embed_icon-irc-bot-verification"><i class="icon icon-medium"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><title>checkbox-marked-outline</title><path d="M19,19H5V5H15V3H5C3.89,3 3,3.89 3,5V19A2,2 0 0,0 5,21H19A2,2 0 0,0 21,19V11H19M7.91,10.08L6.5,11.5L11,16L21,6L19.59,4.58L11,13.17L7.91,10.08Z" /></svg>
+</i> IRC Bot: Verification<a class="headerlink" href="#checkbox-marked-outline-embed_icon-irc-bot-verification" title="Permanent link">&para;</a></h3>
+<p>To receive credit for the <strong>IRC Bot</strong>, you must:</p>
+<ol>
+<li>
+<p>Have your <strong>IRC bot</strong> join the <code>#bots</code> channel on <a href="https://chat.ndlug.org">chat.ndlug.org</a> server.</p>
+</li>
+<li>
+<p>Demonstrate your bot's functionality by logging into the server with your
+own separate account and showing one of the TAs.</p>
+</li>
+<li>
+<p>Post a <strong>screenshot</strong> of your <code>IRC Bot</code> in action in your <strong>Pull Request</strong>.</p>
+</li>
+</ol>
+</div>
+<h2 id="submission">Submission<a class="headerlink" href="#submission" title="Permanent link">&para;</a></h2>
+<p>To submit your assignment, please commit your work to the <code>homework10</code> folder
+of your <code>homework10</code> branch in your <strong>assignments</strong> <a href="https://github.com">GitHub</a> repository.
+Your <code>homework10</code> folder should <strong>only</strong> contain the following files:</p>
+<ul>
+<li><code>Makefile</code></li>
+<li><code>README.md</code></li>
+<li><code>answers.json</code></li>
+<li><code>curlit.c</code></li>
+<li><code>nmapit.c</code></li>
+<li><code>socket.c</code></li>
+<li><code>socket.h</code></li>
+<li><code>socket.unit.c</code></li>
+</ul>
+<div class="alert warning-bg">
+<p><strong>Note</strong>: You do not need to commit the test scripts because the <code>Makefile</code>
+automatically downloads them.</p>
+</div>
+<div class="codehilite"><pre><span></span><code><span class="c1">#-----------------------------------------------------------------------</span>
+<span class="c1"># Make sure you have already completed Activity 0: Preparation</span>
+<span class="c1">#-----------------------------------------------------------------------</span>
+...
+$<span class="w"> </span>git<span class="w"> </span>add<span class="w"> </span>Makefile<span class="w">                        </span><span class="c1"># Mark changes for commit</span>
+$<span class="w"> </span>git<span class="w"> </span>add<span class="w"> </span>socket.c<span class="w">                        </span><span class="c1"># Mark changes for commit</span>
+$<span class="w"> </span>git<span class="w"> </span>commit<span class="w"> </span>-m<span class="w"> </span><span class="s2">&quot;Homework 10: socket&quot;</span><span class="w">     </span><span class="c1"># Record changes</span>
+...
+$<span class="w"> </span>git<span class="w"> </span>add<span class="w"> </span>Makefile<span class="w">                        </span><span class="c1"># Mark changes for commit</span>
+$<span class="w"> </span>git<span class="w"> </span>add<span class="w"> </span>nmapit.c<span class="w">                        </span><span class="c1"># Mark changes for commit</span>
+$<span class="w"> </span>git<span class="w"> </span>commit<span class="w"> </span>-m<span class="w"> </span><span class="s2">&quot;Homework 10: nmapit&quot;</span><span class="w">     </span><span class="c1"># Record changes</span>
+...
+$<span class="w"> </span>git<span class="w"> </span>add<span class="w"> </span>Makefile<span class="w">                        </span><span class="c1"># Mark changes for commit</span>
+$<span class="w"> </span>git<span class="w"> </span>add<span class="w"> </span>curlit.c<span class="w">                        </span><span class="c1"># Mark changes for commit</span>
+$<span class="w"> </span>git<span class="w"> </span>commit<span class="w"> </span>-m<span class="w"> </span><span class="s2">&quot;Homework 10: curlit&quot;</span><span class="w">     </span><span class="c1"># Record changes</span>
+...
+$<span class="w"> </span>git<span class="w"> </span>add<span class="w"> </span>answers.json<span class="w">                    </span><span class="c1"># Mark changes for commit</span>
+$<span class="w"> </span>git<span class="w"> </span>commit<span class="w"> </span>-m<span class="w"> </span><span class="s2">&quot;Homework 10: quiz&quot;</span><span class="w">       </span><span class="c1"># Record changes</span>
+...
+$<span class="w"> </span>git<span class="w"> </span>push<span class="w"> </span>-u<span class="w"> </span>origin<span class="w"> </span>homework10<span class="w">           </span><span class="c1"># Push branch to GitHub</span>
+</code></pre></div>
+
+<div class="alert warning-bg">
+<h3 id="lifebuoy-embed_icon-acknowledgments"><i class="icon icon-medium"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><title>lifebuoy</title><path d="M19.79,15.41C20.74,13.24 20.74,10.75 19.79,8.59L17.05,9.83C17.65,11.21 17.65,12.78 17.06,14.17L19.79,15.41M15.42,4.21C13.25,3.26 10.76,3.26 8.59,4.21L9.83,6.94C11.22,6.35 12.79,6.35 14.18,6.95L15.42,4.21M4.21,8.58C3.26,10.76 3.26,13.24 4.21,15.42L6.95,14.17C6.35,12.79 6.35,11.21 6.95,9.82L4.21,8.58M8.59,19.79C10.76,20.74 13.25,20.74 15.42,19.78L14.18,17.05C12.8,17.65 11.22,17.65 9.84,17.06L8.59,19.79M12,2A10,10 0 0,1 22,12A10,10 0 0,1 12,22A10,10 0 0,1 2,12A10,10 0 0,1 12,2M12,8A4,4 0 0,0 8,12A4,4 0 0,0 12,16A4,4 0 0,0 16,12A4,4 0 0,0 12,8Z" /></svg>
+</i> Acknowledgments<a class="headerlink" href="#lifebuoy-embed_icon-acknowledgments" title="Permanent link">&para;</a></h3>
+<p>If you collaborated with any other students, or received help from TAs or AI
+tools on this assignment, please record this support in the <code>README.md</code> in
+the <code>homework10</code> folder and include it with your <strong>Pull Request</strong>.</p>
+</div>
+<div class="alert success-bg">
+<h3 id="account-question-embed_icon-graders"><i class="icon icon-medium"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><title>account-question</title><path d="M13,8A4,4 0 0,1 9,12A4,4 0 0,1 5,8A4,4 0 0,1 9,4A4,4 0 0,1 13,8M17,18V20H1V18C1,15.79 4.58,14 9,14C13.42,14 17,15.79 17,18M20.5,14.5V16H19V14.5H20.5M18.5,9.5H17V9A3,3 0 0,1 20,6A3,3 0 0,1 23,9C23,9.97 22.5,10.88 21.71,11.41L21.41,11.6C20.84,12 20.5,12.61 20.5,13.3V13.5H19V13.3C19,12.11 19.6,11 20.59,10.35L20.88,10.16C21.27,9.9 21.5,9.47 21.5,9A1.5,1.5 0 0,0 20,7.5A1.5,1.5 0 0,0 18.5,9V9.5Z" /></svg>
+</i> Graders<a class="headerlink" href="#account-question-embed_icon-graders" title="Permanent link">&para;</a></h3>
+<p>Once you have committed your work and pushed it to <a href="https://github.com">GitHub</a>, remember to
+create a <strong>pull request</strong> and assign it to the appropriate <strong>teaching
+assistant</strong> from the <a href="reading10_tas.html">Reading 10 TA List</a>.</p>
+<p><strong>Note</strong>: this list changes each week, so be sure to consult the appropriate
+list for each assignment.</p>
+</div>
+</main>
+<footer>
+Built using <a href="https://python.org">Python</a>
+and <a href="https://jinja.palletsprojects.com">Jinja</a>
+with colors from <a href="https://nordtheme.com">Nord Theme</a>
+and icons from <a href="https://pictogrammers.com/library/mdi/">Material Design Icons</a>.</footer>
+</body>
+</html>
