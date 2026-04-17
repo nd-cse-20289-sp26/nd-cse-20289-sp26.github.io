@@ -342,7 +342,6 @@ body:       |
       # Scan student05.cse.nd.edu with default ports (1-1023)
       $ ./nmapit student05.cse.nd.edu
       22
-      80
       111
 
       # Return success if at least one port is found
