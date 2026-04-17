@@ -396,6 +396,8 @@
         items:
           - name:       Slides
             link:       https://docs.google.com/presentation/d/1DHAig58aEaIQYTPIbI_fXEjMCQ9nP1_j9MH1L2yY-1c/edit?usp=sharing
+          - name:       Panopto
+            link:       https://notredame.hosted.panopto.com/Panopto/Pages/Viewer.aspx?id=40882223-94fa-4f19-92ab-b42f012754bc
 
       - date:           Sat 04/18
         topics:         '<i class="muted">MoveIt, TimeIt</i>'
