@@ -438,6 +438,7 @@
         topics:         ""
         items:
           - name:       Checklist 04
+            link:       checklist04.html
 
       - date:           Wed 04/29
         topics:         '<i>Fin</i>'

@@ -1,0 +1,576 @@
+title:      Checklist 04
+body:       |
+
+    This is a general outline of the **key** concepts (*arranged by topic*) that
+    you should know for the **Exam 04**.
+
+    The exam will have the following format:
+
+    -   <div class="flex-col" markdown="1">
+
+        **Scripting**
+
+        1. [Shell] (*multiple choice*, *fill-in-the-blank*).
+
+        2. [Python] (*multiple choice*, *fill-in-the-blank*).
+
+    -   <div class="flex-col" markdown="1">
+
+        **C**
+
+        1. **Pointers, Arrays, Strings/Memory Allocation** (*multiple choice*, *fill-in-the-blank*).
+
+        2. **Memory Management/Linked Lists** (*multiple choice*, *fill-in-the-blank*).
+
+    -   <div class="flex-col" markdown="1">
+
+        **System Calls**
+
+        1. **Files** (*multiple choice*, *fill-in-the-blank*).
+
+        2. **Processes** (*multiple choice*, *fill-in-the-blank*).
+
+        3. **Networking** (*multiple choice*, *fill-in-the-blank*).
+
+    -   <div class="flex-col" markdown="1">
+
+        **Programming**
+
+        1. Write a [Shell] script that navigates [unix] file system.
+
+        2. Write a [Python] script that processes data.
+
+        3. Write a [C] program that uses [system calls].
+
+    The first three sections (**Scripting**, **C**, and **System Calls**) are
+    to be done first on **paper**. Once that portion is completed and
+    submitted, you will do the last **Programming** section on your own
+    computer and submit code to your **assignments** repository.
+
+    <div class="alert warning-bg" markdown="1">
+
+    ### <i class="icon icon-medium">{{ "check-all" | embed_icon }}</i> Representative, But Not Exhaustive
+
+    The final exam will be a **comprehrensive** assessment. This means that
+    **everything** we have discussed this semester is considered fair game.
+
+    That said, the **majority** of the test will cover the **last quarter** of
+    the class, as detailed below.
+
+    This check list is meant to be representative, rather than exhaustive (ie.
+    there may be questions that show up on the exam that are not shown below).
+
+    </div>
+
+    [Unix]: https://en.wikipedia.org/wiki/Unix
+    [Unix Philosophy]: https://en.wikipedia.org/wiki/Unix_philosophy
+    [C]: https://en.wikipedia.org/wiki/C_(programming_language)
+    [shell]: https://en.wikipedia.org/wiki/Unix_shell
+    [system call]: https://en.wikipedia.org/wiki/System_call
+    [system calls]: https://en.wikipedia.org/wiki/System_call
+    [Python]: https://www.python.org/
+    [compiling]: https://en.wikipedia.org/wiki/Compiler
+    [compiler pipeline]: https://en.wikipedia.org/wiki/Compiler
+    [makefiles]: https://en.wikipedia.org/wiki/Makefile
+    [pointers]: https://en.wikipedia.org/wiki/Pointer_(computer_programming)
+    [arrays]: https://en.wikipedia.org/wiki/Array_data_structure
+    [strings]: https://en.wikipedia.org/wiki/C_string_handling
+    [memory]: https://en.wikipedia.org/wiki/Computer_memory
+    [i/o]: https://en.wikipedia.org/wiki/Input/output
+    [files]: https://en.wikipedia.org/wiki/Computer_file
+    [directories]: https://en.wikipedia.org/wiki/Directory_(computing)
+    [processes]: https://en.wikipedia.org/wiki/Process_(computing)
+    [networking]: https://en.wikipedia.org/wiki/Computer_network
+    [data representation]: https://en.wikipedia.org/wiki/Data_(computing)
+
+    ## Logistics
+
+    **Exam 04** will take place on **Tuesday, May 5** from **10:30 AM - 12:30
+    PM** in **155 DeBartolo Hall**.
+
+    As noted above, the first portion of the exam with be on **paper**, while
+    the remaining component with require **coding** and submitting work to your
+    **assignments** repository on [GitHub].
+
+    During the **paper** portion of the exam, students will only be allowed to
+    use **four** cheatsheets. This **paper** component of the exam must be
+    submitted before students can access the **coding** section.
+
+    For the **coding** portion, students will use their own computer, and thus
+    are permitted access to any material in their textbooks, notes,
+    assignments, and the Internet.
+
+    <div class="alert danger-bg"  markdown="1">
+
+    ### <i class="icon icon-medium">{{ "alert" | embed_icon }}</i> Honor Code Violations
+
+    Although students are allowed to use their computers and the Internet
+    during the **coding** portion of the exam, students **may not communicate
+    with others** or **solicit answers from others**.  **Nor may they use AI
+    tools** such as **ChatGPT** or **Co-Pilot** during the exam.  Students
+    caught sharing solutions or violating any portion of the honor code will
+    **receive a zero on the exam**.
+
+    Furthermore, students are not allowed to consult, copy, or share material
+    from previous sections of this course.
+
+    </div>
+
+    [GitHub]: https://github.com
+
+    ## Scripting
+
+    1. What is [Unix]?
+
+        - What are the **three tenets** of the [Unix Philosophy]?
+
+        - What are [filters]?  What do they do and how are they related to the [Unix Philosophy]?
+
+        - What happens during [I/O redirection]?
+
+    2. What is [concurrency] and what is [parallelism]?
+
+        - What makes [concurrency] challenging?
+
+        - What are some different types of [parallelism]?
+
+        - What are some common examples of these types of [parallelism]?
+
+    [Unix]: https://en.wikipedia.org/wiki/Unix
+    [filters]: https://en.wikipedia.org/wiki/Filter_(software)
+    [functional programming]: https://en.wikipedia.org/wiki/Functional_programming
+    [concurrency]: https://en.wikipedia.org/wiki/Concurrency_(computer_science)
+    [parallelism]: https://en.wikipedia.org/wiki/Parallel_computing
+    [procedural programming]: https://en.wikipedia.org/wiki/Procedural_programming
+    [i/o redirection]: https://en.wikipedia.org/wiki/Redirection_(computing)
+
+    ### Shell
+
+    How do you construct a [unix pipeline] to do the following:
+
+    1. Extract a fields or characters.
+
+    2. Search based on a pattern.
+
+    3. Count the number of lines.
+
+    4. Search a directory based on a pattern or file attribute.
+
+    5. List the processes on the current machine.
+
+    <div class="alert success-bg" markdown="1">
+
+    ### <i class="icon icon-medium">{{ "help" | embed_icon }}</i> Sample Question
+
+    Which of the following pipelines counts all the "Permission denied" errors
+    encountered when recursively searching file names under the "/etc"
+    directory?
+
+    - `find /etc > /dev/null | wc -l`
+    - `find /etc 2>&1 > /dev/null | wc -l`
+    - `find /etc 2> /dev/null | wc -l`
+    - `find /etc > /dev/null 2>&1 | wc -l`
+
+    </div>
+
+    ### Python
+
+    1. How do you use [map], [filter], and [lambda]?
+
+    2. How do you use [list comprehensions]?
+
+    3. How do you use [generator expressions]?
+
+    4. How do you **sort** data?
+
+    5. How do you **split** and **join** strings?
+
+    [map]: https://docs.python.org/3/library/functions.html#map
+    [filter]: https://docs.python.org/3/library/functions.html#filter
+    [lambda]: https://docs.python.org/3/tutorial/controlflow.html#lambda-expressions
+    [list comprehensions]: https://docs.python.org/3/tutorial/datastructures.html#list-comprehensions
+    [generator expressions]: https://www.python.org/dev/peps/pep-0289/
+    [unix pipeline]: https://en.wikipedia.org/wiki/Pipeline_(Unix)
+
+    <div class="alert success-bg" markdown="1">
+
+    ### <i class="icon icon-medium">{{ "help" | embed_icon }}</i> Sample Questions
+
+    -   <div class="flex-col" markdown="1">
+
+        Given a `list` of integers called `numbers`, produce a new `list`
+        called `fives` which consist only of the multiples of `5` by using
+        `filter` and `lambda`.
+
+        Then, do the same thing using **list comprehensions**.
+
+    -   <div class="flex-col" markdown="1">
+
+        Write a program `isitdown.py` that uses [os.system] and [curl] to check
+        if a series of websites are down (ie. respond with successful [HTTP]
+        requests).
+
+            :::text
+            $ ./isitdown.py google.com nd.edu fake.website example.com
+            google.com UP
+            nd.edu UP
+            fake.website DOWN
+            example.com UP
+
+        Then, do the same thing using [requests].
+
+    </div>
+
+    <div class="alert warning-bg" markdown="1">
+
+    ### <i class="icon icon-medium">{{ "lightbulb-outline" | embed_icon }}</i> Exam 01 and 02
+
+    You may wish to review **Exam 01** and **Exam 02**, along with previous
+    **quizzes** assocated with those exams.
+
+    </div>
+
+    [os.system]: https://docs.python.org/3/library/os.html
+    [curl]: https://curl.se/docs/manpage.html
+    [requests]: https://requests.readthedocs.io/en/latest/
+
+    ## C
+
+    1. Why bother with [C]?  Why not just [Python] or [C++]?
+
+    2. Why is [C] considered a **systems programming language**?
+
+    3. What is [C]'s relationship to [Unix]?
+
+    [C]:    https://en.wikipedia.org/wiki/C_(programming_language)
+    [C++]:  https://isocpp.org/
+
+    ### Pointers, Arrays, Strings
+
+    1. What exactly is a [pointer]? [array]? [string]?  How are they related?
+
+    2. What does it mean to **dereference** a [pointer]?
+
+    3. How do we get the **address** of a variable?
+
+    4. What are multiple ways to access an element of an [array] or [string]?
+
+    <div class="alert success-bg" markdown="1">
+
+    ### <i class="icon icon-medium">{{ "help" | embed_icon }}</i> Sample Questions
+
+    See [Checklist 03] and **Exam 03**.
+
+    </div>
+
+    [Checklist 03]: checklist03.html
+
+    ### Memory Allocation
+
+    1. What is the difference between a [struct] and a [union]?
+
+    2. How much memory is allocated when we declare an `int`, `float`,
+    `double`, `char`, `int8_t`, `int32_t`, `int64_t`, `size_t`, [array],
+    [string], or [pointer]?
+
+    3. When we declare a variable, where is the data allocated ([stack],
+    [heap], **data**, **code**)?
+
+    <div class="alert success-bg" markdown="1">
+
+    ### <i class="icon icon-medium">{{ "help" | embed_icon }}</i> Sample Questions
+
+    See [Checklist 03] and **Exam 03**.
+
+    </div>
+
+    ### Memory Management and Linked Lists
+
+    1. How do we [dynamically allocate] memory?  How do we deallocate that
+    memory?
+
+    2. When should we allocate on the [stack]? [heap]? **data**?  What are the
+    advantages and disadvantages of utilizing each memory segment?
+
+    3.  <div class="flex-col" markdown="1">
+
+        What is [singly linked list]? [doubly linked list]?
+
+        - How would we **insert** an entry into a [linked list]?
+
+        - How would we **search** for an entry in a [linked list]?
+
+        - How would we **remove** an entry in a [linked list]?
+
+    <div class="alert success-bg" markdown="1">
+
+    ### <i class="icon icon-medium">{{ "help" | embed_icon }}</i> Sample Questions
+
+    See [Checklist 03] and **Exam 03**.
+
+    </div>
+
+    <div class="alert warning-bg" markdown="1">
+
+    ### <i class="icon icon-medium">{{ "help" | embed_icon }}</i> Exam 03
+
+    You may wish to review **Exam 03**, along with previous **quizzes**
+    assocated with those exams.
+
+    </div>
+
+    [singly linked list]: https://en.wikipedia.org/wiki/Linked_list#Singly_linked_list
+    [doubly linked list]: https://en.wikipedia.org/wiki/Linked_list#Doubly_linked_list
+    [linked list]: https://en.wikipedia.org/wiki/Linked_list
+    [complexities]: https://en.wikipedia.org/wiki/Computational_complexity_theory
+
+    [struct]: https://en.wikipedia.org/wiki/Record_(computer_science)
+    [union]: https://en.wikipedia.org/wiki/Union_type
+    [array]: https://en.wikipedia.org/wiki/Array_data_type
+    [string]: https://en.wikipedia.org/wiki/C_string_handling
+    [pointer]: https://en.wikipedia.org/wiki/Pointer_(computer_programming)
+    [stack]: https://en.wikipedia.org/wiki/Call_stack
+    [heap]: https://en.wikipedia.org/wiki/Memory_management#HEAP
+    [dynamically allocate]: https://en.wikipedia.org/wiki/Memory_management#Dynamic_memory_allocation
+    [memory leak]: https://en.wikipedia.org/wiki/Memory_leak
+    [memory leaks]: https://en.wikipedia.org/wiki/Memory_leak
+    [segmentation fault]:  https://en.wikipedia.org/wiki/Segmentation_fault
+    [segmentation faults]:  https://en.wikipedia.org/wiki/Segmentation_fault
+    [Homework 07]: homework07.html
+
+    ## System Calls
+
+    1. What exactly are [system calls]?  How are they different from normal
+    functions?
+
+    2.  <div class="flex-col" markdown="1">
+
+        What are some reasons why [system calls] related to [files],
+        [processes], and [networking] would fail?
+
+        - How could these [system calls] **fail**?
+
+        - How do we check these **failures**?
+
+        - How do we get the error message related to these **failures**?
+
+    ### Files
+
+    1. What is the difference between [open] and [fopen]?
+
+    2. What exactly is a [file descriptor] and what [system calls] can we do with
+    one?
+
+    3. How do we get the [inode] information for a file?
+
+    [file descriptor]: https://en.wikipedia.org/wiki/File_descriptor
+    [inode]: https://en.wikipedia.org/wiki/Inode
+    [open]: http://man7.org/linux/man-pages/man2/open.2.html
+    [fopen]: http://man7.org/linux/man-pages/man3/fopen.3.html
+
+    <div class="alert success-bg" markdown="1">
+
+    ### <i class="icon icon-medium">{{ "help" | embed_icon }}</i> Sample Questions
+
+    How would you use [system calls] in [C] to accomplish the following tasks:
+
+    - Display the contents of a file?
+
+    - Copy the contents of a file?
+
+    - Check if a file is a regular file, directory, or symlink?
+
+    - Check if a file is a readable, writable, or executable?
+
+    - Check the size of the file?
+
+    - Check the last modification time?
+
+    - List the contents of a directory?
+
+    </div>
+
+    <div class="alert warning-bg" markdown="1">
+
+    ### <i class="icon icon-medium">{{ "brain" | embed_icon }}</i> Big Brain
+
+    Review [Reading 08](reading08.html): using [system calls] to manipulate
+    files and directories.
+
+    </div>
+
+    ### Processes
+
+    1.  <div class="flex-col" markdown="1">
+
+        What is a [process]?
+
+        - What attributes or components does it have?
+
+        - What [system calls] can you do with them?
+
+    2.  <div class="flex-col" markdown="1">
+
+        What happens during the life cycle of a typical [process]?
+
+        - After a [fork], how does a [process] determine if they are the
+          **child** or **parent**?
+
+        - After a [fork], who executes first: **parent** or **child**?
+
+        - What happens when a process performs [exec]?
+
+        - Why is it necessary to perform a [wait]?
+
+        - What is the purpose of [exit]?
+
+    3.  <div class="flex-col" markdown="1">
+
+        How do we prevent a [fork bomb]?
+
+        - How do we prevent [zombies]?
+
+        - Why would we want to prevent these situations?
+
+    4.  <div class="flex-col" markdown="1">
+
+        What is a [signal]?
+
+        - What does a [signal] do to a [process]?
+
+        - How do we send a [signal] to another [process]?
+
+        - How do we catch a [signal] and handle them?
+
+    [fork]: http://man7.org/linux/man-pages/man2/fork.2.html
+    [exec]: http://man7.org/linux/man-pages/man3/exec.3.html
+    [wait]: http://man7.org/linux/man-pages/man2/waitpid.2.html
+    [exit]: http://man7.org/linux/man-pages/man3/exit.3.html
+    [process]: https://en.wikipedia.org/wiki/Process_(computing)
+    [signal]: https://en.wikipedia.org/wiki/Unix_signal
+    [fork bomb]: https://en.wikipedia.org/wiki/Fork_bomb
+    [zombies]: https://en.wikipedia.org/wiki/Zombie_process
+
+    <div class="alert success-bg" markdown="1">
+
+    ### <i class="icon icon-medium">{{ "help" | embed_icon }}</i> Sample Questions
+
+    Given the following [C] code:
+
+        :::C
+        /* forking.c */
+
+        #include <stdlib.h>
+        #include <unistd.h>
+        #include <sys/wait.h>
+
+        int main(int argc, char *argv[]) {
+            int status = 0;
+
+            for (int i = 1; i < argc; i++) {
+                pid_t pid = fork();
+
+                if (pid < 0) {
+                    return EXIT_FAILURE;
+                }
+
+                if (pid == 0) {
+                    execlp(argv[i], "forkit", NULL);
+                }
+            }
+
+            for (int i = 1; i < argc; i++) {
+                int child_status;
+                while (wait(&child_status) < 0) {
+                    status += child_status;
+                }
+            }
+
+            return status;
+        }
+
+    Which of the following statements are true (*choose all that apply*)?
+
+    1. The `execlp` always succeeds.
+    2. The `execlp` always fails.
+    3. The `execlp` may succeed depending on the arguments.
+    4. `main` will always return with success.
+    5. `main` will always return with failure.
+    6. `main` will may return with success depending on the arguments.
+    7. At most one child process may run concurrently with the parent.
+    8. Multiple child processes may run concurrently with the parent.
+    9. This program has fork bomb potential.
+    10. This program does not have fork bomb potential.
+    11. This program always terminates gracefully.
+    12. This program sometimes hangs indefinitely.
+
+    </div>
+
+    [system]: http://man7.org/linux/man-pages/man3/system.3.html
+
+    <div class="alert warning-bg" markdown="1">
+
+    ### <i class="icon icon-medium">{{ "brain" | embed_icon }}</i> Big Brain
+
+    Review [Reading 09](reading09.html): using [fork], [exec], and [wait].
+
+    </div>
+
+    ### Networking
+
+    1.  <div class="flex-col" markdown="1">
+
+        What is [networking]?
+
+        - What is [bandwidth] and [latency] and how do we measure them?
+
+        - What is an [IP address] and what is a [domain name]?
+
+        - What is a [network port]?
+
+        - What is the basic difference between [TCP] and [UDP]?
+
+    2. What is a [URL] and what are its components?
+
+    3. How are [sockets] like [files]? How are they different?
+
+    4.  <div class="flex-col" markdown="1">
+
+        What is [HTTP]?
+
+        - What [system calls] does a typical [HTTP] **client** perform?  What
+          messages does it send and receive?
+
+        - What [system calls] does a typical [HTTP] **server** perform?  What
+          messages does it send and receive?
+
+    <div class="alert success-bg" markdown="1">
+
+    ### <i class="icon icon-medium">{{ "help" | embed_icon }}</i> Sample Questions
+
+    Modify [http_client.c] to upload a file (ie. `PUT`).
+
+    </div>
+
+    <div class="alert warning-bg" markdown="1">
+
+    ### <i class="icon icon-medium">{{ "brain" | embed_icon }}</i> Big Brain
+
+    Review [Reading 10](reading10.html): using [sockets] to connect to another
+    machine.
+
+    </div>
+
+    [bandwidth]: https://en.wikipedia.org/wiki/Bandwidth_(computing)
+    [latency]: https://en.wikipedia.org/wiki/Latency_(engineering)
+    [IP address]: https://en.wikipedia.org/wiki/IP_address
+    [domain name]: https://en.wikipedia.org/wiki/Domain_name
+    [network port]: https://en.wikipedia.org/wiki/Port_(computer_networking)
+    [TCP]: https://en.wikipedia.org/wiki/Transmission_Control_Protocol
+    [UDP]: https://en.wikipedia.org/wiki/User_Datagram_Protocol
+    [URL]: https://en.wikipedia.org/wiki/URL
+    [sockets]: https://en.wikipedia.org/wiki/Network_socket
+    [HTTP]: https://en.wikipedia.org/wiki/Hypertext_Transfer_Protocol
+    [http_client.c]: https://github.com/nd-cse-20289-sp26/examples/blob/master/lecture25/http_client.c
+    [port scanner]: https://en.wikipedia.org/wiki/Port_scanner
+    [Data Representation]: https://en.wikipedia.org/wiki/Data_(computing)
