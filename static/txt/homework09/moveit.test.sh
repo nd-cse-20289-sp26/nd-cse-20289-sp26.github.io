@@ -336,7 +336,7 @@ rm -f $(prefix_files $old_files $new_files)
 
 old_files="doom"
 new_files="thing"
-printf "  %-60s ... " "$old_files -> $new_files"
+printf "  %-60s ... " "$old_files -> $new_files (rename)"
 make_editor $new_files && \
     valgrind --leak-check=full ./$PROGRAM $(prefix_files $old_files) &> $WORKSPACE/test
 if [ $? -eq 0 ]; then
