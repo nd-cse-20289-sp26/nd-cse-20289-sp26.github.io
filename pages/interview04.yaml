@@ -1,0 +1,113 @@
+title:      Interview 04
+body:       |
+
+    Next week, you will have the opportunity to demonstrate your mastery of the
+    skills and concepts discussed in **Unit 04: System Calls** to the instructor or
+    a teaching assistant in a `15` minute in-person **coding interview**.
+
+    This interview will evaluate your proficiency in the following areas:
+
+    1. Writing a [Makefile].
+
+    2. Executing a [process].
+
+    3. Walking the [file system].
+
+    4. Testing [file metadata].
+
+    More details of what you need to know about these particular areas can be
+    found in [Checklist 04].
+
+    [process]: https://en.wikipedia.org/wiki/Process_(computing)
+    [file system]: https://en.wikipedia.org/wiki/File_system
+    [file metadata]: https://en.wikipedia.org/wiki/Inode
+
+    ## Scheduling
+
+    To schedule a **coding interview** appointment, put your **netid** (ie.
+    `pbui`) in an open cell in a timeslot with an interviewer in the following:
+
+    <div class="centered">
+      <a class="badge warning-btn" href="https://docs.google.com/spreadsheets/d/1Pl8TBbl4WY5IOB9-9FMmBJtB5Nun9aor31Mzas1hH-8/edit?usp=sharing" target="_new" style="font-size: 150%;">Interview 04 Spreadsheet</a>
+    </div>
+
+    The location of the interviewer can be found in the **Locations** tab of
+    the [Interview 04 Spreadsheet].
+
+    <div class="alert warning-bg" markdown="1">
+
+    ### <i class="icon icon-medium">{{ "calendar-clock" | embed_icon }}</i> Scheduling Deadline
+
+    For planning purposes, please schedule your **Interview 04** appointment by
+    **midnight, Friday, April 24**.
+
+    You may only signup for **one** appointment timeslot.
+
+    </div>
+
+    [Interview 04 Spreadsheet]: https://docs.google.com/spreadsheets/d/1Pl8TBbl4WY5IOB9-9FMmBJtB5Nun9aor31Mzas1hH-8/edit?usp=sharing
+
+    ## Sample Interview
+
+    Here is an example of the types of tasks the interviewer may ask you to
+    perform:
+
+    -   <div class="flex-col" markdown="1">
+
+        [ ] Download the following:
+
+        - `Makefile`: [https://yld.me/raw/jdtr](https://yld.me/raw/jdtr)
+        - `wcd.c`: [https://yld.me/raw/gQ16](https://yld.me/raw/gQ16)
+
+    - [ ] Complete the `Makefile` and build `wcd`.
+
+    - [ ] Implement the `wcd_file` function (using [fork] and [execlp]).
+
+    - [ ] Implement the `wc_directory` function (using [opendir], [readdir], [closedir]).
+
+    - [ ] Use `make test` to verify functional correctness and memory safety.
+
+    <div class="alert success-bg" markdown="1">
+
+    ### <i class="icon icon-medium">{{ "lightbulb-outline" | embed_icon }}</i> Hints
+
+    - You should be familiar with using [git] to create a branch, record a
+      commit, and upload changes to [GitHub].
+
+    - You should be familiar with downloading files using [curl] or [wget].
+
+    - You should be familiar with [gdb] (or any *debugger*).
+
+    - You should be familiar with [valgrind].
+
+    </div>
+
+    [Makefile]: https://www.gnu.org/software/make/manual/make.html
+    [gdb]: https://www.gnu.org/software/gdb/
+    [valgrind]: http://valgrind.org/
+    [fork]: https://man7.org/linux/man-pages/man2/fork.2.html
+    [execlp]: https://man7.org/linux/man-pages/man3/exec.3.html
+    [opendir]: https://man7.org/linux/man-pages/man3/opendir.3.html
+    [readdir]: https://man7.org/linux/man-pages/man3/readdir.3.html
+    [closedir]: https://man7.org/linux/man-pages/man3/closedir.3.html
+
+    <div class="alert warning-bg" markdown="1">
+
+    ### <i class="icon icon-medium">{{ "alert" | embed_icon }}</i> Consulting Resources
+
+    As with your **Reading** and **Homework** assignments, you are allowed to
+    consult the course texts, slides, notes, the Internet, and even **AI
+    tools**.  However, you cannot communicate with anyone else nor can you ask
+    an **AI tool** to generate a solution.
+
+    Be mindful that the interviewer is assessing your **proficiency** and how
+    much you have **internalized**.  Over reliance on any external resource
+    will be viewed **negatively** in regards to your **mastery** of the material.
+
+    </div>
+
+    [Checklist 04]: checklist04.html
+    [git]: https://git-scm.com/
+    [GitHub]: https://github.com/
+    [curl]: https://curl.haxx.se/docs/manpage.html
+    [wget]: http://man7.org/linux/man-pages/man1/wget.1.html
