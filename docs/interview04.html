@@ -1,0 +1,123 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<!-- Favicon -->
+<link rel="icon" type="image/png" sizes="32x32" href="static/ico/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="static/ico/favicon-16x16.png">
+<link rel="manifest" href="static/ico/site.webmanifest">
+<!-- Stylesheets -->
+<link rel="stylesheet" href="static/css/pnutzh4x0r.css">
+<title>Interview 04</title>
+</head>
+<body>
+<header>
+<a class="logo" href="interview04.html">
+    <h1>Interview 04</h1>
+</a>
+<nav>
+    <ul>
+        <li><a href="index.html"><h4>Home</h4></a></li>
+        </ul>
+</nav></header>
+<main>
+<p>Next week, you will have the opportunity to demonstrate your mastery of the
+skills and concepts discussed in <strong>Unit 04: System Calls</strong> to the instructor or
+a teaching assistant in a <code>15</code> minute in-person <strong>coding interview</strong>.</p>
+<p>This interview will evaluate your proficiency in the following areas:</p>
+<ol>
+<li>
+<p>Writing a <a href="https://www.gnu.org/software/make/manual/make.html">Makefile</a>.</p>
+</li>
+<li>
+<p>Executing a <a href="https://en.wikipedia.org/wiki/Process_(computing)">process</a>.</p>
+</li>
+<li>
+<p>Walking the <a href="https://en.wikipedia.org/wiki/File_system">file system</a>.</p>
+</li>
+<li>
+<p>Testing <a href="https://en.wikipedia.org/wiki/Inode">file metadata</a>.</p>
+</li>
+</ol>
+<p>More details of what you need to know about these particular areas can be
+found in <a href="checklist04.html">Checklist 04</a>.</p>
+<h2 id="scheduling">Scheduling<a class="headerlink" href="#scheduling" title="Permanent link">&para;</a></h2>
+<p>To schedule a <strong>coding interview</strong> appointment, put your <strong>netid</strong> (ie.
+<code>pbui</code>) in an open cell in a timeslot with an interviewer in the following:</p>
+<div class="centered">
+  <a class="badge warning-btn" href="https://docs.google.com/spreadsheets/d/1Pl8TBbl4WY5IOB9-9FMmBJtB5Nun9aor31Mzas1hH-8/edit?usp=sharing" target="_new" style="font-size: 150%;">Interview 04 Spreadsheet</a>
+</div>
+
+<p>The location of the interviewer can be found in the <strong>Locations</strong> tab of
+the <a href="https://docs.google.com/spreadsheets/d/1Pl8TBbl4WY5IOB9-9FMmBJtB5Nun9aor31Mzas1hH-8/edit?usp=sharing">Interview 04 Spreadsheet</a>.</p>
+<div class="alert warning-bg">
+<h3 id="calendar-clock-embed_icon-scheduling-deadline"><i class="icon icon-medium"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><title>calendar-clock</title><path d="M15,13H16.5V15.82L18.94,17.23L18.19,18.53L15,16.69V13M19,8H5V19H9.67C9.24,18.09 9,17.07 9,16A7,7 0 0,1 16,9C17.07,9 18.09,9.24 19,9.67V8M5,21C3.89,21 3,20.1 3,19V5C3,3.89 3.89,3 5,3H6V1H8V3H16V1H18V3H19A2,2 0 0,1 21,5V11.1C22.24,12.36 23,14.09 23,16A7,7 0 0,1 16,23C14.09,23 12.36,22.24 11.1,21H5M16,11.15A4.85,4.85 0 0,0 11.15,16C11.15,18.68 13.32,20.85 16,20.85A4.85,4.85 0 0,0 20.85,16C20.85,13.32 18.68,11.15 16,11.15Z" /></svg>
+</i> Scheduling Deadline<a class="headerlink" href="#calendar-clock-embed_icon-scheduling-deadline" title="Permanent link">&para;</a></h3>
+<p>For planning purposes, please schedule your <strong>Interview 04</strong> appointment by
+<strong>midnight, Friday, April 24</strong>.</p>
+<p>You may only signup for <strong>one</strong> appointment timeslot.</p>
+</div>
+<h2 id="sample-interview">Sample Interview<a class="headerlink" href="#sample-interview" title="Permanent link">&para;</a></h2>
+<p>Here is an example of the types of tasks the interviewer may ask you to
+perform:</p>
+<ul>
+<li>
+<div class="flex-col" markdown="1">
+<p>[ ] Download the following:</p>
+<ul>
+<li><code>Makefile</code>: <a href="https://yld.me/raw/jdtr">https://yld.me/raw/jdtr</a></li>
+<li><code>wcd.c</code>: <a href="https://yld.me/raw/gQ16">https://yld.me/raw/gQ16</a></li>
+</ul>
+</li>
+<li>
+<p>[ ] Complete the <code>Makefile</code> and build <code>wcd</code>.</p>
+</li>
+<li>
+<p>[ ] Implement the <code>wcd_file</code> function (using <a href="https://man7.org/linux/man-pages/man2/fork.2.html">fork</a> and <a href="https://man7.org/linux/man-pages/man3/exec.3.html">execlp</a>).</p>
+</li>
+<li>
+<p>[ ] Implement the <code>wc_directory</code> function (using <a href="https://man7.org/linux/man-pages/man3/opendir.3.html">opendir</a>, <a href="https://man7.org/linux/man-pages/man3/readdir.3.html">readdir</a>, <a href="https://man7.org/linux/man-pages/man3/closedir.3.html">closedir</a>).</p>
+</li>
+<li>
+<p>[ ] Use <code>make test</code> to verify functional correctness and memory safety.</p>
+</li>
+</ul>
+<div class="alert success-bg">
+<h3 id="lightbulb-outline-embed_icon-hints"><i class="icon icon-medium"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><title>lightbulb-outline</title><path d="M12,2A7,7 0 0,1 19,9C19,11.38 17.81,13.47 16,14.74V17A1,1 0 0,1 15,18H9A1,1 0 0,1 8,17V14.74C6.19,13.47 5,11.38 5,9A7,7 0 0,1 12,2M9,21V20H15V21A1,1 0 0,1 14,22H10A1,1 0 0,1 9,21M12,4A5,5 0 0,0 7,9C7,11.05 8.23,12.81 10,13.58V16H14V13.58C15.77,12.81 17,11.05 17,9A5,5 0 0,0 12,4Z" /></svg>
+</i> Hints<a class="headerlink" href="#lightbulb-outline-embed_icon-hints" title="Permanent link">&para;</a></h3>
+<ul>
+<li>
+<p>You should be familiar with using <a href="https://git-scm.com/">git</a> to create a branch, record a
+  commit, and upload changes to <a href="https://github.com/">GitHub</a>.</p>
+</li>
+<li>
+<p>You should be familiar with downloading files using <a href="https://curl.haxx.se/docs/manpage.html">curl</a> or <a href="http://man7.org/linux/man-pages/man1/wget.1.html">wget</a>.</p>
+</li>
+<li>
+<p>You should be familiar with <a href="https://www.gnu.org/software/gdb/">gdb</a> (or any <em>debugger</em>).</p>
+</li>
+<li>
+<p>You should be familiar with <a href="http://valgrind.org/">valgrind</a>.</p>
+</li>
+</ul>
+</div>
+<div class="alert warning-bg">
+<h3 id="alert-embed_icon-consulting-resources"><i class="icon icon-medium"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><title>alert</title><path d="M13 14H11V9H13M13 18H11V16H13M1 21H23L12 2L1 21Z" /></svg>
+</i> Consulting Resources<a class="headerlink" href="#alert-embed_icon-consulting-resources" title="Permanent link">&para;</a></h3>
+<p>As with your <strong>Reading</strong> and <strong>Homework</strong> assignments, you are allowed to
+consult the course texts, slides, notes, the Internet, and even <strong>AI
+tools</strong>.  However, you cannot communicate with anyone else nor can you ask
+an <strong>AI tool</strong> to generate a solution.</p>
+<p>Be mindful that the interviewer is assessing your <strong>proficiency</strong> and how
+much you have <strong>internalized</strong>.  Over reliance on any external resource
+will be viewed <strong>negatively</strong> in regards to your <strong>mastery</strong> of the material.</p>
+</div>
+</main>
+<footer>
+Built using <a href="https://python.org">Python</a>
+and <a href="https://jinja.palletsprojects.com">Jinja</a>
+with colors from <a href="https://nordtheme.com">Nord Theme</a>
+and icons from <a href="https://pictogrammers.com/library/mdi/">Material Design Icons</a>.</footer>
+</body>
+</html>
