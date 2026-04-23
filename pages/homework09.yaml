@@ -429,6 +429,12 @@ body:       |
   and [wait] for it.  Moreover, the parent should always return the child's
   exit status as its own exit status.
 
+  If the child was [kill]ed, then the parent should return the signal it was
+  terminated with:
+
+      :::c
+      status = WIFEXITED(status) ? WEXITSTATUS(status) : WTERMSIG(status);
+
   </div>
 
   ### Task 1: `timeit.c`
