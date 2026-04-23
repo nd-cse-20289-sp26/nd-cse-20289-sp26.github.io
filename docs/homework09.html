@@ -381,6 +381,11 @@ Time Elapsed: 1.0
 <p><strong>Note</strong>: If the time limit is exceeded, the parent should <a href="http://man7.org/linux/man-pages/man2/kill.2.html">kill</a> the child
 and <a href="http://man7.org/linux/man-pages/man2/wait.2.html">wait</a> for it.  Moreover, the parent should always return the child's
 exit status as its own exit status.</p>
+<p>If the child was <a href="http://man7.org/linux/man-pages/man2/kill.2.html">kill</a>ed, then the parent should return the signal it was
+terminated with:</p>
+<div class="codehilite"><pre><span></span><code><span class="n">status</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">WIFEXITED</span><span class="p">(</span><span class="n">status</span><span class="p">)</span><span class="w"> </span><span class="o">?</span><span class="w"> </span><span class="n">WEXITSTATUS</span><span class="p">(</span><span class="n">status</span><span class="p">)</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">WTERMSIG</span><span class="p">(</span><span class="n">status</span><span class="p">);</span>
+</code></pre></div>
+
 </div>
 <h3 id="task-1-timeitc">Task 1: <code>timeit.c</code><a class="headerlink" href="#task-1-timeitc" title="Permanent link">&para;</a></h3>
 <p>To implement the <code>timeit</code> utility, you are to complete the provided
